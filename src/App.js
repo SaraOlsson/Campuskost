@@ -14,24 +14,31 @@ const useStyles = makeStyles({
   body: {
     padding: 15
   },
-  root: {
-    width: 500
+  footer: {
+    position: 'fixed',
+    left: 0,
+    bottom: 0,
+    width: 100 + '%',
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  bottomMenu: {
+    width: 500,
   },
   imageContainer: {
     display: 'flex',
-    flexDirection: 'row-reverse',
+    flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    marginBottom: 50
+    marginBottom: 50,
 
   },
   foodImg: {
+    backgroundColor: 'pink',
     height: 100,
     width: 100,
-    backgroundColor: 'pink',
     margin: 5,
     borderRadius: 20
-
   },
 
 });
@@ -77,8 +84,8 @@ function App() {
       
 
       </div>
-      <div>
-        <BottomNavigation value={value} onChange={handleChange} className={classes.root}>
+      <div className={classes.footer}>
+        <BottomNavigation value={value} onChange={handleChange} className={classes.bottomMenu}>
           <BottomNavigationAction label="Recents" value="recents" icon={<RestoreIcon />} />
           <BottomNavigationAction label="Favorites" value="favorites" icon={<FavoriteIcon />} />
           <BottomNavigationAction label="Nearby" value="nearby" icon={<LocationOnIcon />} />
