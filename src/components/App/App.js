@@ -374,7 +374,7 @@ class App extends Component {
           });
         }
 
-        return;
+        return; 
       }
 
       this.removeReferenceListener = reference.onSnapshot((snapshot) => {
