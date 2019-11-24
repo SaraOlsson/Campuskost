@@ -1,11 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import { BrowserRouter as Router, Route, Link, Switch, Redirect  } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import logo from './logo.svg';
 import './App.css';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+
+import ProfilePage from './pages/profilepage';
+import NoticePage from './pages/noticepage';
+import FavoritePage from './pages/favoritepage';
+import UploadPage from './pages/uploadpage';
+// import Feed from './pages/feedpage';
 
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
@@ -14,6 +21,10 @@ import FolderIcon from '@material-ui/icons/Folder';
 import RestoreIcon from '@material-ui/icons/Restore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import PublishIcon from '@material-ui/icons/PublishRounded';
+import NotificationsActiveRoundedIcon from '@material-ui/icons/NotificationsActiveRounded';
+import LoyaltyRoundedIcon from '@material-ui/icons/LoyaltyRounded';
+import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 
 require('dotenv').config();
 //
@@ -78,21 +89,6 @@ function ImageContainer(props) {
 
 }
 
-function Profile(props) {
-
-  const classes = useStyles();
-
-  // console.log(props)
-
-  return (
-
-    <div>
-    <h1>Hey you</h1>
-    </div>
-
-  );
-
-}
 
 function Feed() {
 
@@ -176,9 +172,10 @@ function initFirebase() {
 
 function App() {
 
-  const [value, setValue] = React.useState('recents');
+  const [value, setValue] = React.useState('');
+  const [redirect, setRedirect] = React.useState(false);
 
-
+  // let history = useHistory();
 
 
   if(db === undefined)
@@ -190,6 +187,9 @@ function App() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    setRedirect(true);
+    // history.push('/' + newValue );
+
   };
 
   return (
@@ -197,22 +197,30 @@ function App() {
 
       <Router>
 
+      {redirect ? <Redirect to={"/" + value} /> : null }
+
       <div className={classes.mainContainer}>
+
+      <button value="profile" onClick={handleChange}>Profil</button>
 
         <Switch>
           <Route exact path="/">
             <Feed/>
           </Route>
-          <Route path="/profile" component={Profile} />
+
+          <Route path="/profile" component={ProfilePage} />
+          <Route path="/upload" component={UploadPage} />
+          <Route path="/notices" component={NoticePage} />
+          <Route path="/saved" component={FavoritePage} />
         </Switch>
 
       </div>
       <div className={classes.footer}>
         <BottomNavigation value={value} onChange={handleChange} className={classes.bottomMenu}>
-          <BottomNavigationAction label="Recents" value="recents" icon={<RestoreIcon />} />
-          <BottomNavigationAction label="Favorites" value="favorites" icon={<FavoriteIcon />} />
-          <BottomNavigationAction label="Nearby" value="nearby" icon={<LocationOnIcon />} />
-          <BottomNavigationAction label="Folder" value="folder" icon={<FolderIcon />} />
+          <BottomNavigationAction label="Flöde" value="" icon={<HomeRoundedIcon />} />
+          <BottomNavigationAction label="Ladda up" value="upload" icon={<PublishIcon />} />
+          <BottomNavigationAction label="Notiser" value="notices" icon={<NotificationsActiveRoundedIcon />} />
+          <BottomNavigationAction label="Sparat" value="saved" icon={<LoyaltyRoundedIcon />} />
         </BottomNavigation>
       </div>
 
