@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import { BrowserRouter as Router, Route, Link, Switch, Redirect  } from "react-router-dom";
 import logo from './logo.svg';
 import './App.css';
 
@@ -13,6 +14,15 @@ import FolderIcon from '@material-ui/icons/Folder';
 import RestoreIcon from '@material-ui/icons/Restore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+
+require('dotenv').config();
+//
+
+console.log(process.env);
+
+const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
+
+console.log(API_KEY);
 
 const useStyles = makeStyles({
   body: {
@@ -49,7 +59,6 @@ const useStyles = makeStyles({
 
 function ImageContainer(props) {
 
-
   const classes = useStyles();
 
   console.log(props)
@@ -61,7 +70,6 @@ function ImageContainer(props) {
 
       <div className={classes.foodImg}>
 
-
       </div>
       {props.data.title}
     </div>
@@ -70,17 +78,31 @@ function ImageContainer(props) {
 
 }
 
+function Profile(props) {
 
+  const classes = useStyles();
+
+  // console.log(props)
+
+  return (
+
+    <div>
+    <h1>Hey you</h1>
+    </div>
+
+  );
+
+}
 
 function Feed() {
-
-  // const [loadeddata, setLoadeddata] = useState(false);
-  //const [count, setCount] = useState(0);
-  const [init, setInit] = useState(true);
 
   const [images, setImages] = useState(undefined);
   const [recipes, setRecipes] = useState(undefined);
   const [docs, setDocs] = useState(undefined);
+
+  useEffect(() => {
+    someFetcher();
+  }, []);
 
   const classes = useStyles();
   let recpiesRef = db.collection('recipes');
@@ -88,8 +110,6 @@ function Feed() {
   const removeImg = (listId) => {
 
     console.log("remove " + listId +  " from parent component ")
-    // let temp_array = recipes.filter( recipe => recipes. )
-    // temp_array = temp_array.
 
   }
 
@@ -117,21 +137,12 @@ function Feed() {
 
   }
 
-  if(init === true)
-  {
-      someFetcher();
-      setInit(false);
-      console.log("init == true")
-  }
-
   // <button onClick={() => setCount(count + 1)}>Click me</button>
 
   return (
     <div>
 
       <h1>Nya recept</h1>
-
-
 
       <div className={classes.imageContainer}>{images}</div>
 
@@ -140,13 +151,13 @@ function Feed() {
 
 }
 
-let db;
+let db = undefined;
 function initFirebase() {
 
   console.log("run initFirebase")
 
   const firebaseConfig = {
-    apiKey: "AIzaSyAq0vTBf0o5MckjHcCOJiJ_DRK8v_UZY88",
+    apiKey: API_KEY, // "AIzaSyAq0vTBf0o5MckjHcCOJiJ_DRK8v_UZY88",
     authDomain: "campuskost-firebase.firebaseapp.com",
     databaseURL: "https://campuskost-firebase.firebaseio.com",
     projectId: "campuskost-firebase",
@@ -162,45 +173,38 @@ function initFirebase() {
   return db;
 }
 
+
 function App() {
 
-  console.log("hejsan")
-
-  const classes = useStyles();
   const [value, setValue] = React.useState('recents');
 
+
+
+
+  if(db === undefined)
+  {
+    db = initFirebase();
+  }
+
+  const classes = useStyles();
+
   const handleChange = (event, newValue) => {
-    console.log("handleChange")
     setValue(newValue);
   };
 
-
-
-  db = initFirebase();
-  let citiesRef = db.collection('users');
-  let users = [];
-
-  /*
-  console.log("get..");
-
-  let allCities = citiesRef.get()
-    .then(snapshot => {
-      snapshot.forEach(doc => {
-        users.push(doc.data()); // doc.id
-      })
-    })
-    .catch(err => {
-      console.log('Error getting documents', err);
-  });
-
-  console.log("get done");
-  console.log(users); */
-
   return (
     <div className={classes.body}>
+
+      <Router>
+
       <div className={classes.mainContainer}>
 
-      <Feed/>
+        <Switch>
+          <Route exact path="/">
+            <Feed/>
+          </Route>
+          <Route path="/profile" component={Profile} />
+        </Switch>
 
       </div>
       <div className={classes.footer}>
@@ -211,6 +215,8 @@ function App() {
           <BottomNavigationAction label="Folder" value="folder" icon={<FolderIcon />} />
         </BottomNavigation>
       </div>
+
+      </Router>
     </div>
   );
 }
