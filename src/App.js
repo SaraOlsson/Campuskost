@@ -28,12 +28,20 @@ import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 
 require('dotenv').config();
 //
-
-console.log(process.env);
-
 const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
 
-console.log(API_KEY);
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Stash the event so it can be triggered later.
+  deferredPrompt = e;
+
+  console.log("beforeinstallprompt")
+
+  deferredPrompt.prompt();
+  // Update UI notify the user they can add to home screen
+  // showInstallPromotion();
+});
 
 const useStyles = makeStyles({
   body: {
