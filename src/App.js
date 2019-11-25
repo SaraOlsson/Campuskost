@@ -40,7 +40,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
   console.log("beforeinstallprompt")
 
-alert("Heello")
+  alert("Heello")
 
   deferredPrompt.prompt();
   // Update UI notify the user they can add to home screen
