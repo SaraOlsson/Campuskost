@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import logo from './logo.svg';
 import './App.css';
 
 import firebase from 'firebase/app';
@@ -158,7 +157,7 @@ function Feed() {
   return (
     <div>
 
-      <h1>Nya recept</h1>
+      <h1>Nya recept!</h1>
 
       <div className={classes.imageContainer}>{images}</div>
 
