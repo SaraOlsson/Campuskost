@@ -11,6 +11,7 @@ import ProfilePage from './pages/profilepage';
 import NoticePage from './pages/noticepage';
 import FavoritePage from './pages/favoritepage';
 import UploadPage from './pages/uploadpage';
+import Login from './login';
 // import Feed from './pages/feedpage';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -191,11 +192,25 @@ function initFirebase() {
 
 function App() {
 
+  const [signedIn, setSignedIn] = React.useState(false);
   const [value, setValue] = React.useState('');
   const [redirect, setRedirect] = React.useState(false);
 
   // let history = useHistory();
 
+  // start auth listener
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => {
+            if (user)  {
+              // console.log("user signed in")
+              setSignedIn(true);
+            }
+            else {
+              // console.log("user NOT signed in")
+              setSignedIn(false);
+            }
+          });
+  }, []);
 
   if(db === undefined)
   {
@@ -205,11 +220,33 @@ function App() {
   const classes = useStyles();
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    // console.log(event.target.value)
+    // setValue(newValue);
     setRedirect(true);
     // history.push('/' + newValue );
+    let button_value = event.target.value;
+
+    if(button_value != undefined)
+      setValue(button_value);
+    else
+      setValue(newValue);
 
   };
+
+  /*
+  const handleChange2 = (e) => {
+
+    console.log(e.target.value)
+
+
+  }; */
+
+  console.log("signedIn: " + signedIn)
+
+  let profile_or_login = (signedIn === true) ? "profile" : "login";
+
+  console.log("profile_or_login: " + profile_or_login)
+  console.log("value: " + value)
 
   return (
     <div className={classes.body}>
@@ -220,13 +257,14 @@ function App() {
 
       <div className={classes.mainContainer}>
 
-      <button value="profile" onClick={handleChange}>Profil</button>
+      <button value={profile_or_login} onClick={(e) => handleChange(e)}>{profile_or_login}</button>
 
         <Switch>
           <Route exact path="/">
             <Feed/>
           </Route>
 
+          <Route path="/login" component={Login} />
           <Route path="/profile" component={ProfilePage} />
           <Route path="/upload" component={UploadPage} />
           <Route path="/notices" component={NoticePage} />
