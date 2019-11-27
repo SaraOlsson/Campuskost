@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { incrementdispatch } from './actions/RecipeActions';
 import './App.css';
 
 import firebase from 'firebase/app';
@@ -11,16 +14,14 @@ import ProfilePage from './pages/profilepage';
 import NoticePage from './pages/noticepage';
 import FavoritePage from './pages/favoritepage';
 import UploadPage from './pages/uploadpage';
-import Login from './login';
+import RecipePage from './pages/recipepage';
+import Login from './pages/login';
 // import Feed from './pages/feedpage';
 
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import FolderIcon from '@material-ui/icons/Folder';
-import RestoreIcon from '@material-ui/icons/Restore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
+
 import PublishIcon from '@material-ui/icons/PublishRounded';
 import NotificationsActiveRoundedIcon from '@material-ui/icons/NotificationsActiveRounded';
 import LoyaltyRoundedIcon from '@material-ui/icons/LoyaltyRounded';
@@ -35,14 +36,9 @@ let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
   // Stash the event so it can be triggered later.
   deferredPrompt = e;
-
-  console.log("beforeinstallprompt")
-
-  // alert("Heello")
-
   deferredPrompt.prompt();
+
   // Update UI notify the user they can add to home screen
-  // showInstallPromotion();
   deferredPrompt.userChoice
     .then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
@@ -92,11 +88,9 @@ function ImageContainer(props) {
 
   const classes = useStyles();
 
-  console.log(props)
-  // <button onClick={() => props.removeFunction(props.listId) }>del</button>
-
   return (
 
+    <Link to={"/recipe/" + props.data.title } >
     <div>
 
       <div className={classes.foodImg}>
@@ -104,9 +98,9 @@ function ImageContainer(props) {
       </div>
       {props.data.title}
     </div>
+    </Link>
 
   );
-
 }
 
 
@@ -124,9 +118,7 @@ function Feed() {
   let recpiesRef = db.collection('recipes');
 
   const removeImg = (listId) => {
-
     console.log("remove " + listId +  " from parent component ")
-
   }
 
   const someFetcher = async () => {
@@ -189,27 +181,24 @@ function initFirebase() {
   return db;
 }
 
-
 function App() {
 
   const [signedIn, setSignedIn] = React.useState(false);
   const [value, setValue] = React.useState('');
   const [redirect, setRedirect] = React.useState(false);
 
-  // let history = useHistory();
-
   // start auth listener
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
-            if (user)  {
-              // console.log("user signed in")
-              setSignedIn(true);
-            }
-            else {
-              // console.log("user NOT signed in")
-              setSignedIn(false);
-            }
-          });
+        if (user)  {
+          // console.log("user signed in")
+          setSignedIn(true);
+        }
+        else {
+          // console.log("user NOT signed in")
+          setSignedIn(false);
+        }
+      });
   }, []);
 
   if(db === undefined)
@@ -220,12 +209,9 @@ function App() {
   const classes = useStyles();
 
   const handleChange = (event, newValue) => {
-    // console.log(event.target.value)
-    // setValue(newValue);
-    setRedirect(true);
-    // history.push('/' + newValue );
-    let button_value = event.target.value;
 
+    setRedirect(true);
+    let button_value = event.target.value;
     if(button_value != undefined)
       setValue(button_value);
     else
@@ -233,13 +219,6 @@ function App() {
 
   };
 
-  /*
-  const handleChange2 = (e) => {
-
-    console.log(e.target.value)
-
-
-  }; */
 
   console.log("signedIn: " + signedIn)
 
@@ -247,6 +226,21 @@ function App() {
 
   console.log("profile_or_login: " + profile_or_login)
   console.log("value: " + value)
+
+  let data_obj = {
+    title: "Pannkaka",
+    user: "sarol"
+  };
+
+  /*
+
+  <button
+  onClick={() => incrementdispatch }
+  >
+  Increment
+ </button>
+
+ */
 
   return (
     <div className={classes.body}>
@@ -257,7 +251,8 @@ function App() {
 
       <div className={classes.mainContainer}>
 
-      <button value={profile_or_login} onClick={(e) => handleChange(e)}>{profile_or_login}</button>
+        <button value={profile_or_login} onClick={(e) => handleChange(e)}>{profile_or_login}</button>
+
 
         <Switch>
           <Route exact path="/">
@@ -269,6 +264,9 @@ function App() {
           <Route path="/upload" component={UploadPage} />
           <Route path="/notices" component={NoticePage} />
           <Route path="/saved" component={FavoritePage} />
+          <Route path="/recipe/:recipe" component={RecipePage} />
+
+
         </Switch>
 
       </div>
@@ -285,6 +283,32 @@ function App() {
     </div>
   );
 }
+
+// <Route path="/abc" component={TestWidget} />
+// <Route path="/abc" render={()=><TestWidget num="2" someProp={100}/>}/>
+/*
+<Link to={{
+   pathname: '/abc',
+   state: data_obj
+ }}>
+ Superlinkis </Link>
+
+function TestWidget(props) {
+
+  const _props = props.location.state;
+
+  console.log(_props.title)
+
+  return (
+
+    <div>
+    <h1>TestWidget, {_props.title} av  {_props.user}</h1>
+    </div>
+
+  );
+
+} */
+
 
 
 export default App;

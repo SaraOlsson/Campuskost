@@ -11,17 +11,18 @@ const useStyles = makeStyles({
 function NoticePage(props) {
 
   const classes = useStyles();
-
   // console.log(props)
 
   return (
 
     <div>
     <h1>Dina notiser</h1>
+
     </div>
 
   );
 
 }
+
 
 export default NoticePage;
