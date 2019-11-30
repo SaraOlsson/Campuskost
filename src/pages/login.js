@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -11,6 +13,11 @@ function Login(props) {
   const [password, setPassword] = useState("");
   const [signedInStatus, setSignedInStatus] = useState("Ej inloggad");
   const [signContext, setSignContext ] = useState("Logga in");
+
+  const dispatch = useDispatch(); // be able to dispatch
+  // const state = useSelector(state => state.userReducer); // subscribe to the redux store
+  // console.log(state)
+
 
   // init app only once
   useEffect(() => {
@@ -115,16 +122,27 @@ function Login(props) {
         var uid = user.uid;
         var providerData = user.providerData;
 
-        console.log('user json: ')
-        console.log(JSON.stringify(user, null, '  '))
+        // console.log('user json: ')
+        //console.log(JSON.stringify(user, null, '  '))
 
         setSignedInStatus('Inloggad');
         setSignContext('Logga ut');
+
+        dispatch({
+          type: "SIGNIN",
+          signedIn: ""
+        })
+
 
       } else {
         // User is signed out.
         setSignedInStatus('Ej inloggad');
         setSignContext('Logga in');
+
+        dispatch({
+          type: "SIGNOUT",
+          signedIn: ""
+        })
       }
 
     });

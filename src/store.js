@@ -1,4 +1,6 @@
-function reducer(state = { num: 0 }, action) {
+import { combineReducers } from 'redux';
+
+function testreducer(state = { num: 0 }, action) {
   switch (action.type) {
     case "INCREMENT":
       return {
@@ -15,4 +17,40 @@ function reducer(state = { num: 0 }, action) {
   }
 }
 
-export default reducer;
+function uploadReducer(state = { title: "title" }, action) {
+  switch (action.type) {
+    case "SETTITLE":
+      return {
+        ...state,
+        title: action.title
+      };
+    default:
+      return state;
+  }
+}
+
+function userReducer(state = { signedIn: false }, action) {
+  switch (action.type) {
+    case "SIGNIN":
+      return {
+        ...state,
+        signedIn: true
+      };
+    case "SIGNOUT":
+      return {
+        ...state,
+        signedIn: false
+      };
+    default:
+      return state;
+  }
+}
+
+
+// export default reducer;
+
+export default combineReducers({
+  testReducers: testreducer,
+  uploadReducer: uploadReducer,
+  userReducer: userReducer
+});

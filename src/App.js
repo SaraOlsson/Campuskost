@@ -10,6 +10,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
+import FeedPage from './pages/feedpage';
 import ProfilePage from './pages/profilepage';
 import NoticePage from './pages/noticepage';
 import FavoritePage from './pages/favoritepage';
@@ -19,6 +20,7 @@ import Login from './pages/login';
 // import Feed from './pages/feedpage';
 
 import { makeStyles } from '@material-ui/core/styles';
+import Icon from '@material-ui/core/Icon';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 
@@ -26,13 +28,14 @@ import PublishIcon from '@material-ui/icons/PublishRounded';
 import NotificationsActiveRoundedIcon from '@material-ui/icons/NotificationsActiveRounded';
 import LoyaltyRoundedIcon from '@material-ui/icons/LoyaltyRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 require('dotenv').config();
 //
 const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
 
+// for PWA - needed?
 let deferredPrompt;
-
 window.addEventListener('beforeinstallprompt', (e) => {
   // Stash the event so it can be triggered later.
   deferredPrompt = e;
@@ -50,114 +53,6 @@ window.addEventListener('beforeinstallprompt', (e) => {
   });
 
 });
-
-const useStyles = makeStyles({
-  body: {
-    padding: 15
-  },
-  footer: {
-    position: 'fixed',
-    left: 0,
-    bottom: 0,
-    width: 100 + '%',
-    display: 'flex',
-    justifyContent: 'center'
-  },
-  bottomMenu: {
-    width: 500,
-  },
-  imageContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginBottom: 50,
-
-  },
-  foodImg: {
-    backgroundColor: 'pink',
-    height: 100,
-    width: 100,
-    margin: 5,
-    borderRadius: 20
-  },
-
-});
-
-function ImageContainer(props) {
-
-  const classes = useStyles();
-
-  return (
-
-    <Link to={"/recipe/" + props.data.title } >
-    <div>
-
-      <div className={classes.foodImg}>
-
-      </div>
-      {props.data.title}
-    </div>
-    </Link>
-
-  );
-}
-
-
-function Feed() {
-
-  const [images, setImages] = useState(undefined);
-  const [recipes, setRecipes] = useState(undefined);
-  const [docs, setDocs] = useState(undefined);
-
-  useEffect(() => {
-    someFetcher();
-  }, []);
-
-  const classes = useStyles();
-  let recpiesRef = db.collection('recipes');
-
-  const removeImg = (listId) => {
-    console.log("remove " + listId +  " from parent component ")
-  }
-
-  const someFetcher = async () => {
-
-    recpiesRef.get()
-      .then(snapshot => {
-
-        let images_array = [];
-        let recipe_docs = [];
-
-        snapshot.forEach(doc => {
-          images_array.push(<ImageContainer key={doc.id} listId={doc.id} data={doc.data()} removeFunction={removeImg}/>);
-          recipe_docs.push(doc.data());
-          //docs_array.push(doc)
-        })
-
-        setImages(images_array);
-        setRecipes(recipe_docs);
-
-      })
-      .catch(err => {
-        console.log('Error getting documents', err);
-    });
-
-  }
-
-  // <button onClick={() => setCount(count + 1)}>Click me</button>
-
-  return (
-    <div>
-
-      <h1>Nya recept!</h1>
-
-      <div className={classes.imageContainer}>{images}</div>
-
-    </div>
-  );
-
-}
 
 let db = undefined;
 function initFirebase() {
@@ -181,32 +76,46 @@ function initFirebase() {
   return db;
 }
 
+function ProfileBtn (props) {
+
+  const classes = useStyles();
+
+  console.log(props)
+
+  let text = (props.signedIn === true) ? "profile" : "login";
+  let btn = (
+    <div className={classes.profileBtn}>
+      <button value={text} onClick={(e) => props.handleChange(e)}>{text}</button>
+    </div> );
+
+  let jsx_content = props.signedIn ? <Link to={"/profile"}><AccountCircleIcon/></Link> : btn;
+
+  return (<div>{jsx_content} </div>);
+
+}
+
 function App() {
 
-  const [signedIn, setSignedIn] = React.useState(false);
+  // const [signedIn, setSignedIn] = React.useState(false);
   const [value, setValue] = React.useState('');
   const [redirect, setRedirect] = React.useState(false);
 
+  const classes = useStyles();
+  const dispatch = useDispatch(); // be able to dispatch
+  const state_user = useSelector(state => state.userReducer); // subscribe to the redux store
+  console.log(state_user)
+
   // start auth listener
   useEffect(() => {
+
     firebase.auth().onAuthStateChanged(user => {
-        if (user)  {
-          // console.log("user signed in")
-          setSignedIn(true);
-        }
-        else {
-          // console.log("user NOT signed in")
-          setSignedIn(false);
-        }
-      });
+      dispatch({ type: user ? "SIGNIN" : "SIGNOUT" })
+    });
+
   }, []);
 
-  if(db === undefined)
-  {
+  if(db === undefined) // init firebase once
     db = initFirebase();
-  }
-
-  const classes = useStyles();
 
   const handleChange = (event, newValue) => {
 
@@ -220,28 +129,6 @@ function App() {
   };
 
 
-  console.log("signedIn: " + signedIn)
-
-  let profile_or_login = (signedIn === true) ? "profile" : "login";
-
-  console.log("profile_or_login: " + profile_or_login)
-  console.log("value: " + value)
-
-  let data_obj = {
-    title: "Pannkaka",
-    user: "sarol"
-  };
-
-  /*
-
-  <button
-  onClick={() => incrementdispatch }
-  >
-  Increment
- </button>
-
- */
-
   return (
     <div className={classes.body}>
 
@@ -251,12 +138,13 @@ function App() {
 
       <div className={classes.mainContainer}>
 
-        <button value={profile_or_login} onClick={(e) => handleChange(e)}>{profile_or_login}</button>
-
+        <div className={classes.headerrow}>
+        <ProfileBtn signedIn={state_user.signedIn} handleChange={handleChange}/>
+        </div>
 
         <Switch>
           <Route exact path="/">
-            <Feed/>
+            <FeedPage db={db}/>
           </Route>
 
           <Route path="/login" component={Login} />
@@ -265,7 +153,6 @@ function App() {
           <Route path="/notices" component={NoticePage} />
           <Route path="/saved" component={FavoritePage} />
           <Route path="/recipe/:recipe" component={RecipePage} />
-
 
         </Switch>
 
@@ -284,31 +171,29 @@ function App() {
   );
 }
 
-// <Route path="/abc" component={TestWidget} />
-// <Route path="/abc" render={()=><TestWidget num="2" someProp={100}/>}/>
-/*
-<Link to={{
-   pathname: '/abc',
-   state: data_obj
- }}>
- Superlinkis </Link>
+const useStyles = makeStyles({
+  body: {
+    padding: 15
+  },
+  footer: {
+    position: 'fixed',
+    left: 0,
+    bottom: 0,
+    width: 100 + '%',
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  headerrow: {
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+  profileBtn: {
+    color: 'green'
+  },
+  bottomMenu: {
+    width: 500,
+  }
 
-function TestWidget(props) {
-
-  const _props = props.location.state;
-
-  console.log(_props.title)
-
-  return (
-
-    <div>
-    <h1>TestWidget, {_props.title} av  {_props.user}</h1>
-    </div>
-
-  );
-
-} */
-
-
+});
 
 export default App;
