@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { incrementdispatch } from './actions/RecipeActions';
 import './App.css';
 
