@@ -1,3 +1,8 @@
 /*.MuiButton-root {
   width: 100%;
 } */
+
+.MuiAvatar-colorDefault {
+    color: #fafafa;
+    background-color: #68BB8C !important;
+}
