@@ -1,8 +1,18 @@
-/*.MuiButton-root {
-  width: 100%;
-} */
 
 .MuiAvatar-colorDefault {
     color: #fafafa;
     background-color: #68BB8C !important;
+}
+
+.MuiTab-root {
+    text-transform: unset !important;
+}
+
+.MuiAppBar-colorPrimary {
+    color: #fff;
+    background-color: #68BB8C !important;
+}
+
+.PrivateTabIndicator-colorSecondary-1433 {
+    background-color: gray !important;
 }
