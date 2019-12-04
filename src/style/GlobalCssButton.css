@@ -13,6 +13,18 @@
     background-color: #68BB8C !important;
 }
 
-.PrivateTabIndicator-colorSecondary-1433 {
-    background-color: gray !important;
+.body .MuiTabs-indicator {
+  background-color: gray !important;
+}
+
+.body .MuiGridList-root {
+  justify-content: center;
+  width: 360px;
+  height: 300px;
+  margin: 0px;
+}
+
+
+.body .MuiBox-root {
+  padding: 0;
 }

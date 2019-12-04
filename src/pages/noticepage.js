@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import '../style/GlobalCssButton.css';
+// import '../style/GlobalCssButton.css';
 // import * as ui from '../meterialuiimports';
 
 import List from '@material-ui/core/List';

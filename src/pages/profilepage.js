@@ -5,9 +5,10 @@ import { BrowserRouter as Link, Redirect} from "react-router-dom";
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+import recipeData from '../assets/recipes_dev';
 import SimpleTabs from '../components/userpagetabs';
 import RecipeGridList from '../components/recipegrid';
-import '../style/GlobalCssButton.css';
+// import '../style/GlobalCssButton.css';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -49,13 +50,14 @@ function ProfilePage(props) {
   </Button>
   <button onClick={ () => firebase.auth().signOut() } name="signout"> Logga ut </button>*/
 
-  let tileData = [
-  {img: 'temp_food1', title: "Falafeltalltik", author: "LillKocken"},
-  {img: 'temp_food2', title: "Svamprisotto", author: "LillKocken"},
-  {img: 'temp_food3', title: "Laxpasta", author: "LillKocken"},
-  {img: 'temp_food4', title: "Bönsoppa", author: "LillKocken"},
-  {img: 'temp_food5', title: "Gulaschsoppa", author: "LillKocken"}
-  ];
+  // console.log(recipeData)
+ /*
+  let keys = Object.keys(recipeData);
+  let index = keys.indexOf("LillKocken");
+  let data = recipeData[index];
+
+  console.log( data ) */
+  // recipeData.PastaMaster.recipes
 
   return (
 
@@ -81,7 +83,7 @@ function ProfilePage(props) {
       </Grid>
 
       <SimpleTabs>
-        <RecipeGridList imageData={tileData}/>
+        <RecipeGridList imageData={recipeData.LillKocken.recipes}/>
         <InfoIcon/>
       </SimpleTabs>
 

@@ -2,6 +2,12 @@ import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Link} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 
+import recipeData from '../assets/recipes_dev';
+import RecipeGridList from '../components/recipegrid';
+
+import Grid from '@material-ui/core/Grid';
+import ImageIcon from '@material-ui/icons/Image';
+
 function FeedPage(props) {
 
   const [images, setImages] = useState(default_content());
@@ -45,12 +51,45 @@ function FeedPage(props) {
 
   }
 
+  // <div className={classes.imageContainer}>{images}</div>
+
   return (
     <div>
-      <h1>Nya recept!</h1>
-      <div className={classes.imageContainer}>{images}</div>
+      <NewsContainer/>
+      <RecipeGridList imageData={recipeData.PastaMaster.recipes}/>
     </div>
   );
+
+}
+
+function NewsContainer(props) {
+
+  const classes = useStyles();
+  // className={classes.userinfo}
+
+  return (
+    <div>
+    <h3>Veckans poppis</h3>
+    <Grid
+      container
+      spacing={1}
+      justify="center"
+      alignItems="center"
+      className={classes.newscontainer}
+    >
+      <Grid item xs={3}>
+        <ImageIcon/>
+      </Grid>
+      <Grid item xs={6}>
+        <h3>Vegetarisk lasagne</h3>
+        <h5>"Bästa matlådan!"</h5>
+      </Grid>
+
+    </Grid>
+
+    </div>
+  );
+
 
 }
 
@@ -73,7 +112,6 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
     marginBottom: 50,
 
   },
@@ -84,6 +122,11 @@ const useStyles = makeStyles({
     margin: 5,
     borderRadius: 20
   },
+  newscontainer: {
+    borderRadius: 20,
+    backgroundColor: '#f1f1f1',
+    marginBottom: 15
+  }
 });
 
 export default FeedPage;

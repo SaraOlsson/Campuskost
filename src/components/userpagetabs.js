@@ -52,7 +52,7 @@ export default function SimpleTabs(props) {
     setValue(newValue);
   };
 
-  console.log(props.children)
+  // console.log(props.children)
 
   return (
     <div className={classes.root}>

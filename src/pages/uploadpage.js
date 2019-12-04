@@ -66,7 +66,7 @@ function UploadPage(props) {
   return (
 
     <div>
-      <h2>Ladda upp recept</h2>
+      <h3>Ladda upp recept</h3>
 
       <form>
 

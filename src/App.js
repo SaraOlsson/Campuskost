@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-ro
 // import { useHistory } from "react-router-dom";
 import { incrementdispatch } from './actions/RecipeActions';
 import './App.css';
+import './style/GlobalCssButton.css';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -80,7 +81,7 @@ function ProfileBtn (props) {
 
   const classes = useStyles();
 
-  console.log(props)
+  //console.log(props)
 
   let text = (props.signedIn === true) ? "profile" : "login";
   let btn = (
@@ -103,7 +104,7 @@ function App() {
   const classes = useStyles();
   const dispatch = useDispatch(); // be able to dispatch
   const state_user = useSelector(state => state.userReducer); // subscribe to the redux store
-  console.log(state_user)
+  //console.log(state_user)
 
   // start auth listener
   useEffect(() => {
@@ -130,7 +131,7 @@ function App() {
 
 
   return (
-    <div className={classes.body}>
+    <div className="body">
 
       <Router>
 
