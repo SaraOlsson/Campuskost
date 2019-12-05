@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Link} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
+import { useFirebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
+import { useSelector } from 'react-redux';
 
 import recipeData from '../assets/recipes_dev';
 import RecipeGridList from '../components/recipegrid';
@@ -10,53 +12,43 @@ import ImageIcon from '@material-ui/icons/Image';
 
 function FeedPage(props) {
 
-  const [images, setImages] = useState(default_content());
+  // const [images, setImages] = useState();
   const [recipes, setRecipes] = useState(undefined);
   const [docs, setDocs] = useState(undefined);
 
+  const classes = useStyles();
+  const store = useSelector(state => state.fireReducer);
+
   useEffect(() => {
     // someFetcher();
+    //usersRef.on('value', function(snap) { console.log(snap.val()); })
+    let recpiesRef = store.db.collection('recipes');
+    recipeFetcher(recpiesRef);
+
   }, []);
 
-  const classes = useStyles();
-  let recpiesRef = props.db.collection('recipes');
+  const recipeFetcher = (recpiesRef) => {
+    store.db.collection("recipes")
+    .onSnapshot(function(querySnapshot) {
 
-  function default_content() {
-    let images_array = [];
-    for(let i = 0; i < 3; i++)
-      images_array.push(<ImageContainer key={i} listId={i} data={{title: "Pannkaka", user: "Sara"}}/>);
-    return images_array;
-  }
-
-  const someFetcher = async () => {
-
-    recpiesRef.get()
-      .then(snapshot => {
-
-        let images_array = [];
+        //let images_array = [];
         let recipe_docs = [];
-
-        snapshot.forEach(doc => {
-          images_array.push(<ImageContainer key={doc.id} listId={doc.id} data={doc.data()}/>);
+        querySnapshot.forEach(function(doc) {
+          //images_array.push(<ImageContainer key={doc.id} listId={doc.id} data={doc.data()}/>);
           recipe_docs.push(doc.data());
-        })
-
-        setImages(images_array);
+        });
+        //setImages(images_array);
         setRecipes(recipe_docs);
-
-      })
-      .catch(err => {
-        console.log('Error getting documents', err);
     });
-
   }
 
   // <div className={classes.imageContainer}>{images}</div>
+  // recipeData.PastaMaster.recipes
 
   return (
     <div>
       <NewsContainer/>
-      <RecipeGridList imageData={recipeData.PastaMaster.recipes}/>
+      { recipes != undefined && <RecipeGridList imageData={recipes}/> }
     </div>
   );
 

@@ -6,8 +6,10 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 
 import recipeData from '../assets/recipes_dev';
+import followerData from '../assets/users_dev';
 import SimpleTabs from '../components/userpagetabs';
 import RecipeGridList from '../components/recipegrid';
+import FollowerList from '../components/followerlist';
 // import '../style/GlobalCssButton.css';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -30,11 +32,13 @@ const useMountEffect = (fun) => useEffect(fun, []);
 // () =>
 function ProfilePage(props) {
 
+  const [recipes, setRecipes] = useState(undefined);
   const [signedIn, setSignedIn] = React.useState(false);
   const [redirect, setRedirect] = React.useState(false);
 
   const classes = useStyles();
   const state = useSelector(state => state.userReducer); // subscribe to the redux store
+  const store = useSelector(state => state.fireReducer);
   console.log(state)
 
   function handleSignOut() {
@@ -42,7 +46,32 @@ function ProfilePage(props) {
     setRedirect(true);
   }
 
-  let username = "Sara Olsson";
+  useEffect(() => {
+    // someFetcher();
+    //usersRef.on('value', function(snap) { console.log(snap.val()); })
+    let recpiesRef = store.db.collection('recipes');
+    recipeFetcher(recpiesRef);
+
+  }, []);
+
+  let username = "LillKocken";
+
+  const recipeFetcher = (recpiesRef) => {
+    store.db.collection("recipes").where("user", "==", "LillKocken")
+    .onSnapshot(function(querySnapshot) {
+
+        //let images_array = [];
+        let recipe_docs = [];
+        querySnapshot.forEach(function(doc) {
+          //images_array.push(<ImageContainer key={doc.id} listId={doc.id} data={doc.data()}/>);
+          recipe_docs.push(doc.data());
+        });
+        //setImages(images_array);
+        setRecipes(recipe_docs);
+    });
+  }
+
+
 
   /*
   <Button onClick={ () => firebase.auth().signOut()} variant="contained" color="primary">
@@ -55,9 +84,11 @@ function ProfilePage(props) {
   let keys = Object.keys(recipeData);
   let index = keys.indexOf("LillKocken");
   let data = recipeData[index];
-
-  console.log( data ) */
+*/
+  console.log( recipes )
   // recipeData.PastaMaster.recipes
+
+  let recipeContent = (recipes != undefined) ? <RecipeGridList imageData={recipes}/> : <div>Yo</div>;
 
   return (
 
@@ -83,8 +114,10 @@ function ProfilePage(props) {
       </Grid>
 
       <SimpleTabs>
-        <RecipeGridList imageData={recipeData.LillKocken.recipes}/>
+        { recipeContent }
         <InfoIcon/>
+        <FollowerList followerData={followerData.LillKocken.followers}/>
+        <FollowerList followerData={followerData.LillKocken.following}/>
       </SimpleTabs>
 
       {state.signedIn === false && <p> Hey you're not signed in. Things won't work here (redirect back) </p>  }
@@ -92,7 +125,7 @@ function ProfilePage(props) {
    </React.Fragment>
 
   );
-
+  // recipeData.LillKocken.recipes //         <RecipeGridList imageData={recipes}/>
 }
 
 const useStyles = makeStyles({

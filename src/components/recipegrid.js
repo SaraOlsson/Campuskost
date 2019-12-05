@@ -26,14 +26,16 @@ function RecipeGridListTile(props) {
   }
   */
 
+  let r_img = ( tile.img != undefined) ? tile.img : 'temp_food1';
+
   return (
 
-    <GridListTile key={tile.img} className={classes.listimage}>
-      <img src={require('../assets/'+ tile.img + '.jpg')} alt={tile.title} />
+    <GridListTile key={r_img} className={classes.listimage}>
+      <img src={require('../assets/'+ r_img + '.jpg')} alt={tile.title} />
 
       <GridListTileBar
         title={tile.title}
-        subtitle={<span>Av: {tile.author}</span>}
+        subtitle={<span>Av: {tile.user}</span>}
 
       />
 

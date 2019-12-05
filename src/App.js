@@ -115,8 +115,12 @@ function App() {
 
   }, []);
 
+
   if(db === undefined) // init firebase once
+  {
     db = initFirebase();
+    dispatch({ type: "SETDB", db: db });
+  }
 
   const handleChange = (event, newValue) => {
 

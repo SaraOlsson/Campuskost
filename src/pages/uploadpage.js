@@ -30,7 +30,7 @@ function UploadPage(props) {
   });
 
   const classes = useStyles();
-  //const dispatch = useDispatch(); // be able to dispatch
+  const dispatch = useDispatch(); // be able to dispatch
   //const state = useSelector(state => state.testReducers); // subscribe to the redux store // testReducers
   //const state = useSelector(state => state.uploadReducer);
   //console.log(state)
@@ -39,13 +39,13 @@ function UploadPage(props) {
     setLabelWidth(labelRef.current.offsetWidth);
   }, []);
 
-  /*
+
   const titleDisp = (evt) => {
     dispatch({
       type: "SETTITLE",
       title: evt.target.value
     })
-  } */
+  }
 
   const handleChange = event => {
 
@@ -53,6 +53,10 @@ function UploadPage(props) {
     setTitle(value);
     setValid({ ...valid, ["title"]: value.length > 2 ? true : false });
 
+    dispatch({
+      type: "SETTITLE",
+      title: value
+    })
   };
 
   const addIngredients = () => {

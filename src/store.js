@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import { createStore, combineReducers, compose } from 'redux'
 
 function testreducer(state = { num: 0 }, action) {
   switch (action.type) {
@@ -46,11 +46,26 @@ function userReducer(state = { signedIn: false }, action) {
   }
 }
 
+function fireReducer(state = { db: 0 }, action) {
+  switch (action.type) {
+    case "SETDB":
+      return {
+        ...state,
+        db: action.db
+      };
+    default:
+      return state;
+  }
+}
 
 // export default reducer;
+//  firestore: firestoreReducer,
 
-export default combineReducers({
+const rootReducer = combineReducers({
+  fireReducer: fireReducer,
   testReducers: testreducer,
   uploadReducer: uploadReducer,
   userReducer: userReducer
 });
+
+ export default rootReducer;

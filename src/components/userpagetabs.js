@@ -60,8 +60,8 @@ export default function SimpleTabs(props) {
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
           <Tab label="Recept" {...a11yProps(0)} />
           <Tab label="Listor" {...a11yProps(1)} />
-          <Tab label="Följer" {...a11yProps(2)} />
-          <Tab label="Följare" {...a11yProps(3)} />
+          <Tab label="Följare" {...a11yProps(2)} />
+          <Tab label="Följer" {...a11yProps(3)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -71,10 +71,10 @@ export default function SimpleTabs(props) {
         {props.children[1]}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        {props.children[2]}
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        {props.children[3]}
       </TabPanel>
     </div>
   );
