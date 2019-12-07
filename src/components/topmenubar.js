@@ -92,7 +92,7 @@ function ProfileBtn (props) {
   let text = (props.signedIn === true) ? "profile" : "login";
   let btn = (
     <div>
-      <button value={text} onClick={(e) => props.handleChange(e)}>{text}</button>
+      <button value={text} onClick={(e) => props.handleChange(undefined, e.target.value)}>{text}</button>
     </div> );
 
   //let jsx_content = props.signedIn ? <Link to={"/profile"} ><AccountCircleIcon/></Link> : btn;
