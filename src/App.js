@@ -18,15 +18,18 @@ import FavoritePage from './pages/favoritepage';
 import UploadPage from './pages/uploadpage';
 import RecipePage from './pages/recipepage';
 import Login from './pages/login';
+import TopMenuBar from './components/topmenubar';
 // import Feed from './pages/feedpage';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Icon from '@material-ui/core/Icon';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import Badge from '@material-ui/core/Badge';
 
 import PublishIcon from '@material-ui/icons/PublishRounded';
 import NotificationsActiveRoundedIcon from '@material-ui/icons/NotificationsActiveRounded';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 import LoyaltyRoundedIcon from '@material-ui/icons/LoyaltyRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -77,6 +80,7 @@ function initFirebase() {
   return db;
 }
 
+/*
 function ProfileBtn (props) {
 
   const classes = useStyles();
@@ -93,7 +97,7 @@ function ProfileBtn (props) {
 
   return (<div>{jsx_content} </div>);
 
-}
+} */
 
 function App() {
 
@@ -122,17 +126,29 @@ function App() {
     dispatch({ type: "SETDB", db: db });
   }
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (event = undefined, newValue) => {
 
+    console.log("heello" + newValue)
+
+    setRedirect(true);
+    setValue(newValue);
+    /*
     setRedirect(true);
     let button_value = event.target.value;
     if(button_value != undefined)
       setValue(button_value);
     else
-      setValue(newValue);
+      setValue(newValue); */
 
   };
 
+/*
+
+<div className={classes.headerrow}>
+<ProfileBtn signedIn={state_user.signedIn} handleChange={handleChange}/>
+</div>
+
+*/
 
   return (
     <div className="body">
@@ -141,11 +157,11 @@ function App() {
 
       {redirect ? <Redirect to={"/" + value} /> : null }
 
-      <div className={classes.mainContainer}>
+      <div className={classes.headerrow}>
+      <TopMenuBar signedIn={state_user.signedIn} handleChange={handleChange}/>
+      </div>
 
-        <div className={classes.headerrow}>
-        <ProfileBtn signedIn={state_user.signedIn} handleChange={handleChange}/>
-        </div>
+      <div className={classes.mainContainer}>
 
         <Switch>
           <Route exact path="/">
@@ -163,10 +179,10 @@ function App() {
 
       </div>
       <div className={classes.footer}>
-        <BottomNavigation value={value} onChange={handleChange} className={classes.bottomMenu}>
+        <BottomNavigation value={value} onChange={ (evt,value) => handleChange(evt, value) } className={classes.bottomMenu}>
           <BottomNavigationAction label="Flöde" value="" icon={<HomeRoundedIcon />} />
           <BottomNavigationAction label="Ladda up" value="upload" icon={<PublishIcon />} />
-          <BottomNavigationAction label="Notiser" value="notices" icon={<NotificationsActiveRoundedIcon />} />
+          <BottomNavigationAction label="Notiser" value="notices" icon={<Badge badgeContent={3} color="secondary"><NotificationsIcon /></Badge>} />
           <BottomNavigationAction label="Sparat" value="saved" icon={<LoyaltyRoundedIcon />} />
         </BottomNavigation>
       </div>
@@ -176,9 +192,14 @@ function App() {
   );
 }
 
+// margin: -15px -11px 50px -15px;
+
 const useStyles = makeStyles({
   body: {
     padding: 15
+  },
+  mainContainer: {
+    paddingTop: '50px'
   },
   footer: {
     position: 'fixed',
@@ -189,8 +210,10 @@ const useStyles = makeStyles({
     justifyContent: 'center'
   },
   headerrow: {
-    display: 'flex',
-    justifyContent: 'flex-end'
+    position: 'fixed',
+    left: 0,
+    top: 0,
+    width: 100 + '%'
   },
   profileBtn: {
     color: 'green'

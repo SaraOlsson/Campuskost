@@ -11,45 +11,15 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import InfoIcon from '@material-ui/icons/Info';
 
-// import '../style/GlobalCssButton.css';
-
-function RecipeGridListTile(props) {
-
-  const tile = props.recipe;
-  const classes = useStyles();
-
-  /*
-  actionIcon={
-    <IconButton aria-label={`info about ${tile.title}`} className={classes.icon}>
-      <InfoIcon />
-    </IconButton>
-  }
-  */
-
-  let r_img = ( tile.img != undefined) ? tile.img : 'temp_food1';
-
-  return (
-
-    <GridListTile key={r_img} className={classes.listimage}>
-      <img src={require('../assets/'+ r_img + '.jpg')} alt={tile.title} />
-
-      <GridListTileBar
-        title={tile.title}
-        subtitle={<span>Av: {tile.user}</span>}
-
-      />
-
-    </GridListTile>
-  );
-
-}
+  
+import RecipeItem from '../components/recipeitem';
 
 function RecipeGridList(props) {
 
   const classes = useStyles();
 
   let images = props.imageData.map((recipe, idx) =>
-    <RecipeGridListTile recipe={recipe} key={idx}/>
+    <RecipeItem recipe={recipe} key={idx}/>
   );
 
   return (
@@ -67,14 +37,16 @@ const useStyles = makeStyles({
    flexWrap: 'wrap',
    justifyContent: 'center',
    overflow: 'hidden',
-   backgroundColor: 'white',
- },
+   backgroundColor: '#f1f1f1',
+   padding: '15px'
+  },
   icon: {
     color: 'rgba(255, 255, 255, 0.54)',
   },
   listimage: {
     maxHeight: '150px',
-    maxWidth: '150px'
+    maxWidth: '150px',
+    padding: '5px'
   }
 });
 

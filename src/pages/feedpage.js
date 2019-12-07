@@ -8,7 +8,10 @@ import recipeData from '../assets/recipes_dev';
 import RecipeGridList from '../components/recipegrid';
 
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import ImageIcon from '@material-ui/icons/Image';
+
+var Spinner = require('react-spinkit');
 
 function FeedPage(props) {
 
@@ -44,11 +47,15 @@ function FeedPage(props) {
 
   // <div className={classes.imageContainer}>{images}</div>
   // recipeData.PastaMaster.recipes
-
+// { recipes != undefined && <RecipeGridList imageData={recipes}/> }
   return (
     <div>
       <NewsContainer/>
       { recipes != undefined && <RecipeGridList imageData={recipes}/> }
+      { recipes === undefined && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
+
+
+
     </div>
   );
 
@@ -118,6 +125,11 @@ const useStyles = makeStyles({
     borderRadius: 20,
     backgroundColor: '#f1f1f1',
     marginBottom: 15
+  },
+  spinner: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 100
   }
 });
 

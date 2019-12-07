@@ -24,6 +24,14 @@
   margin: 0px;
 }
 
+.body .MuiGridListTile-tile {
+    height: 100%;
+    display: block;
+    overflow: hidden;
+    position: relative;
+    border-radius: 20px;
+}
+
 
 .body .MuiBox-root {
   padding: 0;

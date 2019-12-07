@@ -10,21 +10,14 @@ import followerData from '../assets/users_dev';
 import SimpleTabs from '../components/userpagetabs';
 import RecipeGridList from '../components/recipegrid';
 import FollowerList from '../components/followerlist';
-// import '../style/GlobalCssButton.css';
+import ListContainer from '../components/listcontainer';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import GridListTile from '@material-ui/core/GridListTile';
 import GridList from '@material-ui/core/GridList';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-
 import InfoIcon from '@material-ui/icons/Info';
-import PersonIcon from '@material-ui/icons/Person';
 import userchef from '../assets/userchef.png';
 
 const useMountEffect = (fun) => useEffect(fun, []);
@@ -47,8 +40,7 @@ function ProfilePage(props) {
   }
 
   useEffect(() => {
-    // someFetcher();
-    //usersRef.on('value', function(snap) { console.log(snap.val()); })
+
     let recpiesRef = store.db.collection('recipes');
     recipeFetcher(recpiesRef);
 
@@ -71,22 +63,12 @@ function ProfilePage(props) {
     });
   }
 
-
-
   /*
   <Button onClick={ () => firebase.auth().signOut()} variant="contained" color="primary">
     Logga ut
   </Button>
   <button onClick={ () => firebase.auth().signOut() } name="signout"> Logga ut </button>*/
 
-  // console.log(recipeData)
- /*
-  let keys = Object.keys(recipeData);
-  let index = keys.indexOf("LillKocken");
-  let data = recipeData[index];
-*/
-  console.log( recipes )
-  // recipeData.PastaMaster.recipes
 
   let recipeContent = (recipes != undefined) ? <RecipeGridList imageData={recipes}/> : <div>Yo</div>;
 
@@ -115,7 +97,7 @@ function ProfilePage(props) {
 
       <SimpleTabs>
         { recipeContent }
-        <InfoIcon/>
+        <ListContainer title="Favoriter"/>
         <FollowerList followerData={followerData.LillKocken.followers}/>
         <FollowerList followerData={followerData.LillKocken.following}/>
       </SimpleTabs>
@@ -125,7 +107,7 @@ function ProfilePage(props) {
    </React.Fragment>
 
   );
-  // recipeData.LillKocken.recipes //         <RecipeGridList imageData={recipes}/>
+
 }
 
 const useStyles = makeStyles({
