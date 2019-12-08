@@ -97,7 +97,10 @@ function ProfilePage(props) {
 
       <SimpleTabs>
         { recipeContent }
+        <div>
         <ListContainer title="Favoriter"/>
+        <ListContainer title="Att prova"/>
+        </div>
         <FollowerList followerData={followerData.LillKocken.followers}/>
         <FollowerList followerData={followerData.LillKocken.following}/>
       </SimpleTabs>

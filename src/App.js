@@ -196,7 +196,8 @@ function App() {
 
 const useStyles = makeStyles({
   body: {
-    padding: 15
+    padding: 15,
+    paddingTop: '35px'
   },
   mainContainer: {
     paddingTop: '50px'

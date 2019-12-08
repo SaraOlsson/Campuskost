@@ -6,8 +6,10 @@ import { useSelector } from 'react-redux';
 
 import recipeData from '../assets/recipes_dev';
 import RecipeGridList from '../components/recipegrid';
+import RecipeItem from '../components/recipeitem';
 
 import Grid from '@material-ui/core/Grid';
+import GridList from '@material-ui/core/GridList';
 import Box from '@material-ui/core/Box';
 import ImageIcon from '@material-ui/icons/Image';
 
@@ -53,9 +55,6 @@ function FeedPage(props) {
       <NewsContainer/>
       { recipes != undefined && <RecipeGridList imageData={recipes}/> }
       { recipes === undefined && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
-
-
-
     </div>
   );
 
@@ -65,6 +64,8 @@ function NewsContainer(props) {
 
   const classes = useStyles();
   // className={classes.userinfo}
+
+  let temp_recipe = {img: 'temp_food2', title: "Svamprisotto", user: "LillKocken"};
 
   return (
     <div>
@@ -76,10 +77,12 @@ function NewsContainer(props) {
       alignItems="center"
       className={classes.newscontainer}
     >
-      <Grid item xs={3}>
-        <ImageIcon/>
+      <Grid item xs={5}>
+
+        <img src={require('../assets/'+ temp_recipe.img + '.jpg')} alt={temp_recipe.title} className={classes.listimage}/>
+
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={7}>
         <h3>Vegetarisk lasagne</h3>
         <h5>"Bästa matlådan!"</h5>
       </Grid>
@@ -125,6 +128,13 @@ const useStyles = makeStyles({
     borderRadius: 20,
     backgroundColor: '#f1f1f1',
     marginBottom: 15
+  },
+  listimage: {
+    maxHeight: '90px',
+    maxWidth: '90px',
+    padding: '5px',
+    margin: '15px',
+    borderRadius: '10px'
   },
   spinner: {
     display: 'flex',
