@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as BrowserRouter, Router, Route, Link, Switch, Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 // import { useHistory } from "react-router-dom";
 import { incrementdispatch } from './actions/RecipeActions';
 import './App.css';
@@ -99,15 +100,16 @@ function ProfileBtn (props) {
 
 } */
 
-function App() {
+function App(props) {
 
   // const [signedIn, setSignedIn] = React.useState(false);
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState('default');
   const [redirect, setRedirect] = React.useState(false);
 
   const classes = useStyles();
   const dispatch = useDispatch(); // be able to dispatch
   const state_user = useSelector(state => state.userReducer); // subscribe to the redux store
+
   //console.log(state_user)
 
   // start auth listener
@@ -128,19 +130,15 @@ function App() {
 
   const handleChange = (event = undefined, newValue) => {
 
-    console.log("heello" + newValue)
+    console.log("heello" + newValue + ".")
 
-    setRedirect(true);
-    setValue(newValue);
-    /*
-    setRedirect(true);
-    let button_value = event.target.value;
-    if(button_value != undefined)
-      setValue(button_value);
-    else
-      setValue(newValue); */
+    //history.push("/" + value);
+    //setRedirect(true);
+    //setValue(newValue);
 
   };
+
+  console.log("redirect: " + redirect)
 
 /*
 
@@ -150,46 +148,69 @@ function App() {
 
 */
 
+  // to={{ ...location, pathname: "/welcome" }}
+  // to={"/" + value}
+  // {redirect ? <Redirect to={{ ...window.location, pathname: "/" + value }} /> : null }
+
   return (
     <div className="body">
 
-      <Router>
+      <BrowserRouter>
+      <div>
 
-      {redirect ? <Redirect to={"/" + value} /> : null }
+        <div className={classes.headerrow}>
+        <TopMenuBar signedIn={state_user.signedIn} handleChange={handleChange}/>
+        </div>
 
-      <div className={classes.headerrow}>
-      <TopMenuBar signedIn={state_user.signedIn} handleChange={handleChange}/>
+        <div className={classes.mainContainer}>
+
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/profile/:user" component={ProfilePage} />
+            <Route path="/upload" component={UploadPage} />
+            <Route path="/notices" component={NoticePage} />
+            <Route path="/saved" component={FavoritePage} />
+            <Route path="/recipe/:recipe" component={RecipePage} />
+            <Route path="/home" component={FeedPage}/>
+
+            <Redirect path="*" to="/home" />
+          </Switch>
+
+        </div>
+        <div className={classes.footer}>
+          <BottomMenuBar/>
+        </div>
+
       </div>
+      </BrowserRouter>
 
-      <div className={classes.mainContainer}>
-
-        <Switch>
-          <Route exact path="/">
-            <FeedPage db={db}/>
-          </Route>
-
-          <Route path="/login" component={Login} />
-          <Route path="/profile" component={ProfilePage} />
-          <Route path="/upload" component={UploadPage} />
-          <Route path="/notices" component={NoticePage} />
-          <Route path="/saved" component={FavoritePage} />
-          <Route path="/recipe/:recipe" component={RecipePage} />
-
-        </Switch>
-
-      </div>
-      <div className={classes.footer}>
-        <BottomNavigation value={value} onChange={ (evt,value) => handleChange(evt, value) } className={classes.bottomMenu}>
-          <BottomNavigationAction label="Flöde" value="" icon={<HomeRoundedIcon />} />
-          <BottomNavigationAction label="Ladda up" value="upload" icon={<PublishIcon />} />
-          <BottomNavigationAction label="Notiser" value="notices" icon={<Badge badgeContent={3} color="secondary"><NotificationsIcon /></Badge>} />
-          <BottomNavigationAction label="Sparat" value="saved" icon={<LoyaltyRoundedIcon />} />
-        </BottomNavigation>
-      </div>
-
-      </Router>
     </div>
   );
+}
+
+function BottomMenuBar() {
+
+  const [value, setValue] = React.useState('default');
+
+  const history = useHistory();
+  const classes = useStyles();
+
+  const handleMenuClick = (event = undefined, val) => {
+    setValue(val);
+    history.push("/" + val);
+  };
+
+  return (
+
+    <BottomNavigation value={value} onChange={ (evt,value) => handleMenuClick(evt, value) } className={classes.bottomMenu}>
+      <BottomNavigationAction label="Flöde" value="home" icon={<HomeRoundedIcon />} />
+      <BottomNavigationAction label="Ladda up" value="upload" icon={<PublishIcon />} />
+      <BottomNavigationAction label="Notiser" value="notices" icon={<Badge badgeContent={3} color="secondary"><NotificationsIcon /></Badge>} />
+      <BottomNavigationAction label="Sparat" value="saved" icon={<LoyaltyRoundedIcon />} />
+    </BottomNavigation>
+
+  );
+
 }
 
 // margin: -15px -11px 50px -15px;

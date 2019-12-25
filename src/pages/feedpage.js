@@ -15,7 +15,7 @@ import ImageIcon from '@material-ui/icons/Image';
 
 var Spinner = require('react-spinkit');
 
-function FeedPage(props) {
+function FeedPage() {
 
   // const [images, setImages] = useState();
   const [recipes, setRecipes] = useState(undefined);

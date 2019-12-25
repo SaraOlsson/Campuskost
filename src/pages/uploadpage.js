@@ -23,6 +23,7 @@ function UploadPage(props) {
   const [labelWidth, setLabelWidth] = React.useState(0);
   const labelRef = React.useRef(null);
 
+
   const [valid, setValid] = React.useState({
     title: false,
     ingredients: false,

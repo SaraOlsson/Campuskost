@@ -25,6 +25,7 @@ const useMountEffect = (fun) => useEffect(fun, []);
 // () =>
 function ProfilePage(props) {
 
+  const [user, setUser] = useState(undefined);
   const [recipes, setRecipes] = useState(undefined);
   const [signedIn, setSignedIn] = React.useState(false);
   const [redirect, setRedirect] = React.useState(false);
@@ -32,7 +33,8 @@ function ProfilePage(props) {
   const classes = useStyles();
   const state = useSelector(state => state.userReducer); // subscribe to the redux store
   const store = useSelector(state => state.fireReducer);
-  console.log(state)
+
+  let username = props.match.params.user;
 
   function handleSignOut() {
     firebase.auth().signOut();
@@ -46,20 +48,20 @@ function ProfilePage(props) {
 
   }, []);
 
-  let username = "LillKocken";
+  console.log("out here")
+
+  useEffect(() => {
+    console.log('user changed!')
+    setUser(props.match.params.user);
+  }, [props.match.params.user]);
 
   const recipeFetcher = (recpiesRef) => {
-    store.db.collection("recipes").where("user", "==", "LillKocken")
-    .onSnapshot(function(querySnapshot) {
+    store.db.collection("recipes").where("user", "==", username)
+    .onSnapshot(function(snap) {
 
-        //let images_array = [];
-        let recipe_docs = [];
-        querySnapshot.forEach(function(doc) {
-          //images_array.push(<ImageContainer key={doc.id} listId={doc.id} data={doc.data()}/>);
-          recipe_docs.push(doc.data());
-        });
-        //setImages(images_array);
-        setRecipes(recipe_docs);
+        let temp_docs = [];
+        snap.forEach( doc => temp_docs.push(doc.data()) );
+        setRecipes(temp_docs);
     });
   }
 
@@ -68,7 +70,6 @@ function ProfilePage(props) {
     Logga ut
   </Button>
   <button onClick={ () => firebase.auth().signOut() } name="signout"> Logga ut </button>*/
-
 
   let recipeContent = (recipes != undefined) ? <RecipeGridList imageData={recipes}/> : <div>Yo</div>;
 
@@ -101,8 +102,8 @@ function ProfilePage(props) {
         <ListContainer title="Favoriter"/>
         <ListContainer title="Att prova"/>
         </div>
-        <FollowerList followerData={followerData.LillKocken.followers}/>
-        <FollowerList followerData={followerData.LillKocken.following}/>
+        <FollowerList test={user} followerData={followerData.LillKocken.followers}/>
+        <FollowerList test={user} followerData={followerData.LillKocken.following}/>
       </SimpleTabs>
 
       {state.signedIn === false && <p> Hey you're not signed in. Things won't work here (redirect back) </p>  }

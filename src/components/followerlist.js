@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { Redirect } from "react-router-dom";
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -20,7 +21,6 @@ function FollowerListItem(props) {
   const classes = useStyles();
   let user = props.user;
 
-
   return (
 
     <ListItem>
@@ -33,9 +33,8 @@ function FollowerListItem(props) {
       <ListItemText
         primary= { user.nickname }
         secondary={ user.fullname }
+        onClick={() => props.handleChange(user.nickname)}
       />
-
-
 
       <ListItemSecondaryAction>
         <IconButton edge="end" aria-label="follows">
@@ -52,25 +51,34 @@ function FollowerListItem(props) {
 
 function FollowerList(props) {
 
+  const [user, setUser] = React.useState(false);
+  const [redirect, setRedirect] = React.useState(false);
   const classes = useStyles();
 
+  /*
   let followers = [
   {nickname: "NinjaChef", fullname: "Amanda Tydén", follows: true},
   {nickname: "UtterMat", fullname: "Ronja Faltin", follows: true},
   {nickname: "SimbaFood", fullname: "Scar Leijon", follows: false}
-  ];
+  ]; */
+
+  const handleUserClick = (user) => {
+    setRedirect(true);
+    setUser(user);
+  };
+
+  if(redirect) // redirect if click
+    return ( <Redirect to={"/profile/" + user} /> );
 
   let followersjsx = props.followerData.map((user, idx) =>
-    <FollowerListItem key={idx} user={user}/>
+    <FollowerListItem key={idx} user={user} handleChange={handleUserClick} tjululu={props.test}/>
   );
 
   return (
     <List dense={true} className={classes.followerlist}>
       {followersjsx}
     </List>
-
   );
-
 }
 
 const useStyles = makeStyles({

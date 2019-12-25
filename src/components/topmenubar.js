@@ -14,8 +14,12 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { Link } from "react-router-dom";
+import LinkUI from '@material-ui/core/Link';
+import { useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -86,19 +90,25 @@ const useStyles = makeStyles(theme => ({
 function ProfileBtn (props) {
 
   const classes = useStyles();
+  const history = useHistory();
+
 
   //console.log(props)
+  // history.push("/" + val);
+  // (e) => props.handleChange(undefined, e.target.value)
 
   let text = (props.signedIn === true) ? "profile" : "login";
   let btn = (
     <div>
-      <button value={text} onClick={(e) => props.handleChange(undefined, e.target.value)}>{text}</button>
+      <button value={text} onClick={(e) => history.push("/" + e.target.value)}>{text}</button>
     </div> );
 
   //let jsx_content = props.signedIn ? <Link to={"/profile"} ><AccountCircleIcon/></Link> : btn;
   let jsx_content = props.signedIn ? <AccountCircleIcon/> : btn;
   //let jsx_content = props.signedIn ? <AccountCircleIcon onClick={props.handleChange("/profile")}/> : btn;
   // className={classes.whiteColor}
+
+  //  props.handleChange(undefined, "profile" + '/LillKocken')
 
   if(props.signedIn === true)
   {
@@ -108,7 +118,7 @@ function ProfileBtn (props) {
         className={classes.menuButton}
         color="inherit"
         aria-label="open profile"
-        onClick={() => props.handleChange(undefined, "profile")}
+        onClick={() => history.push("profile/" + "LillKocken")}
       >
       {jsx_content} </IconButton>
 
@@ -124,6 +134,9 @@ function TopMenuBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
+  const store = useSelector(state => state.testReducers);
+  const history = useHistory();
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -133,6 +146,10 @@ function TopMenuBar(props) {
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
+  };
+
+  const lala = () => {
+    history.push("/home");
   };
 
   const handleMenuClose = () => {
@@ -210,11 +227,15 @@ function TopMenuBar(props) {
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
+            onClick={ () => history.goBack() }
           >
-            <MenuIcon />
+            <ArrowBackIosIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Campuskost
+
+            <LinkUI component={Link} to="/home" style={{ textDecoration: 'none', color: 'white' }}>
+              Campuskost
+            </LinkUI>
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>

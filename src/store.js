@@ -1,6 +1,6 @@
 import { createStore, combineReducers, compose } from 'redux'
 
-function testreducer(state = { num: 0 }, action) {
+function testreducer(state = { num: 0, url: "hey" }, action) {
   switch (action.type) {
     case "INCREMENT":
       return {
@@ -14,6 +14,11 @@ function testreducer(state = { num: 0 }, action) {
       };
     default:
       return state;
+    case "SETURL":
+      return {
+        ...state,
+        url: state.url
+      };
   }
 }
 
