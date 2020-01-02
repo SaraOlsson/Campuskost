@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
+import { useHistory } from "react-router-dom";
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 
@@ -11,8 +11,10 @@ function RecipeItem(props) {
 
   const [redirect, setRedirect] = React.useState(false);
 
-  const tile = props.recipe;
+  const history = useHistory();
   const classes = useStyles();
+
+  const tile = props.recipe;
 
   let r_img = ( tile.img != undefined) ? tile.img : 'temp_food1';
 
@@ -20,12 +22,13 @@ function RecipeItem(props) {
 
     console.log("heelloo yoyoyo, go to " + recipeTitle)
 
-    setRedirect(true);
+    history.push("/recipe/" + tile.title);
+    // setRedirect(true);
 
   };
 
-  if(redirect)
-    return ( <Redirect to={"/recipe/" + tile.title} /> );
+  // if(redirect)
+  //  return ( <Redirect to={"/recipe/" + tile.title} /> );
 
   return (
 
