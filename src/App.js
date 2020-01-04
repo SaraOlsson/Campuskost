@@ -170,7 +170,7 @@ function App(props) {
             <Route path="/upload" component={UploadPage} />
             <Route path="/notices" component={NoticePage} />
             <Route path="/saved" component={FavoritePage} />
-            <Route path="/recipe/:recipe" component={RecipePage} />
+            <Route path="/recipe/:recipetitle/:id" component={RecipePage} />
             <Route path="/home" component={FeedPage}/>
 
             <Redirect path="*" to="/home" />
@@ -221,7 +221,8 @@ const useStyles = makeStyles({
     paddingTop: '35px'
   },
   mainContainer: {
-    paddingTop: '50px'
+    paddingTop: '50px',
+    paddingBottom: '50px'
   },
   footer: {
     position: 'fixed',

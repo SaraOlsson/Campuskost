@@ -36,13 +36,13 @@ function FeedPage() {
     store.db.collection("recipes")
     .onSnapshot(function(querySnapshot) {
 
-        //let images_array = [];
         let recipe_docs = [];
-        querySnapshot.forEach(function(doc) {
-          //images_array.push(<ImageContainer key={doc.id} listId={doc.id} data={doc.data()}/>);
-          recipe_docs.push(doc.data());
+        querySnapshot.forEach( doc => {
+          let data = doc.data();
+          data.id = doc.id;
+          recipe_docs.push(data);
         });
-        //setImages(images_array);
+
         setRecipes(recipe_docs);
     });
   }
@@ -53,7 +53,7 @@ function FeedPage() {
   return (
     <div>
       <NewsContainer/>
-      { recipes != undefined && <RecipeGridList imageData={recipes}/> }
+      { recipes != undefined && <RecipeGridList recipes={recipes}/> }
       { recipes === undefined && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
     </div>
   );

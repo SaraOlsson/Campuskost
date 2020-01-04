@@ -14,30 +14,32 @@ function RecipeItem(props) {
   const history = useHistory();
   const classes = useStyles();
 
-  const tile = props.recipe;
+  const recipe = props.recipe;
 
-  let r_img = ( tile.img != undefined) ? tile.img : 'temp_food1';
+  let r_img = ( recipe.img != undefined) ? recipe.img : 'temp_food1';
 
-  const handeRecipeClick = (recipeTitle) => {
+  const handeRecipeClick = (clicked_recipe) => {
 
-    console.log("heelloo yoyoyo, go to " + recipeTitle)
+    console.log("yoyoyo, go to " + clicked_recipe.title)
+    console.log(clicked_recipe)
 
-    history.push("/recipe/" + tile.title);
+
+    history.push("/recipe/" + clicked_recipe.title + "/" + clicked_recipe.id );
     // setRedirect(true);
 
   };
 
   // if(redirect)
-  //  return ( <Redirect to={"/recipe/" + tile.title} /> );
+  //  return ( <Redirect to={"/recipe/" + recipe.title} /> );
 
   return (
 
-    <GridListTile key={r_img} className={classes.listimage} onClick={() => handeRecipeClick(tile.title)}>
-      <img src={require('../assets/'+ r_img + '.jpg')} alt={tile.title} />
+    <GridListTile key={r_img} className={classes.listimage} onClick={() => handeRecipeClick(recipe)}>
+      <img src={require('../assets/'+ r_img + '.jpg')} alt={recipe.title} />
 
       <GridListTileBar
-        title={tile.title}
-        subtitle={<span>Av: {tile.user}</span>}
+        title={recipe.title}
+        subtitle={<span>Av: {recipe.user}</span>}
 
       />
 

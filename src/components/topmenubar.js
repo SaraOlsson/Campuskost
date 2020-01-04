@@ -103,12 +103,7 @@ function ProfileBtn (props) {
       <button value={text} onClick={(e) => history.push("/" + e.target.value)}>{text}</button>
     </div> );
 
-  //let jsx_content = props.signedIn ? <Link to={"/profile"} ><AccountCircleIcon/></Link> : btn;
   let jsx_content = props.signedIn ? <AccountCircleIcon/> : btn;
-  //let jsx_content = props.signedIn ? <AccountCircleIcon onClick={props.handleChange("/profile")}/> : btn;
-  // className={classes.whiteColor}
-
-  //  props.handleChange(undefined, "profile" + '/LillKocken')
 
   if(props.signedIn === true)
   {
@@ -118,7 +113,7 @@ function ProfileBtn (props) {
         className={classes.menuButton}
         color="inherit"
         aria-label="open profile"
-        onClick={() => history.push("profile/" + "LillKocken")}
+        onClick={() => history.push("/profile/" + "LillKocken")}
       >
       {jsx_content} </IconButton>
 

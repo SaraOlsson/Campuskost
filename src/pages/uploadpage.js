@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 import '../style/GlobalCssButton.css';
 import FileInput from '../components/fileinput';
+import ValidCheck from '../components/validcheck';
 
 import FilledInput from '@material-ui/core/FilledInput';
 import FormControl from '@material-ui/core/FormControl';
@@ -158,24 +159,6 @@ function UploadPage(props) {
 
 }
 
-function ValidCheck(props) {
-
-  const classes = useStyles();
-
-  return (
-    <Grid item xs={props.xs}>
-    <FormControlLabel disabled
-      control={
-        <Checkbox
-          checked={props.checked}
-          color="primary"
-          className= {classes.nomargin}
-        />}
-    />
-    </Grid>
-  );
-}
-
 // material ui design
 const useStyles = makeStyles({
   body: {
@@ -183,9 +166,6 @@ const useStyles = makeStyles({
   },
   buttontext: {
     textTransform: 'unset'
-  },
-  nomargin: {
-    margin: 0
   },
   input: {
     color: 'black',
@@ -198,42 +178,3 @@ const useStyles = makeStyles({
 });
 
 export default UploadPage;
-
-/*
-
-<ValidCheck checked={valid.image} xs={2}/>
-<Grid item xs={9}>
-  <input accept="image/*" className={classes.input} id="icon-button-file" type="file" />
-  <label htmlFor="icon-button-file">
-    <IconButton color="primary" aria-label="upload picture" component="span">
-      <PhotoCamera />
-    </IconButton>
-  </label>
-</Grid>
-
-
-
-*/
-
-
-/*
-
-<Grid item xs={12}>
-
-<input
-  accept="image/*"
-  className={classes.input}
-  style={{ display: 'none' }}
-  id="raised-button-file"
-  multiple
-  type="file"
-/>
-<label htmlFor="raised-button-file">
-  <Button variant="raised" component="span" className={classes.buttontext}>
-    Upload
-  </Button>
-</label>
-
-</Grid>
-
-*/

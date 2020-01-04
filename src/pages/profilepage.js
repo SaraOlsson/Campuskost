@@ -42,26 +42,26 @@ function ProfilePage(props) {
   }
 
   useEffect(() => {
-
-    let recpiesRef = store.db.collection('recipes');
-    recipeFetcher(recpiesRef);
-
+    recipeFetcher();
   }, []);
-
-  console.log("out here")
 
   useEffect(() => {
     console.log('user changed!')
     setUser(props.match.params.user);
   }, [props.match.params.user]);
 
-  const recipeFetcher = (recpiesRef) => {
-    store.db.collection("recipes").where("user", "==", username)
-    .onSnapshot(function(snap) {
+  const recipeFetcher = () => {
+    store.db.collection("recipes")
+    .onSnapshot(function(querySnapshot) {
 
-        let temp_docs = [];
-        snap.forEach( doc => temp_docs.push(doc.data()) );
-        setRecipes(temp_docs);
+        let recipe_docs = [];
+        querySnapshot.forEach( doc => {
+          let data = doc.data();
+          data.id = doc.id;
+          recipe_docs.push(data);
+        });
+
+        setRecipes(recipe_docs);
     });
   }
 
@@ -71,7 +71,7 @@ function ProfilePage(props) {
   </Button>
   <button onClick={ () => firebase.auth().signOut() } name="signout"> Logga ut </button>*/
 
-  let recipeContent = (recipes != undefined) ? <RecipeGridList imageData={recipes}/> : <div>Yo</div>;
+  let recipeContent = (recipes != undefined) ? <RecipeGridList recipes={recipes}/> : <div>Yo</div>;
 
   return (
 

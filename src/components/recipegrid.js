@@ -11,14 +11,14 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import InfoIcon from '@material-ui/icons/Info';
 
-  
+
 import RecipeItem from '../components/recipeitem';
 
 function RecipeGridList(props) {
 
   const classes = useStyles();
 
-  let images = props.imageData.map((recipe, idx) =>
+  let images = props.recipes.map((recipe, idx) =>
     <RecipeItem recipe={recipe} key={idx}/>
   );
 
