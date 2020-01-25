@@ -91,7 +91,10 @@ function ProfileBtn (props) {
 
   const classes = useStyles();
   const history = useHistory();
+  const store = useSelector(state => state.fireReducer);
 
+  //console.log("topbar firebase user: ")
+  // console.log(store.user)
 
   //console.log(props)
   // history.push("/" + val);
@@ -113,7 +116,7 @@ function ProfileBtn (props) {
         className={classes.menuButton}
         color="inherit"
         aria-label="open profile"
-        onClick={() => history.push("/profile/" + "LillKocken")}
+        onClick={() => history.push("/profile/" + store.firestore_user.username)}
       >
       {jsx_content} </IconButton>
 
@@ -129,7 +132,7 @@ function TopMenuBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  const store = useSelector(state => state.testReducers);
+  const store_temp = useSelector(state => state.testReducers);
   const history = useHistory();
 
   const isMenuOpen = Boolean(anchorEl);
@@ -249,47 +252,11 @@ function TopMenuBar(props) {
           <div className={classes.sectionDesktop}>
           <ProfileBtn signedIn={props.signedIn} handleChange={props.handleChange}/>
           </div>
-          { /*
-          <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </div>
-
-          */ }
 
           <div className={classes.sectionMobile}>
           <ProfileBtn signedIn={props.signedIn} handleChange={props.handleChange}/>
           </div>
-          { /*
-          <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </div> */ }
+
         </Toolbar>
       </AppBar>
       {renderMobileMenu}

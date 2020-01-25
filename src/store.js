@@ -51,12 +51,22 @@ function userReducer(state = { signedIn: false }, action) {
   }
 }
 
-function fireReducer(state = { db: 0 }, action) {
+function fireReducer(state = { db: 0, auth_user: undefined, firestore_user: undefined }, action) {
   switch (action.type) {
     case "SETDB":
       return {
         ...state,
         db: action.db
+      };
+    case "SETUSER":
+      return {
+        ...state,
+        auth_user: action.auth_user
+      };
+    case "SETFIREUSER":
+      return {
+        ...state,
+        firestore_user: action.firestore_user
       };
     default:
       return state;

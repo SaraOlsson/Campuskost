@@ -30,8 +30,9 @@ function RecipePage(props) {
 
   useEffect(() => {
     // someFetcher();
-    //usersRef.on('value', function(snap) { console.log(snap.val()); })
+
     let ref = store.db.collection('recipes').doc(id);
+    // ref.on('value', function(snap) { console.log(snap.val()); })
     recipeFetcher(ref);
 
   }, []);
@@ -58,11 +59,26 @@ function RecipePage(props) {
     });
 
   }
+/*
+  const recipeFetcher = (ref) => {
+    ref.get().then(function(doc) {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            setRecipe(doc.data());
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+
+  } */
 
   let icon = (saved === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
   let r_img = ( recipe != undefined) ? recipe.img : 'temp_food1';
   let triedbyNum = 3;
-
+  // , zIndex: '-1'
   return (
 
     <div>
@@ -71,7 +87,7 @@ function RecipePage(props) {
         <div>
         <h2>
           <Button disableTouchRipple onClick={likeRecipe}
-          style={{display: 'inline', backgroundColor: 'transparent', zIndex: '-1'}}>
+          style={{display: 'inline', backgroundColor: 'transparent'}}>
             {icon}
           </Button>
           { recipetitle + ' | ' + recipe.user }
@@ -104,8 +120,8 @@ function RecipePage(props) {
           </Grid>
         </Grid>
 
-        <IngredientsList/>
-        <RecipeDecsList/>
+        <IngredientsList ingredients={recipe.ingredients}/>
+        <RecipeDecsList description={recipe.description}/>
 
         </div>
       }
@@ -121,15 +137,26 @@ function IngredientsList(props) {
 
   const classes = useStyles();
 
+/*
   let ingredients = [
   "2 dl mjöl", "1 tsk salt", "4 dl mjölk", "2 ägg"
-  ];
+]; */
+
+
+  let temp_ingredients = [
+  {name: 'mjöl (default data)', quantity: "2", measure: "dl"},
+  {name: 'salt', quantity: "1", measure: "tsk"},
+  {name: 'mjölk', quantity: "4", measure: "dl"},
+  {name: 'ägg', quantity: "2", measure: ""}
+];
+
+  let ingredients = (props.ingredients != undefined) ? props.ingredients : temp_ingredients;
 
   let ingredientsjsx = ingredients.map((ingred, idx) =>
   <React.Fragment key={idx}>
     <ListItem>
       <ListItemText
-        primary= { ingred }
+        primary={ ingred.quantity + " " + ingred.measure + " " + ingred.name }
       />
 
     </ListItem>
@@ -151,12 +178,19 @@ function RecipeDecsList(props) {
 
   const classes = useStyles();
 
-  let full_desc = [
-  "Knäck äggen i en bunke", "Vispa i mjöl, mjölk och salt", "Stek i pannan meed smör eller kokosolja"
+  let temp_description = [
+  {order: 0, text: "Knäck äggen i en bunke (default data)"},
+  {order: 2, text: "Stek i pannan meed smör eller kokosolja"},
+  {order: 1, text: "Vispa i mjöl, mjölk och salt"}
   ];
 
-  let descjsx = full_desc.map((desc, idx) =>
-    <RecipeDecsListItem idx={idx} key={idx} desc={desc} len={full_desc.length}/>
+  let description = (props.description != undefined) ? props.description : temp_description;
+
+  // sort by order
+  description.sort( (desc1, desc2) => desc1.order - desc2.order );
+
+  let descjsx = description.map((desc, idx) =>
+    <RecipeDecsListItem idx={idx} key={idx} desc={desc.text} len={description.length}/>
   );
 
   return (

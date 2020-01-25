@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Grid from '@material-ui/core/Grid';
@@ -11,21 +11,35 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import InfoIcon from '@material-ui/icons/Info';
 
-
 import RecipeItem from '../components/recipeitem';
+
+var Spinner = require('react-spinkit');
 
 function RecipeGridList(props) {
 
   const classes = useStyles();
 
-  let images = props.recipes.map((recipe, idx) =>
-    <RecipeItem recipe={recipe} key={idx}/>
-  );
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+
+    let images_temp = props.recipes.map((recipe, idx) =>
+      <RecipeItem recipe={recipe} key={idx}/>
+    );
+
+    setImages(images_temp);
+
+  }, []);
+
+  // console.log("images.length: " + images.length)
+
+  // oh loading in parent component is what is taking time
 
   return (
     <div className={classes.root}>
       <GridList>
-      {images}
+      {images.length > 0 && images }
+      {images.length < 1 && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
       </GridList>
     </div>
   );
@@ -47,6 +61,11 @@ const useStyles = makeStyles({
     maxHeight: '150px',
     maxWidth: '150px',
     padding: '5px'
+  },
+  spinner: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 100
   }
 });
 

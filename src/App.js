@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+//import { HashRouter as BrowserRouter, Router, Route, Link, Switch, Redirect } from "react-router-dom";
 import { BrowserRouter as BrowserRouter, Router, Route, Link, Switch, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 // import { useHistory } from "react-router-dom";
@@ -19,6 +20,7 @@ import FavoritePage from './pages/favoritepage';
 import UploadPage from './pages/uploadpage';
 import RecipePage from './pages/recipepage';
 import Login from './pages/login';
+import SearchPage from './pages/searchpage';
 import TopMenuBar from './components/topmenubar';
 // import Feed from './pages/feedpage';
 
@@ -81,24 +83,6 @@ function initFirebase() {
   return db;
 }
 
-/*
-function ProfileBtn (props) {
-
-  const classes = useStyles();
-
-  //console.log(props)
-
-  let text = (props.signedIn === true) ? "profile" : "login";
-  let btn = (
-    <div className={classes.profileBtn}>
-      <button value={text} onClick={(e) => props.handleChange(e)}>{text}</button>
-    </div> );
-
-  let jsx_content = props.signedIn ? <Link to={"/profile"}><AccountCircleIcon/></Link> : btn;
-
-  return (<div>{jsx_content} </div>);
-
-} */
 
 function App(props) {
 
@@ -109,6 +93,7 @@ function App(props) {
   const classes = useStyles();
   const dispatch = useDispatch(); // be able to dispatch
   const state_user = useSelector(state => state.userReducer); // subscribe to the redux store
+  const store = useSelector(state => state.fireReducer); // subscribe to the redux store
 
   //console.log(state_user)
 
@@ -117,9 +102,79 @@ function App(props) {
 
     firebase.auth().onAuthStateChanged(user => {
       dispatch({ type: user ? "SIGNIN" : "SIGNOUT" })
+
+      // if user is signed in
+      if( user ) {
+
+        dispatch({
+          type: "SETUSER",
+          auth_user: user
+        })
+
+        const user_id = user.uid;
+        const user_email = user.email;
+      //  console.log("userId: " + user_id)
+      //  console.log("user_email: " + user_email)
+      //  console.log(user)
+
+        // check with firestore data
+        // const document = store.db.doc('users/' + user_id);
+        const usersRef = db.collection('users').doc(user_email);
+
+        usersRef.get()
+        .then((docSnapshot) => {
+          if (docSnapshot.exists) {
+            usersRef.onSnapshot((doc) => {
+              // do stuff with the data
+              console.log("user exists in firestore")
+              //console.log(doc.data())
+
+              dispatch({
+                type: "SETFIREUSER",
+                firestore_user: doc.data()
+              })
+
+            });
+          } else {
+
+            console.log("create the document")
+            usersRef.set({
+              email: user_email,
+              username: "DefaultChef",
+              university: "",
+              fullname: "Master Chef"
+            }); // create the document
+          }
+      });
+
+        // Enter new data into the document.
+        /*
+        document.set({
+          user: username,
+          title: recipe_name,
+          img: "temp_food2",
+          ingredients: temp_i,
+          description: temp_d
+        }).then(() => {
+          // Document created successfully.
+          console.log( "Document created/updated successfully.")
+        }); */
+
+      } // end if user
+      else {
+
+      dispatch({
+        type: "SETUSER",
+        user: undefined
+      })
+
+      }
+
     });
 
-  }, []);
+    // end auth
+
+  }, []); // end useEffect
 
 
   if(db === undefined) // init firebase once
@@ -138,7 +193,7 @@ function App(props) {
 
   };
 
-  console.log("redirect: " + redirect)
+  // console.log("redirect: " + redirect)
 
 /*
 
@@ -166,14 +221,15 @@ function App(props) {
 
           <Switch>
             <Route path="/login" component={Login} />
-            <Route path="/profile/:user" component={ProfilePage} />
+            <Route path="/profile/:url_user" component={ProfilePage} />
             <Route path="/upload" component={UploadPage} />
             <Route path="/notices" component={NoticePage} />
             <Route path="/saved" component={FavoritePage} />
             <Route path="/recipe/:recipetitle/:id" component={RecipePage} />
+            <Route path="/searchpage" component={SearchPage} />
             <Route path="/home" component={FeedPage}/>
+            <Redirect exact path="/" to="/home" />
 
-            <Redirect path="*" to="/home" />
           </Switch>
 
         </div>
@@ -185,7 +241,7 @@ function App(props) {
       </BrowserRouter>
 
     </div>
-  );
+  ); // <Redirect path="*" to="/home" />
 }
 
 function BottomMenuBar() {

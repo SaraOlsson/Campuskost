@@ -20,6 +20,7 @@ function FeedPage() {
   // const [images, setImages] = useState();
   const [recipes, setRecipes] = useState(undefined);
   const [docs, setDocs] = useState(undefined);
+  const [scrollview, setScrollview] = useState(true);
 
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
@@ -50,6 +51,19 @@ function FeedPage() {
   // <div className={classes.imageContainer}>{images}</div>
   // recipeData.PastaMaster.recipes
 // { recipes != undefined && <RecipeGridList imageData={recipes}/> }
+  if(scrollview === false )
+  {
+    return (
+
+      <div>
+
+      { recipes != undefined && <ScrollableRecipes recipes={recipes}/> }
+
+       </div>
+
+    );
+  }
+
   return (
     <div>
       <NewsContainer/>
@@ -59,6 +73,46 @@ function FeedPage() {
   );
 
 }
+
+function ScrollableRecipes(props) {
+
+  const classes = useStyles();
+  // className={classes.userinfo}
+
+  let recipes = props.recipes.concat(props.recipes);
+  recipes = recipes.concat(recipes);
+
+  return (
+    <Grid
+      container
+      spacing={1}
+      justify="center"
+
+    >
+      {
+        recipes.map((recipe, idx) =>
+        <div className={classes.scrolldiv} key={idx}>
+        <Grid item xs={12}>
+        <h3 className={classes.scrolltitle}>
+          { recipe.title + ' | ' + recipe.user }
+        </h3>
+        </Grid>
+        <Grid item xs={12} >
+          <img src={require('../assets/'+ 'temp_food1' + '.jpg')} className={classes.scrollimage} alt={"recipe img"} />
+        </Grid>
+        <Grid item xs={12}>
+        <p className={classes.scrolltext}>
+          { 'Some text' }
+        </p>
+        </Grid>
+        </div>
+      )
+
+      }
+    </Grid>
+  );
+}
+
 
 function NewsContainer(props) {
 
@@ -140,6 +194,30 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     marginTop: 100
+  },
+  imagesidebar: {
+    padding: 5
+  },
+  triedby: {
+    background: '#f1f1f1',
+    borderRadius: '4px',
+    padding: 5,
+    textAlign: 'center'
+  },
+  scrollimage: {
+    maxWidth: '300px',
+  },
+  scrolltitle: {
+    alignSelf: 'flex-start'
+  },
+  scrolldiv: {
+    background: '#f2f2f2',
+    padding: '25px',
+    margin: '15px',
+    borderRadius: '12px'
+  },
+  scrolltext: {
+    color: 'black'
   }
 });
 

@@ -20,9 +20,10 @@ function Login(props) {
 
 
   // init app only once
+  /*
   useEffect(() => {
     initApp();
-  }, []);
+  }, []); */
 
   /**
    * Handles the sign in button press.
@@ -105,6 +106,7 @@ function Login(props) {
    *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
    *    out, and that is where we update the UI.
    */
+   /*
   function initApp() {
 
     console.log("initApp")
@@ -148,7 +150,7 @@ function Login(props) {
     });
     // [END authstatelistener]
   }
-
+*/
   return (
 
     <div>

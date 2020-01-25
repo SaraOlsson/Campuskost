@@ -29,6 +29,8 @@ function RecipeItem(props) {
 
   };
 
+    // console.log(recipe.user)
+
   // if(redirect)
   //  return ( <Redirect to={"/recipe/" + recipe.title} /> );
 

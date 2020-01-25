@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Redirect } from "react-router-dom";
-
+import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 
 import List from '@material-ui/core/List';
@@ -51,9 +51,10 @@ function FollowerListItem(props) {
 
 function FollowerList(props) {
 
-  const [user, setUser] = React.useState(false);
-  const [redirect, setRedirect] = React.useState(false);
+  //const [user, setUser] = React.useState(false);
+  // const [redirect, setRedirect] = React.useState(false);
   const classes = useStyles();
+  const history = useHistory();
 
   /*
   let followers = [
@@ -63,12 +64,13 @@ function FollowerList(props) {
   ]; */
 
   const handleUserClick = (user) => {
-    setRedirect(true);
-    setUser(user);
+    //setRedirect(true);
+    history.push("/profile/" + user );
+    //setUser(user);
   };
 
-  if(redirect) // redirect if click
-    return ( <Redirect to={"/profile/" + user} /> );
+  //if(redirect) // redirect if click
+  //  return ( <Redirect to={"/profile/" + user} /> );
 
   let followersjsx = props.followerData.map((user, idx) =>
     <FollowerListItem key={idx} user={user} handleChange={handleUserClick} tjululu={props.test}/>

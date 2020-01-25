@@ -10,7 +10,7 @@ LillKocken: { username: "LillKocken",
   {nickname: "BaraVego", fullname: "Vera Colbert", follows: true}]
   },
 
-PastaMaster: { username: "PastaMaster",
+PastaMaster: { username: "UtterMat",
   followers: [
   {nickname: "WowFood", fullname: "Joppe Larsson", follows: false},
   {nickname: "UtterMat", fullname: "Ronja Faltin", follows: true},

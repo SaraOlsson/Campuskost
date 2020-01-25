@@ -38,6 +38,7 @@ function UploadPage(props) {
 
   const classes = useStyles();
   const dispatch = useDispatch(); // be able to dispatch
+  const store = useSelector(state => state.fireReducer);
   //const state = useSelector(state => state.testReducers); // subscribe to the redux store // testReducers
   //const state = useSelector(state => state.uploadReducer);
   //console.log(state)
@@ -87,6 +88,102 @@ function UploadPage(props) {
     }
 
     reader.readAsDataURL(files[0]);
+
+  };
+
+  const uploadAction = () => {
+    console.log("upload now")
+
+    let temp_i = [
+    {name: 'lax (temp data)', quantity: "400", measure: "gram"},
+    {name: 'pasta', quantity: "500", measure: "gram"},
+    {name: 'citron', quantity: "1", measure: "st"},
+    {name: 'chilipeppar', quantity: "1", measure: "tsk"}
+    ];
+
+    let temp_d = [
+    {order: 0, text: "Koka upp pastavattnet"},
+    {order: 2, text: "Stek lax i pannan med olivolja"},
+    {order: 1, text: "Blanda och tillsätt pressad citron och chilipeppar"}
+    ];
+
+/*
+    firebase.database().ref('/recipes')
+    .push({
+      user: "NyaKocken",
+      title: "Laxpasta",
+      img: "temp_food2",
+      ingredients: {temp_i},
+      description: {temp_d}
+    }); */
+    // const Firestore = require('@google-cloud/firestore');
+
+    // let recpiesRef = store.db.collection('recipes');
+
+    let username = "CheapChef";
+    let recipe_name = "Linssoppa"
+
+    const document = store.db.doc('recipes/' + recipe_name + '-' + username);
+
+    // Enter new data into the document.
+    document.set({
+      user: username,
+      title: recipe_name,
+      img: "temp_food2",
+      ingredients: temp_i,
+      description: temp_d
+    }).then(() => {
+      // Document created successfully.
+      console.log( "Document created/updated successfully.")
+    });
+
+/*
+    recpiesRef.push({
+      user: "NyaKocken",
+      title: "Laxpasta",
+      img: "temp_food2",
+      ingredients: {temp_i},
+      description: {temp_d}
+    }); */
+/*
+    // Import Admin SDK
+    var admin = require("firebase-admin");
+
+    // Get a database reference to our blog
+    var db = admin.database();
+    var ref = db.ref("server/saving-data/fireblog"); */
+
+ /*
+    var newPostRef = recpiesRef.push();
+    newPostRef.set({
+      user: "NyaKocken",
+      title: "Laxpasta",
+      img: "temp_food2",
+      ingredients: {temp_i},
+      description: {temp_d}
+    });  */
+/*
+    firebase.database().ref('/books')
+    .push({
+      author,
+      date,
+      user: currentUser.uid,
+      description,
+      email,
+      location,
+      phone,
+      pictureUrl,
+      price,
+      name,
+      title
+    })
+    .then(() => {
+      dispatch({ type: BOOK_CREATE });
+      navigator.switchToTab({
+        tabIndex: 0
+      });
+    });
+}; */
 
   };
 
@@ -145,6 +242,7 @@ function UploadPage(props) {
           variant="contained"
           color="primary"
           startIcon={<CloudUploadIcon />}
+          onClick={uploadAction}
         >
           Upload
         </Button>
