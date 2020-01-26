@@ -15,7 +15,7 @@ function ValidCheck(props) {
       control={
         <Checkbox
           checked={props.checked}
-          color="primary"
+          color= "primary"
           className= {classes.nomargin}
         />}
     />
@@ -25,7 +25,8 @@ function ValidCheck(props) {
 
 const useStyles = makeStyles({
   nomargin: {
-    margin: 0
+    margin: 0,
+    color: '#68BB8C !important'
   }
 });
 

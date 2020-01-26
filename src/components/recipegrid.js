@@ -13,7 +13,7 @@ import InfoIcon from '@material-ui/icons/Info';
 
 import RecipeItem from '../components/recipeitem';
 
-var Spinner = require('react-spinkit');
+
 
 function RecipeGridList(props) {
 
@@ -39,7 +39,6 @@ function RecipeGridList(props) {
     <div className={classes.root}>
       <GridList>
       {images.length > 0 && images }
-      {images.length < 1 && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
       </GridList>
     </div>
   );

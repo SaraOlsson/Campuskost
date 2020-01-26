@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
 import { useParams} from "react-router";
 import { useSelector } from 'react-redux';
 // import { recipeFetch } from '../actions/RecipeActions';
@@ -27,6 +28,7 @@ function RecipePage(props) {
   const { recipetitle, id } = useParams();
   const store = useSelector(state => state.fireReducer);
   const classes = useStyles();
+  const history = useHistory();
 
   useEffect(() => {
     // someFetcher();
@@ -45,6 +47,11 @@ function RecipePage(props) {
     setTried( !tried );
   };
 
+  const handleUserClick = () => {
+    console.log("well hello")
+    history.push("/profile/" + recipe.user );
+  };
+
   const recipeFetcher = (ref) => {
     ref.get().then(function(doc) {
         if (doc.exists) {
@@ -59,39 +66,52 @@ function RecipePage(props) {
     });
 
   }
-/*
-  const recipeFetcher = (ref) => {
-    ref.get().then(function(doc) {
-        if (doc.exists) {
-            console.log("Document data:", doc.data());
-            setRecipe(doc.data());
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
-    }).catch(function(error) {
-        console.log("Error getting document:", error);
-    });
-
-  } */
 
   let icon = (saved === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
   let r_img = ( recipe != undefined) ? recipe.img : 'temp_food1';
   let triedbyNum = 3;
   // , zIndex: '-1'
+
+  /*
+
+  <h2 style={{display: 'inline'}}>
+    <Button disableTouchRipple onClick={likeRecipe}
+    style={{display: 'inline', backgroundColor: 'transparent'}}>
+      {icon}
+    </Button>
+    { recipetitle + ' | ' }
+
+  </h2>
+  <h2 onClick={ handleUserClick} style={{display: 'inline'}}>
+    { recipe.user }
+  </h2>
+
+  */
+
   return (
 
     <div>
 
       { recipe != undefined &&
         <div>
-        <h2>
-          <Button disableTouchRipple onClick={likeRecipe}
-          style={{display: 'inline', backgroundColor: 'transparent'}}>
-            {icon}
-          </Button>
-          { recipetitle + ' | ' + recipe.user }
-        </h2>
+
+          <div className={classes.recipeheader}>
+          <span>
+            <Button disableTouchRipple onClick={likeRecipe}
+            style={{display: 'inline', backgroundColor: 'transparent'}}>
+              {icon}
+            </Button>
+            { recipetitle + ' | ' }
+
+          </span>
+          <span>
+
+            <Button disableTouchRipple onClick={handleUserClick}
+            style={{display: 'inline', backgroundColor: 'transparent', textTransform: 'none'}}>
+              { recipe.user }
+            </Button>
+          </span>
+          </div>
 
         <Grid
           container
@@ -259,6 +279,10 @@ const useStyles = makeStyles({
  checkIcon: {
    marginRight: '10px',
    color: '#68bb8c'
+ },
+ recipeheader: {
+   margin: '20px 0px',
+   fontWeight: 'bold'
  }
 });
 

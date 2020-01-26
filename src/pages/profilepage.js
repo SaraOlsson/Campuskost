@@ -21,6 +21,7 @@ import Button from '@material-ui/core/Button';
 import InfoIcon from '@material-ui/icons/Info';
 import userchef from '../assets/userchef.png';
 
+var Spinner = require('react-spinkit');
 const useMountEffect = (fun) => useEffect(fun, []);
 
 // () =>
@@ -145,8 +146,8 @@ function ProfilePage(props) {
     Logga ut
   </Button>
   <button onClick={ () => firebase.auth().signOut() } name="signout"> Logga ut </button>*/
-
-  let recipeContent = (recipes != undefined) ? <RecipeGridList recipes={recipes}/> : <div>Yo</div>;
+  let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
+  let recipeContent = (recipes != undefined) ? <RecipeGridList recipes={recipes}/> : spinner_jsx;
 
   // {!state.signedIn ? <Redirect to={"/"} /> : null }
 
@@ -184,8 +185,6 @@ function ProfilePage(props) {
         <FollowerList test={user} followerData={followerData.LillKocken.following}/>
       </SimpleTabs>
 
-      {state.signedIn === false && <p> Hey you're not signed in. Things won't work here (redirect back) </p>  }
-
    </React.Fragment>
 
   );
@@ -195,7 +194,12 @@ function ProfilePage(props) {
 const useStyles = makeStyles({
   userinfo: {
    marginBottom: '20px',
-   }
+ },
+ spinner: {
+   display: 'flex',
+   justifyContent: 'center',
+   marginTop: 100
+ }
 });
 
 

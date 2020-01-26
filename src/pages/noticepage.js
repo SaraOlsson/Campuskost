@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-
+import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 
 // import '../style/GlobalCssButton.css';
@@ -44,17 +44,28 @@ const B = (props) => <span style={{fontWeight: 'bold'}}>{props.children}</span>
 
 function NoticeListItem(props) {
 
+  const history = useHistory();
   let noticeText;
+
+  const userClick = () => {
+    console.log("well hello " + props.user)
+    history.push("/profile/" + props.user );
+  };
+
+  const recipeClick = () => {
+    console.log("well hello " + props.recipe)
+    //history.push("/profile/" + props.user );
+  };
 
   switch (props.type) {
     case "FOLLOWS":
-      noticeText = <span><B>{props.user}</B> följer nu dig.</span>;
+      noticeText = <span onClick={userClick}><B>{props.user}</B> följer nu dig.</span>;
       break;
     case "TIPS":
-      noticeText = <span><B>{props.user}</B> tipsar dig om att laga <B>{props.recipe}</B>.</span>;
+      noticeText = <div><span onClick={userClick}><B>{props.user}</B></span> <span onClick={recipeClick}>tipsar dig om att laga <B>{props.recipe}</B>.</span></div>;
       break;
     case "TESTED":
-      noticeText = <span><B>{props.user}</B> har testat ditt recept <B>{props.recipe}</B>.</span>;
+      noticeText = <div><span onClick={userClick}><B>{props.user}</B></span> <span onClick={recipeClick}>har testat ditt recept <B>{props.recipe}</B>.</span></div>;
     default:
 
   }

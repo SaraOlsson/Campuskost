@@ -24,6 +24,10 @@
   margin: 0px;
 }
 
+.body .MuiPaper-elevation1 {
+    box-shadow: none;
+}
+
 .body .MuiGridListTile-tile {
     height: 100%;
     display: block;
@@ -32,7 +36,30 @@
     border-radius: 20px;
 }
 
+.body .MuiFormControlLabel-label {
+  margin-left: 27px;
+}
+
+.body .test .MuiOutlinedInput-input {
+    padding: 8.5px 10px;
+}
 
 .body .MuiBox-root {
   padding: 0;
+}
+
+.testis {
+  animation: blinking 3s infinite;
+}
+
+@keyframes blinking {
+  0% {
+    background-color: #efefef2b;
+  }
+  50% {
+    background-color: #d4d4d457;
+  }
+  100% {
+    background-color: #efefef2b;
+  }
 }
