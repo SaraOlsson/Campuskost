@@ -31,9 +31,9 @@ function FollowerListItem(props) {
       </ListItemAvatar>
 
       <ListItemText
-        primary= { user.nickname }
+        primary= { user.username }
         secondary={ user.fullname }
-        onClick={() => props.handleChange(user.nickname)}
+        onClick={() => props.handleChange(user.username)}
       />
 
       <ListItemSecondaryAction>
@@ -51,29 +51,33 @@ function FollowerListItem(props) {
 
 function FollowerList(props) {
 
-  //const [user, setUser] = React.useState(false);
-  // const [redirect, setRedirect] = React.useState(false);
+  const [followData, setFollowData] = useState([]);
   const classes = useStyles();
   const history = useHistory();
 
-  /*
-  let followers = [
-  {nickname: "NinjaChef", fullname: "Amanda Tydén", follows: true},
-  {nickname: "UtterMat", fullname: "Ronja Faltin", follows: true},
-  {nickname: "SimbaFood", fullname: "Scar Leijon", follows: false}
-  ]; */
-
   const handleUserClick = (user) => {
-    //setRedirect(true);
     history.push("/profile/" + user );
-    //setUser(user);
   };
 
-  //if(redirect) // redirect if click
-  //  return ( <Redirect to={"/profile/" + user} /> );
+  // when url changes, on load and on user click
+  useEffect(() => {
 
-  let followersjsx = props.followerData.map((user, idx) =>
-    <FollowerListItem key={idx} user={user} handleChange={handleUserClick} tjululu={props.test}/>
+    //console.log("new props")
+    setFollowData(props.followerData);
+
+  }, [props.followerData]);
+
+  //console.log(props.followerData)
+
+  if (false && props.followerData.length < 1) {
+    //console.log("sad")
+    return (
+      <p>sad </p>
+    );
+  }
+
+  let followersjsx = followData.map((user, idx) =>
+    <FollowerListItem key={idx} user={user} handleChange={handleUserClick}/>
   );
 
   return (

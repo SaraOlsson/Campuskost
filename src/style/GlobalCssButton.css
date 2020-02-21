@@ -1,16 +1,29 @@
 
-.MuiAvatar-colorDefault {
+.body .MuiAvatar-colorDefault {
     color: #fafafa;
     background-color: #68BB8C !important;
 }
 
-.MuiTab-root {
+.body .MuiTab-root {
     text-transform: unset !important;
+}
+
+.body .MuiButton-root {
+    text-transform: unset !important;
+}
+
+.body .MuiFormControlLabel-root {
+    margin-left: 0 !important;
 }
 
 .MuiAppBar-colorPrimary {
     color: #fff;
     background-color: #68BB8C !important;
+}
+
+.whitebtn .MuiButton-containedPrimary {
+    color: #4d504f;
+    background-color: #ffffff;
 }
 
 .body .MuiTabs-indicator {
@@ -19,7 +32,7 @@
 
 .body .MuiGridList-root {
   justify-content: center;
-  width: 360px;
+  width: 100%; /* 360px; */
   height: 300px;
   margin: 0px;
 }
@@ -50,6 +63,10 @@
 
 .testis {
   animation: blinking 3s infinite;
+}
+
+.body .MuiOutlinedInput-input {
+  background: white;
 }
 
 @keyframes blinking {

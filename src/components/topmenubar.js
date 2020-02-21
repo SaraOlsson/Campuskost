@@ -93,6 +93,8 @@ function ProfileBtn (props) {
   const history = useHistory();
   const store = useSelector(state => state.fireReducer);
 
+
+
   //console.log("topbar firebase user: ")
   // console.log(store.user)
 
@@ -157,6 +159,11 @@ function TopMenuBar(props) {
 
   const handleMobileMenuOpen = event => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const handleSearchFocus = () => {
+    if(history.location.pathname != "/search")
+      history.push("/search")
   };
 
   const menuId = 'primary-search-account-menu';
@@ -246,6 +253,8 @@ function TopMenuBar(props) {
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
+              onBlur={() => console.log("onBlur")}
+              onFocus={() => handleSearchFocus()}
             />
           </div>
           <div className={classes.grow} />

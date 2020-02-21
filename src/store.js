@@ -22,13 +22,28 @@ function testreducer(state = { num: 0, url: "hey" }, action) {
   }
 }
 
-function uploadReducer(state = { title: "title" }, action) {
+function uploadReducer(state = { title: "title", ingredients: undefined, descriptions: undefined, image: undefined }, action) {
   switch (action.type) {
     case "SETTITLE":
       return {
         ...state,
         title: action.title
       };
+      case "SETINGREDIENTS":
+        return {
+          ...state,
+          ingredients: action.ingredients
+        };
+      case "SETDESCRIPTIONS":
+        return {
+          ...state,
+          descriptions: action.descriptions
+        };
+      case "SETIMAGE":
+        return {
+          ...state,
+          image: action.image
+        };
     default:
       return state;
   }

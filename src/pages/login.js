@@ -90,6 +90,9 @@ function Login(props) {
       }
       console.log(error);
     });
+
+    console.log("signed up " + email);
+
   }
 
   function sendEmailVerification() {

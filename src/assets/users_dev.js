@@ -5,7 +5,6 @@ LillKocken: { username: "LillKocken",
   {nickname: "UtterMat", fullname: "Ronja Faltin", follows: true},
   {nickname: "SimbaFood", fullname: "Scar Leijon", follows: false}],
   following: [
-  {nickname: "Mumsmat", fullname: "Lena Handén", follows: true},
   {nickname: "UtterMat", fullname: "Ronja Faltin", follows: true},
   {nickname: "BaraVego", fullname: "Vera Colbert", follows: true}]
   },

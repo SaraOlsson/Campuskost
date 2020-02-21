@@ -137,13 +137,20 @@ function App(props) {
             });
           } else {
 
-            console.log("create the document")
-            usersRef.set({
+            let userObj = {
               email: user_email,
               username: "DefaultChef",
               university: "",
               fullname: "Master Chef"
-            }); // create the document
+            };
+
+            console.log("create the document")
+            usersRef.set(userObj); // create the document
+
+            dispatch({
+              type: "SETFIREUSER",
+              firestore_user: userObj
+            })
           }
       });
 
@@ -221,12 +228,12 @@ function App(props) {
 
           <Switch>
             <Route path="/login" component={Login} />
-            <Route path="/profile/:url_user" component={ProfilePage} />
+            <Route path="/profile/:user" component={ProfilePage} />
             <Route path="/upload" component={UploadPage} />
             <Route path="/notices" component={NoticePage} />
             <Route path="/saved" component={FavoritePage} />
             <Route path="/recipe/:recipetitle/:id" component={RecipePage} />
-            <Route path="/searchpage" component={SearchPage} />
+            <Route path="/search" component={SearchPage} />
             <Route path="/home" component={FeedPage}/>
             <Redirect exact path="/" to="/home" />
 
