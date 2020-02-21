@@ -16,42 +16,31 @@ function SearchPage(props) {
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
 
+  let searchstring = "";
+
   useEffect(() => {
     userFetcher('users');
-    // setUsers(user_data);
-
     userFetcher('recipes');
-    // setRecipes(recipe_data);
-    // recipeFetcher();
   }, []);
 
   const userFetcher = (collection_name) => {
 
-    console.log('in userFetcher')
-
-    // let usersRef = store.db.collection(collection_name);
-    let temp_users = [];
-
-    //console.log(queryRef)
     store.db.collection(collection_name).onSnapshot(function(querySnapshot) {
 
-          console.log(users)
-
+          let temp_users = [];
           querySnapshot.forEach( doc => {
+            //let data = doc.data();
             let data = doc.data();
+            data.id = doc.id;
             temp_users.push(data);
-            //console.log(data)
           });
 
           if (collection_name == 'users')
             setUsers(temp_users);
           if (collection_name == 'recipes')
             setRecipes(temp_users);
-
       });
   }
-
-  console.log("users.length")
 
   let followingInfo = users.map( user => {
     let obj = {username: user.username, fullname: "", follows: false};
@@ -59,31 +48,18 @@ function SearchPage(props) {
   });
 
   /*
-
-  {
-    users.map( user =>
-      <p key={user.email}> &bull; {user.username} </p>
-    )
-
-    <FollowerList followerData={followingInfo}/>
-
-  }
-
-  */
-
-  /*
-
   {
     recipes.map( (recipe, idx) =>
       <RecipeItem recipe={recipe} key={idx}/>
     )
-
   }*/
 
   return (
 
     <div>
       <h3>Sökresultat</h3>
+
+      { searchstring == "" && <p> Sök specifikt recept eller användare ovan </p> }
 
       { users.length <= 0 && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
       { users.length > 0 && <React.Fragment>
@@ -101,8 +77,6 @@ function SearchPage(props) {
 
   );
 }
-
-//           <p key={recipe.title}> &bull; {recipe.title} </p>
 
 const useStyles = makeStyles({
   spinner: {
