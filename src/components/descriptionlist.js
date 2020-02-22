@@ -72,7 +72,7 @@ function DescriptionList(props) {
   }
 
   const addDescription = () => {
-    console.log("okay add")
+    // console.log("okay add")
 
     let temp_list = descriptions.slice(0);
     let new_obj = {order: descriptions.length + 1, text: ""};

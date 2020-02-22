@@ -109,7 +109,7 @@ function IngredientsList(props) {
   }
 
   const saveEdited = () => {
-    console.log("save values")
+    //console.log("save values")
 
     let temp_list = ingredients.slice(0);
     let ind = temp_list.indexOf(editObject);
@@ -139,7 +139,7 @@ function IngredientsList(props) {
     // console.log(`Pressed keyCode ${ev.key}`);
     if (ev.key === 'Enter') {
       // Do code here
-      console.log(`Pressed enter`);
+      // console.log(`Pressed enter`);
       saveEdited();
       ev.preventDefault();
     }

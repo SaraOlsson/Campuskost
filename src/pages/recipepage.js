@@ -55,7 +55,7 @@ function RecipePage(props) {
   const recipeFetcher = (ref) => {
     ref.get().then(function(doc) {
         if (doc.exists) {
-            console.log("Document data:", doc.data());
+            // console.log("Document data:", doc.data());
             setRecipe(doc.data());
         } else {
             // doc.data() will be undefined in this case
@@ -87,6 +87,16 @@ function RecipePage(props) {
   </h2>
 
   */
+
+  let img_src;
+
+  if  ( recipe != undefined && recipe.img_url != undefined) {
+    img_src = recipe.img_url;
+  } else {
+    img_src = require('../assets/'+ r_img + '.jpg');
+  }
+
+  // console.log(img_src)
 
   return (
 
@@ -120,7 +130,7 @@ function RecipePage(props) {
 
         >
           <Grid item xs={6} >
-            <img src={require('../assets/'+ r_img + '.jpg')} className={classes.listimage} alt={"recipe img"} />
+            <img src={img_src} className={classes.listimage} alt={"recipe img"} />
           </Grid>
           <Grid item xs={4} className={classes.imagesidebar}>
             { tried === true &&
@@ -235,7 +245,7 @@ function RecipeDecsListItem(props) {
   }
 
   let icon = (checked === true ) ? <CheckBoxIcon className={classes.checkIcon}/> : <CheckBoxOutlineBlankIcon className={classes.checkIcon}/> ;
-  console.log(props.desc)
+  // console.log(props.desc)
 
   return (
     <React.Fragment>

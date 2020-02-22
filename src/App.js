@@ -79,8 +79,10 @@ function initFirebase() {
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+  //const storage = firebase.storage();
+  let storage = 1;
 
-  return db;
+  return [db, storage];
 }
 
 
@@ -186,8 +188,10 @@ function App(props) {
 
   if(db === undefined) // init firebase once
   {
-    db = initFirebase();
+    let storage;
+    [db, storage] = initFirebase();
     dispatch({ type: "SETDB", db: db });
+    dispatch({ type: "SETSTORAGE", storage: storage });
   }
 
   const handleChange = (event = undefined, newValue) => {

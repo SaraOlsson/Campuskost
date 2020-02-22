@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { makeStyles, withStyles, ThemeProvider } from '@material-ui/core/styles';
+import firebase from 'firebase'; // 'firebase/app';
+// import 'firebase/firestore';
 //import { withStyles } from '@material-ui/core/styles';
 //import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import '../style/GlobalCssButton.css';
@@ -44,6 +46,7 @@ function UploadPage(props) {
   const [image, setImage] = React.useState(undefined);
   const [labelWidth, setLabelWidth] = React.useState(0);
   const labelRef = React.useRef(null);
+  const [url, setUrl] = React.useState("temp");
 
   const [valid, setValid] = React.useState({
     title: false,
@@ -64,10 +67,29 @@ function UploadPage(props) {
     })
   }
 
+  const allValid = () => {
+
+    return (valid.title && valid.ingredients && valid.desc && valid.image)
+  }
+
   React.useEffect(() => {
     setLabelWidth(labelRef.current.offsetWidth);
+    getImage();
   }, []);
 
+  const getImage = () => {
+
+    let storageRef = firebase.storage();
+    storageRef.ref('recept/bananbröd.jpg').getDownloadURL().then(function(url) {
+
+      setUrl("temp 1")
+      console.log("url: " + url)
+
+    }).catch(function(error) {
+      // Handle any errors
+    });
+
+  }
 
   const titleDisp = (evt) => {
     dispatch({
@@ -116,59 +138,94 @@ function UploadPage(props) {
     setImage(undefined);
   };
 
+  const uploadImage = (callback) => {
+
+    console.log('Upload a data_url string..');
+
+    // Create a reference to 'mountains.jpg'
+    let storageRef = firebase.storage();
+    let newImageRef = storageRef.ref('recept/' + title + '_image.jpg');
+
+    // Base64 formatted image string
+    let uploadTask = newImageRef.putString(image, 'data_url');
+
+    uploadTask.on('state_changed', function(snapshot){
+    }, function(error) { // Handle unsuccessful uploads
+    }, function() { // Handle successful uploads on complete
+      // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+      uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+        console.log('Successful upload. File available at', downloadURL);
+        callback(downloadURL);
+      });
+    });
+
+  }
+
   const uploadAction = () => {
     console.log("upload now")
 
+    // make sure all valid
+    if(!allValid())
+    {
+      console.log("some input is not valid")
+      return;
+    }
+
+    // make sure signed in
     if(store.firestore_user == undefined) {
       alert("you have to sign in first")
       return
     }
 
-    let username = store.firestore_user.username; //  "CheapChef";
-    let recipe_name = upload_store.title; // "Linssoppa"
+    // when image is uploaded, continue with uploading the rest
+    uploadImage(function(returnValue_downloadURL) {
+      // use the return value here instead of like a regular (non-evented) return value
+      console.log("then url: " + returnValue_downloadURL)
+      let downloadURL = returnValue_downloadURL;
 
-    console.log("username: " + username)
-    console.log("recipe_name: " + recipe_name)
+      let username = store.firestore_user.username; //  "CheapChef";
+      let recipe_name = upload_store.title; // "Linssoppa"
 
-    let temp_i = [
-    {name: 'lax (temp data)', quantity: "400", measure: "gram"},
-    {name: 'pasta', quantity: "500", measure: "gram"},
-    {name: 'citron', quantity: "1", measure: "st"},
-    {name: 'chilipeppar', quantity: "1", measure: "tsk"}
-    ];
+      /*
+      let temp_i = [
+      {name: 'lax (temp data)', quantity: "400", measure: "gram"},
+      {name: 'pasta', quantity: "500", measure: "gram"},
+      {name: 'citron', quantity: "1", measure: "st"},
+      {name: 'chilipeppar', quantity: "1", measure: "tsk"}
+      ];
 
-    let temp_d = [
-    {order: 0, text: "Koka upp pastavattnet"},
-    {order: 2, text: "Stek lax i pannan med olivolja"},
-    {order: 1, text: "Blanda och tillsätt pressad citron och chilipeppar"}
-    ];
+      let temp_d = [
+      {order: 0, text: "Koka upp pastavattnet"},
+      {order: 2, text: "Stek lax i pannan med olivolja"},
+      {order: 1, text: "Blanda och tillsätt pressad citron och chilipeppar"}
+    ]; */
 
-    console.log(temp_d)
-    console.log(upload_store.descriptions)
+      const document = store.db.doc('recipes/' + recipe_name + '-' + username);
+      let r_img = "temp_food1";
 
-    const document = store.db.doc('recipes/' + recipe_name + '-' + username);
-    let r_img = "temp_food1"; // ( upload_store.image != undefined) ? upload_store.image : 'temp_food1';
+      // Enter new data into the document.
+      document.set({
+        user: username,
+        title: recipe_name,
+        img: r_img,
+        img_url: downloadURL,
+        ingredients: upload_store.ingredients,
+        description: upload_store.descriptions
+      }).then(() => {
+        // Document created successfully.
+        console.log( "Document created/updated successfully.")
+      });
 
-    // Enter new data into the document.
-    document.set({
-      user: username,
-      title: recipe_name,
-      img: r_img,
-      ingredients: upload_store.ingredients,
-      description: upload_store.descriptions
-    }).then(() => {
-      // Document created successfully.
-      console.log( "Document created/updated successfully.")
-    });
+    }); // end of image upload callback
 
   };
-  // style={{marginLeft: '-13px !important'}}
 
   return (
 
 
     <div>
       <h3>Ladda upp recept</h3>
+      <p> {url} </p>
 
       <form>
 
