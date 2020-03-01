@@ -16,6 +16,10 @@
     margin-left: 0 !important;
 }
 
+.body .MuiExpansionPanel-root:before {
+  display: none;
+} 
+
 .MuiAppBar-colorPrimary {
     color: #fff;
     background-color: #68BB8C !important;
@@ -33,7 +37,7 @@
 .body .MuiGridList-root {
   justify-content: center;
   width: 100%; /* 360px; */
-  height: 300px;
+  /*height: 300px; */
   margin: 0px;
 }
 

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { makeStyles, withStyles, ThemeProvider } from '@material-ui/core/styles';
 import firebase from 'firebase'; // 'firebase/app';
 // import 'firebase/firestore';
@@ -37,13 +38,16 @@ import SaveIcon from '@material-ui/icons/Save';
 
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
-
+var Spinner = require('react-spinkit');
 
 function UploadPage(props) {
 
   const [title, setTitle] = React.useState('');
   const [files, setFiles] = React.useState([]);
   const [image, setImage] = React.useState(undefined);
+  const [id, setId] = React.useState(undefined);
+  const [upload_wait, setUpload_wait] = React.useState(false);
+  const [done, setDone] = React.useState(false);
   const [labelWidth, setLabelWidth] = React.useState(0);
   const labelRef = React.useRef(null);
   const [url, setUrl] = React.useState("temp");
@@ -59,6 +63,7 @@ function UploadPage(props) {
   const dispatch = useDispatch(); // be able to dispatch
   const store = useSelector(state => state.fireReducer);
   const upload_store = useSelector(state => state.uploadReducer);
+  const history = useHistory();
 
   const imageDisp = img => {
     dispatch({
@@ -74,9 +79,16 @@ function UploadPage(props) {
 
   React.useEffect(() => {
     setLabelWidth(labelRef.current.offsetWidth);
-    getImage();
+    // getImage();
+    if(upload_store.title != undefined)
+    {
+      setTitle(upload_store.title);
+      setValid({ ...valid, ["title"]: true });
+    }
+        
   }, []);
 
+  /*
   const getImage = () => {
 
     let storageRef = firebase.storage();
@@ -89,14 +101,7 @@ function UploadPage(props) {
       // Handle any errors
     });
 
-  }
-
-  const titleDisp = (evt) => {
-    dispatch({
-      type: "SETTITLE",
-      title: evt.target.value
-    })
-  }
+  } */
 
   const handleChange = event => {
 
@@ -138,27 +143,26 @@ function UploadPage(props) {
     setImage(undefined);
   };
 
+  // upload image and callback with download URL
   const uploadImage = (callback) => {
 
-    console.log('Upload a data_url string..');
-
-    // Create a reference to 'mountains.jpg'
+    setUpload_wait(true);
+    // Create a reference to the new image
     let storageRef = firebase.storage();
     let newImageRef = storageRef.ref('recept/' + title + '_image.jpg');
 
-    // Base64 formatted image string
+    // Upload image as a Base64 formatted image string.
     let uploadTask = newImageRef.putString(image, 'data_url');
 
     uploadTask.on('state_changed', function(snapshot){
     }, function(error) { // Handle unsuccessful uploads
     }, function() { // Handle successful uploads on complete
-      // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+
       uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
         console.log('Successful upload. File available at', downloadURL);
         callback(downloadURL);
       });
     });
-
   }
 
   const uploadAction = () => {
@@ -180,7 +184,6 @@ function UploadPage(props) {
     // when image is uploaded, continue with uploading the rest
     uploadImage(function(returnValue_downloadURL) {
       // use the return value here instead of like a regular (non-evented) return value
-      console.log("then url: " + returnValue_downloadURL)
       let downloadURL = returnValue_downloadURL;
 
       let username = store.firestore_user.username; //  "CheapChef";
@@ -203,6 +206,8 @@ function UploadPage(props) {
       const document = store.db.doc('recipes/' + recipe_name + '-' + username);
       let r_img = "temp_food1";
 
+      setId(document.id)
+
       // Enter new data into the document.
       document.set({
         user: username,
@@ -211,21 +216,55 @@ function UploadPage(props) {
         img_url: downloadURL,
         ingredients: upload_store.ingredients,
         description: upload_store.descriptions
-      }).then(() => {
+      }).then((test) => {
         // Document created successfully.
         console.log( "Document created/updated successfully.")
+        setUpload_wait(false);
+        setDone(true);
       });
 
     }); // end of image upload callback
 
   };
 
+  const goToRecipe = () => {
+
+    history.push("/recipe/" + title + "/" + id );
+  };
+
+  let bottom_content;
+  // if working on recipe
+  if(upload_wait == false && done == false)
+  {
+    bottom_content = (<Button
+      variant="contained"
+      color="primary"
+      startIcon={<CloudUploadIcon />}
+      onClick={uploadAction}
+    >
+      Upload
+    </Button> );
+  }
+  else if ( upload_wait == true ) // if waiting on upload
+  {
+    bottom_content = (<div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#ffffff" fadeIn="none"/></div>);
+  } else // done with upload
+  {
+    bottom_content = (<Button
+      variant="contained"
+      color="primary"
+      onClick={goToRecipe}
+    >
+      Uppladding klar! Visa recept
+    </Button> );
+  }
+
+
   return (
 
 
     <div>
       <h3>Ladda upp recept</h3>
-      <p> {url} </p>
 
       <form>
 
@@ -328,18 +367,10 @@ function UploadPage(props) {
         <div className={classes.uploaddiv} >
           <Grid container justify="center" alignItems="center">
           <Grid item xs={4} className="whitebtn">
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<CloudUploadIcon />}
-            onClick={uploadAction}
-          >
-            Upload
-          </Button>
+          {bottom_content}
           </Grid>
           </Grid>
           </div>
-
       </form>
     </div>
 
@@ -393,6 +424,10 @@ const useStyles = makeStyles(theme => ({
   },
   titlediv: {
     background: 'gray'
+  },
+  spinner: {
+    display: 'flex',
+    justifyContent: 'center',
   }
 }));
 

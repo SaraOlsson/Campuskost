@@ -72,7 +72,7 @@ function FollowerList(props) {
   if (false && props.followerData.length < 1) {
     //console.log("sad")
     return (
-      <p>sad </p>
+      <p>sad, no followers</p>
     );
   }
 

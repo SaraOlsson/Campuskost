@@ -48,7 +48,7 @@ function IngredientsList(props) {
   const classes = useStyles();
 
   const dispatch = useDispatch(); // be able to dispatch
-  // const upload_store = useSelector(state => state.uploadReducer);
+  const upload_store = useSelector(state => state.uploadReducer);
 
   const ingredientsDisp = () => {
     dispatch({
@@ -69,6 +69,17 @@ function IngredientsList(props) {
 
     return (props.ingredients != undefined) ? props.ingredients : temp_ingredients;
   }
+
+  useEffect(() => {
+
+    let temp_ingredients = upload_store.ingredients;
+    if(temp_ingredients != undefined)
+    {
+      setIngredients(temp_ingredients);
+      props.handleAdd(temp_ingredients.length);
+    }
+
+  }, []);
 
   const addIngredient = () => {
     //console.log("okay add")

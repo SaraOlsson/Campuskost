@@ -20,6 +20,7 @@ import FavoritePage from './pages/favoritepage';
 import UploadPage from './pages/uploadpage';
 import RecipePage from './pages/recipepage';
 import Login from './pages/login';
+import Settings from './pages/settings';
 import SearchPage from './pages/searchpage';
 import TopMenuBar from './components/topmenubar';
 // import Feed from './pages/feedpage';
@@ -232,6 +233,7 @@ function App(props) {
 
           <Switch>
             <Route path="/login" component={Login} />
+            <Route path="/settings" component={Settings} />
             <Route path="/profile/:user" component={ProfilePage} />
             <Route path="/upload" component={UploadPage} />
             <Route path="/notices" component={NoticePage} />

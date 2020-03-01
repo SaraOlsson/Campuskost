@@ -67,7 +67,7 @@ function FeedPage() {
   return (
     <div>
       <NewsContainer/>
-      { recipes != undefined && <RecipeGridList recipes={recipes}/> }
+      { recipes != undefined && <div className={classes.grid_background}><RecipeGridList recipes={recipes}/></div> }
       { recipes === undefined && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
     </div>
   );
@@ -169,7 +169,9 @@ const useStyles = makeStyles({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginBottom: 50,
-
+  },
+  grid_background: {
+    backgroundColor: '#f1f1f1',
   },
   foodImg: {
     backgroundColor: 'pink',

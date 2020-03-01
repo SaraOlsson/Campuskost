@@ -30,6 +30,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
+
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
@@ -50,6 +51,7 @@ function DescriptionList(props) {
   const classes = useStyles();
 
   const dispatch = useDispatch(); // be able to dispatch
+  const upload_store = useSelector(state => state.uploadReducer);
 
   const ingredientsDisp = () => {
     dispatch({
@@ -70,6 +72,17 @@ function DescriptionList(props) {
 
     return (props.description != undefined) ? props.description : temp_description;
   }
+
+  useEffect(() => {
+
+    let temp_descriptions = upload_store.descriptions;
+    if(temp_descriptions != undefined)
+    {
+      setDescriptions(temp_descriptions);
+      props.handleAdd(temp_descriptions.length);
+    }
+
+  }, []);
 
   const addDescription = () => {
     // console.log("okay add")
@@ -103,7 +116,8 @@ function DescriptionList(props) {
     console.log("edit descriptions")
     setEditObject(object);
 
-    //console.log(object)
+    // first letter to toUpperCase
+    object.text = object.text[0].toUpperCase() + object.text.slice(1)
 
     setText(object.text);
     // setOrder(object.order);
@@ -119,7 +133,7 @@ function DescriptionList(props) {
     //console.log(editObject)
 
     let obj_copy = editObject;
-    obj_copy.text = text;
+    obj_copy.text = text[0].toUpperCase() + text.slice(1);
     // obj_copy.order = order;
 
     temp_list[ind] = obj_copy;
@@ -201,7 +215,7 @@ function DescriptionList(props) {
         <React.Fragment>
 
         <Grid item xs={10}>
-          <TextField variant="outlined" label="steg" InputLabelProps={{shrink: true}} value={text} onChange={ event => setText(event.target.value.toLowerCase())} onKeyPress={(ev) => enterPress(ev)}/>
+          <TextField variant="outlined" label="steg" InputLabelProps={{shrink: true}} value={text} onChange={ event => setText(event.target.value)} onKeyPress={(ev) => enterPress(ev)}/>
         </Grid>
 
         <Grid item xs={1}>
@@ -221,7 +235,7 @@ function DescriptionList(props) {
   );
 }
 
-
+// .toLowerCase()
 // material ui design
 const useStyles = makeStyles(theme => ({
   body: {

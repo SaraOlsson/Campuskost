@@ -8,6 +8,8 @@ import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import Button from '@material-ui/core/Button';
+
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -16,6 +18,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import MoreIcon from '@material-ui/icons/MoreVert';
+
 import { Link } from "react-router-dom";
 import LinkUI from '@material-ui/core/Link';
 import { useSelector } from 'react-redux';
@@ -84,6 +87,10 @@ const useStyles = makeStyles(theme => ({
   },
   whiteColor: {
     color: 'white'
+  },
+  buttonPad: {
+    padding: '6px',
+    fontSize: 'small'
   }
 }));
 
@@ -102,15 +109,21 @@ function ProfileBtn (props) {
   // history.push("/" + val);
   // (e) => props.handleChange(undefined, e.target.value)
 
-  let text = (props.signedIn === true) ? "profile" : "login";
   let btn = (
     <div>
-      <button value={text} onClick={(e) => history.push("/" + e.target.value)}>{text}</button>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => history.push("/login")}
+        className={classes.buttonPad}
+      >
+        logga in
+      </Button>
     </div> );
 
   let jsx_content = props.signedIn ? <AccountCircleIcon/> : btn;
 
-  if(props.signedIn === true)
+  if(props.signedIn === true && store.firestore_user)
   {
     return (
       <IconButton

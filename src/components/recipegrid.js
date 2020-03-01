@@ -20,11 +20,12 @@ function RecipeGridList(props) {
   const classes = useStyles();
 
   const [images, setImages] = useState([]);
+  let smalltiles = (props.smalltiles) ? props.smalltiles : false;
 
   useEffect(() => {
 
     let images_temp = props.recipes.map((recipe, idx) =>
-      <RecipeItem recipe={recipe} key={idx}/>
+      <RecipeItem recipe={recipe} key={idx} smalltiles={smalltiles}/>
     );
 
     setImages(images_temp);
@@ -43,6 +44,7 @@ function RecipeGridList(props) {
     </div>
   );
 }
+//    backgroundColor: '#f1f1f1',
 
 const useStyles = makeStyles({
   root: {
@@ -50,8 +52,7 @@ const useStyles = makeStyles({
    flexWrap: 'wrap',
    justifyContent: 'center',
    overflow: 'hidden',
-   backgroundColor: '#f1f1f1',
-   padding: '15px'
+   padding: '10px'
   },
   icon: {
     color: 'rgba(255, 255, 255, 0.54)',

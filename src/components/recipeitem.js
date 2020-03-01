@@ -32,19 +32,28 @@ function RecipeItem(props) {
 
   let image = <img src={img_src} className={classes.listimage} alt={recipe.title} alt={"recipe img"} />;
 
+  let tile_jsx;
+  if(props.smalltiles != undefined && props.smalltiles == false) {
+    tile_jsx = (
+    <GridListTile key={r_img} className={classes.listtile} onClick={() => handeRecipeClick(recipe)}>
+      {image}
+      <GridListTileBar
+        title={recipe.title}
+        subtitle={<span>Av: {recipe.user}</span>}
+      />
+    </GridListTile>);
+  } else {
+    tile_jsx = (
+    <GridListTile key={r_img} className={classes.listtile_small} onClick={() => handeRecipeClick(recipe)}>
+      {image}
+    </GridListTile>);
+  }
+
   return (
     <React.Fragment>
 
-      <GridListTile key={r_img} className={classes.listtile} onClick={() => handeRecipeClick(recipe)}>
+    {tile_jsx}
 
-        {image}
-
-        <GridListTileBar
-          title={recipe.title}
-          subtitle={<span>Av: {recipe.user}</span>}
-        />
-
-      </GridListTile>
 
     </React.Fragment>
   );
@@ -72,6 +81,11 @@ const useStyles = makeStyles({
     minWidth: '150px',
     minHeight: '150px',
     objectFit: 'cover'
+  },
+  listtile_small: {
+    maxHeight: '100px',
+    maxWidth: '100px',
+    padding: '2px',
   },
   listtile: {
     maxHeight: '150px',

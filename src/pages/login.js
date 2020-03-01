@@ -1,10 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
+import { makeStyles } from '@material-ui/core/styles';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+
+import Button from '@material-ui/core/Button';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 
 function Login(props) {
@@ -12,18 +16,10 @@ function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signedInStatus, setSignedInStatus] = useState("Ej inloggad");
-  const [signContext, setSignContext ] = useState("Logga in");
 
-  const dispatch = useDispatch(); // be able to dispatch
-  // const state = useSelector(state => state.userReducer); // subscribe to the redux store
-  // console.log(state)
+  const classes = useStyles();
 
-
-  // init app only once
-  /*
-  useEffect(() => {
-    initApp();
-  }, []); */
+  // const dispatch = useDispatch(); // be able to dispatch
 
   /**
    * Handles the sign in button press.
@@ -46,19 +42,17 @@ function Login(props) {
         return;
       }
       // Sign in with email and pass.
-      // [START authwithemail]
       firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
-        // [START_EXCLUDE]
+
         if (errorCode === 'auth/wrong-password') {
           alert('fel lösenord.');
         } else {
           alert(errorMessage);
         }
         console.log(error);
-
       });
     }
   }
@@ -90,93 +84,73 @@ function Login(props) {
       }
       console.log(error);
     });
-
     console.log("signed up " + email);
-
   }
 
   function sendEmailVerification() {
-
       firebase.auth().currentUser.sendEmailVerification().then(function() {
         // Email Verification sent!
         alert('Email Verification Sent!');
-
       });
   }
 
-  /**
-   * initApp handles setting up UI event listeners and registering Firebase auth listeners:
-   *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
-   *    out, and that is where we update the UI.
-   */
-   /*
-  function initApp() {
+  let signText = (firebase.auth().currentUser) ? "Logga ut" : "Logga in";
+  let btn_color = (firebase.auth().currentUser) ? "secondary" : "primary";
 
-    console.log("initApp")
-
-    // Listening for auth state changes.
-    firebase.auth().onAuthStateChanged(function(user) {
-
-      if (user) {
-        // User is signed in.
-        var displayName = user.displayName;
-        var email = user.email;
-        var emailVerified = user.emailVerified;
-        var photoURL = user.photoURL;
-        var isAnonymous = user.isAnonymous;
-        var uid = user.uid;
-        var providerData = user.providerData;
-
-        // console.log('user json: ')
-        //console.log(JSON.stringify(user, null, '  '))
-
-        setSignedInStatus('Inloggad');
-        setSignContext('Logga ut');
-
-        dispatch({
-          type: "SIGNIN",
-          signedIn: ""
-        })
-
-
-      } else {
-        // User is signed out.
-        setSignedInStatus('Ej inloggad');
-        setSignContext('Logga in');
-
-        dispatch({
-          type: "SIGNOUT",
-          signedIn: ""
-        })
-      }
-
-    });
-    // [END authstatelistener]
-  }
-*/
   return (
 
-    <div>
+    <div className={classes.login_div}>
     <p>Ange email and lösenord för att logga in eller skapa ett konto</p>
 
          <input type="text" name="email" placeholder="Email" onChange={evt => setEmail(evt.target.value)}/>
+
          &nbsp;&nbsp;&nbsp;
          <input type="password" name="password" placeholder="Password" onChange={evt => setPassword(evt.target.value)}/>
 
          <br/><br/>
-         <button onClick={toggleSignIn} name="signin"> {signContext} </button>
-         &nbsp;&nbsp;&nbsp;
-         <button onClick={handleSignUp} name="signup">Skapa konto</button>
-         &nbsp;&nbsp;&nbsp;
-         <button onClick={sendEmailVerification} name="verify">Verifiera konto</button>
 
-         <span id="quickstart-sign-in-status"> &nbsp; {signedInStatus} </span>
+         <Button
+           variant="contained"
+           color={btn_color}
+           onClick={toggleSignIn}
+         >
+           {signText}
+         </Button>
+
+         &nbsp;&nbsp;&nbsp;
+
+         <Button
+           variant="contained"
+           color="primary"
+           onClick={handleSignUp}
+         >
+           Skapa konto
+         </Button>
+
 
     </div>
 
   );
 
 }
+
+/*
+<OutlinedInput
+  value={email}
+  onChange={evt => setEmail(evt.target.value)}
+/>*/
+
+const useStyles = makeStyles({
+  login_div: {
+    background: '#f5f5f5',
+    padding: '1em',
+    margin: '0.5em',
+    borderRadius: '15px'
+ }
+});
+
+// <span id="quickstart-sign-in-status"> &nbsp; {signedInStatus} </span>
+// <button onClick={sendEmailVerification} name="verify">Verifiera konto</button>
 
 /*
 

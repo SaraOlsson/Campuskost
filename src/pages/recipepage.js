@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
 import { useParams} from "react-router";
 import { useSelector } from 'react-redux';
+import { useDispatch } from "react-redux";
 // import { recipeFetch } from '../actions/RecipeActions';
 
 import ValidCheck from '../components/validcheck';
@@ -14,14 +15,19 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Divider from '@material-ui/core/Divider';
+// import Container from '@material-ui/core/container';
 
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import EditIcon from '@material-ui/icons/Edit';
+
+//let admin = require('firebase-admin');
 
 function RecipePage(props) {
 
+  const [ ifUser, setIfUser] = useState(false);
   const [ recipe, setRecipe] = useState(undefined);
   const [ saved, setSaved ] = useState(false);
   const [ tried, setTried ] = useState(false);
@@ -29,6 +35,7 @@ function RecipePage(props) {
   const store = useSelector(state => state.fireReducer);
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // someFetcher();
@@ -39,7 +46,42 @@ function RecipePage(props) {
 
   }, []);
 
+  // know if recipe belongs to this user
+  useEffect(() => {
+    // exit funtion if undefined
+    if(!store.firestore_user || !recipe || !recipe.user_doc.username )
+      return;
+
+    if(recipe.user_doc.username == store.firestore_user.username) {
+      console.log("same as logged in: " + recipe.user_doc.username)
+      setIfUser(true);
+    } else {
+      console.log("NOT same as logged in: " + recipe.user_doc.username)
+    }
+
+  }, [store.firestore_user, recipe]);
+
   const likeRecipe = () => {
+
+    console.log("likeRecipe")
+    /*
+    if(!saved) {
+      console.log("!saved")
+      // ...
+      let listRef = store.db.collection('lists').doc(store.firestore_user.email);
+
+      // Atomically add a new region to the "regions" array field.
+      let arrUnion = listRef.update({
+        recipes: admin.firestore.FieldValue.arrayUnion(recipetitle)
+      }).then(function() {
+        console.log("Frank food updated");
+      });
+
+    } */
+    /*
+    else {
+      store.db.collection("lists").doc(store.firestore_user.email).set({});
+    } */
     setSaved( !saved );
   };
 
@@ -47,16 +89,53 @@ function RecipePage(props) {
     setTried( !tried );
   };
 
+  const editRecipe = () => {
+
+    console.log("edit recipe")
+
+    dispatch({
+      type: "SETDESCRIPTIONS",
+      descriptions: recipe.description
+    })
+
+    dispatch({
+      type: "SETINGREDIENTS",
+      ingredients: recipe.ingredients
+    })
+
+    dispatch({
+      type: "SETTITLE",
+      title: recipe.title
+    })
+    /*
+    dispatch({
+      type: "SETDESCRIPTIONS",
+      descriptions: descriptions
+    }) */
+    history.push("/upload" );
+  }
+
   const handleUserClick = () => {
-    console.log("well hello")
-    history.push("/profile/" + recipe.user );
+    history.push("/profile/" + recipe.user_doc.username );
   };
 
   const recipeFetcher = (ref) => {
     ref.get().then(function(doc) {
         if (doc.exists) {
-            // console.log("Document data:", doc.data());
-            setRecipe(doc.data());
+            let data = doc.data()
+            // console.log("Document data:", data);
+            if(data.user_ref) {
+              // get user info
+              data.user_ref.get().then(function(user_doc) {
+                let user_data = user_doc.data()
+                data.user_doc = user_data; // append to recipe data
+                // console.log("Document USER data:", user_data);
+                setRecipe(data);
+              });
+            } else {
+              setRecipe(data);
+            }
+
         } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
@@ -118,7 +197,7 @@ function RecipePage(props) {
 
             <Button disableTouchRipple onClick={handleUserClick}
             style={{display: 'inline', backgroundColor: 'transparent', textTransform: 'none'}}>
-              { recipe.user }
+              { recipe.user_doc.username }
             </Button>
           </span>
           </div>
@@ -153,14 +232,26 @@ function RecipePage(props) {
         <IngredientsList ingredients={recipe.ingredients}/>
         <RecipeDecsList description={recipe.description}/>
 
+        {ifUser &&
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<EditIcon />}
+            onClick={editRecipe}
+          >
+            Ändra recept
+          </Button>
+        }
+
         </div>
       }
 
     </div>
 
-  );
+  ); // style={{display: 'inline', backgroundColor: 'transparent', textTransform: 'none'}}
 
 }
+
 
 
 function IngredientsList(props) {
@@ -264,7 +355,10 @@ const useStyles = makeStyles({
   listimage: {
     maxHeight: '100%',
     maxWidth: '100%',
-    borderRadius: '4px'
+    borderRadius: '4px',
+    objectFit: 'cover',
+    minHeight: '150px',
+    maxWidth: '150px'
   },
   imagesidebar: {
     padding: 5
