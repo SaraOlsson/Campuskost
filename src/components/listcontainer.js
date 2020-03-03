@@ -14,9 +14,43 @@ function ListContainer(props) {
 
   useEffect(() => {
 
-    recipe_fetcher(props.list.recipes);
+    // using recipe refs
+    if (props.refs != undefined) {
+      recipe_refs_fetcher(props.refs);
+      //console.log("!= undefined");
+    } // else {
+      // console.log("oups undefined");
+    // }
+
+
+    // using recipe ids
+    if (props.list != undefined)
+      recipe_fetcher(props.list.recipes);
 
   }, []);
+
+  const recipe_refs_fetcher = (refs_list) => {
+
+    let temp_recipes = [];
+    refs_list.map( (ref, idx) => {
+
+      ref.recipe_ref.get().then(function(doc) {
+          if (doc.exists) {
+
+              let data = doc.data();
+              data.id = doc.id;
+              temp_recipes.push(data);
+              if (idx == refs_list.length - 1) {
+                setRecipes(temp_recipes);
+              }
+          } else {
+              console.log("No such document!");
+          }
+      }).catch(function(error) {
+          console.log("Error getting document:", error);
+      });
+    })
+  }
 
   // let ref = store.db.collection('recipes').doc(id);
   const recipe_fetcher = (recipe_id_list) => {
@@ -30,7 +64,7 @@ function ListContainer(props) {
           if (doc.exists) {
 
               let data = doc.data();
-              data.id = doc.id; 
+              data.id = doc.id;
               temp_recipes.push(data);
               if (idx == recipe_id_list.length - 1) {
                 setRecipes(temp_recipes);
@@ -47,9 +81,11 @@ function ListContainer(props) {
   let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
   let recipeContent = (recipes.length > 0) ? <RecipeGridList recipes={recipes} smalltiles={true}/> : spinner_jsx;
 
+  let listname = (props.list) ? props.list.listname : "Gillade recept"; // "Gillade recept"
+
   return (
-    <div>
-    <h4>{props.list.listname}</h4>
+    <div style={{width: '100%'}}>
+    <p className={classes.list_header}> {listname}</p>
     <div className={classes.listcontainer}>
       {recipeContent}
     </div>
@@ -68,7 +104,13 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     marginTop: '20px'
-  }
+  },
+  list_header: {
+    background: '#cab18e',
+    color: 'white',
+    padding: '3px 15px',
+    borderRadius: '5px'
+}
 });
 
 

@@ -45,14 +45,13 @@ function RecipeGridList(props) {
   );
 }
 //    backgroundColor: '#f1f1f1',
-
+//    padding: '10px'
 const useStyles = makeStyles({
   root: {
    display: 'flex',
    flexWrap: 'wrap',
    justifyContent: 'center',
-   overflow: 'hidden',
-   padding: '10px'
+   overflow: 'hidden'
   },
   icon: {
     color: 'rgba(255, 255, 255, 0.54)',

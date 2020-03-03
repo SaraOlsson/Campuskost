@@ -29,7 +29,7 @@ function RecipePage(props) {
 
   const [ ifUser, setIfUser] = useState(false);
   const [ recipe, setRecipe] = useState(undefined);
-  const [ saved, setSaved ] = useState(false);
+  const [ saved, setSaved ] = useState({likes: false, doc_id: undefined});
   const [ tried, setTried ] = useState(false);
   const { recipetitle, id } = useParams();
   const store = useSelector(state => state.fireReducer);
@@ -43,6 +43,8 @@ function RecipePage(props) {
     let ref = store.db.collection('recipes').doc(id);
     // ref.on('value', function(snap) { console.log(snap.val()); })
     recipeFetcher(ref);
+    // likeFetcher();
+
 
   }, []);
 
@@ -59,30 +61,56 @@ function RecipePage(props) {
       console.log("NOT same as logged in: " + recipe.user_doc.username)
     }
 
+    console.log(store.firestore_user.email)
+    let queryRef = store.db.collection('likes').where('email', '==', store.firestore_user.email);
+    likeFetcher(queryRef);
+
+
   }, [store.firestore_user, recipe]);
+
+  const likeFetcher = (ref) => {
+
+    ref.get()
+    .then(snapshot => {
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+        return;
+      }
+
+      snapshot.forEach(doc => {
+        console.log(doc.id, '=>', doc.data());
+        let data = doc.data();
+
+        data.recipe_ref.get().then(function(recipe_doc) {
+          let recipe_data = recipe_doc.data()
+
+          if(recipe_doc.id == recipe.id ) {
+            console.log("Yeah I like this recipe! ", recipe_doc.id);
+            setSaved({likes: true, doc_id: doc.id});
+          }
+        });
+      });
+    })
+    .catch(err => {
+      console.log('Error getting documents', err);
+    });
+  }
 
   const likeRecipe = () => {
 
     console.log("likeRecipe")
-    /*
-    if(!saved) {
-      console.log("!saved")
-      // ...
-      let listRef = store.db.collection('lists').doc(store.firestore_user.email);
 
-      // Atomically add a new region to the "regions" array field.
-      let arrUnion = listRef.update({
-        recipes: admin.firestore.FieldValue.arrayUnion(recipetitle)
-      }).then(function() {
-        console.log("Frank food updated");
-      });
+    // stop liking
+    if(saved.likes) {
+      store.db.collection('likes').doc(saved.doc_id).delete();
+    } else {
+      let temp_ref = store.db.collection('recipes').doc(id);
+      store.db.collection('likes').doc(recipe.id).set({email: store.firestore_user.email, recipe_ref: temp_ref});
+    }
 
-    } */
-    /*
-    else {
-      store.db.collection("lists").doc(store.firestore_user.email).set({});
-    } */
-    setSaved( !saved );
+    //setSaved( !saved );
+    setSaved({likes: !saved.likes, doc_id: !saved.doc_id});
+
   };
 
   const tryRecipe = () => {
@@ -123,6 +151,7 @@ function RecipePage(props) {
     ref.get().then(function(doc) {
         if (doc.exists) {
             let data = doc.data()
+            data.id = doc.id;
             // console.log("Document data:", data);
             if(data.user_ref) {
               // get user info
@@ -146,7 +175,7 @@ function RecipePage(props) {
 
   }
 
-  let icon = (saved === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
+  let icon = (saved.likes === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
   let r_img = ( recipe != undefined) ? recipe.img : 'temp_food1';
   let triedbyNum = 3;
   // , zIndex: '-1'

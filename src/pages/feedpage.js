@@ -172,6 +172,7 @@ const useStyles = makeStyles({
   },
   grid_background: {
     backgroundColor: '#f1f1f1',
+    paddingTop: '10px'
   },
   foodImg: {
     backgroundColor: 'pink',

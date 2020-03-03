@@ -2,12 +2,21 @@ import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 import firebase from 'firebase/app';
+import _ from 'underscore';
 
 import ListContainer from '../components/listcontainer';
+
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Typography from '@material-ui/core/Typography';
 
 function FavoritePage(props) {
 
   const [lists, setLists] = React.useState([]);
+  const [myLists, setMyLists] = React.useState({});
+  const [refList, setRefList] = React.useState([]);
 
   const store = useSelector(state => state.fireReducer);
 
@@ -21,6 +30,7 @@ function FavoritePage(props) {
     } else if(store.firestore_user) {
       console.log("list for firestore_user: " + store.firestore_user.username)
       listFetcher(store.firestore_user.username);
+      likedFetcher();
 
     }
   }, [store.firestore_user]);
@@ -49,23 +59,191 @@ function FavoritePage(props) {
 
   }
 
+  const likedFetcher = () => {
+
+    let citiesRef = store.db.collection('likes');
+    let list_docs = [];
+
+    let list_ids = [];
+    let grouped_by_list = {};
+    let obj_temp = {};
+
+    let query = citiesRef.where('email', '==', store.firestore_user.email).get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents.');
+          return;
+        }
+        snapshot.forEach(doc => {
+          // console.log(doc.id, '=>', doc.data());
+          let data = doc.data();
+          if(data.list_ref == undefined){
+            list_docs.push(data);
+          } else {
+            //console.log("one liked recipe belonged to a list")
+
+            // uploadImage(function(returnValue_downloadURL) {
+            let path_segments = data.list_ref._key.path.segments;
+            let the_id = path_segments[path_segments.length-1];
+            let prop = the_id;
+            console.log(data.list_ref)
+            if (!grouped_by_list[prop]) {
+              grouped_by_list[prop] = [];
+            }
+            grouped_by_list[prop].push(data);
+
+            console.log(grouped_by_list)
+
+            // also append list doc
+            /*
+            data.list_ref.get().then(function(list_doc) {
+              data.list_doc = list_doc.data();
+              data.list_id = list_doc.id;
+
+              let prop = list_doc.id
+              if (!grouped_by_list[prop]) {
+                grouped_by_list[prop] = [];
+              }
+              grouped_by_list[prop].push(data);
+              list_ids.push(list_doc.id);
+              obj_temp = { ...obj_temp, [`${prop}`]: grouped_by_list[prop] };
+              console.log(obj_temp)
+              // setMyLists({ ...myLists, [`${prop}`]: grouped_by_list[prop] });
+              // setValid({ ...valid, ["title"]: true });
+
+            }); */
+          }
+        });
+
+        // setMyLists({ ...myLists, [`${prop}`]: grouped_by_list[prop] });
+        setMyLists(grouped_by_list);
+        //console.log(grouped_by_list)
+        //let my_lists_temp = Object.values(grouped_by_list);
+        //console.log(Object.values(grouped_by_list))
+
+        setRefList(list_docs);
+      })
+      .catch(err => {
+        console.log('Error getting documents', err);
+      });
+
+  }
+
   let lists_jxs = lists.map((item, i) =>
     <ListContainer key={i} list={item}/>
   );
 
+  // if user profile view, this prop will be available
   let no_lists_text = (props.otheruser) ? props.otheruser + " har ännu inga sparade listor" : "Inga sparade listor ännu";
+  // <ListContainer list={list_with_liked}/>
+
+  let liked_list_jsx = (refList.length >= 1) ? <ListContainer refs={refList}/> : <p> Gillade recept.. </p>
+
+  const object1 = {
+    a: 'somestring',
+    b: 42
+  };
+
+  console.log("render..")
+  console.log(myLists)
+
+  let my_list_jsx = [];
+  let counter = 0;
+  for (let [key, value] of Object.entries(myLists)) {
+      //console.log(`${key}: ${value}`);
+
+      console.log(value)
+
+      //let ref_list = value.map(_obj => _obj.recipe_ref );
+      //console.log(ref_list)
+      my_list_jsx.push(<ListContainer key={counter} refs={value}/>);
+      counter = counter + 1;
+  }
+
+  /*
+  let my_lists_jsx = myLists.map((list_info, i) =>
+
+
+    <ListContainer key={i} refs={item}/>
+  ); */
 
   return (
 
     <div>
-    { !props.otheruser && <h3>Dina listor</h3> }
+    { !props.otheruser &&
+
+      <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography style={{fontWeight: 'bold'}}> Gillade recept</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+
+          {liked_list_jsx}
+
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+
+    }
+    { !props.otheruser &&
+
+      <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography style={{fontWeight: 'bold'}}> Listor du följer</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+
+          {my_list_jsx}
+
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+
+    }
+    { false && !props.otheruser && <h3>Dina listor</h3> }
     { lists.length < 1 && <p> {no_lists_text} </p>}
-    <div>
-    { lists_jxs }
-    </div>
+
+    <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}>
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Typography style={{fontWeight: 'bold'}}> Dina listor</Typography>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
+
+        {lists_jxs}
+
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
+
     </div>
 
   );
 }
+
+/*
+
+<div>
+{ lists_jxs }
+</div>
+
+*/
+
+/*
+
+<React.Fragment>
+<h3>Gillade recept</h3>
+{liked_list_jsx}
+</React.Fragment>
+
+*/
 
 export default FavoritePage;

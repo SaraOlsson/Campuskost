@@ -18,7 +18,13 @@
 
 .body .MuiExpansionPanel-root:before {
   display: none;
-} 
+}
+
+.body .MuiExpansionPanelDetails-root {
+  padding: 15px;
+  display: block;
+  padding-top: 0px;
+}
 
 .MuiAppBar-colorPrimary {
     color: #fff;
@@ -39,6 +45,10 @@
   width: 100%; /* 360px; */
   /*height: 300px; */
   margin: 0px;
+}
+
+.body .MuiExpansionPanelDetails-root .MuiGridList-root {
+  justify-content: left;
 }
 
 .body .MuiPaper-elevation1 {
