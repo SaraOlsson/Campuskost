@@ -32,8 +32,64 @@ function FavoritePage(props) {
       listFetcher(store.firestore_user.username);
       likedFetcher();
 
+      myFetchPromise_wrapper(store.firestore_user.username).then((loadedDocs) => {
+        // successMessage is whatever we passed in the resolve(...) function above.
+        // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+        console.log("Yay! loaded " + loadedDocs)
+      });
+
     }
+
+    myFirstPromise.then((successMessage) => {
+      // successMessage is whatever we passed in the resolve(...) function above.
+      // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+      console.log("Yay! " + successMessage)
+    });
+
+
+
+
   }, [store.firestore_user]);
+
+  var myFetchPromise_wrapper = function(current_username) {
+    return new Promise((resolve, reject) => {
+
+      let citiesRef = store.db.collection('lists');
+      let list_docs = [];
+
+      let query = citiesRef.where('created_by', '==', current_username).get()
+        .then(snapshot => {
+          if (snapshot.empty) {
+            console.log('No matching documents.');
+            return;
+          }
+          snapshot.forEach(doc => {
+            // console.log(doc.id, '=>', doc.data());
+            list_docs.push(doc.data());
+          });
+          //setLists(list_docs);
+          resolve(list_docs)
+        })
+        .catch(err => {
+          console.log('Error getting documents', err);
+        });
+
+    });
+  }
+
+
+  const testFetcher = () => {
+    let testis = 0;
+  }
+
+  let myFirstPromise = new Promise((resolve, reject) => {
+    // We call resolve(...) when what we were doing asynchronously was successful, and reject(...) when it failed.
+    // In this example, we use setTimeout(...) to simulate async code.
+    // In reality, you will probably be using something like XHR or an HTML5 API.
+    setTimeout( function() {
+      resolve("Success!")  // Yay! Everything went well!
+    }, 250)
+  })
 
   // fetch recipes for the user profile in view
   const listFetcher = (current_username) => {
@@ -48,10 +104,12 @@ function FavoritePage(props) {
           return;
         }
         snapshot.forEach(doc => {
-          // console.log(doc.id, '=>', doc.data());
+          //console.log(doc.id, '=>', doc.data());
+
           list_docs.push(doc.data());
         });
         setLists(list_docs);
+
       })
       .catch(err => {
         console.log('Error getting documents', err);
@@ -61,14 +119,14 @@ function FavoritePage(props) {
 
   const likedFetcher = () => {
 
-    let citiesRef = store.db.collection('likes');
+    let likesRef = store.db.collection('likes');
     let list_docs = [];
 
     let list_ids = [];
     let grouped_by_list = {};
     let obj_temp = {};
 
-    let query = citiesRef.where('email', '==', store.firestore_user.email).get()
+    let query = likesRef.where('email', '==', store.firestore_user.email).get()
       .then(snapshot => {
         if (snapshot.empty) {
           console.log('No matching documents.');
@@ -79,6 +137,7 @@ function FavoritePage(props) {
           let data = doc.data();
           if(data.list_ref == undefined){
             list_docs.push(data);
+            console.log("pushing..")
           } else {
             //console.log("one liked recipe belonged to a list")
 
@@ -86,13 +145,14 @@ function FavoritePage(props) {
             let path_segments = data.list_ref._key.path.segments;
             let the_id = path_segments[path_segments.length-1];
             let prop = the_id;
-            console.log(data.list_ref)
+
+            // console.log(data.list_ref)
             if (!grouped_by_list[prop]) {
               grouped_by_list[prop] = [];
             }
             grouped_by_list[prop].push(data);
 
-            console.log(grouped_by_list)
+            //console.log(grouped_by_list)
 
             // also append list doc
             /*
@@ -122,16 +182,21 @@ function FavoritePage(props) {
         //console.log(Object.values(grouped_by_list))
 
         setRefList(list_docs);
+        return list_docs;
       })
       .catch(err => {
         console.log('Error getting documents', err);
       });
 
+      console.log("query:")
+      console.log(query)
+
   }
 
+  /*
   let lists_jxs = lists.map((item, i) =>
     <ListContainer key={i} list={item}/>
-  );
+  ); */
 
   // if user profile view, this prop will be available
   let no_lists_text = (props.otheruser) ? props.otheruser + " har ännu inga sparade listor" : "Inga sparade listor ännu";
@@ -144,10 +209,11 @@ function FavoritePage(props) {
     b: 42
   };
 
-  console.log("render..")
-  console.log(myLists)
+  //console.log("render..")
+  //console.log(myLists)
 
   let my_list_jsx = [];
+  let lists_I_follow = [];
   let counter = 0;
   for (let [key, value] of Object.entries(myLists)) {
       //console.log(`${key}: ${value}`);
@@ -156,7 +222,8 @@ function FavoritePage(props) {
 
       //let ref_list = value.map(_obj => _obj.recipe_ref );
       //console.log(ref_list)
-      my_list_jsx.push(<ListContainer key={counter} refs={value}/>);
+      my_list_jsx.push(<ListContainer key={counter} refs={value} onlyMine={true} myEmail={store.firestore_user.email}/>);
+      lists_I_follow.push(<ListContainer key={counter} refs={value} onlyMine={false} myEmail={store.firestore_user.email}/>)
       counter = counter + 1;
   }
 
@@ -219,7 +286,7 @@ function FavoritePage(props) {
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
 
-        {lists_jxs}
+        {lists_I_follow}
 
       </ExpansionPanelDetails>
     </ExpansionPanel>

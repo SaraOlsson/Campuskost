@@ -29,16 +29,96 @@ function ListContainer(props) {
 
   }, []);
 
+  // omg ugly code - FIX
   const recipe_refs_fetcher = (refs_list) => {
 
     let temp_recipes = [];
-    refs_list.map( (ref, idx) => {
+    let continue_until = refs_list.length - 1;
 
-      ref.recipe_ref.get().then(function(doc) {
+    //console.log(refs_list)
+    refs_list.map( (likes_doc, idx) => {
+
+      if(likes_doc.list_ref != undefined)
+      {
+        likes_doc.list_ref.get().then(function(list_doc) {
+            if (list_doc.exists) {
+
+                let fetch_it = false;
+                let list_data = list_doc.data();
+
+                if (props.onlyMine == undefined){
+                  console.log("care about all likes")
+                  fetch_it = true;
+                }
+                else if (props.onlyMine == true && list_data.created_by == props.myEmail) {
+                  console.log("only care about my lists")
+                  fetch_it = true;
+
+                } else if(props.onlyMine == false && list_data.created_by != props.myEmail){
+                  console.log("only care about lists I follow")
+                  fetch_it = true;
+                } else {
+                  console.log("skipped recipe!")
+                  continue_until = continue_until-1;
+                }
+
+                // if this recipe should be saved
+                if(fetch_it == true)
+                {
+                  likes_doc.recipe_ref.get().then(function(doc) {
+                      if (doc.exists) {
+
+                          let data = doc.data();
+                          data.id = doc.id;
+
+                          temp_recipes.push(data);
+                          if (idx == continue_until) {
+                            setRecipes(temp_recipes);
+                          }
+                      } else {
+                          console.log("No such document!");
+                      }
+                  }).catch(function(error) {
+                      console.log("Error getting document:", error);
+                  });
+
+                }
+
+
+            } else {
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+      } else {
+
+        likes_doc.recipe_ref.get().then(function(doc) {
+            if (doc.exists) {
+
+                let data = doc.data();
+                data.id = doc.id;
+
+                temp_recipes.push(data);
+                if (idx == continue_until) {
+                  setRecipes(temp_recipes);
+                }
+            } else {
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+
+      }
+
+/*
+      likes_doc.recipe_ref.get().then(function(doc) {
           if (doc.exists) {
 
               let data = doc.data();
               data.id = doc.id;
+
               temp_recipes.push(data);
               if (idx == refs_list.length - 1) {
                 setRecipes(temp_recipes);
@@ -48,7 +128,7 @@ function ListContainer(props) {
           }
       }).catch(function(error) {
           console.log("Error getting document:", error);
-      });
+      }); */
     })
   }
 
