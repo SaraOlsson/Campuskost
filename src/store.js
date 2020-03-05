@@ -22,13 +22,13 @@ function testreducer(state = { num: 0, url: "hey" }, action) {
   }
 }
 
-function uploadReducer(state = { title: undefined, ingredients: undefined, descriptions: undefined, image: undefined }, action) {
+function uploadReducer(state = { editmode: false, recipe_id: undefined, title: undefined, ingredients: undefined, descriptions: undefined, image: undefined }, action) {
   switch (action.type) {
-    case "SETTITLE":
-      return {
-        ...state,
-        title: action.title
-      };
+      case "SETTITLE":
+        return {
+          ...state,
+          title: action.title
+        };
       case "SETINGREDIENTS":
         return {
           ...state,
@@ -43,6 +43,12 @@ function uploadReducer(state = { title: undefined, ingredients: undefined, descr
         return {
           ...state,
           image: action.image
+        };
+      case "SETEDITMODE":
+        return {
+          ...state,
+          editmode: action.editmode,
+          recipe_id: action.recipe_id,
         };
     default:
       return state;

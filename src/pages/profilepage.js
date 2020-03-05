@@ -161,7 +161,7 @@ function ProfilePage(props) {
   }
 
   function callback2 (followers, collection) {
-    console.log('setFollowInfo and setFollowingInfo');
+    //console.log('setFollowInfo and setFollowingInfo');
 
     if(collection == "followers")
       setFollowInfo(followers);
@@ -230,7 +230,7 @@ function ProfilePage(props) {
   let recipeContent = (recipes != undefined) ? <RecipeGridList recipes={recipes}/> : spinner_jsx;
 
   let followBtn;
-  if (!ifUser && following_this_user.following == true) {
+  if (store.firestore_user && !ifUser && following_this_user.following == true) {
 
     followBtn = (<Button
       variant="contained"
@@ -241,7 +241,7 @@ function ProfilePage(props) {
       Sluta följ
     </Button>);
 
-  } else if (!ifUser) {
+  } else if (store.firestore_user && !ifUser) {
 
     followBtn = (<Button
       variant="contained"
@@ -254,6 +254,8 @@ function ProfilePage(props) {
   }
 
   // let followBtn =
+
+  let uni = (store.firestore_user != undefined) ? store.firestore_user.university : undefined;
 
   //console.log("rerender ")
   return (
@@ -269,7 +271,8 @@ function ProfilePage(props) {
       >
 
         <Grid item xs={6}>
-          <h3>{user}</h3>
+          <p className={classes.username}>{user}</p>
+          <p className={classes.university}>{uni}</p>
           {ifUser && <Button
             variant="contained"
             color="primary"
@@ -287,7 +290,7 @@ function ProfilePage(props) {
       </Grid>
 
       <SimpleTabs value={0}>
-        <div>
+        <div style={{paddingTop: '15px'}}>
         { recipeContent }
         </div>
         <div>
@@ -315,6 +318,13 @@ const useStyles = makeStyles({
    display: 'flex',
    justifyContent: 'center',
    marginTop: 100
+ },
+ username: {
+   fontWeight: 'bold',
+   margin: '10px 0px'
+ },
+ university: {
+   margin: '10px 0px'
  }
 });
 

@@ -79,7 +79,7 @@ function DescriptionList(props) {
     if(temp_descriptions != undefined)
     {
       setDescriptions(temp_descriptions);
-      props.handleAdd(temp_descriptions.length);
+      // props.handleAdd(temp_descriptions.length);
     }
 
   }, []);

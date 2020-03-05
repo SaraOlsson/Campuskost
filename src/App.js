@@ -263,10 +263,36 @@ function BottomMenuBar() {
 
   const history = useHistory();
   const classes = useStyles();
+  const upload_store = useSelector(state => state.uploadReducer);
+  const dispatch = useDispatch();
 
   const handleMenuClick = (event = undefined, val) => {
     setValue(val);
     history.push("/" + val);
+
+    dispatch({
+      type: "SETDESCRIPTIONS",
+      descriptions: undefined
+    })
+
+    dispatch({
+      type: "SETINGREDIENTS",
+      ingredients: undefined
+    })
+
+    dispatch({
+      type: "SETTITLE",
+      title: undefined
+    })
+
+    if(val != "upload" && upload_store.editmode == true) {
+      dispatch({
+        type: "SETEDITMODE",
+        editmode: false
+      })
+
+    }
+
   };
 
   return (

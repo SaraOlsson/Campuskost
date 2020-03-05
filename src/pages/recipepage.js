@@ -78,7 +78,7 @@ function RecipePage(props) {
       }
 
       snapshot.forEach(doc => {
-        console.log(doc.id, '=>', doc.data());
+        //console.log(doc.id, '=>', doc.data());
         let data = doc.data();
 
         data.recipe_ref.get().then(function(recipe_doc) {
@@ -135,12 +135,22 @@ function RecipePage(props) {
       type: "SETTITLE",
       title: recipe.title
     })
-    /*
+
     dispatch({
-      type: "SETDESCRIPTIONS",
-      descriptions: descriptions
-    }) */
+      type: "SETEDITMODE",
+      editmode: true,
+      recipe_id: id
+    })
+
     history.push("/upload" );
+  }
+
+  const removeRecipe = () => {
+
+    store.db.collection('recipes').doc(id).delete();
+    console.log("recipe deleted");
+    history.push("/home");
+
   }
 
   const handleUserClick = () => {
@@ -269,6 +279,19 @@ function RecipePage(props) {
             onClick={editRecipe}
           >
             Ändra recept
+          </Button>
+        }
+
+        &nbsp; &nbsp; &nbsp;
+
+        {ifUser &&
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<EditIcon />}
+            onClick={removeRecipe}
+          >
+            Ta bort recept
           </Button>
         }
 

@@ -94,6 +94,16 @@ function Login(props) {
       });
   }
 
+  function resetPassword() {
+
+      firebase.auth().sendPasswordResetEmail(email).then(function() {
+        alert("sent password reset to email: " + email);
+      }).catch(function(error) {
+        // An error happened.
+        console.log("could not send reset email")
+      });
+  }
+
   let signText = (firebase.auth().currentUser) ? "Logga ut" : "Logga in";
   let btn_color = (firebase.auth().currentUser) ? "secondary" : "primary";
 
@@ -125,6 +135,16 @@ function Login(props) {
            onClick={handleSignUp}
          >
            Skapa konto
+         </Button>
+
+         <br/><br/>
+
+         <Button
+           variant="contained"
+           color="secondary"
+           onClick={resetPassword}
+         >
+           Återställ lösenord
          </Button>
 
 

@@ -66,7 +66,7 @@ function FeedPage() {
 
   return (
     <div>
-      <NewsContainer/>
+      <NewsContainer recipes={recipes}/>
       { recipes != undefined && <div className={classes.grid_background}><RecipeGridList recipes={recipes}/></div> }
       { recipes === undefined && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
     </div>
@@ -121,6 +121,9 @@ function NewsContainer(props) {
 
   let temp_recipe = {img: 'temp_food2', title: "Svamprisotto", user: "LillKocken"};
 
+  // <img src={require('../assets/'+ temp_recipe.img + '.jpg')} alt={temp_recipe.title} className={classes.listimage}/>
+  let viral_header = (props.recipes != undefined ) ? props.recipes[0].title : "Veckans favvo ";
+
   return (
     <div>
     <h3>Veckans poppis</h3>
@@ -131,13 +134,16 @@ function NewsContainer(props) {
       alignItems="center"
       className={classes.newscontainer}
     >
+
       <Grid item xs={5}>
 
-        <img src={require('../assets/'+ temp_recipe.img + '.jpg')} alt={temp_recipe.title} className={classes.listimage}/>
+        {props.recipes != undefined &&
+          <GridList><RecipeItem recipe={props.recipes[0]} /></GridList>
+        }
 
       </Grid>
       <Grid item xs={7}>
-        <h3>Vegetarisk lasagne</h3>
+        <h3>{viral_header}</h3>
         <h5>"Bästa matlådan!"</h5>
       </Grid>
 

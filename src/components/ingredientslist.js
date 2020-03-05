@@ -76,7 +76,7 @@ function IngredientsList(props) {
     if(temp_ingredients != undefined)
     {
       setIngredients(temp_ingredients);
-      props.handleAdd(temp_ingredients.length);
+      // props.handleAdd(temp_ingredients.length);
     }
 
   }, []);

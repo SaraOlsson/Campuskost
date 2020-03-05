@@ -54,12 +54,14 @@ function SearchPage(props) {
     )
   }*/
 
+  // Sök specifikt recept eller användare ovan
+
   return (
 
     <div>
       <h3>Sökresultat</h3>
 
-      { searchstring == "" && <p> Sök specifikt recept eller användare ovan </p> }
+      { searchstring == "" && <p> Sökfunktionen kommer snart! Tills dess visas alla användare och recept nedan </p> }
 
       { users.length <= 0 && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
       { users.length > 0 && <React.Fragment>
@@ -68,7 +70,7 @@ function SearchPage(props) {
       <FollowerList followerData={followingInfo}/>
       </div>
       <b> Alla recept: </b>
-      <div>
+      <div style={{paddingTop: '15px'}}>
       { recipes != undefined && <RecipeGridList recipes={recipes}/> }
 
       </div>

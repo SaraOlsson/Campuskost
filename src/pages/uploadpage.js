@@ -85,7 +85,17 @@ function UploadPage(props) {
       setTitle(upload_store.title);
       setValid({ ...valid, ["title"]: true });
     }
-        
+
+    if(upload_store.descriptions != undefined)
+    {
+      handleDescriptionsAdd(upload_store.descriptions.length);
+    }
+
+    if(upload_store.ingredients != undefined)
+    {
+      handleIngredientsAdd(upload_store.ingredients.length);
+    }
+
   }, []);
 
   /*
@@ -116,10 +126,12 @@ function UploadPage(props) {
   };
 
   const handleIngredientsAdd = length => {
+    console.log("handleIngredientsAdd")
     setValid({ ...valid, ["ingredients"]: length > 1 ? true : false });
   };
 
   const handleDescriptionsAdd = length => {
+    console.log("handleDescriptionsAdd")
     setValid({ ...valid, ["desc"]: length > 1 ? true : false });
   };
 
@@ -169,61 +181,90 @@ function UploadPage(props) {
     console.log("upload now")
 
     // make sure all valid
+    /*
     if(!allValid())
     {
       console.log("some input is not valid")
       return;
-    }
+    } */
 
     // make sure signed in
     if(store.firestore_user == undefined) {
       alert("you have to sign in first")
-      return
+      return;
     }
 
-    // when image is uploaded, continue with uploading the rest
-    uploadImage(function(returnValue_downloadURL) {
-      // use the return value here instead of like a regular (non-evented) return value
-      let downloadURL = returnValue_downloadURL;
+    // console.log("editmode: " + upload_store.editmode)
 
-      let username = store.firestore_user.username; //  "CheapChef";
-      let recipe_name = upload_store.title; // "Linssoppa"
+    // prepare data
+    let username = store.firestore_user.username;
+    let recipe_name = upload_store.title;
+    const document = store.db.doc('recipes/' + recipe_name + '-' + username);
 
-      /*
-      let temp_i = [
-      {name: 'lax (temp data)', quantity: "400", measure: "gram"},
-      {name: 'pasta', quantity: "500", measure: "gram"},
-      {name: 'citron', quantity: "1", measure: "st"},
-      {name: 'chilipeppar', quantity: "1", measure: "tsk"}
-      ];
+    let r_img = "temp_food1";
+    let ref_to_user = store.db.collection('users').doc(store.firestore_user.email);
 
-      let temp_d = [
-      {order: 0, text: "Koka upp pastavattnet"},
-      {order: 2, text: "Stek lax i pannan med olivolja"},
-      {order: 1, text: "Blanda och tillsätt pressad citron och chilipeppar"}
-    ]; */
+    // if upload or create new doc
+    if(upload_store.editmode == false)
+    {
+      // when image is uploaded, continue with uploading the rest
+      uploadImage(function(returnValue_downloadURL) {
+        // use the return value here instead of like a regular (non-evented) return value
+        let downloadURL = returnValue_downloadURL;
 
-      const document = store.db.doc('recipes/' + recipe_name + '-' + username);
-      let r_img = "temp_food1";
+        // Enter new data into the document.
+        document.set({
+          user: username,
+          title: recipe_name,
+          img: r_img,
+          img_url: downloadURL,
+          ingredients: upload_store.ingredients,
+          description: upload_store.descriptions,
+          user_ref: ref_to_user
+        }).then((test) => {
+          // Document created successfully.
+          console.log( "Document created/updated successfully.")
+          setUpload_wait(false);
+          setDone(true);
+        });
 
-      setId(document.id)
+        // to be able to direct to recipe page
+        setId(document.id);
 
-      // Enter new data into the document.
-      document.set({
-        user: username,
+      }); // end of image upload callback
+
+    } else {
+
+      // UPDATE MODE
+      let update_data = {
         title: recipe_name,
-        img: r_img,
-        img_url: downloadURL,
         ingredients: upload_store.ingredients,
-        description: upload_store.descriptions
-      }).then((test) => {
-        // Document created successfully.
-        console.log( "Document created/updated successfully.")
+        description: upload_store.descriptions,
+      };
+
+      // either upload with or without image
+      if (image == undefined) {
+
+        store.db.collection('recipes').doc(upload_store.recipe_id).update(update_data);
         setUpload_wait(false);
         setDone(true);
-      });
 
-    }); // end of image upload callback
+      } else {
+        uploadImage(function(returnValue_downloadURL) {
+          // use the return value here instead of like a regular (non-evented) return value
+          update_data.img_url = returnValue_downloadURL;
+          store.db.collection('recipes').doc(upload_store.recipe_id).update(update_data);
+
+          setUpload_wait(false);
+          setDone(true);
+
+        }); // end of image upload callback
+      }
+
+      // to be able to direct to recipe page
+      setId(upload_store.recipe_id);
+    }
+
 
   };
 
@@ -232,6 +273,8 @@ function UploadPage(props) {
     history.push("/recipe/" + title + "/" + id );
   };
 
+  let upload_done_text = (upload_store.editmode) ? "Ändring" : "Uppladding";
+  let upload_button_text = (upload_store.editmode) ? "Ändra recept" : "Ladda upp";
   let bottom_content;
   // if working on recipe
   if(upload_wait == false && done == false)
@@ -242,7 +285,7 @@ function UploadPage(props) {
       startIcon={<CloudUploadIcon />}
       onClick={uploadAction}
     >
-      Upload
+      {upload_button_text}
     </Button> );
   }
   else if ( upload_wait == true ) // if waiting on upload
@@ -255,16 +298,24 @@ function UploadPage(props) {
       color="primary"
       onClick={goToRecipe}
     >
-      Uppladding klar! Visa recept
+      {upload_done_text} klar! Visa recept
     </Button> );
   }
 
+  let page_title = (upload_store.editmode) ? "Ändra recept" : "Ladda upp recept";
+
+  let decs_valid = (valid.desc || (upload_store.descriptions && upload_store.descriptions.length > 1)) ? true : false;
+  let ingred_valid = (valid.ingredients || (upload_store.ingredients && upload_store.ingredients.length > 1)) ? true : false;
+  let title_valid = (title.length >= 3 );
+
+  //console.log("decs_valid " + decs_valid)
+  //console.log("ingred_valid " + ingred_valid)
 
   return (
 
 
     <div>
-      <h3>Ladda upp recept</h3>
+      <h3>{page_title}</h3>
 
       <form>
 
@@ -275,7 +326,7 @@ function UploadPage(props) {
         alignItems="center"
       >
 
-        <ValidCheck checked={valid.title} xs={2}/>
+        <ValidCheck checked={title_valid} xs={2}/>
 
 
         <Grid item xs={9}>
@@ -299,7 +350,7 @@ function UploadPage(props) {
           >
             <FormControlLabel
               aria-label="Acknowledge"
-              control={<ValidCheck checked={valid.ingredients} xs={2}/>}
+              control={<ValidCheck checked={ingred_valid} xs={2}/>}
               label="Ingredienser"
               className={classes.formlabel}
             />
@@ -320,7 +371,7 @@ function UploadPage(props) {
           >
             <FormControlLabel
               aria-label="Acknowledge"
-              control={<ValidCheck checked={valid.desc} xs={2}/>}
+              control={<ValidCheck checked={decs_valid} xs={2}/>}
               label="Beskrivning"
               className={classes.formlabel}
             />
@@ -366,7 +417,7 @@ function UploadPage(props) {
 
         <div className={classes.uploaddiv} >
           <Grid container justify="center" alignItems="center">
-          <Grid item xs={4} className="whitebtn">
+          <Grid item xs={4}>
           {bottom_content}
           </Grid>
           </Grid>
@@ -378,6 +429,7 @@ function UploadPage(props) {
 
 }
 
+// className="whitebtn"
 
 // material ui design
 const useStyles = makeStyles(theme => ({

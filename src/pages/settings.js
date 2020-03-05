@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 // import { useDispatch } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -33,6 +34,7 @@ function Settings(props) {
 
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
+  const history = useHistory();
 
   React.useEffect(() => {
     setLabelWidth(labelRef.current.offsetWidth);
@@ -60,17 +62,95 @@ function Settings(props) {
     }
   }
 
+  function signOut() {
+
+    console.log("sign out")
+
+    // sign out if signed in
+    if (firebase.auth().currentUser) {
+      firebase.auth().signOut();
+      history.push("/login");
+    }
+  }
+
+  var toChangePromise = function(current_username) {
+    return new Promise((resolve, reject) => {
+
+      let listsRef = store.db.collection('recipes');
+      let list_ids = [];
+
+      let query = listsRef.where('user', '==', current_username).get()
+        .then(snapshot => {
+
+          snapshot.forEach(doc => {
+            list_ids.push(doc.id);
+          });
+          resolve(list_ids)
+        })
+    });
+  }
+
   // update in Firebase
   function save_username() {
 
     console.log("set username to " + username_textfield)
 
     // Set the 'username' field of the city
-    let cityRef = store.db.collection('users').doc(store.firestore_user.email).update({username: username_textfield});
+    store.db.collection('users').doc(store.firestore_user.email).update({username: username_textfield});
     setIn_editmode(false);
+
+    let doc_ids = [];
+
+
+
+    // update all recipes with for this user with new username
+    /*store.db.collection('recipes').onSnapshot(function(querySnapshot) {
+        querySnapshot.forEach( doc => {
+          let data = doc.data();
+          if (data.user == store.firestore_user.username) {
+            // store.db.collection('recipes').doc(doc.id).update({user: username_textfield});
+            doc_ids.push(doc.id)
+          }
+        });
+    }); */
+
+    toChangePromise(store.firestore_user.username).then((loadedIds) => {
+      // successMessage is whatever we passed in the resolve(...) function above.
+      // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+      console.log("Yay!! loaded " + loadedIds)
+
+      loadedIds.map( _id => {
+        store.db.collection('recipes').doc(_id).update({user: username_textfield});
+      });
+
+    });
+
+    /*
+    doc_ids.map( _id => {
+      store.db.collection('recipes').doc(_id).update({user: username_textfield});
+    }); */
 
   }
 
+  function newName() {
+
+    let preNames = ["Master", "Lill", "Pro"];
+    let postNames = ["Chef", "Sleven", "Pasta", "Vego"];
+
+    let rand1 = Math.floor(Math.random() * preNames.length);
+    let rand2 = Math.floor(Math.random() * postNames.length);
+
+    let pre_n = preNames[rand1];
+    let post_n = postNames[rand2];
+
+    // props
+    return pre_n + post_n;
+  }
+
+  const randomName = () => {
+    let temp_username = newName();
+    setUsername_textfield(temp_username);
+  }
 
   //let signText = (firebase.auth().currentUser) ? "Logga ut" : "Logga in";
 
@@ -78,70 +158,82 @@ function Settings(props) {
 
   return (
 
-    <div className={classes.login_div}>
-      <h3>Inställningar</h3>
+    <div>
+      <div className={classes.login_div}>
+        <h3>Inställningar</h3>
 
-      <ExpansionPanel style={{background: '#fbfbfb', marginTop: '8px'}}>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography className={classes.heading}>Användarnamn</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails style={{display: 'inline-block'}}>
-
-          <FormControl variant="outlined">
-            <InputLabel ref={labelRef} htmlFor="component-outlined"> Användarnamn </InputLabel>
-            <OutlinedInput
-              value={username_textfield}
-              onChange={(e) => setUsername_textfield(e.target.value)}
-              labelWidth={labelWidth}
-              disabled={!in_editmode}
-            />
-          </FormControl>
-
-          { !in_editmode &&
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setIn_editmode(true)}
-            className={classes.buttons}
+        <ExpansionPanel style={{background: '#fbfbfb', marginTop: '8px'}}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
           >
-            Ändra användarnamn
-          </Button>
-          }
-          { in_editmode &&
-          <React.Fragment>
+            <Typography className={classes.heading}>Användarnamn</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails style={{display: 'inline-block'}}>
+
+            <FormControl variant="outlined">
+              <InputLabel ref={labelRef} htmlFor="component-outlined"> Användarnamn </InputLabel>
+              <OutlinedInput
+                value={username_textfield}
+                onChange={(e) => setUsername_textfield(e.target.value)}
+                labelWidth={labelWidth}
+                disabled={!in_editmode}
+              />
+            </FormControl>
+
+            { !in_editmode &&
             <Button
               variant="contained"
               color="primary"
-              onClick={() => cancel_edit() }
+              onClick={() => setIn_editmode(true)}
               className={classes.buttons}
             >
-              Avbryt
+              Ändra användarnamn
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => console.log("Slumpa")}
-              className={`${classes.buttons} ${classes.rainbow}`}
-            >
-              Slumpa 🤪
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => save_username()}
-              className={classes.buttons}
-              disabled={!has_changed}
-            >
-              Spara nytt användarnamn
-            </Button>
-          </React.Fragment>
-          }
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+            }
+            { in_editmode &&
+            <React.Fragment>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => cancel_edit() }
+                className={classes.buttons}
+              >
+                Avbryt
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => randomName()}
+                className={`${classes.buttons} ${classes.rainbow}`}
+              >
+                Slumpa 🤪
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => save_username()}
+                className={classes.buttons}
+                disabled={!has_changed}
+              >
+                Spara nytt användarnamn
+              </Button>
+            </React.Fragment>
+            }
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+
+      </div>
+
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => signOut()}
+        className={classes.center_btn}
+      >
+        Logga ut
+      </Button>
 
     </div>
   );
@@ -160,6 +252,12 @@ const useStyles = makeStyles({
  rainbow: {
    backgroundImage: 'linear-gradient(to bottom right, #ff49e0 , #26ffa7)',
    fontWeight: 'bold'
+ },
+ center_btn: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: '20px',
+    display: 'flex'
  }
 });
 

@@ -58,7 +58,7 @@ function ListContainer(props) {
                   console.log("only care about lists I follow")
                   fetch_it = true;
                 } else {
-                  console.log("skipped recipe!")
+                  //console.log("skipped recipe!")
                   continue_until = continue_until-1;
                 }
 
@@ -161,11 +161,17 @@ function ListContainer(props) {
   let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
   let recipeContent = (recipes.length > 0) ? <RecipeGridList recipes={recipes} smalltiles={true}/> : spinner_jsx;
 
-  let listname = (props.list) ? props.list.listname : "Gillade recept"; // "Gillade recept"
+  let listname = (props.list) ? props.list.listname : "<listname> | <username>"; // "Gillade recept"
+  // listname = ( props.noheader != undefined ) ? listname : "";
+  // listname = (props.list && props.list.listname) ? listname : "";
+  let header;
+  if(props.noheader == undefined || props.noheader == false ) {
+    header = <p className={classes.list_header}> {listname}</p>
+  }
 
   return (
     <div style={{width: '100%'}}>
-    <p className={classes.list_header}> {listname}</p>
+    {header}
     <div className={classes.listcontainer}>
       {recipeContent}
     </div>

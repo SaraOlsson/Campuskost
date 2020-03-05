@@ -25,12 +25,13 @@ function FavoritePage(props) {
     if(props.otheruser) {
 
       console.log("list for user user: " + props.otheruser)
-      listFetcher(props.otheruser);
+        listFetcher(props.otheruser);
 
     } else if(store.firestore_user) {
       console.log("list for firestore_user: " + store.firestore_user.username)
-      listFetcher(store.firestore_user.username);
+      listFetcher(store.firestore_user.email);
       likedFetcher();
+      //testFetcher();
 
       myFetchPromise_wrapper(store.firestore_user.username).then((loadedDocs) => {
         // successMessage is whatever we passed in the resolve(...) function above.
@@ -47,39 +48,114 @@ function FavoritePage(props) {
     });
 
 
-
-
   }, [store.firestore_user]);
 
   var myFetchPromise_wrapper = function(current_username) {
     return new Promise((resolve, reject) => {
 
-      let citiesRef = store.db.collection('lists');
+      let listsRef = store.db.collection('lists');
       let list_docs = [];
 
-      let query = citiesRef.where('created_by', '==', current_username).get()
+      let query = listsRef.where('created_by', '==', current_username).get()
         .then(snapshot => {
-          if (snapshot.empty) {
-            console.log('No matching documents.');
-            return;
-          }
+
           snapshot.forEach(doc => {
             // console.log(doc.id, '=>', doc.data());
             list_docs.push(doc.data());
           });
-          //setLists(list_docs);
           resolve(list_docs)
         })
-        .catch(err => {
-          console.log('Error getting documents', err);
-        });
+    });
+  }
+
+  // takes ref to one doc and returns data+id
+  var refPromise = function(ref) {
+    return new Promise((resolve, reject) => {
+
+      ref.get().then(function(doc) {
+        let data = doc.data();
+        data.id = doc.id;
+        resolve(data);
+      });
+
+    });
+  }
+
+  // takes snapshot and loop through all docs, to one doc and returns data+id
+  var snapshotPromise = function(snapshot, my_lists, current_email) {
+    return new Promise((resolve, reject) => {
+
+      let grouped_list = {}; // group by list id
+      let list_docs = [];
+
+      snapshot.forEach(doc => {
+        // console.log(doc.id, '=>', doc.data());
+        let data = doc.data();
+
+        // if simple like (no specific list)
+        if(data.list_ref == undefined){
+          list_docs.push(data);
+        } else {
+          // if like belongs to a list
+
+          refPromise(data.list_ref).then((loadedDoc) => {
+
+            //console.log("Ooh! loaded: ")
+            //console.log(loadedDoc)
+
+            data.list_doc = loadedDoc;
+
+            //console.log("my_lists " + my_lists)
+            //console.log("current_email " + current_email)
+
+            if(my_lists == true && data.list_doc.created_by == current_email || my_lists == false && data.list_doc.created_by != current_email)
+            {
+              let id_prop = data.list_doc.id;
+              if (!grouped_list[id_prop]) {
+                grouped_list[id_prop] = [];     // create new slot for this id
+              }
+              grouped_list[id_prop].push(data); // append to array of this id
+            } else {
+              console.log("new skipping recipe..")
+            }
+          });
+        }
+      });
+
+      console.log("resolve now")
+      //setMyLists({ ...myLists, grouped_list });
+      resolve(grouped_list);
 
     });
   }
 
 
   const testFetcher = () => {
-    let testis = 0;
+    let likesRef = store.db.collection('likes');
+    //let grouped_by_list = {};
+
+    let current_email = store.firestore_user.email;
+
+    // get all recipes this user likes
+    let query = likesRef.where('email', '==', current_email).get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents.');
+          return;
+        }
+        // wait for snapshot results
+        let my_lists = true;
+        snapshotPromise(snapshot, my_lists, current_email).then((snapresult) => {
+          console.log("Ooh! snapresult: ")
+          console.log(snapresult)
+          // setMyLists(snapresult); // hm doesnt work
+        });
+
+      })
+      .catch(err => {
+        console.log('Error getting documents', err);
+      });
+
   }
 
   let myFirstPromise = new Promise((resolve, reject) => {
@@ -137,7 +213,7 @@ function FavoritePage(props) {
           let data = doc.data();
           if(data.list_ref == undefined){
             list_docs.push(data);
-            console.log("pushing..")
+            //console.log("pushing..")
           } else {
             //console.log("one liked recipe belonged to a list")
 
@@ -188,28 +264,23 @@ function FavoritePage(props) {
         console.log('Error getting documents', err);
       });
 
-      console.log("query:")
-      console.log(query)
+      //console.log("query:")
+      //console.log(query)
 
   }
 
-  /*
+
   let lists_jxs = lists.map((item, i) =>
-    <ListContainer key={i} list={item}/>
-  ); */
+    <ListContainer key={i} list={item} noheader={true}/>
+  );
 
   // if user profile view, this prop will be available
   let no_lists_text = (props.otheruser) ? props.otheruser + " har ännu inga sparade listor" : "Inga sparade listor ännu";
   // <ListContainer list={list_with_liked}/>
 
-  let liked_list_jsx = (refList.length >= 1) ? <ListContainer refs={refList}/> : <p> Gillade recept.. </p>
+  let liked_list_jsx = (refList.length >= 1) ? <ListContainer refs={refList} noheader={true}/> : <p> Gillade recept.. </p>
 
-  const object1 = {
-    a: 'somestring',
-    b: 42
-  };
 
-  //console.log("render..")
   //console.log(myLists)
 
   let my_list_jsx = [];
@@ -227,11 +298,10 @@ function FavoritePage(props) {
       counter = counter + 1;
   }
 
-  /*
+/*
   let my_lists_jsx = myLists.map((list_info, i) =>
 
-
-    <ListContainer key={i} refs={item}/>
+    <ListContainer key={i} refs={list_info}/>
   ); */
 
   return (
@@ -267,15 +337,18 @@ function FavoritePage(props) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
 
+          <p> Här kommer du se de listor skapade av andra använder som du följer 🍴💎 </p>
+          <p> - kanske listor som <i>billig vecka, bra matlådemat</i> eller <i>att prova</i> ? </p>
           {my_list_jsx}
 
         </ExpansionPanelDetails>
       </ExpansionPanel>
 
     }
-    { false && !props.otheruser && <h3>Dina listor</h3> }
-    { lists.length < 1 && <p> {no_lists_text} </p>}
+    { !props.otheruser && <h3>Dina listor</h3> }
+    { lists_I_follow.length < 1 && <p> {no_lists_text} </p>}
 
+    { lists.length > 0 &&
     <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
@@ -286,10 +359,11 @@ function FavoritePage(props) {
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
 
-        {lists_I_follow}
+        {lists_jxs}
 
       </ExpansionPanelDetails>
     </ExpansionPanel>
+    }
 
     </div>
 
