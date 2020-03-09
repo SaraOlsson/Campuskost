@@ -15,6 +15,8 @@ import Typography from '@material-ui/core/Typography';
 function FavoritePage(props) {
 
   const [lists, setLists] = React.useState([]);
+  const [lists_by_user, setLists_by_user] = React.useState([]);
+
   const [myLists, setMyLists] = React.useState({});
   const [refList, setRefList] = React.useState([]);
 
@@ -25,19 +27,38 @@ function FavoritePage(props) {
     if(props.otheruser) {
 
       console.log("list for user user: " + props.otheruser)
-        listFetcher(props.otheruser);
+        //listFetcher(props.otheruser);
 
     } else if(store.firestore_user) {
       console.log("list for firestore_user: " + store.firestore_user.username)
-      listFetcher(store.firestore_user.email);
-      likedFetcher();
+      //listFetcher(store.firestore_user.email);
+      // likedFetcher();
       //testFetcher();
 
+      // lists the user follows
+      getListDocsForUser(store.firestore_user.email, false).then((loadedDocs) => {
+        // successMessage is whatever we passed in the resolve(...) function above.
+        // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+        console.log("Mjau! loaded " + loadedDocs)
+        setLists(loadedDocs);
+
+      });
+
+      // lists created by the user
+      getListDocsForUser(store.firestore_user.email, true).then((loadedDocs) => {
+        // successMessage is whatever we passed in the resolve(...) function above.
+        // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+        console.log("Woff! loaded " + loadedDocs)
+        setLists_by_user(loadedDocs);
+
+      });
+
+      /*
       myFetchPromise_wrapper(store.firestore_user.username).then((loadedDocs) => {
         // successMessage is whatever we passed in the resolve(...) function above.
         // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
         console.log("Yay! loaded " + loadedDocs)
-      });
+      }); */
 
     }
 
@@ -48,7 +69,42 @@ function FavoritePage(props) {
     });
 
 
+
+
   }, [store.firestore_user]);
+
+
+  var getListDocsForUser = function(current_email, mine) {
+    return new Promise((resolve, reject) => {
+
+      let replaced_email = current_email.replace(/\./g, ','); // replaces all dots
+      let listsRef = store.db.collection('recipe_lists').where('list_followers.' + replaced_email, '==', true);
+      let list_docs = [];
+
+      if (mine === true) {
+        listsRef = listsRef.where('created_by', '==', current_email);
+      }
+
+
+      let query = listsRef.get()
+        .then(snapshot => {
+
+          snapshot.forEach(doc => {
+
+            let data = doc.data();
+            // grab only lists of other users
+            if (mine === true || (mine === false && data.created_by != current_email)) {
+              list_docs.push(data);
+            }
+
+          });
+          console.log(list_docs)
+          resolve(list_docs);
+
+          // Aubergine-DefaultChef
+        })
+    });
+  }
 
   var myFetchPromise_wrapper = function(current_username) {
     return new Promise((resolve, reject) => {
@@ -170,10 +226,9 @@ function FavoritePage(props) {
   // fetch recipes for the user profile in view
   const listFetcher = (current_username) => {
 
-    let citiesRef = store.db.collection('lists');
     let list_docs = [];
 
-    let query = citiesRef.where('created_by', '==', current_username).get()
+    let query = store.db.collection('lists').where('created_by', '==', current_username).get()
       .then(snapshot => {
         if (snapshot.empty) {
           console.log('No matching documents.');
@@ -270,8 +325,13 @@ function FavoritePage(props) {
   }
 
 
+
   let lists_jxs = lists.map((item, i) =>
-    <ListContainer key={i} list={item} noheader={true}/>
+    <ListContainer key={i} list={item} noheader={false}/>
+  );
+
+  let lists_by_user_jxs = lists_by_user.map((item, i) =>
+    <ListContainer key={i} list={item} noheader={false} mine={true}/>
   );
 
   // if user profile view, this prop will be available
@@ -304,6 +364,9 @@ function FavoritePage(props) {
     <ListContainer key={i} refs={list_info}/>
   ); */
 
+  // <p> - kanske listor som <i>billig vecka, bra matlådemat</i> eller <i>att prova</i> ? </p>
+  // <p> Här kommer du se de listor skapade av andra använder som du följer 🍴💎 </p>
+
   return (
 
     <div>
@@ -325,6 +388,7 @@ function FavoritePage(props) {
       </ExpansionPanel>
 
     }
+    { !props.otheruser && <h3>Listor</h3> }
     { !props.otheruser &&
 
       <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}>
@@ -337,18 +401,15 @@ function FavoritePage(props) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
 
-          <p> Här kommer du se de listor skapade av andra använder som du följer 🍴💎 </p>
-          <p> - kanske listor som <i>billig vecka, bra matlådemat</i> eller <i>att prova</i> ? </p>
-          {my_list_jsx}
+          {lists_jxs}
 
         </ExpansionPanelDetails>
       </ExpansionPanel>
 
     }
-    { !props.otheruser && <h3>Dina listor</h3> }
-    { lists_I_follow.length < 1 && <p> {no_lists_text} </p>}
+    { false && lists_I_follow.length < 1 && <p> {no_lists_text} </p>}
 
-    { lists.length > 0 &&
+    { (true || lists.length > 0) &&
     <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
@@ -359,7 +420,7 @@ function FavoritePage(props) {
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
 
-        {lists_jxs}
+        {lists_by_user_jxs}
 
       </ExpansionPanelDetails>
     </ExpansionPanel>

@@ -24,8 +24,15 @@ function ListContainer(props) {
 
 
     // using recipe ids
-    if (props.list != undefined)
-      recipe_fetcher(props.list.recipes);
+    //console.log(props.list)
+    if (props.list != undefined) {
+      recipe_fetcher(Object.keys(props.list.recipes));
+    }
+      //recipe_fetcher(Object.keys(props.list.recipes));
+
+
+
+
 
   }, []);
 
@@ -164,10 +171,13 @@ function ListContainer(props) {
   let listname = (props.list) ? props.list.listname : "<listname> | <username>"; // "Gillade recept"
   // listname = ( props.noheader != undefined ) ? listname : "";
   // listname = (props.list && props.list.listname) ? listname : "";
-  let header;
-  if(props.noheader == undefined || props.noheader == false ) {
+  let user_in_header = (props.mine) ? "" : "| " + props.list.created_by.split("@")[0];
+
+  let header = <p className={classes.list_header}> {props.list.listname} <i>{user_in_header}</i> </p>;
+  /*
+  if(props.noheader == undefined || props.noheader == true ) {
     header = <p className={classes.list_header}> {listname}</p>
-  }
+  } */
 
   return (
     <div style={{width: '100%'}}>

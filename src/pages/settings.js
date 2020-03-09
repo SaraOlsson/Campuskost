@@ -28,8 +28,9 @@ function Settings(props) {
 
   const [username_textfield, setUsername_textfield] = useState("");
   const [has_changed, setHas_changed] = useState(false);
-  const [labelWidth, setLabelWidth] = React.useState(0);
-  const [in_editmode, setIn_editmode] = React.useState(false);
+  const [labelWidth, setLabelWidth] = useState(0);
+  const [in_editmode, setIn_editmode] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(true);
   const labelRef = React.useRef(null);
 
   const classes = useStyles();
@@ -53,6 +54,7 @@ function Settings(props) {
     }
   }, [store.firestore_user]);
 
+
   // exit edit mode
   function cancel_edit() {
 
@@ -73,6 +75,11 @@ function Settings(props) {
     }
   }
 
+  const editUsername = (new_value) => {
+    setUsername_textfield(new_value);
+    setIsAvailable(true);
+  }
+
   var toChangePromise = function(current_username) {
     return new Promise((resolve, reject) => {
 
@@ -90,45 +97,48 @@ function Settings(props) {
     });
   }
 
+  var isAvailableCheck = function() {
+    return new Promise((resolve, reject) => {
+
+      // check if available
+      let is_available = true;
+      let query = store.db.collection('users').where('username', '==', username_textfield).get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            is_available = false;
+          });
+          resolve(is_available)
+        })
+    });
+  }
+
   // update in Firebase
   function save_username() {
 
     console.log("set username to " + username_textfield)
 
-    // Set the 'username' field of the city
-    store.db.collection('users').doc(store.firestore_user.email).update({username: username_textfield});
-    setIn_editmode(false);
+    isAvailableCheck().then((is_available) => {
 
-    let doc_ids = [];
+      if(is_available === false)
+      {
+        console.log("is_available: " + is_available)
+        setIsAvailable(false);
+        return;
+      }
 
+      // Set the 'username' field of the city
+      store.db.collection('users').doc(store.firestore_user.email).update({username: username_textfield});
+      setIn_editmode(false);
 
-
-    // update all recipes with for this user with new username
-    /*store.db.collection('recipes').onSnapshot(function(querySnapshot) {
-        querySnapshot.forEach( doc => {
-          let data = doc.data();
-          if (data.user == store.firestore_user.username) {
-            // store.db.collection('recipes').doc(doc.id).update({user: username_textfield});
-            doc_ids.push(doc.id)
-          }
-        });
-    }); */
-
-    toChangePromise(store.firestore_user.username).then((loadedIds) => {
-      // successMessage is whatever we passed in the resolve(...) function above.
-      // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
-      console.log("Yay!! loaded " + loadedIds)
-
-      loadedIds.map( _id => {
-        store.db.collection('recipes').doc(_id).update({user: username_textfield});
+      toChangePromise(store.firestore_user.username).then((loadedIds) => {
+        console.log("Yay!! loaded " + loadedIds)
+        loadedIds.map( _id => {
+          store.db.collection('recipes').doc(_id).update({user: username_textfield});
       });
 
     });
 
-    /*
-    doc_ids.map( _id => {
-      store.db.collection('recipes').doc(_id).update({user: username_textfield});
-    }); */
+  });
 
   }
 
@@ -176,7 +186,7 @@ function Settings(props) {
               <InputLabel ref={labelRef} htmlFor="component-outlined"> Användarnamn </InputLabel>
               <OutlinedInput
                 value={username_textfield}
-                onChange={(e) => setUsername_textfield(e.target.value)}
+                onChange={(e) => editUsername(e.target.value)}
                 labelWidth={labelWidth}
                 disabled={!in_editmode}
               />
@@ -219,6 +229,9 @@ function Settings(props) {
               >
                 Spara nytt användarnamn
               </Button>
+              { !isAvailable &&
+              <Typography className={classes.available_text} >Namnet är upptaget</Typography>
+              }
             </React.Fragment>
             }
           </ExpansionPanelDetails>
@@ -258,7 +271,12 @@ const useStyles = makeStyles({
     marginRight: 'auto',
     marginTop: '20px',
     display: 'flex'
- }
+ },
+ available_text: {
+    fontSize: '13px',
+    color: '#f50057',
+    margin: '8px'
+}
 });
 
 export default Settings;
