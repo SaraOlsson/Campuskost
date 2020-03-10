@@ -31,11 +31,12 @@ const useMountEffect = (fun) => useEffect(fun, []);
 // () =>
 function ProfilePage(props) {
 
-  const { user } = useParams();
+  const { username_url } = useParams();
   // const [user, setUser] = useState(url_user); // props.match.params.url_user
+  const [user, setUser] = useState(undefined);
   const [ifUser, setIfUser] = useState(false);
   const [recipes, setRecipes] = useState(undefined);
-  const [signedIn, setSignedIn] = React.useState(false);
+  const [signedIn, setSignedIn] = useState(false);
   const [followInfo, setFollowInfo] = useState([]);
   const [followingInfo, setFollowingInfo] = useState([]);
   const [following_this_user, setFollowing_this_user] = useState({following: false, email: ""});
@@ -47,25 +48,49 @@ function ProfilePage(props) {
   // when url changes, on load and on user click
   useEffect(() => {
 
-    recipeFetcher_new(user);
+    recipeFetcher_new(username_url);
 
-    if(store.firestore_user && user == store.firestore_user.username) {
+    if(store.firestore_user && username_url == store.firestore_user.username) {
       console.log("firestore_user changed: " + store.firestore_user.username)
       console.log("same as logged in")
       setIfUser(true)
-      followFetcher(user, store.firestore_user.email, "followers");
-      followFetcher(user, store.firestore_user.email, "following");
-    } else if ( store.firestore_user && user != store.firestore_user.username ) {
+      followFetcher(username_url, store.firestore_user.email, "followers");
+      followFetcher(username_url, store.firestore_user.email, "following");
+    } else if ( store.firestore_user && username_url != store.firestore_user.username ) {
 
-      console.log("someone else than firestore_user: " + user)
-      getEmail(user)
+      console.log("someone else than firestore_user: " + username_url)
+      getEmail(username_url)
       setIfUser(false)
     }
 
-  }, [store.firestore_user, user]);
+    // get email of user
+    email_promise(username_url).then((loadedDoc) => {
+      console.log("got email: " + loadedDoc.email)
+      setUser(loadedDoc)
+    });
+
+  }, [store.firestore_user, username_url]);
+
+  var email_promise = function(url_username) {
+    return new Promise((resolve, reject) => {
+
+      let listsRef = store.db.collection('users');
+
+      let query = store.db.collection('users').where('username', '==', url_username).get()
+        .then(snapshot => {
+
+          let doc_data;
+          snapshot.forEach(doc => {
+            // console.log(doc.id, '=>', doc.data());
+            doc_data = doc.data();
+          });
+          resolve(doc_data)
+        })
+    });
+  }
 
   const followUser = () => {
-    console.log(store.firestore_user.username + " will follow " + user)
+    console.log(store.firestore_user.username + " will follow " + username_url)
 
     console.log(following_this_user)
 
@@ -92,8 +117,8 @@ function ProfilePage(props) {
             doc_email = doc.id;
             console.log("found other user email: " + doc_email)
 
-            followFetcher(user, doc_email, "followers");
-            followFetcher(user, doc_email, "following");
+            followFetcher(username_url, doc_email, "followers");
+            followFetcher(username_url, doc_email, "following");
           }
 
           let found = false;
@@ -271,7 +296,7 @@ function ProfilePage(props) {
       >
 
         <Grid item xs={6}>
-          <p className={classes.username}>{user}</p>
+          <p className={classes.username}>{username_url}</p>
           <p className={classes.university}>{uni}</p>
           {ifUser && <Button
             variant="contained"

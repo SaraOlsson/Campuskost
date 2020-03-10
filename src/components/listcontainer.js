@@ -14,132 +14,14 @@ function ListContainer(props) {
 
   useEffect(() => {
 
-    // using recipe refs
-    if (props.refs != undefined) {
-      recipe_refs_fetcher(props.refs);
-      //console.log("!= undefined");
-    } // else {
-      // console.log("oups undefined");
-    // }
-
-
     // using recipe ids
-    //console.log(props.list)
-    if (props.list != undefined) {
-      recipe_fetcher(Object.keys(props.list.recipes));
+    if (props.recipemap != undefined) {
+      recipe_fetcher(Object.keys(props.recipemap));
     }
-      //recipe_fetcher(Object.keys(props.list.recipes));
-
-
-
-
 
   }, []);
 
-  // omg ugly code - FIX
-  const recipe_refs_fetcher = (refs_list) => {
-
-    let temp_recipes = [];
-    let continue_until = refs_list.length - 1;
-
-    //console.log(refs_list)
-    refs_list.map( (likes_doc, idx) => {
-
-      if(likes_doc.list_ref != undefined)
-      {
-        likes_doc.list_ref.get().then(function(list_doc) {
-            if (list_doc.exists) {
-
-                let fetch_it = false;
-                let list_data = list_doc.data();
-
-                if (props.onlyMine == undefined){
-                  console.log("care about all likes")
-                  fetch_it = true;
-                }
-                else if (props.onlyMine == true && list_data.created_by == props.myEmail) {
-                  console.log("only care about my lists")
-                  fetch_it = true;
-
-                } else if(props.onlyMine == false && list_data.created_by != props.myEmail){
-                  console.log("only care about lists I follow")
-                  fetch_it = true;
-                } else {
-                  //console.log("skipped recipe!")
-                  continue_until = continue_until-1;
-                }
-
-                // if this recipe should be saved
-                if(fetch_it == true)
-                {
-                  likes_doc.recipe_ref.get().then(function(doc) {
-                      if (doc.exists) {
-
-                          let data = doc.data();
-                          data.id = doc.id;
-
-                          temp_recipes.push(data);
-                          if (idx == continue_until) {
-                            setRecipes(temp_recipes);
-                          }
-                      } else {
-                          console.log("No such document!");
-                      }
-                  }).catch(function(error) {
-                      console.log("Error getting document:", error);
-                  });
-
-                }
-
-
-            } else {
-                console.log("No such document!");
-            }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
-        });
-      } else {
-
-        likes_doc.recipe_ref.get().then(function(doc) {
-            if (doc.exists) {
-
-                let data = doc.data();
-                data.id = doc.id;
-
-                temp_recipes.push(data);
-                if (idx == continue_until) {
-                  setRecipes(temp_recipes);
-                }
-            } else {
-                console.log("No such document!");
-            }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
-        });
-
-      }
-
-/*
-      likes_doc.recipe_ref.get().then(function(doc) {
-          if (doc.exists) {
-
-              let data = doc.data();
-              data.id = doc.id;
-
-              temp_recipes.push(data);
-              if (idx == refs_list.length - 1) {
-                setRecipes(temp_recipes);
-              }
-          } else {
-              console.log("No such document!");
-          }
-      }).catch(function(error) {
-          console.log("Error getting document:", error);
-      }); */
-    })
-  }
-
-  // let ref = store.db.collection('recipes').doc(id);
+  // fetch by list of recipe ids
   const recipe_fetcher = (recipe_id_list) => {
 
     let temp_recipes = [];
@@ -165,19 +47,16 @@ function ListContainer(props) {
     })
   }
 
+  // either spinner or recipe content is to be shown
   let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
   let recipeContent = (recipes.length > 0) ? <RecipeGridList recipes={recipes} smalltiles={true}/> : spinner_jsx;
 
-  let listname = (props.list) ? props.list.listname : "<listname> | <username>"; // "Gillade recept"
-  // listname = ( props.noheader != undefined ) ? listname : "";
-  // listname = (props.list && props.list.listname) ? listname : "";
-  let user_in_header = (props.mine) ? "" : "| " + props.list.created_by.split("@")[0];
-
-  let header = <p className={classes.list_header}> {props.list.listname} <i>{user_in_header}</i> </p>;
-  /*
-  if(props.noheader == undefined || props.noheader == true ) {
-    header = <p className={classes.list_header}> {listname}</p>
-  } */
+  let header;
+  if (props.noheader == false) {
+    let listname = (props.listname) ? props.listname : "<listname>"; // "Gillade recept"
+    let user_in_header = (props.mine) ? "" : "| " + props.createdby.split("@")[0];
+    header = <p className={classes.list_header}> {listname} <i>{user_in_header}</i> </p>;
+  }
 
   return (
     <div style={{width: '100%'}}>
@@ -208,6 +87,5 @@ const useStyles = makeStyles({
     borderRadius: '5px'
 }
 });
-
 
 export default ListContainer;

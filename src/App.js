@@ -234,7 +234,7 @@ function App(props) {
           <Switch>
             <Route path="/login" component={Login} />
             <Route path="/settings" component={Settings} />
-            <Route path="/profile/:user" component={ProfilePage} />
+            <Route path="/profile/:username_url" component={ProfilePage} />
             <Route path="/upload" component={UploadPage} />
             <Route path="/notices" component={NoticePage} />
             <Route path="/saved" component={FavoritePage} />
