@@ -15,6 +15,14 @@ function RecipeItem(props) {
 
   const recipe = props.recipe;
 
+  function onClick(evt) {
+    console.log('click ' + evt.currentTarget.id)
+  }
+
+  function onHold(evt) {
+    console.log('hold ' + evt.currentTarget.id)
+  }
+
   let r_img = ( recipe.img != undefined) ? recipe.img : 'temp_food1';
   let img_src;
 
@@ -29,10 +37,20 @@ function RecipeItem(props) {
     history.push("/recipe/" + clicked_recipe.title + "/" + clicked_recipe.id );
   };
 
+  /*
+  <Holdable
+    onClick={onClick}
+    onHold={onHold}
+    key={id}
+    id={id}
+  >
+    {id}
+  </Holdable>*/
 
   let image = <img src={img_src} className={classes.listimage} alt={recipe.title} alt={"recipe img"} />;
 
   let tile_jsx;
+  // if feed or list
   if(props.smalltiles != undefined && props.smalltiles == false) {
     tile_jsx = (
     <GridListTile key={r_img} className={classes.listtile} onClick={() => handeRecipeClick(recipe)}>
@@ -42,11 +60,18 @@ function RecipeItem(props) {
         subtitle={<span>Av: {recipe.user}</span>}
       />
     </GridListTile>);
-  } else {
+  } else // LIST
+  {
     tile_jsx = (
+    <Holdable
+      onClick={onClick}
+      onHold={onHold}
+      id={props.id}
+    >
     <GridListTile key={r_img} className={classes.listtile_small} onClick={() => handeRecipeClick(recipe)}>
       {image}
-    </GridListTile>);
+    </GridListTile>
+    </Holdable>);
   }
 
   return (
@@ -93,5 +118,40 @@ const useStyles = makeStyles({
     padding: '5px',
   }
 });
+
+function Holdable({id, onClick, onHold, children}) {
+
+  const [timer, setTimer] = React.useState(null)
+
+  function onPointerDown(evt) {
+    const event = { ...evt } // convert synthetic event to real object
+    const timeoutId = window.setTimeout(timesup.bind(null, event), 500)
+    setTimer(timeoutId)
+  }
+
+  function onPointerUp(evt) {
+    if (timer) {
+      window.clearTimeout(timer)
+      setTimer(null)
+      onClick(evt)
+    }
+  }
+
+  function timesup(evt) {
+    setTimer(null)
+    onHold(evt)
+  }
+
+  return (
+    <div
+      onPointerDown={onPointerDown}
+      onPointerUp={onPointerUp}
+      id={id}
+      style={{display: 'inherit'}}
+    >
+      {children}
+    </div>
+  )
+}
 
 export default RecipeItem;

@@ -48,7 +48,7 @@ function FavoritePage(props) {
 
   }, [store.firestore_user]);
 
-  var getListDocsForUser = function(current_email, mine) {
+  let getListDocsForUser = function(current_email, mine) {
     return new Promise((resolve, reject) => {
 
       let replaced_email = current_email.replace(/\./g, ','); // replaces all dots
@@ -77,7 +77,7 @@ function FavoritePage(props) {
   }
 
   // fix not found
-  var getLikesDocsForUser = function(current_email) {
+  let getLikesDocsForUser = function(current_email) {
     return new Promise((resolve, reject) => {
 
       let likesRef = store.db.collection('recipe_likes').doc(current_email);
@@ -87,84 +87,7 @@ function FavoritePage(props) {
         //data.id = doc.id;
         resolve(data);
       });
-
     });
-  }
-
-  const likedFetcher = () => {
-
-    let likesRef = store.db.collection('likes');
-    let list_docs = [];
-
-    let list_ids = [];
-    let grouped_by_list = {};
-    let obj_temp = {};
-
-    let query = likesRef.where('email', '==', store.firestore_user.email).get()
-      .then(snapshot => {
-        if (snapshot.empty) {
-          console.log('No matching documents.');
-          return;
-        }
-        snapshot.forEach(doc => {
-          // console.log(doc.id, '=>', doc.data());
-          let data = doc.data();
-          if(data.list_ref == undefined){
-            list_docs.push(data);
-            //console.log("pushing..")
-          } else {
-            //console.log("one liked recipe belonged to a list")
-
-            // uploadImage(function(returnValue_downloadURL) {
-            let path_segments = data.list_ref._key.path.segments;
-            let the_id = path_segments[path_segments.length-1];
-            let prop = the_id;
-
-            // console.log(data.list_ref)
-            if (!grouped_by_list[prop]) {
-              grouped_by_list[prop] = [];
-            }
-            grouped_by_list[prop].push(data);
-
-            //console.log(grouped_by_list)
-
-            // also append list doc
-            /*
-            data.list_ref.get().then(function(list_doc) {
-              data.list_doc = list_doc.data();
-              data.list_id = list_doc.id;
-
-              let prop = list_doc.id
-              if (!grouped_by_list[prop]) {
-                grouped_by_list[prop] = [];
-              }
-              grouped_by_list[prop].push(data);
-              list_ids.push(list_doc.id);
-              obj_temp = { ...obj_temp, [`${prop}`]: grouped_by_list[prop] };
-              console.log(obj_temp)
-              // setMyLists({ ...myLists, [`${prop}`]: grouped_by_list[prop] });
-              // setValid({ ...valid, ["title"]: true });
-
-            }); */
-          }
-        });
-
-        // setMyLists({ ...myLists, [`${prop}`]: grouped_by_list[prop] });
-        setMyLists(grouped_by_list);
-        //console.log(grouped_by_list)
-        //let my_lists_temp = Object.values(grouped_by_list);
-        //console.log(Object.values(grouped_by_list))
-
-        setRefList(list_docs);
-        return list_docs;
-      })
-      .catch(err => {
-        console.log('Error getting documents', err);
-      });
-
-      //console.log("query:")
-      //console.log(query)
-
   }
 
   // build jsx for lists this user follows
@@ -186,13 +109,14 @@ function FavoritePage(props) {
   // <p> - kanske listor som <i>billig vecka, bra matlådemat</i> eller <i>att prova</i> ? </p>
   // <p> Här kommer du se de listor skapade av andra använder som du följer 🍴💎 </p>
   // { lists_I_follow.length < 1 && <p> {no_lists_text} </p>}
-
+ // .body .MuiGridList-root
   return (
 
     <div>
     { !props.otheruser &&
 
-      <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}>
+      <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}
+        defaultExpanded={true}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -209,6 +133,32 @@ function FavoritePage(props) {
 
     }
     { !props.otheruser && <h3>Listor</h3> }
+
+    { props.otheruser &&
+
+      <div style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px', padding: '15px'}}
+           className="profilepageLists"
+        >
+        {lists_by_user_jxs}
+      </div>
+
+    }
+    { !props.otheruser &&
+    <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}>
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Typography style={{fontWeight: 'bold'}}> Dina listor</Typography>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
+
+        {lists_by_user_jxs}
+
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
+    }
     { !props.otheruser &&
 
       <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}>
@@ -228,24 +178,10 @@ function FavoritePage(props) {
 
     }
 
-    { (true || lists.length > 0) &&
-    <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}>
-      <ExpansionPanelSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Typography style={{fontWeight: 'bold'}}> Dina listor</Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-
-        {lists_by_user_jxs}
-
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
-    }
     </div>
   );
 }
+
+
 
 export default FavoritePage;

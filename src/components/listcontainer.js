@@ -3,6 +3,9 @@ import { useSelector } from "react-redux";
 
 import { makeStyles } from '@material-ui/core/styles';
 import RecipeGridList from '../components/recipegrid';
+
+import Button from '@material-ui/core/Button';
+
 var Spinner = require('react-spinkit');
 // import RecipeGridList from '../components/recipegrid';
 
@@ -16,7 +19,16 @@ function ListContainer(props) {
 
     // using recipe ids
     if (props.recipemap != undefined) {
-      recipe_fetcher(Object.keys(props.recipemap));
+
+      let temp_recipes = [];
+
+      // previously liked recipes will persist in the firestore map but be false
+      Object.keys(props.recipemap).forEach(function(key) {
+          if(props.recipemap[key] === true)
+            temp_recipes.push(key)
+      });
+
+      recipe_fetcher(temp_recipes); // Object.keys(props.recipemap)
     }
 
   }, []);
@@ -57,6 +69,8 @@ function ListContainer(props) {
     let user_in_header = (props.mine) ? "" : "| " + props.createdby.split("@")[0];
     header = <p className={classes.list_header}> {listname} <i>{user_in_header}</i> </p>;
   }
+
+  let id = 5;
 
   return (
     <div style={{width: '100%'}}>

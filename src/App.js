@@ -23,6 +23,7 @@ import Login from './pages/login';
 import Settings from './pages/settings';
 import SearchPage from './pages/searchpage';
 import TopMenuBar from './components/topmenubar';
+import ListPage from './pages/listpage';
 // import Feed from './pages/feedpage';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -241,6 +242,7 @@ function App(props) {
             <Route path="/recipe/:recipetitle/:id" component={RecipePage} />
             <Route path="/search" component={SearchPage} />
             <Route path="/home" component={FeedPage}/>
+            <Route path="/lists" component={ListPage}/>
             <Redirect exact path="/" to="/home" />
 
           </Switch>

@@ -63,50 +63,47 @@ function RecipePage(props) {
 
     console.log(store.firestore_user.email)
     let queryRef = store.db.collection('likes').where('email', '==', store.firestore_user.email);
-    likeFetcher(queryRef);
-
+    //likeFetcher(queryRef);
+    likeFetcher(store.firestore_user.email);
 
   }, [store.firestore_user, recipe]);
 
-  const likeFetcher = (ref) => {
+  const likeFetcher = (current_email) => {
 
-    ref.get()
-    .then(snapshot => {
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-        return;
-      }
+    let likesRef = store.db.collection('recipe_likes').doc(current_email);
+    likesRef.get().then(function(doc) {
 
-      snapshot.forEach(doc => {
-        //console.log(doc.id, '=>', doc.data());
-        let data = doc.data();
+      let data = doc.data();
+      let isliked = ( data.liked_recipes[recipe.id] != undefined ) ? data.liked_recipes[recipe.id] : false;
 
-        data.recipe_ref.get().then(function(recipe_doc) {
-          let recipe_data = recipe_doc.data()
+      if (isliked)
+        setSaved({likes: true, doc_id: doc.id});
 
-          if(recipe_doc.id == recipe.id ) {
-            console.log("Yeah I like this recipe! ", recipe_doc.id);
-            setSaved({likes: true, doc_id: doc.id});
-          }
-        });
-      });
     })
     .catch(err => {
       console.log('Error getting documents', err);
     });
+
   }
 
   const likeRecipe = () => {
 
+    if(!store.firestore_user) {
+      console.log("eh slow down, user not loaded yet")
+      return;
+    }
+
     console.log("likeRecipe")
 
-    // stop liking
-    if(saved.likes) {
-      store.db.collection('likes').doc(saved.doc_id).delete();
-    } else {
-      let temp_ref = store.db.collection('recipes').doc(id);
-      store.db.collection('likes').doc(recipe.id).set({email: store.firestore_user.email, recipe_ref: temp_ref});
-    }
+    let likesRef = store.db.collection('recipe_likes').doc(store.firestore_user.email);
+
+    likesRef.get().then(function(doc) {
+      let data = doc.data();
+
+      data.liked_recipes[recipe.id] = (saved.likes) ? false : true;
+
+      store.db.collection("recipe_likes").doc(doc.id).update(data);
+    });
 
     //setSaved( !saved );
     setSaved({likes: !saved.likes, doc_id: !saved.doc_id});

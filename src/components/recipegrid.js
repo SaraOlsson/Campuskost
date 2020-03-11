@@ -13,8 +13,6 @@ import InfoIcon from '@material-ui/icons/Info';
 
 import RecipeItem from '../components/recipeitem';
 
-
-
 function RecipeGridList(props) {
 
   const classes = useStyles();
@@ -25,7 +23,7 @@ function RecipeGridList(props) {
   useEffect(() => {
 
     let images_temp = props.recipes.map((recipe, idx) =>
-      <RecipeItem recipe={recipe} key={idx} smalltiles={smalltiles}/>
+      <RecipeItem recipe={recipe} key={idx} smalltiles={smalltiles} id={idx}/>
     );
 
     setImages(images_temp);

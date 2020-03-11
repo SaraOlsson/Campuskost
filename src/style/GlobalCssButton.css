@@ -47,6 +47,10 @@
   margin: 0px;
 }
 
+.body .profilepageLists .MuiGridList-root {
+  justify-content: left;
+}
+
 .body .MuiExpansionPanelDetails-root .MuiGridList-root {
   justify-content: left;
 }
