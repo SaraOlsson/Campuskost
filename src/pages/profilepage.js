@@ -1,24 +1,18 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
 import { useParams} from "react-router";
 import { useHistory } from "react-router-dom";
-import { BrowserRouter as Link, Redirect} from "react-router-dom";
-import firebase from 'firebase/app';
+//import { BrowserRouter as Link, Redirect} from "react-router-dom";
+//import firebase from 'firebase/app';
 import 'firebase/auth';
 
-import recipeData from '../assets/recipes_dev';
-import followerData from '../assets/users_dev';
 import SimpleTabs from '../components/userpagetabs';
 import RecipeGridList from '../components/recipegrid';
 import FollowerList from '../components/followerlist';
-import ListContainer from '../components/listcontainer';
 import FavoritePage from '../pages/favoritepage';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import GridList from '@material-ui/core/GridList';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import Button from '@material-ui/core/Button';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AddIcon from '@material-ui/icons/Add';
@@ -26,7 +20,6 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import userchef from '../assets/userchef.png';
 
 var Spinner = require('react-spinkit');
-const useMountEffect = (fun) => useEffect(fun, []);
 
 // () =>
 function ProfilePage(props) {
@@ -36,7 +29,7 @@ function ProfilePage(props) {
   const [user, setUser] = useState(undefined);
   const [ifUser, setIfUser] = useState(false);
   const [recipes, setRecipes] = useState(undefined);
-  const [signedIn, setSignedIn] = useState(false);
+  //const [signedIn, setSignedIn] = useState(false);
   const [followInfo, setFollowInfo] = useState([]);
   const [followingInfo, setFollowingInfo] = useState([]);
   const [following_this_user, setFollowing_this_user] = useState({following: false, email: ""});
@@ -50,13 +43,13 @@ function ProfilePage(props) {
 
     recipeFetcher_new(username_url);
 
-    if(store.firestore_user && username_url == store.firestore_user.username) {
+    if(store.firestore_user && username_url === store.firestore_user.username) {
       console.log("firestore_user changed: " + store.firestore_user.username)
       console.log("same as logged in")
       setIfUser(true)
       followFetcher(username_url, store.firestore_user.email, "followers");
       followFetcher(username_url, store.firestore_user.email, "following");
-    } else if ( store.firestore_user && username_url != store.firestore_user.username ) {
+    } else if ( store.firestore_user && username_url !== store.firestore_user.username ) {
 
       console.log("someone else than firestore_user: " + username_url)
       getEmail(username_url)
@@ -74,9 +67,7 @@ function ProfilePage(props) {
   var email_promise = function(url_username) {
     return new Promise((resolve, reject) => {
 
-      let listsRef = store.db.collection('users');
-
-      let query = store.db.collection('users').where('username', '==', url_username).get()
+      store.db.collection('users').where('username', '==', url_username).get()
         .then(snapshot => {
 
           let doc_data;
@@ -113,7 +104,7 @@ function ProfilePage(props) {
         querySnapshot.forEach( doc => {
 
           let doc_email = "";
-          if(doc.data().username == url_user) {
+          if(doc.data().username === url_user) {
             doc_email = doc.id;
             console.log("found other user email: " + doc_email)
 
@@ -128,7 +119,7 @@ function ProfilePage(props) {
 
               querySnapshot.forEach( doc => {
                 // console.log(doc.id)
-                if(doc.id == doc_email) {
+                if(doc.id === doc_email) {
                   console.log("following " + doc_email)
                   found = true;
                   setFollowing_this_user({following: true, email: doc_email});
@@ -136,7 +127,7 @@ function ProfilePage(props) {
               })
           });
 
-          if(found == false && doc_email != "") {
+          if(found === false && doc_email !== "") {
             setFollowing_this_user({following: false, email: doc_email});
           }
 
@@ -188,9 +179,9 @@ function ProfilePage(props) {
   function callback2 (followers, collection) {
     //console.log('setFollowInfo and setFollowingInfo');
 
-    if(collection == "followers")
+    if(collection === "followers")
       setFollowInfo(followers);
-    else if(collection == "following")
+    else if(collection === "following")
       setFollowingInfo(followers);
   }
 

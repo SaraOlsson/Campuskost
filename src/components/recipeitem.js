@@ -4,14 +4,95 @@ import { useHistory } from "react-router-dom";
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 
-import { Link, Redirect } from "react-router-dom";
+import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
+
+import Holdable from '../components/holdable';
+import SimpleDialog from '../components/simpledialog';
+
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { blue } from '@material-ui/core/colors';
+
+/* avatar: {
+   backgroundColor: blue[100],
+   color: blue[600],
+ }*/
+
+ function handleClick(e, data) {
+   console.log(data.foo);
+ }
+
+ function RightClickMenu() {
+ // NOTICE: id must be unique for EVERY instance
+   return (
+     <div>
+
+       <ContextMenuTrigger id="some_unique_identifier">
+         <div className="well">Right click to see the menu</div>
+       </ContextMenuTrigger>
+
+       <ContextMenu id="some_unique_identifier">
+         <MenuItem data={{foo: 'bar'}} onClick={handleClick}>
+           ContextMenu Item 1
+         </MenuItem>
+         <MenuItem data={{foo: 'bar'}} onClick={handleClick}>
+           ContextMenu Item 2
+         </MenuItem>
+         <MenuItem divider />
+         <MenuItem data={{foo: 'bar'}} onClick={handleClick}>
+           ContextMenu Item 3
+         </MenuItem>
+       </ContextMenu>
+
+     </div>
+   );
+ }
+
+//let admin = require('firebase-admin');
+/*
+const emails = ['username@gmail.com', 'user02@gmail.com'];
+function SimpleDialogDemo() {
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = value => {
+    setOpen(false);
+    setSelectedValue(value);
+  };
+
+  return (
+    <div>
+      <Typography variant="subtitle1">Selected: {selectedValue}</Typography>
+      <br />
+      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+        Open simple dialog
+      </Button>
+      <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
+    </div>
+  );
+} */
 
 function RecipeItem(props) {
 
-  const [redirect, setRedirect] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  //const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
   const history = useHistory();
   const classes = useStyles();
+
+  /*
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = value => {
+    setOpen(false);
+    setSelectedValue(value);
+  }; */
 
   const recipe = props.recipe;
 
@@ -21,13 +102,14 @@ function RecipeItem(props) {
 
   function onHold(evt) {
     console.log('hold ' + evt.currentTarget.id)
+    setOpen(true);
   }
 
-  let r_img = ( recipe.img != undefined) ? recipe.img : 'temp_food1';
+  let r_img = ( recipe.img !== undefined) ? recipe.img : 'temp_food1';
   let img_src;
 
 
-  if  ( recipe.img_url != undefined) {
+  if  ( recipe.img_url !== undefined) {
     img_src = recipe.img_url;
   } else {
     img_src = require('../assets/'+ r_img + '.jpg');
@@ -37,21 +119,12 @@ function RecipeItem(props) {
     history.push("/recipe/" + clicked_recipe.title + "/" + clicked_recipe.id );
   };
 
-  /*
-  <Holdable
-    onClick={onClick}
-    onHold={onHold}
-    key={id}
-    id={id}
-  >
-    {id}
-  </Holdable>*/
 
   let image = <img src={img_src} className={classes.listimage} alt={recipe.title} alt={"recipe img"} />;
 
   let tile_jsx;
   // if feed or list
-  if(props.smalltiles != undefined && props.smalltiles == false) {
+  if(props.smalltiles !== undefined && props.smalltiles === false) {
     tile_jsx = (
     <GridListTile key={r_img} className={classes.listtile} onClick={() => handeRecipeClick(recipe)}>
       {image}
@@ -62,42 +135,54 @@ function RecipeItem(props) {
     </GridListTile>);
   } else // LIST
   {
+    // className={classes.contextmenu}
     tile_jsx = (
-    <Holdable
-      onClick={onClick}
-      onHold={onHold}
-      id={props.id}
-    >
+    <React.Fragment>
+    <ContextMenuTrigger id={props.id + recipe.title} holdToDisplay={500}>
+
     <GridListTile key={r_img} className={classes.listtile_small} onClick={() => handeRecipeClick(recipe)}>
       {image}
     </GridListTile>
-    </Holdable>);
+
+    </ContextMenuTrigger>
+
+    <ContextMenu id={props.id + recipe.title} className={classes.contextmenu}>
+      <MenuItem data={{foo: 'bar'}} onClick={handleClick}>
+        ContextMenu Item 1
+      </MenuItem>
+      <MenuItem data={{foo: 'bar'}} onClick={handleClick}>
+        ContextMenu Item 2
+      </MenuItem>
+      <MenuItem divider />
+      <MenuItem data={{foo: 'bar'}} onClick={handleClick}>
+        ContextMenu Item 3
+      </MenuItem>
+    </ContextMenu>
+
+    </React.Fragment>);
   }
+
+  /*
+  tile_jsx = (
+  <Holdable
+    onClick={onClick}
+    onHold={onHold}
+    id={props.id}
+  >
+  <GridListTile key={r_img} className={classes.listtile_small} onClick={() => handeRecipeClick(recipe)}>
+    {image}
+  </GridListTile>
+  </Holdable>);
+  */
+
+  //     <RightClickMenu/>
 
   return (
     <React.Fragment>
-
     {tile_jsx}
-
-
     </React.Fragment>
   );
 }
-
-/*
-
-{ true &&
-<GridListTile key={r_img} className={classes.listimage} onClick={() => handeRecipeClick(recipe)}>
-
-  <img src={img_src} alt={recipe.title} alt={"recipe img"}/>
-
-  <GridListTileBar
-    title={recipe.title}
-    subtitle={<span>Av: {recipe.user}</span>}
-  />
-
-</GridListTile>
-}*/
 
 const useStyles = makeStyles({
   listimage: {
@@ -116,9 +201,14 @@ const useStyles = makeStyles({
     maxHeight: '150px',
     maxWidth: '150px',
     padding: '5px',
+  },
+  contextmenu: {
+    background: 'gray',
+    color: 'white',
+    zIndex: 2
   }
 });
-
+/*
 function Holdable({id, onClick, onHold, children}) {
 
   const [timer, setTimer] = React.useState(null)
@@ -152,6 +242,6 @@ function Holdable({id, onClick, onHold, children}) {
       {children}
     </div>
   )
-}
+} */
 
 export default RecipeItem;

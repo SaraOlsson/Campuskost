@@ -36,6 +36,11 @@
     background-color: #ffffff;
 }
 
+/*
+.body .MuiTypography-h6 {
+    user-select: none;
+} */
+
 .body .MuiTabs-indicator {
   background-color: gray !important;
 }

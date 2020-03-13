@@ -1,16 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Grid from '@material-ui/core/Grid';
-import GridListTile from '@material-ui/core/GridListTile';
 import GridList from '@material-ui/core/GridList';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import InfoIcon from '@material-ui/icons/Info';
-
 import RecipeItem from '../components/recipeitem';
 
 function RecipeGridList(props) {

@@ -1,17 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Link} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import { useFirebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
+//import { useFirebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
 
-import recipeData from '../assets/recipes_dev';
 import RecipeGridList from '../components/recipegrid';
 import RecipeItem from '../components/recipeitem';
 
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
-import Box from '@material-ui/core/Box';
-import ImageIcon from '@material-ui/icons/Image';
 
 var Spinner = require('react-spinkit');
 
@@ -19,7 +16,7 @@ function FeedPage() {
 
   // const [images, setImages] = useState();
   const [recipes, setRecipes] = useState(undefined);
-  const [docs, setDocs] = useState(undefined);
+  //const [docs, setDocs] = useState(undefined);
   const [scrollview, setScrollview] = useState(true);
 
   const classes = useStyles();
@@ -57,7 +54,7 @@ function FeedPage() {
 
       <div>
 
-      { recipes != undefined && <ScrollableRecipes recipes={recipes}/> }
+      { recipes !== undefined && <ScrollableRecipes recipes={recipes}/> }
 
        </div>
 
@@ -67,7 +64,7 @@ function FeedPage() {
   return (
     <div>
       <NewsContainer recipes={recipes}/>
-      { recipes != undefined && <div className={classes.grid_background}><RecipeGridList recipes={recipes}/></div> }
+      { recipes !== undefined && <div className={classes.grid_background}><RecipeGridList recipes={recipes}/></div> }
       { recipes === undefined && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
     </div>
   );
@@ -119,10 +116,10 @@ function NewsContainer(props) {
   const classes = useStyles();
   // className={classes.userinfo}
 
-  let temp_recipe = {img: 'temp_food2', title: "Svamprisotto", user: "LillKocken"};
+  // let temp_recipe = {img: 'temp_food2', title: "Svamprisotto", user: "LillKocken"};
 
   // <img src={require('../assets/'+ temp_recipe.img + '.jpg')} alt={temp_recipe.title} className={classes.listimage}/>
-  let viral_header = (props.recipes != undefined ) ? props.recipes[0].title : "Veckans favvo ";
+  let viral_header = (props.recipes !== undefined ) ? props.recipes[0].title : "Veckans favvo ";
 
   return (
     <div>
@@ -137,7 +134,7 @@ function NewsContainer(props) {
 
       <Grid item xs={5}>
 
-        {props.recipes != undefined &&
+        {props.recipes !== undefined &&
           <GridList><RecipeItem recipe={props.recipes[0]} /></GridList>
         }
 

@@ -10,14 +10,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button';
 
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import MoreIcon from '@material-ui/icons/MoreVert';
+
 
 import { Link } from "react-router-dom";
 import LinkUI from '@material-ui/core/Link';
@@ -147,22 +146,18 @@ function TopMenuBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  const store_temp = useSelector(state => state.testReducers);
   const history = useHistory();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
-  };
-
-  const lala = () => {
-    history.push("/home");
   };
 
   const handleMenuClose = () => {
@@ -175,7 +170,7 @@ function TopMenuBar(props) {
   };
 
   const handleSearchFocus = () => {
-    if(history.location.pathname != "/search")
+    if(history.location.pathname !== "/search")
       history.push("/search")
   };
 

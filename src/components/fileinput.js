@@ -1,8 +1,5 @@
 import React from "react";
 
-import Button from '@material-ui/core/Button';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
-
 const noop = () => {};
 
 const FileInput = ({ value, onChange = noop, ...rest }) => (

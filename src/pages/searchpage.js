@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 
 import RecipeGridList from '../components/recipegrid';
-import RecipeItem from '../components/recipeitem';
 import FollowerList from '../components/followerlist';
 var Spinner = require('react-spinkit');
 
@@ -35,9 +34,9 @@ function SearchPage(props) {
             temp_users.push(data);
           });
 
-          if (collection_name == 'users')
+          if (collection_name === 'users')
             setUsers(temp_users);
-          if (collection_name == 'recipes')
+          if (collection_name === 'recipes')
             setRecipes(temp_users);
       });
   }
@@ -61,7 +60,7 @@ function SearchPage(props) {
     <div>
       <h3>Sökresultat</h3>
 
-      { searchstring == "" && <p> Sökfunktionen kommer snart! Tills dess visas alla användare och recept nedan </p> }
+      { searchstring === "" && <p> Sökfunktionen kommer snart! Tills dess visas alla användare och recept nedan </p> }
 
       { users.length <= 0 && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
       { users.length > 0 && <React.Fragment>

@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import { useSelector } from "react-redux";
+import React, {useState} from 'react';
+
 // import { useDispatch } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -8,18 +8,15 @@ import 'firebase/auth';
 import 'firebase/firestore';
 
 import Button from '@material-ui/core/Button';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 
 function Login(props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [signedInStatus, setSignedInStatus] = useState("Ej inloggad");
+  //const [signedInStatus, setSignedInStatus] = useState("Ej inloggad");
 
   const classes = useStyles();
-
-  // const dispatch = useDispatch(); // be able to dispatch
 
   /**
    * Handles the sign in button press.
@@ -77,7 +74,7 @@ function Login(props) {
       var errorCode = error.code;
       var errorMessage = error.message;
 
-      if (errorCode == 'auth/weak-password') {
+      if (errorCode === 'auth/weak-password') {
         alert('Lösenordet är för svagt.');
       } else {
         alert(errorMessage);
@@ -153,12 +150,6 @@ function Login(props) {
   );
 
 }
-
-/*
-<OutlinedInput
-  value={email}
-  onChange={evt => setEmail(evt.target.value)}
-/>*/
 
 const useStyles = makeStyles({
   login_div: {

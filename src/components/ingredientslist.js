@@ -2,22 +2,11 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { makeStyles, withStyles, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 //import { withStyles } from '@material-ui/core/styles';
 //import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import '../style/GlobalCssButton.css';
-import theme from '../theme';
 
-import FilledInput from '@material-ui/core/FilledInput';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import IconButton from '@material-ui/core/IconButton';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
@@ -26,17 +15,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import SaveIcon from '@material-ui/icons/Save';
-
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 function IngredientsList(props) {
 
@@ -67,13 +47,13 @@ function IngredientsList(props) {
 
     temp_ingredients = [];
 
-    return (props.ingredients != undefined) ? props.ingredients : temp_ingredients;
+    return (props.ingredients !== undefined) ? props.ingredients : temp_ingredients;
   }
 
   useEffect(() => {
 
     let temp_ingredients = upload_store.ingredients;
-    if(temp_ingredients != undefined)
+    if(temp_ingredients !== undefined)
     {
       setIngredients(temp_ingredients);
       // props.handleAdd(temp_ingredients.length);
@@ -188,7 +168,7 @@ function IngredientsList(props) {
 
           {ingredientsjsx}
 
-          { editObject == undefined &&
+          { editObject === undefined &&
 
             <ListItem alignItems="center" onClick={() => addIngredient()} className={classes.newListItem}>
               <ListItemText
@@ -200,7 +180,7 @@ function IngredientsList(props) {
         </List>
       </Grid>
 
-      { (editObject != undefined  ) &&
+      { (editObject !== undefined  ) &&
 
         <React.Fragment>
 

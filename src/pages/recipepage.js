@@ -5,15 +5,13 @@ import { useParams} from "react-router";
 import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux";
 // import { recipeFetch } from '../actions/RecipeActions';
-
-import ValidCheck from '../components/validcheck';
+import SimpleDialog from '../components/simpledialog';
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Divider from '@material-ui/core/Divider';
 // import Container from '@material-ui/core/container';
 
@@ -23,7 +21,6 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import EditIcon from '@material-ui/icons/Edit';
 
-//let admin = require('firebase-admin');
 
 function RecipePage(props) {
 
@@ -62,7 +59,7 @@ function RecipePage(props) {
     }
 
     console.log(store.firestore_user.email)
-    let queryRef = store.db.collection('likes').where('email', '==', store.firestore_user.email);
+    //let queryRef = store.db.collection('likes').where('email', '==', store.firestore_user.email);
     //likeFetcher(queryRef);
     likeFetcher(store.firestore_user.email);
 
@@ -74,7 +71,7 @@ function RecipePage(props) {
     likesRef.get().then(function(doc) {
 
       let data = doc.data();
-      let isliked = ( data.liked_recipes[recipe.id] != undefined ) ? data.liked_recipes[recipe.id] : false;
+      let isliked = ( data.liked_recipes[recipe.id] !== undefined ) ? data.liked_recipes[recipe.id] : false;
 
       if (isliked)
         setSaved({likes: true, doc_id: doc.id});
@@ -183,7 +180,7 @@ function RecipePage(props) {
   }
 
   let icon = (saved.likes === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
-  let r_img = ( recipe != undefined) ? recipe.img : 'temp_food1';
+  let r_img = ( recipe !== undefined) ? recipe.img : 'temp_food1';
   let triedbyNum = 3;
   // , zIndex: '-1'
 
@@ -205,19 +202,20 @@ function RecipePage(props) {
 
   let img_src;
 
-  if  ( recipe != undefined && recipe.img_url != undefined) {
+  if  ( recipe !== undefined && recipe.img_url !== undefined) {
     img_src = recipe.img_url;
   } else {
     img_src = require('../assets/'+ r_img + '.jpg');
   }
 
   // console.log(img_src)
+  // <SimpleDialogDemo/>
 
   return (
 
     <div>
 
-      { recipe != undefined &&
+      { recipe !== undefined &&
         <div>
 
           <div className={classes.recipeheader}>
