@@ -1,10 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import { makeStyles } from '@material-ui/core/styles';
 
 import RecipeGridList from '../components/recipegrid';
 import FollowerList from '../components/followerlist';
+
+import Button from '@material-ui/core/Button';
+
 var Spinner = require('react-spinkit');
 
 function SearchPage(props) {
@@ -14,6 +18,8 @@ function SearchPage(props) {
 
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
+
+  const history = useHistory();
 
   let searchstring = "";
 
@@ -59,6 +65,14 @@ function SearchPage(props) {
 
     <div>
       <h3>Sökresultat</h3>
+
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => history.push('/lists')}
+        >
+          Till ListPage
+        </Button>
 
       { searchstring === "" && <p> Sökfunktionen kommer snart! Tills dess visas alla användare och recept nedan </p> }
 
