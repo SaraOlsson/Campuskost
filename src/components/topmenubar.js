@@ -99,15 +99,6 @@ function ProfileBtn (props) {
   const history = useHistory();
   const store = useSelector(state => state.fireReducer);
 
-
-
-  //console.log("topbar firebase user: ")
-  // console.log(store.user)
-
-  //console.log(props)
-  // history.push("/" + val);
-  // (e) => props.handleChange(undefined, e.target.value)
-
   let btn = (
     <div>
       <Button
@@ -151,7 +142,7 @@ function TopMenuBar(props) {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  
+
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };

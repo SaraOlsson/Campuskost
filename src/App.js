@@ -1,18 +1,20 @@
 import React, {useState, useEffect} from 'react';
+import { BrowserRouter as BrowserRouter, Router, Route, Link, Switch, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-//import { HashRouter as BrowserRouter, Router, Route, Link, Switch, Redirect } from "react-router-dom";
-import { BrowserRouter as BrowserRouter, Router, Route, Link, Switch, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-// import { useHistory } from "react-router-dom";
-import { incrementdispatch } from './actions/RecipeActions';
-import './App.css';
-import './style/GlobalCssButton.css';
-
+import { makeStyles } from '@material-ui/core/styles';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+// import { useHistory } from "react-router-dom";
+// import { incrementdispatch } from './actions/RecipeActions';
 
+// import our css
+import './App.css';
+import './style/GlobalCssButton.css';
+
+// import our page components
 import FeedPage from './pages/feedpage';
 import ProfilePage from './pages/profilepage';
 import NoticePage from './pages/noticepage';
@@ -24,14 +26,12 @@ import Settings from './pages/settings';
 import SearchPage from './pages/searchpage';
 import TopMenuBar from './components/topmenubar';
 import ListPage from './pages/listpage';
-// import Feed from './pages/feedpage';
 
-import { makeStyles } from '@material-ui/core/styles';
+// import material UI components
 import Icon from '@material-ui/core/Icon';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Badge from '@material-ui/core/Badge';
-
 import PublishIcon from '@material-ui/icons/PublishRounded';
 import NotificationsActiveRoundedIcon from '@material-ui/icons/NotificationsActiveRounded';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -39,8 +39,8 @@ import LoyaltyRoundedIcon from '@material-ui/icons/LoyaltyRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-require('dotenv').config();
-//
+require('dotenv').config(); // check if we need this
+
 const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
 
 // for PWA - needed?
@@ -63,6 +63,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 });
 
+// initiate Firebase
 let db = undefined;
 function initFirebase() {
 
@@ -87,10 +88,9 @@ function initFirebase() {
   return [db, storage];
 }
 
-
+// main component of the app
 function App(props) {
 
-  // const [signedIn, setSignedIn] = React.useState(false);
   const [value, setValue] = React.useState('default');
   const [redirect, setRedirect] = React.useState(false);
 
@@ -99,17 +99,18 @@ function App(props) {
   const state_user = useSelector(state => state.userReducer); // subscribe to the redux store
   const store = useSelector(state => state.fireReducer); // subscribe to the redux store
 
-  //console.log(state_user)
-
-  // start auth listener
+  // runs once on start
   useEffect(() => {
 
+    // set listener for authentication changes
+    // either only set redux object or also create firestore instance
     firebase.auth().onAuthStateChanged(user => {
       dispatch({ type: user ? "SIGNIN" : "SIGNOUT" })
 
-      // if user is signed in
+      // if user is signed in, set redux object
       if( user ) {
 
+        // dispatch auth info (such as last time logged in etc)
         dispatch({
           type: "SETUSER",
           auth_user: user
@@ -117,22 +118,17 @@ function App(props) {
 
         const user_id = user.uid;
         const user_email = user.email;
-      //  console.log("userId: " + user_id)
-      //  console.log("user_email: " + user_email)
-      //  console.log(user)
 
-        // check with firestore data
-        // const document = store.db.doc('users/' + user_id);
         const usersRef = db.collection('users').doc(user_email);
-
+        // connect to firebase and check if a user doc for this email exists
         usersRef.get()
         .then((docSnapshot) => {
           if (docSnapshot.exists) {
             usersRef.onSnapshot((doc) => {
-              // do stuff with the data
-              console.log("user exists in firestore")
-              //console.log(doc.data())
 
+              console.log("user exists in firestore")
+
+              // dispatch user doc info (such as username, other info set in the app)
               dispatch({
                 type: "SETFIREUSER",
                 firestore_user: doc.data()
@@ -141,6 +137,7 @@ function App(props) {
             });
           } else {
 
+            // prepare to create firestore doc as this user signed in for the first time
             let userObj = {
               email: user_email,
               username: "DefaultChef",
@@ -151,6 +148,7 @@ function App(props) {
             console.log("create the document")
             usersRef.set(userObj); // create the document
 
+            // set redux state
             dispatch({
               type: "SETFIREUSER",
               firestore_user: userObj
@@ -158,32 +156,18 @@ function App(props) {
           }
       });
 
-        // Enter new data into the document.
-        /*
-        document.set({
-          user: username,
-          title: recipe_name,
-          img: "temp_food2",
-          ingredients: temp_i,
-          description: temp_d
-        }).then(() => {
-          // Document created successfully.
-          console.log( "Document created/updated successfully.")
-        }); */
-
       } // end if user
       else {
 
-      dispatch({
-        type: "SETUSER",
-        user: undefined
-      })
+        // no user is signed in
+        dispatch({
+          type: "SETUSER",
+          user: undefined
+        })
 
       }
 
-    });
-
-    // end auth
+    }); // end auth listener
 
   }, []); // end useEffect
 
@@ -196,30 +180,16 @@ function App(props) {
     dispatch({ type: "SETSTORAGE", storage: storage });
   }
 
+  // used in TopMenuBar, which needs to be refactored
   const handleChange = (event = undefined, newValue) => {
 
     console.log("heello" + newValue + ".")
 
-    //history.push("/" + value);
-    //setRedirect(true);
-    //setValue(newValue);
-
   };
 
-  // console.log("redirect: " + redirect)
-
-/*
-
-<div className={classes.headerrow}>
-<ProfileBtn signedIn={state_user.signedIn} handleChange={handleChange}/>
-</div>
-
-*/
-
-  // to={{ ...location, pathname: "/welcome" }}
-  // to={"/" + value}
-  // {redirect ? <Redirect to={{ ...window.location, pathname: "/" + value }} /> : null }
-
+  // jsx code, looks like html
+  // renders top bar, page content and bottom bar.
+  // page content is based on url, defined with Route objects
   return (
     <div className="body">
 
@@ -244,7 +214,6 @@ function App(props) {
             <Route path="/home" component={FeedPage}/>
             <Route path="/lists" component={ListPage}/>
             <Redirect exact path="/" to="/home" />
-
           </Switch>
 
         </div>
@@ -256,9 +225,10 @@ function App(props) {
       </BrowserRouter>
 
     </div>
-  ); // <Redirect path="*" to="/home" />
+  );
 }
 
+// extract as individual component
 function BottomMenuBar() {
 
   const [value, setValue] = React.useState('default');
@@ -272,6 +242,7 @@ function BottomMenuBar() {
     setValue(val);
     history.push("/" + val);
 
+    // set as one dispatch instead.. 
     dispatch({
       type: "SETDESCRIPTIONS",
       descriptions: undefined

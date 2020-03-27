@@ -110,16 +110,17 @@ function ScrollableRecipes(props) {
   );
 }
 
-
+// component above the feed at start page
 function NewsContainer(props) {
 
   const classes = useStyles();
   // className={classes.userinfo}
 
-  // let temp_recipe = {img: 'temp_food2', title: "Svamprisotto", user: "LillKocken"};
+  if(props.recipes === undefined || props.recipes.length < 1 )
+    return <p style={{margin: 15}}>Sorry chefs, an issue! probably no internet connection.</p>;
 
-  // <img src={require('../assets/'+ temp_recipe.img + '.jpg')} alt={temp_recipe.title} className={classes.listimage}/>
-  let viral_header = (props.recipes !== undefined ) ? props.recipes[0].title : "Veckans favvo ";
+  console.log(props.recipes)
+  let viral_header = (props.recipes !== undefined && props.recipes[0] !== undefined ) ? props.recipes[0].title : "Veckans favvo ";
 
   return (
     <div>
@@ -148,10 +149,10 @@ function NewsContainer(props) {
 
     </div>
   );
-
-
 }
 
+// used before for testing
+/*
 function ImageContainer(props) {
 
   const classes = useStyles();
@@ -164,7 +165,7 @@ function ImageContainer(props) {
       </div>
     </Link>
   );
-}
+} */
 
 const useStyles = makeStyles({
   imageContainer: {

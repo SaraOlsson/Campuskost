@@ -1,12 +1,19 @@
+/*
+
+Component: Page where recipes are uplaoded or edited.
+TODO: refactor - a lot of code right now!
+TODO: it should be possible to reorder ingredients (use Draggable?)
+TODO: let the user add extra information, as time to cook or num portions
+
+*/
+
 import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { makeStyles, withStyles, ThemeProvider } from '@material-ui/core/styles';
 import firebase from 'firebase'; // 'firebase/app';
-// import 'firebase/firestore';
-//import { withStyles } from '@material-ui/core/styles';
-//import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+
 import '../style/GlobalCssButton.css';
 import FileInput from '../components/fileinput';
 import ValidCheck from '../components/validcheck';
@@ -35,7 +42,6 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import SaveIcon from '@material-ui/icons/Save';
-
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 var Spinner = require('react-spinkit');
@@ -52,6 +58,7 @@ function UploadPage(props) {
   const labelRef = React.useRef(null);
   const [url, setUrl] = React.useState("temp");
 
+  // remove these
   const [valid, setValid] = React.useState({
     title: false,
     ingredients: false,
@@ -268,14 +275,16 @@ function UploadPage(props) {
 
   };
 
+  // when done, there's an option to go to recipe page
   const goToRecipe = () => {
-
     history.push("/recipe/" + title + "/" + id );
   };
 
+  // whether uploading new recipe or editing an existing
   let upload_done_text = (upload_store.editmode) ? "Ändring" : "Uppladding";
   let upload_button_text = (upload_store.editmode) ? "Ändra recept" : "Ladda upp";
   let bottom_content;
+
   // if working on recipe
   if(upload_wait == false && done == false)
   {

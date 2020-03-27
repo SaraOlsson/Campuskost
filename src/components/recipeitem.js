@@ -138,26 +138,10 @@ function RecipeItem(props) {
     // className={classes.contextmenu}
     tile_jsx = (
     <React.Fragment>
-    <ContextMenuTrigger id={props.id + recipe.title} holdToDisplay={500}>
 
     <GridListTile key={r_img} className={classes.listtile_small} onClick={() => handeRecipeClick(recipe)}>
       {image}
     </GridListTile>
-
-    </ContextMenuTrigger>
-
-    <ContextMenu id={props.id + recipe.title} className={classes.contextmenu}>
-      <MenuItem data={{foo: 'bar'}} onClick={handleClick}>
-        ContextMenu Item 1
-      </MenuItem>
-      <MenuItem data={{foo: 'bar'}} onClick={handleClick}>
-        ContextMenu Item 2
-      </MenuItem>
-      <MenuItem divider />
-      <MenuItem data={{foo: 'bar'}} onClick={handleClick}>
-        ContextMenu Item 3
-      </MenuItem>
-    </ContextMenu>
 
     </React.Fragment>);
   }
