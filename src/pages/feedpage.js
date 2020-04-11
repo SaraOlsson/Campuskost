@@ -119,7 +119,7 @@ function NewsContainer(props) {
   if(props.recipes === undefined || props.recipes.length < 1 )
     return <p style={{margin: 15}}>Sorry chefs, an issue! probably no internet connection.</p>;
 
-  console.log(props.recipes)
+  //console.log(props.recipes)
   let viral_header = (props.recipes !== undefined && props.recipes[0] !== undefined ) ? props.recipes[0].title : "Veckans favvo ";
 
   return (

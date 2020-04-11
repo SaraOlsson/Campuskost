@@ -96,7 +96,7 @@ function DescriptionList(props) {
     setEditObject(object);
 
     // first letter to toUpperCase
-    object.text = object.text[0].toUpperCase() + object.text.slice(1)
+    object.text = (object.text.length > 0) ? object.text[0].toUpperCase() + object.text.slice(1) : "";
 
     setText(object.text);
     // setOrder(object.order);
@@ -112,12 +112,17 @@ function DescriptionList(props) {
     //console.log(editObject)
 
     let obj_copy = editObject;
-    obj_copy.text = text[0].toUpperCase() + text.slice(1);
+    obj_copy.text = (text.length > 0) ? text[0].toUpperCase() + text.slice(1) : "";
+    //obj_copy.text = text[0].toUpperCase() + text.slice(1);
     // obj_copy.order = order;
 
     temp_list[ind] = obj_copy;
 
     //console.log(obj_copy)
+
+    if(text.length < 1) {
+      console.log("not relevant to save")
+    }
 
     setDescriptions(temp_list);
 

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 import firebase from 'firebase/app';
 import _ from 'underscore';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import ListContainer from '../components/listcontainer';
 
@@ -90,6 +91,11 @@ function FavoritePage(props) {
     });
   }
 
+  const onDragEnd = result => {
+      const { source, destination } = result;
+
+  }
+
   // build jsx for lists this user follows
   let lists_jxs = lists.map((item, i) =>
     <ListContainer key={i} recipemap={item.recipes} listname={item.listname} createdby={item.created_by} noheader={false}/>
@@ -110,9 +116,29 @@ function FavoritePage(props) {
   // <p> Här kommer du se de listor skapade av andra använder som du följer 🍴💎 </p>
   // { lists_I_follow.length < 1 && <p> {no_lists_text} </p>}
  // .body .MuiGridList-root
+
+ const getListStyle = isDraggingOver => ({
+     background: isDraggingOver ? 'lightblue' : '#eeeeee',
+     padding: 8,
+     width: '90%',
+     display: 'flex',
+     overflow: 'auto',
+     borderRadius: 12,
+ });
+
   return (
 
     <div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="list_test2" direction="horizontal">
+          {(provided, snapshot) => (
+              <div
+                  ref={provided.innerRef}
+                  style={getListStyle(snapshot.isDraggingOver)}>
+                  {provided.placeholder}
+              </div>
+          )}
+      </Droppable>
     { !props.otheruser &&
 
       <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}
@@ -177,7 +203,7 @@ function FavoritePage(props) {
       </ExpansionPanel>
 
     }
-
+    </DragDropContext>
     </div>
   );
 }
