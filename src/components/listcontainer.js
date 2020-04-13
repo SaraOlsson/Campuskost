@@ -15,26 +15,60 @@ function ListContainer(props) {
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
 
+  const list_doc = props.listdoc;
+
   useEffect(() => {
 
+    // now using
+    if(props.recipeDocs != undefined) {
+      console.log("what??")
+      setRecipes(props.recipes);
+      return;
+    }
+
     // using recipe ids
-    if (props.recipemap != undefined) {
+    if (list_doc.recipes != undefined) {
 
       let temp_recipes = [];
 
       // previously liked recipes will persist in the firestore map but be false
-      Object.keys(props.recipemap).forEach(function(key) {
-          if(props.recipemap[key] === true)
+      Object.keys(list_doc.recipes).forEach(function(key) {
+          if(list_doc.recipes[key] === true)
             temp_recipes.push(key)
       });
 
-      recipe_fetcher(temp_recipes); // Object.keys(props.recipemap)
+      recipe_fetcher(temp_recipes);
     }
 
   }, []);
 
+  const handleaction = (recipe_id) => {
+
+    console.log("delete " + recipe_id + " from " + list_doc.id )
+
+    let listsRef = store.db.collection('recipe_lists').doc(list_doc.id);
+
+    listsRef.get().then(function(doc) {
+
+      let data = doc.data();
+      data.id = doc.id;
+      data.recipes[recipe_id] = false; // remove from list // my_map.delete(key)
+      store.db.collection("recipe_lists").doc(doc.id).update(data);
+
+      // console.log(data)
+
+      //let updated_recipes = data.recipes[recipe_id];
+      // const nextState = recipes.map(a => a.id === doc.id ? { ...a, [recipes]: updated_recipes } : a);
+      // setRecipes(nextState);
+
+    });
+
+  }
+
   // fetch by list of recipe ids
   const recipe_fetcher = (recipe_id_list) => {
+
+    console.log("fetching..")
 
     let temp_recipes = [];
     let ref;
@@ -61,11 +95,11 @@ function ListContainer(props) {
 
   // either spinner or recipe content is to be shown
   let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
-  let recipeContent = (recipes.length > 0) ? <RecipeGridList recipes={recipes} smalltiles={true}/> : spinner_jsx;
+  let recipeContent = (recipes.length > 0) ? <RecipeGridList handleaction={handleaction} recipes={recipes} smalltiles={true}/> : spinner_jsx;
 
   let header;
   if (props.noheader == false) {
-    let listname = (props.listname) ? props.listname : "<listname>"; // "Gillade recept"
+    let listname = (list_doc.listname) ? list_doc.listname : "<listname>"; // "Gillade recept"
     let user_in_header = (props.mine) ? "" : "| " + props.createdby.split("@")[0];
     header = <p className={classes.list_header}> {listname} <i>{user_in_header}</i> </p>;
   }
@@ -74,10 +108,10 @@ function ListContainer(props) {
 
   return (
     <div style={{width: '100%'}}>
-    {header}
-    <div className={classes.listcontainer}>
-      {recipeContent}
-    </div>
+      {header}
+      <div className={classes.listcontainer}>
+        {recipeContent}
+      </div>
     </div>
   );
 }

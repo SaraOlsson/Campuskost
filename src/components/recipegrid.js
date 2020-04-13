@@ -14,7 +14,7 @@ function RecipeGridList(props) {
   useEffect(() => {
 
     let images_temp = props.recipes.map((recipe, idx) =>
-      <RecipeItem recipe={recipe} key={idx} smalltiles={smalltiles} id={idx}/>
+      <RecipeItem recipe={recipe} key={idx} smalltiles={smalltiles} id={idx} handleaction={props.handleaction}/>
     );
 
     setImages(images_temp);

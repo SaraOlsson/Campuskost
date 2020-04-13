@@ -242,7 +242,7 @@ function BottomMenuBar() {
     setValue(val);
     history.push("/" + val);
 
-    // set as one dispatch instead.. 
+    // set as one dispatch instead..
     dispatch({
       type: "SETDESCRIPTIONS",
       descriptions: undefined

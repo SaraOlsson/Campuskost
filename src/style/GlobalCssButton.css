@@ -20,6 +20,10 @@
   display: none;
 }
 
+.body .MuiSnackbarContent-root {
+  background-color: #68BB8C !important;
+}
+
 .body .MuiExpansionPanelDetails-root {
   padding: 15px;
   display: block;
