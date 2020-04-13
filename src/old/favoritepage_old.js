@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 import firebase from 'firebase/app';
-import _ from 'underscore';
+// import _ from 'underscore';
 
 import ListContainer from '../components/listcontainer';
 

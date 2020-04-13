@@ -57,7 +57,17 @@ function SearchPage(props) {
     recipes.map( (recipe, idx) =>
       <RecipeItem recipe={recipe} key={idx}/>
     )
-  }*/
+  }
+
+  <Button
+    variant="contained"
+    color="primary"
+    onClick={() => history.push('/lists')}
+  >
+    Till ListPage
+  </Button>
+
+  */
 
   // Sök specifikt recept eller användare ovan
 
@@ -66,13 +76,7 @@ function SearchPage(props) {
     <div>
       <h3>Sökresultat</h3>
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => history.push('/lists')}
-        >
-          Till ListPage
-        </Button>
+
 
       { searchstring === "" && <p> Sökfunktionen kommer snart! Tills dess visas alla användare och recept nedan </p> }
 

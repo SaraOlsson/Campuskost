@@ -208,7 +208,7 @@ function App(props) {
             <Route path="/profile/:username_url" component={ProfilePage} />
             <Route path="/upload" component={UploadPage} />
             <Route path="/notices" component={NoticePage} />
-            <Route path="/saved" component={FavoritePage} />
+            <Route path="/saved" component={ListPage} />
             <Route path="/recipe/:recipetitle/:id" component={RecipePage} />
             <Route path="/search" component={SearchPage} />
             <Route path="/home" component={FeedPage}/>
