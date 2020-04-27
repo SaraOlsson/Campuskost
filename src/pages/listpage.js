@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import { useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -85,6 +86,22 @@ function ListPage() {
     const store = useSelector(state => state.fireReducer);
     const classes = useStyles();
     const history = useHistory();
+
+    // dragReducer
+    const dispatch = useDispatch(); // be able to dispatch
+
+    const dragDisp = (isDragging_val, draggableId_val = undefined) => {
+      dispatch({
+        type: "SETISDRAGGING",
+        isDragging: isDragging_val
+      })
+
+      dispatch({
+        type: "SETDRAGGABLEID",
+        draggableId: draggableId_val
+      })
+
+    }
 
     let isDragging = false;
 
@@ -202,6 +219,8 @@ function ListPage() {
       console.log(result)
       //setisDragging(true);
       isDragging = true;
+
+      dragDisp(true, result.draggableId);
     }
 
     const onDragEnd = result => {
@@ -249,7 +268,8 @@ function ListPage() {
           }
 
         //setisDragging(false);
-        isDragging = false
+        isDragging = false;
+        dragDisp(false);
 
         // if just reordered in same list
         if (source.droppableId === destination.droppableId) {

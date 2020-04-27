@@ -32,6 +32,7 @@ function Settings(props) {
   const [in_editmode, setIn_editmode] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true);
   const labelRef = React.useRef(null);
+  const [openSetting, setOpenSetting] = useState("");
 
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
@@ -142,6 +143,14 @@ function Settings(props) {
 
   }
 
+
+  // update in Firebase
+  function save_img() {
+
+    console.log("set img url to: XXX")
+
+  }
+
   function newName() {
 
     let preNames = ["Master", "Lill", "Pro"];
@@ -162,9 +171,21 @@ function Settings(props) {
     setUsername_textfield(temp_username);
   }
 
+  const randomImg = () => {
+    console.log("random img")
+  }
+
+  const onExpand = (e, expanded, id) => {
+    let openval = expanded ? id : "";
+    setOpenSetting(openval);
+  }
+
+  console.log("openSetting: " + openSetting)
   //let signText = (firebase.auth().currentUser) ? "Logga ut" : "Logga in";
 
   // let username = (store.firestore_user) ? store.firestore_user.username : "unset";
+
+  let img_src = (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : undefined;
 
   return (
 
@@ -172,7 +193,10 @@ function Settings(props) {
       <div className={classes.login_div}>
         <h3>Inställningar</h3>
 
-        <ExpansionPanel style={{background: '#fbfbfb', marginTop: '8px'}}>
+        <ExpansionPanel
+          onChange={(e, expanded) => onExpand(e, expanded, "username")}
+          expanded={openSetting === "username"}
+          style={{background: '#fbfbfb', marginTop: '8px'}}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
@@ -235,6 +259,70 @@ function Settings(props) {
             </React.Fragment>
             }
           </ExpansionPanelDetails>
+
+        </ExpansionPanel>
+
+        <ExpansionPanel
+          onChange={(e, expanded) => onExpand(e, expanded, "profileimage")}
+          expanded={openSetting === "profileimage"}
+          style={{background: '#fbfbfb', marginTop: '8px'}}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Profilbild</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails style={{display: 'flex'}}>
+
+            { img_src &&
+
+            <img src={img_src} className={classes.profileimage}  alt={"profile img"} />
+
+            }
+
+            { !in_editmode &&
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setIn_editmode(true)}
+              className={classes.buttons}
+            >
+              Ändra bild
+            </Button>
+            }
+            { in_editmode &&
+            <React.Fragment>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => cancel_edit() }
+                className={classes.buttons}
+              >
+                Avbryt
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => randomImg()}
+                className={`${classes.buttons} ${classes.rainbow}`}
+              >
+                Slumpa 🤪
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => save_img()}
+                className={classes.buttons}
+                disabled={!has_changed}
+              >
+                Spara ny profilbild
+              </Button>
+            </React.Fragment>
+            }
+
+          </ExpansionPanelDetails>
+
         </ExpansionPanel>
 
       </div>
@@ -276,6 +364,10 @@ const useStyles = makeStyles({
     fontSize: '13px',
     color: '#f50057',
     margin: '8px'
+},
+profileimage: {
+  marginLeft: 'auto',
+  marginRight: 'auto'
 }
 });
 

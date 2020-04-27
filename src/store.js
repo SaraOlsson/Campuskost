@@ -99,6 +99,23 @@ function fireReducer(state = { db: undefined, storage: undefined, auth_user: und
   }
 }
 
+function dragReducer(state = { isDragging: false, draggableId: undefined }, action) {
+  switch (action.type) {
+    case "SETISDRAGGING":
+      return {
+        ...state,
+        isDragging: action.isDragging
+      };
+    case "SETDRAGGABLEID":
+      return {
+        ...state,
+        draggableId: action.draggableId
+      };
+    default:
+      return state;
+  }
+}
+
 // export default reducer;
 //  firestore: firestoreReducer,
 
@@ -106,7 +123,8 @@ const rootReducer = combineReducers({
   fireReducer: fireReducer,
   testReducers: testreducer,
   uploadReducer: uploadReducer,
-  userReducer: userReducer
+  userReducer: userReducer,
+  dragReducer: dragReducer
 });
 
  export default rootReducer;
