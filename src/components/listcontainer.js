@@ -85,7 +85,7 @@ function ListContainer(props) {
                 setRecipes(temp_recipes);
               }
           } else {
-              console.log("No such document!");
+              console.log("No such document! recipe_id: " + recipe_id);
           }
       }).catch(function(error) {
           console.log("Error getting document:", error);

@@ -18,13 +18,22 @@ function FollowerListItem(props) {
   const classes = useStyles();
   let user = props.user;
 
+  let user_avatar = undefined;
+  if(user.profile_img_url != undefined) {
+    user_avatar = <img src={user.profile_img_url} className={classes.smallprofileimage} alt={"profile-img"} />; //
+  } else {
+    user_avatar = (
+      <Avatar>
+          <PersonIcon />
+      </Avatar>
+    );
+  }
+
   return (
 
     <ListItem>
       <ListItemAvatar>
-        <Avatar>
-            <PersonIcon />
-        </Avatar>
+        {user_avatar}
       </ListItemAvatar>
 
       <ListItemText
@@ -93,6 +102,9 @@ const useStyles = makeStyles({
    },
    notfollowColor: {
      color: '#e8e8e8'
+   },
+   smallprofileimage: {
+     width: '40px'
    }
 });
 

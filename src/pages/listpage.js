@@ -133,7 +133,7 @@ function ListPage() {
               if(liked_recipes_ids[key] === true)
                 temp_recipes.push(key)
           });
-          console.log(temp_recipes)
+          //console.log(temp_recipes)
           recipe_fetcher(temp_recipes); // Object.keys(props.recipemap)
         }
 
@@ -149,7 +149,7 @@ function ListPage() {
         likesRef.get().then(function(doc) {
           let data = doc.data();
           //data.id = doc.id;
-          console.log(data)
+          //console.log(data)
           resolve(data);
 
         });
@@ -206,7 +206,7 @@ function ListPage() {
                   // console.log(temp_recipes)
                 }
             } else {
-                console.log("No such document!");
+                console.log("No such document! recipe_id: " + recipe_id);
             }
         }).catch(function(error) {
             console.log("Error getting document:", error);

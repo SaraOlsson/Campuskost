@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 // import { useDispatch } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
+//import firebase from 'firebase'; // 'firebase/app';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -34,24 +35,44 @@ function Settings(props) {
   const labelRef = React.useRef(null);
   const [openSetting, setOpenSetting] = useState("");
 
+  const [imageUrl, setImageUrl] = useState(undefined);
+  const [imageUrlList, setImageUrlList] = useState([]);
+
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
   const history = useHistory();
 
   React.useEffect(() => {
     setLabelWidth(labelRef.current.offsetWidth);
+
+    const storageRef = firebase.storage().ref().child('profileimages');
+    const available_images = [];
+
+    // Find all the prefixes and items.
+    storageRef.listAll().then(function(res) {
+      res.items.forEach(function(itemRef) {
+        itemRef.getDownloadURL().then((url) => { available_images.push(url); });
+      });
+      setImageUrlList(available_images);
+
+    }).catch(function(error) {
+      console.log("could not get storage list")
+    });
+
   }, []);
 
   React.useEffect(() => {
-    if(store.firestore_user && username_textfield != store.firestore_user.username) {
+    if(store.firestore_user && (username_textfield !== store.firestore_user.username || imageUrl !== store.firestore_user.profile_img_url)) {
       setHas_changed(true)
     }
-  }, [username_textfield]);
+  }, [username_textfield, imageUrl]);
 
   // when information about user signed in arrives, set textfield value
   React.useEffect(() => {
     if(store.firestore_user) {
       setUsername_textfield(store.firestore_user.username)
+      if (store.firestore_user.profile_img_url !== undefined)
+        setImageUrl(store.firestore_user.profile_img_url);
     }
   }, [store.firestore_user]);
 
@@ -62,6 +83,7 @@ function Settings(props) {
     setIn_editmode(false);
     if(has_changed) {
       setUsername_textfield(store.firestore_user.username);
+      setImageUrl(store.firestore_user.profile_img_url);
     }
   }
 
@@ -127,28 +149,28 @@ function Settings(props) {
         return;
       }
 
-      // Set the 'username' field of the city
+      // Set the 'username' field of the user
       store.db.collection('users').doc(store.firestore_user.email).update({username: username_textfield});
       setIn_editmode(false);
 
+      // update other docs (recipe docs) with this username
       toChangePromise(store.firestore_user.username).then((loadedIds) => {
         console.log("Yay!! loaded " + loadedIds)
         loadedIds.map( _id => {
           store.db.collection('recipes').doc(_id).update({user: username_textfield});
+        });
       });
-
     });
-
-  });
-
   }
 
 
   // update in Firebase
   function save_img() {
 
-    console.log("set img url to: XXX")
+    console.log("set img url to: " + imageUrl)
 
+    // Set the 'username' field of the user
+    store.db.collection('users').doc(store.firestore_user.email).update({profile_img_url: imageUrl});
   }
 
   function newName() {
@@ -172,20 +194,35 @@ function Settings(props) {
   }
 
   const randomImg = () => {
-    console.log("random img")
+
+    let continue_search = true;
+    let img_index, temp_url;
+    do {
+
+      img_index = Math.floor(Math.random() * imageUrlList.length);
+      temp_url = imageUrlList[img_index];
+
+      if(temp_url !== imageUrl) {
+        continue_search = false;
+        setImageUrl(temp_url);
+      }
+
+    } while(continue_search);
   }
 
   const onExpand = (e, expanded, id) => {
     let openval = expanded ? id : "";
     setOpenSetting(openval);
+    cancel_edit();
   }
 
-  console.log("openSetting: " + openSetting)
+  //console.log("openSetting: " + openSetting)
   //let signText = (firebase.auth().currentUser) ? "Logga ut" : "Logga in";
 
   // let username = (store.firestore_user) ? store.firestore_user.username : "unset";
 
-  let img_src = (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : undefined;
+  // fix if undefined
+  let img_src = imageUrl; // (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : undefined;
 
   return (
 
@@ -273,12 +310,12 @@ function Settings(props) {
           >
             <Typography className={classes.heading}>Profilbild</Typography>
           </ExpansionPanelSummary>
-          <ExpansionPanelDetails style={{display: 'flex'}}>
+          <ExpansionPanelDetails style={{display: 'flex', flexWrap: 'wrap'}}>
 
             { img_src &&
-
-            <img src={img_src} className={classes.profileimage}  alt={"profile img"} />
-
+            <div className={classes.fullrow}>
+              <img src={img_src} className={classes.profileimage}  alt={"profile img"} />
+            </div>
             }
 
             { !in_editmode &&
@@ -338,7 +375,9 @@ function Settings(props) {
 
     </div>
   );
-} // className={classes.formlabel}
+}
+// className={classes.formlabel}
+// style={{display: 'flex', flexWrap: 'wrap'}
 
 const useStyles = makeStyles({
   login_div: {
@@ -367,7 +406,12 @@ const useStyles = makeStyles({
 },
 profileimage: {
   marginLeft: 'auto',
-  marginRight: 'auto'
+  marginRight: 'auto',
+  marginBottom: '15px'
+},
+fullrow: {
+  flex: '0 0 100%',
+  display: 'flex'
 }
 });
 

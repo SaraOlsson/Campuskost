@@ -44,21 +44,21 @@ function ProfilePage(props) {
     recipeFetcher_new(username_url);
 
     if(store.firestore_user && username_url === store.firestore_user.username) {
-      console.log("firestore_user changed: " + store.firestore_user.username)
-      console.log("same as logged in")
+      //console.log("firestore_user changed: " + store.firestore_user.username)
+      //console.log("same as logged in")
       setIfUser(true)
       followFetcher(username_url, store.firestore_user.email, "followers");
       followFetcher(username_url, store.firestore_user.email, "following");
     } else if ( store.firestore_user && username_url !== store.firestore_user.username ) {
 
-      console.log("someone else than firestore_user: " + username_url)
+      //console.log("someone else than firestore_user: " + username_url)
       getEmail(username_url)
       setIfUser(false)
     }
 
     // get email of user
     email_promise(username_url).then((loadedDoc) => {
-      console.log("got email: " + loadedDoc.email)
+      //console.log("got email: " + loadedDoc.email)
       setUser(loadedDoc)
     });
 
@@ -169,7 +169,7 @@ function ProfilePage(props) {
       store.db.collection("users").doc(item.email)
       .onSnapshot(function(doc) {
           let data = doc.data();
-          followers.push({username: data.username, fullname: data.fullname, follows: false});
+          followers.push({username: data.username, fullname: data.fullname, profile_img_url: data.profile_img_url, follows: false});
       })
     });
 
@@ -272,6 +272,14 @@ function ProfilePage(props) {
   // let followBtn =
 
   let uni = (store.firestore_user != undefined) ? store.firestore_user.university : undefined;
+  //let img_src = (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : userchef;
+
+  let img_src = userchef; // default user image
+  if (ifUser && store.firestore_user && store.firestore_user.profile_img_url) {
+    img_src = store.firestore_user.profile_img_url; // page shows profile for this user
+  } else if (!ifUser && user && user.profile_img_url) {
+    img_src = user.profile_img_url
+  }
 
   //console.log("rerender ")
   return (
@@ -300,7 +308,7 @@ function ProfilePage(props) {
           {followBtn}
         </Grid>
         <Grid item xs={3}>
-          <img src={userchef} alt="userchef"/>
+          <img src={img_src} alt="user-profile-img"/>
         </Grid>
 
       </Grid>

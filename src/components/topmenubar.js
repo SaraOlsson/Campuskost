@@ -23,75 +23,6 @@ import LinkUI from '@material-ui/core/Link';
 import { useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
-const useStyles = makeStyles(theme => ({
-  grow: {
-    flexGrow: 1,
-    marginBottom: '50px'
-  },
-  menuButton: {
-    marginRight: 0, // theme.spacing(2),
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    width: theme.spacing(7),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 7),
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: 200,
-    },
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-  whiteColor: {
-    color: 'white'
-  },
-  buttonPad: {
-    padding: '6px',
-    fontSize: 'small'
-  }
-}));
 
 function ProfileBtn (props) {
 
@@ -111,7 +42,15 @@ function ProfileBtn (props) {
       </Button>
     </div> );
 
-  let jsx_content = props.signedIn ? <AccountCircleIcon/> : btn;
+  // make sure info is loaded
+  let img_src = (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : undefined;
+
+  // if user has no profile image set in firebase
+  if (img_src === undefined) {
+    img_src = <AccountCircleIcon/>;
+  }
+
+  let jsx_content = props.signedIn ? <img src={img_src} className={classes.smallprofileimage} alt={"profile img"} /> : btn;
 
   if(props.signedIn === true && store.firestore_user)
   {
@@ -272,5 +211,78 @@ function TopMenuBar(props) {
     </div>
   );
 }
+
+const useStyles = makeStyles(theme => ({
+  grow: {
+    flexGrow: 1,
+    marginBottom: '50px'
+  },
+  menuButton: {
+    marginRight: 0, // theme.spacing(2),
+  },
+  title: {
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
+  },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(3),
+      width: 'auto',
+    },
+  },
+  searchIcon: {
+    width: theme.spacing(7),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 7),
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: 200,
+    },
+  },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
+    },
+  },
+  sectionMobile: {
+    display: 'flex',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
+  },
+  whiteColor: {
+    color: 'white'
+  },
+  buttonPad: {
+    padding: '6px',
+    fontSize: 'small'
+  },
+  smallprofileimage: {
+    width: '40px'
+  }
+}));
 
 export default TopMenuBar;
