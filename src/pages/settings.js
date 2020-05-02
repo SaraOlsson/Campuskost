@@ -167,7 +167,7 @@ function Settings(props) {
   // update in Firebase
   function save_img() {
 
-    console.log("set img url to: " + imageUrl)
+    //console.log("set img url to: " + imageUrl)
 
     // Set the 'username' field of the user
     store.db.collection('users').doc(store.firestore_user.email).update({profile_img_url: imageUrl});

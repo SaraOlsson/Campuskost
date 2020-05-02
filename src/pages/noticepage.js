@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from "react-redux";
 
 // import '../style/GlobalCssButton.css';
 // import * as ui from '../meterialuiimports';
@@ -21,6 +22,9 @@ import PersonIcon from '@material-ui/icons/Person';
 const useStyles = makeStyles({
   body: {
     padding: 15
+  },
+  smallprofileimage: {
+    width: '40px'
   }
 });
 
@@ -44,6 +48,7 @@ const B = (props) => <span style={{fontWeight: 'bold'}}>{props.children}</span>
 
 function NoticeListItem(props) {
 
+  const classes = useStyles();
   const history = useHistory();
   let noticeText;
 
@@ -54,7 +59,8 @@ function NoticeListItem(props) {
 
   const recipeClick = () => {
     console.log("well hello " + props.recipe)
-    //history.push("/profile/" + props.user );
+    let recipe_title = props.recipe.substring(0, props.recipe.indexOf("-"));
+    history.push("/recipe/" + recipe_title + "/" + props.recipe );
   };
 
   switch (props.type) {
@@ -62,10 +68,14 @@ function NoticeListItem(props) {
       noticeText = <span onClick={userClick}><B>{props.user}</B> följer nu dig.</span>;
       break;
     case "TIPS":
-      noticeText = <div><span onClick={userClick}><B>{props.user}</B></span> <span onClick={recipeClick}>tipsar dig om att laga <B>{props.recipe}</B>.</span></div>;
+      noticeText = <div>
+                  <span onClick={userClick}><B>{props.user}</B></span> <span onClick={recipeClick}>tipsar dig om att laga <B>{props.recipe}</B>.</span>
+                  </div>;
       break;
     case "TESTED":
-      noticeText = <div><span onClick={userClick}><B>{props.user}</B></span> <span onClick={recipeClick}>har testat ditt recept <B>{props.recipe}</B>.</span></div>;
+      noticeText = <div>
+                    <span onClick={userClick}><B>{props.user}</B></span> <span onClick={recipeClick}>har testat ditt recept <B>{props.recipe}</B>.</span>
+                  </div>;
     default:
 
   }
@@ -73,13 +83,30 @@ function NoticeListItem(props) {
   // if(props.type === "FOLLOWS")
   //  noticeText = <span><B>{props.user}</B> följer nu dig.</span>;
 
+
+  let user_avatar = undefined;
+
+  if(props.eventimg != undefined) {
+    user_avatar = <img src={props.eventimg} className={classes.smallprofileimage} alt={"profile-img"} />; //
+  } else {
+    user_avatar = (
+      <Avatar>
+          <PersonIcon />
+      </Avatar>
+    );
+  }
+  /*
+  user_avatar = (
+    <Avatar>
+        <PersonIcon />
+    </Avatar>
+  ); */
+
   return (
 
     <ListItem>
       <ListItemAvatar>
-        <Avatar>
-            <PersonIcon />
-        </Avatar>
+        {user_avatar}
       </ListItemAvatar>
 
       <ListItemText
@@ -100,25 +127,74 @@ function NoticeListItem(props) {
 
 function NoticePage(props) {
 
+  const [eventList, setEventList] = useState(undefined);
+
   const classes = useStyles();
-  // console.log(props)
+  const store = useSelector(state => state.fireReducer);
+
+  // when url changes, on load and on user click
+  useEffect(() => {
+
+    if(store.firestore_user === undefined)
+      return;
+
+    // get email of user
+    events_promise(store.firestore_user.email).then((loadedDocs) => {
+      console.log(loadedDocs)
+      setEventList(loadedDocs)
+      //setUser(loadedDoc)
+    });
+
+  }, [store.firestore_user]);
+
+  var events_promise = function(email) {
+    return new Promise((resolve, reject) => {
+
+      store.db.collection('events').where('email', '==', email).get()
+        .then(snapshot => {
+
+          let doc_data = [];
+          snapshot.forEach(doc => {
+            let temp_data = doc.data();
+            doc_data.push(temp_data);
+          });
+          resolve(doc_data)
+        })
+    });
+  }
+
+
+  let eventListjsx = (eventList) ? eventList.map( event =>
+    <NoticeListItem type={event.type} user={event.other_username} recipe={event.recipe || undefined} time="2 dgr" eventimg={event.event_image_url}/>
+  ) : null;
 
   return (
 
     <div>
     <h3>Dina notiser</h3>
 
-    <List dense={true}>
-      <NoticeListItem type="FOLLOWS" user="Vegokocken" time="1 h"/>
-      <NoticeListItem type="TIPS" user="DelicatoKing" recipe="Linsgryta" time="3 h"/>
-      <NoticeListItem type="TESTED" user="PastaMaster" recipe="Korvstroganoff" time="2 dgr"/>
-    </List>
+    { eventList &&
+      <List dense={true}>
+        {eventListjsx}
+      </List>
+    }
 
     </div>
 
   );
 
 }
+
+/*
+
+<List dense={true}>
+  <NoticeListItem type="FOLLOWS" user="Vegokocken" time="1 h"/>
+  <NoticeListItem type="TIPS" user="DelicatoKing" recipe="Linsgryta" time="3 h"/>
+  <NoticeListItem type="TESTED" user="PastaMaster" recipe="Korvstroganoff" time="2 dgr"/>
+</List>
+
+*/
+
 
 /*
 

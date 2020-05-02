@@ -46,11 +46,14 @@ function ProfileBtn (props) {
   let img_src = (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : undefined;
 
   // if user has no profile image set in firebase
+  /*
   if (img_src === undefined) {
     img_src = <AccountCircleIcon/>;
-  }
+  } */
 
-  let jsx_content = props.signedIn ? <img src={img_src} className={classes.smallprofileimage} alt={"profile img"} /> : btn;
+  let icon_content = (img_src !== undefined) ? <img src={img_src} className={classes.smallprofileimage} alt={"profile img"} /> : <AccountCircleIcon/>;
+
+  let jsx_content = props.signedIn ? icon_content : btn;
 
   if(props.signedIn === true && store.firestore_user)
   {
