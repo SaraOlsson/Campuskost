@@ -9,7 +9,9 @@ import 'firebase/auth';
 import 'firebase/firestore';
 // import { useHistory } from "react-router-dom";
 // import { incrementdispatch } from './actions/RecipeActions';
+import * as serviceWorker from './serviceWorker';
 
+import MySnackbar from './components/snackbar';
 // import our css
 import './App.css';
 import './style/GlobalCssButton.css';
@@ -93,6 +95,7 @@ function App(props) {
 
   const [value, setValue] = React.useState('default');
   const [redirect, setRedirect] = React.useState(false);
+  const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
 
   const classes = useStyles();
   const dispatch = useDispatch(); // be able to dispatch
@@ -101,6 +104,11 @@ function App(props) {
 
   // runs once on start
   useEffect(() => {
+
+    if(serviceWorker.hasUpdates === true) {
+      setOpenUpdateDialog(true);
+    }
+
 
     // set listener for authentication changes
     // either only set redux object or also create firestore instance
@@ -180,12 +188,18 @@ function App(props) {
     dispatch({ type: "SETSTORAGE", storage: storage });
   }
 
+  const closeDialog = (action) => {
+    setOpenUpdateDialog(false);
+  };
+
   // used in TopMenuBar, which needs to be refactored
   const handleChange = (event = undefined, newValue) => {
 
     console.log("heello" + newValue + ".")
 
   };
+
+  let update_message = 'New content is available and will be used when all tabs for this page are closed';
 
   // jsx code, looks like html
   // renders top bar, page content and bottom bar.
@@ -215,6 +229,8 @@ function App(props) {
             <Route path="/lists" component={ListPage}/>
             <Redirect exact path="/" to="/home" />
           </Switch>
+
+          <MySnackbar open={openUpdateDialog} handleClose={closeDialog} message={update_message} action={""}/>
 
         </div>
         <div className={classes.footer}>

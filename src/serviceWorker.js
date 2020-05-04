@@ -20,6 +20,8 @@ const isLocalhost = Boolean(
     )
 );
 
+export const hasUpdates = false;
+
 export function register(config) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
@@ -71,11 +73,14 @@ function registerValidSW(swUrl, config) {
               // content until all client tabs are closed.
 
               // Sara added: Reload the page if new content is available
+              /*
               navigator.serviceWorker.ready.then(registration => {
                 registration.unregister().then(() => {
                   window.location.reload();
                 });
-              });
+              }); */
+
+              hasUpdates = true;
 
               console.log(
                 'New content is available and will be used when all ' +
