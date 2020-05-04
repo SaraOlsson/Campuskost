@@ -61,6 +61,10 @@ function registerValidSW(swUrl, config) {
     .register(swUrl)
     .then(registration => {
       registration.onupdatefound = () => {
+
+        hasUpdates = true;
+        window.location.reload();
+
         const installingWorker = registration.installing;
         if (installingWorker == null) {
           return;
@@ -79,8 +83,6 @@ function registerValidSW(swUrl, config) {
                   window.location.reload();
                 });
               }); */
-
-              hasUpdates = true;
 
               console.log(
                 'New content is available and will be used when all ' +

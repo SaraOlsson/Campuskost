@@ -124,7 +124,7 @@ function NewsContainer(props) {
 
   return (
     <div>
-    <h3>Populärt den här veckan</h3>
+    <h3>Senaste recepten</h3>
     <Grid
       container
       spacing={1}
