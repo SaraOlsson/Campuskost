@@ -69,8 +69,14 @@ function registerValidSW(swUrl, config) {
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
-              
-              window.location.reload(true);
+
+              // Sara added: Reload the page if new content is available
+              navigator.serviceWorker.ready.then(registration => {
+                registration.unregister().then(() => {
+                  window.location.reload();
+                });
+              });
+
               console.log(
                 'New content is available and will be used when all ' +
                   'tabs for this page are closed. See https://bit.ly/CRA-PWA.'
