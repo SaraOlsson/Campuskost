@@ -120,11 +120,11 @@ function NewsContainer(props) {
     return null; // <p style={{margin: 15}}>Sorry chefs, an issue! probably no internet connection.</p>
 
   //console.log(props.recipes)
-  let viral_header = (props.recipes !== undefined && props.recipes[0] !== undefined ) ? props.recipes[0].title : "Veckans favvo ";
+  let viral_header = (props.recipes !== undefined && props.recipes[1] !== undefined ) ? props.recipes[0].title : "Veckans favvo: ";
 
   return (
     <div>
-    <h3>Populärt just nu</h3>
+    <h3>Populärt den här veckan</h3>
     <Grid
       container
       spacing={1}
@@ -136,7 +136,7 @@ function NewsContainer(props) {
       <Grid item xs={5}>
 
         {props.recipes !== undefined &&
-          <GridList><RecipeItem recipe={props.recipes[0]} /></GridList>
+          <GridList><RecipeItem recipe={props.recipes[1]} /></GridList>
         }
 
       </Grid>
