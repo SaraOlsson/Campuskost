@@ -19,14 +19,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 import ForwardIcon from '@material-ui/icons/Forward';
 import PersonIcon from '@material-ui/icons/Person';
 
-const useStyles = makeStyles({
-  body: {
-    padding: 15
-  },
-  smallprofileimage: {
-    width: '40px'
-  }
-});
+var Spinner = require('react-spinkit');
 
 function generate(element) {
   return [0, 1, 2].map(value =>
@@ -59,9 +52,14 @@ function NoticeListItem(props) {
 
   const recipeClick = () => {
     console.log("well hello " + props.recipe)
-    let recipe_title = props.recipe.substring(0, props.recipe.indexOf("-"));
-    history.push("/recipe/" + recipe_title + "/" + props.recipe );
+    // let recipe_title = props.recipe.substring(0, props.recipe.indexOf("-"));
+    history.push("/recipe/" + recipe_id_to_title(props.recipe) + "/" + props.recipe );
   };
+
+  const recipe_id_to_title = (recipe_id) => {
+    let recipe_title = props.recipe.substring(0, props.recipe.indexOf("-"));
+    return recipe_title;
+  }
 
   switch (props.type) {
     case "FOLLOWS":
@@ -69,12 +67,12 @@ function NoticeListItem(props) {
       break;
     case "TIPS":
       noticeText = <div>
-                  <span onClick={userClick}><B>{props.user}</B></span> <span onClick={recipeClick}>tipsar dig om att laga <B>{props.recipe}</B>.</span>
+                  <span onClick={userClick}><B>{props.user}</B></span> <span onClick={recipeClick}>tipsar dig om att laga <B>{recipe_id_to_title(props.recipe)}</B>.</span>
                   </div>;
       break;
     case "TESTED":
       noticeText = <div>
-                    <span onClick={userClick}><B>{props.user}</B></span> <span onClick={recipeClick}>har testat ditt recept <B>{props.recipe}</B>.</span>
+                    <span onClick={userClick}><B>{props.user}</B></span> <span onClick={recipeClick}>har testat ditt recept <B>{recipe_id_to_title(props.recipe)}</B>.</span>
                   </div>;
     default:
 
@@ -140,7 +138,7 @@ function NoticePage(props) {
 
     // get email of user
     events_promise(store.firestore_user.email).then((loadedDocs) => {
-      console.log(loadedDocs)
+      // console.log(loadedDocs)
       setEventList(loadedDocs)
       //setUser(loadedDoc)
     });
@@ -164,8 +162,8 @@ function NoticePage(props) {
   }
 
 
-  let eventListjsx = (eventList) ? eventList.map( event =>
-    <NoticeListItem type={event.type} user={event.other_username} recipe={event.recipe || undefined} time="2 dgr" eventimg={event.event_image_url}/>
+  let eventListjsx = (eventList) ? eventList.map( (event, idx) =>
+    <NoticeListItem key={idx} type={event.type} user={event.other_username} recipe={event.recipe || undefined} time="2 dgr" eventimg={event.event_image_url}/>
   ) : null;
 
   return (
@@ -173,17 +171,39 @@ function NoticePage(props) {
     <div>
     <h3>Dina notiser</h3>
 
+    { !eventList &&
+      <div className={classes.spinner}><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>
+    }
+
     { eventList &&
       <List dense={true}>
         {eventListjsx}
       </List>
     }
+    { (eventList && eventList.length < 1) &&
+      <p> Ledsen, inga händelsen än. Börja interagera med dina kockvänner! 🍳 </p>
+    }
+
 
     </div>
 
   );
 
 }
+
+const useStyles = makeStyles({
+  body: {
+    padding: 15
+  },
+  smallprofileimage: {
+    width: '40px'
+  },
+  spinner: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 100
+  }
+});
 
 /*
 

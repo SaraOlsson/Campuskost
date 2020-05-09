@@ -22,6 +22,12 @@ const isLocalhost = Boolean(
 
 export let hasUpdates = false;
 
+/*
+export function checkMyUpdate() {
+
+  return hasUpdates;
+}*/
+
 export function register(config) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
@@ -130,7 +136,7 @@ function checkValidServiceWorker(swUrl, config) {
           });
         });
       } else {
-        // Service worker found. Proceed as normal.
+        console.log("Service worker found. Proceed as normal.")
         registerValidSW(swUrl, config);
       }
     })

@@ -102,13 +102,18 @@ function App(props) {
   const state_user = useSelector(state => state.userReducer); // subscribe to the redux store
   const store = useSelector(state => state.fireReducer); // subscribe to the redux store
 
-  // runs once on start
   useEffect(() => {
+
+    // console.log(serviceWorker.hasUpdates)
 
     if(serviceWorker.hasUpdates === true) {
       setOpenUpdateDialog(true);
     }
 
+  }, [serviceWorker.hasUpdates]); // end useEffect
+
+  // runs once on start
+  useEffect(() => {
 
     // set listener for authentication changes
     // either only set redux object or also create firestore instance
@@ -320,7 +325,8 @@ const useStyles = makeStyles({
     position: 'fixed',
     left: 0,
     top: 0,
-    width: 100 + '%'
+    width: 100 + '%',
+    zIndex: 10
   },
   profileBtn: {
     color: 'green'

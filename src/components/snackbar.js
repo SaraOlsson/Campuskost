@@ -44,7 +44,6 @@ export default function MySnackbar(props) {
         autoHideDuration={6000}
         onClose={handleClose}
         message={props.message}
-        ClickAwayListenerProps
         action={
           <React.Fragment>
             <Button color="secondary" size="small" onClick={handleAction} style={{marginRight: '25px'}}>

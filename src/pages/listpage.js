@@ -74,7 +74,7 @@ window.oncontextmenu = function(event) {
 
 function ListPage() {
 
-    const [listState, setlistState] = React.useState([]);
+    const [listState, setlistState] = React.useState(undefined);
     const [likes, setLikes] = React.useState(undefined);
     const [recipes, setRecipes] = React.useState([]);
     const [lists_by_user, setLists_by_user] = React.useState([]);
@@ -122,6 +122,11 @@ function ListPage() {
 
       // lists likes for the user
       getLikesDocsForUser(current_email).then((like_docs) => {
+
+        // if user has no liked recipes
+        if(!like_docs)
+          return;
+
         setLikes(like_docs); // console.log("Mu! loaded " + loadedDoc)
 
         let liked_recipes_ids = like_docs.liked_recipes;
@@ -288,7 +293,7 @@ function ListPage() {
 
 
     let lists_by_user_jxs = lists_by_user.map((list_doc, i) =>
-      <Droppable droppableId={"list_" + i} direction="horizontal">
+      <Droppable key={"list_" + i} droppableId={"list_" + i} direction="horizontal">
           {(provided, snapshot) => {
 
             return (
@@ -301,8 +306,7 @@ function ListPage() {
                 </div>
 
                 { !isDragging &&
-                <div
-                  className={isDragging ? classes.displayNone : null}>
+                <div>
                     <ListContainer key={i}
                        listdoc={list_doc}
                        noheader={false} mine={true}
@@ -316,10 +320,20 @@ function ListPage() {
     );
 
     //                  recipeDocs={list_doc.recipeDocs}
+    // className={isDragging ? classes.displayNone : null}
 
-    return (listState.length > 0) ? (
+    let starter_content = (<div>
+      <p> Du har inga gillade recept än</p>
+    </div>);
+
+    let loading_or_starting = (listState && listState.length < 1) ? starter_content : <p>spinner</p>;
+
+    return (listState && listState.length > 0) ? (
       <div style={{margin: 10}}>
         <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+
+            <h3>Gillade recept</h3>
+
             <div className={classes.listDroppable}>
                 <Droppable droppableId="droppable" direction="horizontal">
                     {(provided, snapshot) => (
@@ -352,13 +366,15 @@ function ListPage() {
                 </Droppable>
             </div>
 
-            <h3>Listor</h3>
+            <h3>Mina listor</h3>
 
               <div style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px', padding: '15px'}}
                    className="profilepageLists"
                 >
                 {lists_by_user_jxs}
               </div>
+
+            <h3>Listor jag följer</h3>
 
         </DragDropContext>
       </div>

@@ -9,7 +9,8 @@ import 'firebase/auth';
 import SimpleTabs from '../components/userpagetabs';
 import RecipeGridList from '../components/recipegrid';
 import FollowerList from '../components/followerlist';
-import FavoritePage from '../pages/favoritepage';
+// import FavoritePage from '../pages/favoritepage';
+import ListPage from '../pages/listpage';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -41,15 +42,21 @@ function ProfilePage(props) {
   // when url changes, on load and on user click
   useEffect(() => {
 
+    // CLEAN UP - can be done better
+
     recipeFetcher_new(username_url);
 
     if(store.firestore_user && username_url === store.firestore_user.username) {
       //console.log("firestore_user changed: " + store.firestore_user.username)
       //console.log("same as logged in")
+      console.log("if")
+
       setIfUser(true)
       followFetcher(username_url, store.firestore_user.email, "followers");
       followFetcher(username_url, store.firestore_user.email, "following");
     } else if ( store.firestore_user && username_url !== store.firestore_user.username ) {
+
+      console.log("else if")
 
       //console.log("someone else than firestore_user: " + username_url)
       getEmail(username_url)
@@ -59,6 +66,7 @@ function ProfilePage(props) {
     // get email of user
     email_promise(username_url).then((loadedDoc) => {
       //console.log("got email: " + loadedDoc.email)
+      console.log("email_promise")
       setUser(loadedDoc)
     });
 
@@ -81,17 +89,39 @@ function ProfilePage(props) {
   }
 
   const followUser = () => {
-    console.log(store.firestore_user.username + " will follow " + username_url)
 
-    console.log(following_this_user)
+    // console.log(store.firestore_user.username + " will follow " + username_url)
+    // console.log(following_this_user)
+
+    let firebase_event_id = store.firestore_user.email + "-follows-" + following_this_user.email;
 
     // in following, remove from following list
     if(following_this_user.following) {
       store.db.collection("followers").doc(store.firestore_user.email).collection("following").doc(following_this_user.email).delete();
+      store.db.collection("followers").doc(following_this_user.email).collection("followers").doc(store.firestore_user.email).delete();
+      store.db.collection('events').doc(firebase_event_id).delete();
+
     } else {
       store.db.collection("followers").doc(store.firestore_user.email).collection("following").doc(following_this_user.email).set({});
+      store.db.collection("followers").doc(following_this_user.email).collection("followers").doc(store.firestore_user.email).set({});
+
+      let date = new Date();
+
+      let event_follow_object = {
+        email: following_this_user.email,
+        event_image_url: store.firestore_user.profile_img_url,
+        other_username: store.firestore_user.username,
+        timestamp: date,
+        type: "FOLLOWS",
+        seen: false
+      };
+
+      store.db.collection('events').doc(firebase_event_id).set(event_follow_object);
+
     }
-    setFollowing_this_user(!following_this_user);
+
+    setFollowing_this_user({following: !following_this_user.following, email: following_this_user.email});
+
   }
 
   // get email correspoding to username
@@ -318,7 +348,7 @@ function ProfilePage(props) {
         { recipeContent }
         </div>
         <div>
-        <FavoritePage otheruser={user}/>
+        <ListPage/>
         </div>
         <div>
         <FollowerList followerData={followInfo}/>
