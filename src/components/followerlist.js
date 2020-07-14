@@ -42,11 +42,13 @@ function FollowerListItem(props) {
         onClick={() => props.handleChange(user.username)}
       />
 
+      { props.showFollowIcon &&
       <ListItemSecondaryAction>
         <IconButton edge="end" aria-label="follows">
           <CheckCircleIcon className={(user.follows ? classes.followColor : classes.notfollowColor)}/>
         </IconButton>
       </ListItemSecondaryAction>
+      }
     </ListItem>
 
   );
@@ -83,7 +85,7 @@ function FollowerList(props) {
   }
 
   let followersjsx = followData.map((user, idx) =>
-    <FollowerListItem key={idx} user={user} handleChange={handleUserClick}/>
+    <FollowerListItem key={idx} user={user} handleChange={handleUserClick} showFollowIcon={props.showFollowIcon}/>
   );
 
   return (

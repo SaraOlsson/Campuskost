@@ -48,7 +48,7 @@ function SearchPage(props) {
   }
 
   let followingInfo = users.map( user => {
-    let obj = {username: user.username, fullname: "", profile_img_url: user.profile_img_url, follows: false};
+    let obj = {username: user.username, fullname: user.fullname, profile_img_url: user.profile_img_url, follows: false};
     return obj;
   });
 

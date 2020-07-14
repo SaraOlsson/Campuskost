@@ -45,7 +45,7 @@ function SimpleDialog(props) {
 
   const handleListItemClick = (friend) => {
     console.log("tips to: ", friend.email)
-    onClose(friend);
+    onClose(friend.email);
 
     let date = new Date();
 
@@ -59,7 +59,7 @@ function SimpleDialog(props) {
       seen: false
     };
 
-    let firebase_event_id = store.firestore_user.email + "-tips-" + friend.email;
+    let firebase_event_id = store.firestore_user.email + "-tips-" + friend.email + "-" + props.recipeId;
 
     store.db.collection('events').doc(firebase_event_id).set(event_tips_object);
   };

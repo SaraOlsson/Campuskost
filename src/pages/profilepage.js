@@ -334,16 +334,16 @@ function ProfilePage(props) {
         <Grid item xs={6}>
           <span className={classes.username}>{username_url}</span>
 
-          { store.firestore_user != undefined &&
-            <span className={classes.university}> | {store.firestore_user.fullname}</span>
+          { user != undefined &&
+            <span className={classes.university}> | {user.fullname}</span>
           }
 
-          { store.firestore_user != undefined &&
-            <p className={classes.university}>🎓{store.firestore_user.university}</p>
+          { user != undefined &&
+            <p className={classes.university}>🎓{user.university}</p>
           }
 
-          { (store.firestore_user != undefined && store.firestore_user.bio != undefined ) &&
-            <p className={classes.bio}><i>{store.firestore_user.bio}</i></p>
+          { (user != undefined && user.bio != undefined ) &&
+            <p className={classes.bio}><i>{user.bio}</i></p>
           }
 
           {ifUser && <Button
@@ -370,10 +370,10 @@ function ProfilePage(props) {
         <ListPage/>
         </div>
         <div>
-        <FollowerList followerData={followInfo}/>
+        <FollowerList followerData={followInfo} showFollowIcon={true}/>
         </div>
         <div>
-        <FollowerList followerData={followingInfo}/>
+        <FollowerList followerData={followingInfo} showFollowIcon={true}/>
         </div>
       </SimpleTabs>
 

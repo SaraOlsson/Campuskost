@@ -64,16 +64,23 @@ function NoticeListItem(props) {
 
   switch (props.type) {
     case "FOLLOWS":
-      noticeText = <span onClick={userClick}><B>{props.user}</B> följer nu dig.</span>;
+      noticeText = <div>
+                   <span className={classes.pointer} onClick={userClick}><B>{props.user}</B></span>
+                   <span> följer nu dig. </span>
+                   </div>;
       break;
     case "TIPS":
       noticeText = <div>
-                  <span onClick={userClick}><B>{props.user}</B></span> <span onClick={recipeClick}>tipsar dig om att laga <B>{recipe_id_to_title(props.recipe)}</B>.</span>
+                  <span className={classes.pointer} onClick={userClick}><B>{props.user}</B></span>
+                  <span> tipsar dig om att laga </span>
+                  <span className={classes.pointer} onClick={recipeClick}><B>{recipe_id_to_title(props.recipe)}</B>.</span>
                   </div>;
       break;
     case "TESTED":
       noticeText = <div>
-                    <span onClick={userClick}><B>{props.user}</B></span> <span onClick={recipeClick}>har testat ditt recept <B>{recipe_id_to_title(props.recipe)}</B>.</span>
+                    <span className={classes.pointer} onClick={userClick}><B>{props.user}</B></span>
+                    <span> har testat ditt recept </span>
+                    <span className={classes.pointer} onClick={recipeClick}><B>{recipe_id_to_title(props.recipe)}</B>.</span>
                   </div>;
     default:
 
@@ -86,7 +93,7 @@ function NoticeListItem(props) {
   let user_avatar = undefined;
 
   if(props.eventimg != undefined) {
-    user_avatar = <img src={props.eventimg} className={classes.smallprofileimage} alt={"profile-img"} />; //
+    user_avatar = <img src={props.eventimg} className={classes.smallprofileimage + ' ' + classes.pointer } alt={"profile-img"} />; //
   } else {
     user_avatar = (
       <Avatar>
@@ -113,14 +120,20 @@ function NoticeListItem(props) {
         secondary={true ? props.time : null}
       />
 
-      <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="delete">
-          <ForwardIcon />
-        </IconButton>
-      </ListItemSecondaryAction>
+
     </ListItem>
 
   );
+
+  /*
+
+  <ListItemSecondaryAction>
+    <IconButton edge="end" aria-label="delete">
+      <ForwardIcon />
+    </IconButton>
+  </ListItemSecondaryAction>
+
+  */
 
 }
 
@@ -167,7 +180,7 @@ function NoticePage(props) {
 
   let spinnerjsx = <LoadSpinner/> // <div className={classes.spinner}><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
   let eventListjsx = (eventList) ? eventList.map( (event, idx) =>
-    <NoticeListItem key={idx} type={event.type} user={event.other_username} recipe={event.recipe || undefined} time="2 dgr" eventimg={event.event_image_url}/>
+    <NoticeListItem key={idx} type={event.type} user={event.other_username} recipe={event.recipe || undefined} time="" eventimg={event.event_image_url}/>
   ) : spinnerjsx;
 
   /*
@@ -210,6 +223,9 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     marginTop: 100
+  },
+  pointer: {
+   cursor: 'pointer'
   }
 });
 
