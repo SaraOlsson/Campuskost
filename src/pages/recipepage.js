@@ -6,6 +6,9 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux";
 // import { recipeFetch } from '../actions/RecipeActions';
 import SimpleDialog from '../components/simpledialog';
+import PickUserDialog from '../components/pickuserdialog';
+//import DescriptionList from '../components/descriptionlist';
+//import IngredientsList from '../components/ingredientslist';
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -33,6 +36,7 @@ function RecipePage(props) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     // someFetcher();
@@ -67,14 +71,25 @@ function RecipePage(props) {
 
   const likeFetcher = (current_email) => {
 
+    // let recipe_likesRef = store.db.collection('recipe_likes');
     let likesRef = store.db.collection('recipe_likes').doc(current_email);
+
     likesRef.get().then(function(doc) {
 
-      let data = doc.data();
-      let isliked = ( data.liked_recipes[recipe.id] !== undefined ) ? data.liked_recipes[recipe.id] : false;
+      let isliked;
 
-      if (isliked)
-        setSaved({likes: true, doc_id: doc.id});
+      if (doc.exists) {
+
+        let data = doc.data();
+        isliked = ( data.liked_recipes[recipe.id] !== undefined ) ? data.liked_recipes[recipe.id] : false;
+
+      } else {
+        store.db.collection('recipe_likes').doc(current_email).set({liked_recipes: {}});
+        isliked = false;
+      }
+
+      // if (isliked)
+      setSaved({likes: isliked, doc_id: current_email});
 
     })
     .catch(err => {
@@ -95,20 +110,30 @@ function RecipePage(props) {
     let likesRef = store.db.collection('recipe_likes').doc(store.firestore_user.email);
 
     likesRef.get().then(function(doc) {
-      let data = doc.data();
 
-      data.liked_recipes[recipe.id] = (saved.likes) ? false : true;
+      let data;
+      console.log("doc id: " + doc.id)
 
-      store.db.collection("recipe_likes").doc(doc.id).update(data);
+      // add or remove like
+      if (doc.exists) {
+
+        data = doc.data();
+        data.liked_recipes[recipe.id] = (saved.likes) ? false : true;
+        store.db.collection("recipe_likes").doc(doc.id).update(data);
+      }
+
     });
 
-    //setSaved( !saved );
-    setSaved({likes: !saved.likes, doc_id: !saved.doc_id});
+    setSaved({likes: !saved.likes, doc_id: saved.doc_id});
 
   };
 
   const tryRecipe = () => {
     setTried( !tried );
+  };
+
+  const recipeToFriend = () => {
+    //setTried( !tried );
   };
 
   const editRecipe = () => {
@@ -246,20 +271,9 @@ function RecipePage(props) {
             <img src={img_src} className={classes.listimage} alt={"recipe img"} />
           </Grid>
           <Grid item xs={4} className={classes.imagesidebar}>
-            { tried === true &&
-            <div className={classes.triedby} >
-              <span className={classes.triedbyText}> Testat av </span>
-              <span className={classes.triedbyNum}> {triedbyNum} </span>
-              <span className={classes.triedbyText}> { triedbyNum > 1 ? "kockar" : "kock" }! </span>
+            <div onClick={recipeToFriend}>
+              <PickUserDialog recipeId={recipe.id}/>
             </div>
-            }
-            { tried === false &&
-            <div className={classes.triedby} onClick={tryRecipe}>
-              <span className={classes.triedbyText}>
-                Bli den första att testa detta recept!
-              </span>
-            </div>
-            }
           </Grid>
         </Grid>
 
@@ -297,6 +311,27 @@ function RecipePage(props) {
 
   ); // style={{display: 'inline', backgroundColor: 'transparent', textTransform: 'none'}}
 
+  /*
+
+  // className={classes.triedby}
+
+  { tried === true &&
+  <div className={classes.triedby} >
+    <span className={classes.triedbyText}> Testat av </span>
+    <span className={classes.triedbyNum}> {triedbyNum} </span>
+    <span className={classes.triedbyText}> { triedbyNum > 1 ? "kockar" : "kock" }! </span>
+  </div>
+  }
+  { tried === false &&
+  <div className={classes.triedby} onClick={tryRecipe}>
+    <span className={classes.triedbyText}>
+      Bli den första att testa detta recept!
+    </span>
+  </div>
+  }
+
+  */
+
 }
 
 
@@ -304,11 +339,6 @@ function RecipePage(props) {
 function IngredientsList(props) {
 
   const classes = useStyles();
-
-/*
-  let ingredients = [
-  "2 dl mjöl", "1 tsk salt", "4 dl mjölk", "2 ägg"
-]; */
 
 
   let temp_ingredients = [
@@ -341,6 +371,8 @@ function IngredientsList(props) {
     </div>
   );
 }
+
+
 
 function RecipeDecsList(props) {
 
@@ -414,7 +446,8 @@ const useStyles = makeStyles({
     background: '#f1f1f1',
     borderRadius: '4px',
     padding: 5,
-    textAlign: 'center'
+    textAlign: 'center',
+    marginTop: 5
   },
   triedbyText: {
     margin: '0',

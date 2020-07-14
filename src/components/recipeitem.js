@@ -75,7 +75,15 @@ function RecipeItem(props) {
     history.push("/recipe/" + clicked_recipe.title + "/" + clicked_recipe.id );
   };
 
-  let image = <div {...backspaceLongPress}> <img src={img_src} className={classes.listimage} alt={recipe.title} alt={"recipe img"} /> </div> ;
+  // console.log(history)
+
+  let enable_press = false;
+  let image;
+
+  if (enable_press === true)
+    image = <div {...backspaceLongPress}> <img src={img_src} className={classes.listimage} alt={recipe.title} alt={"recipe img"} /> </div> ;
+  else
+    image = <div> <img src={img_src} className={classes.listimage} alt={recipe.title} alt={"recipe img"} /> </div> ;
 
   let tile_jsx;
   // if feed or list

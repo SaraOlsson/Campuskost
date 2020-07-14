@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 
 import { makeStyles } from '@material-ui/core/styles';
-import RecipeGridList from '../components/recipegrid';
+import RecipeGridList from '../components/recipegridlist';
 
 import Button from '@material-ui/core/Button';
 

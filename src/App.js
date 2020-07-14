@@ -294,11 +294,13 @@ function BottomMenuBar() {
     <BottomNavigation value={value} onChange={ (evt,value) => handleMenuClick(evt, value) } className={classes.bottomMenu}>
       <BottomNavigationAction label="Flöde" value="home" icon={<HomeRoundedIcon />} />
       <BottomNavigationAction label="Ladda up" value="upload" icon={<PublishIcon />} />
-      <BottomNavigationAction label="Notiser" value="notices" icon={<Badge badgeContent={3} color="secondary"><NotificationsIcon /></Badge>} />
+      <BottomNavigationAction label="Notiser" value="notices" icon={<NotificationsIcon />} />
       <BottomNavigationAction label="Sparat" value="saved" icon={<LoyaltyRoundedIcon />} />
     </BottomNavigation>
 
   );
+
+  // <Badge badgeContent={3} color="secondary"><NotificationsIcon /></Badge>
 
 }
 
@@ -310,7 +312,7 @@ const useStyles = makeStyles({
     paddingTop: '35px'
   },
   mainContainer: {
-    paddingTop: '50px',
+    paddingTop: '80px',
     paddingBottom: '50px'
   },
   footer: {

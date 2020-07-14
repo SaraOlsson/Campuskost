@@ -99,7 +99,7 @@ function fireReducer(state = { db: undefined, storage: undefined, auth_user: und
   }
 }
 
-function dragReducer(state = { isDragging: false, draggableId: undefined }, action) {
+function dragReducer(state = { isDragging: false, draggableId: undefined, enableDrag: false }, action) {
   switch (action.type) {
     case "SETISDRAGGING":
       return {
@@ -110,6 +110,11 @@ function dragReducer(state = { isDragging: false, draggableId: undefined }, acti
       return {
         ...state,
         draggableId: action.draggableId
+      };
+    case "SETENABLEDRAG":
+      return {
+        ...state,
+        enableDrag: action.enableDrag
       };
     default:
       return state;

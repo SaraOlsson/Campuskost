@@ -1,4 +1,15 @@
 
+body {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    /*background: #d4dcd5;*/
+}
+
+.body .MuiFormControl-root {
+  margin: 5px;
+}
+
 .body .MuiAvatar-colorDefault {
     color: #fafafa;
     background-color: #68BB8C !important;

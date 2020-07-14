@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import RecipeGridList from '../components/recipegrid';
+import RecipeGridList from '../components/recipegridlist';
 import FollowerList from '../components/followerlist';
 
 import Button from '@material-ui/core/Button';

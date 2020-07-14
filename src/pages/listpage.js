@@ -109,8 +109,10 @@ function ListPage() {
 
     useEffect(() => {
 
-      if( !store.firestore_user)
+      if( !store.firestore_user) {
+        console.log("not logged in")
         return;
+      }
 
       let current_email = store.firestore_user.email;
       console.log("list for firestore_user: " + current_email)
@@ -330,6 +332,20 @@ function ListPage() {
 
     return (listState && listState.length > 0) ? (
       <div style={{margin: 10}}>
+        <h3>Gillade recept</h3>
+        <div>
+          {listState.map((item, index) => (
+            <DraggableRecipe recipe={item} key={index} className={classes.listimage}/>
+          ))}
+        </div>
+        <h3>Mina listor</h3>
+        <p>Kommer snart! 🥳 </p>
+      </div>
+    ) : <div><h3>Gillade recept</h3><p> Ledsen, du behöver logga in för att börja spara recept! 🍳 </p></div>;
+
+    /*
+    return (listState && listState.length > 0) ? (
+      <div style={{margin: 10}}>
         <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
 
             <h3>Gillade recept</h3>
@@ -366,21 +382,26 @@ function ListPage() {
                 </Droppable>
             </div>
 
-            <h3>Mina listor</h3>
-
-              <div style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px', padding: '15px'}}
-                   className="profilepageLists"
-                >
-                {lists_by_user_jxs}
-              </div>
-
-            <h3>Listor jag följer</h3>
 
         </DragDropContext>
       </div>
-    ) : null;
-
+    ) : <div><h3>Gillade recept</h3><p> Ledsen, du behöver logga in för att börja spara recept! 🍳 </p></div>;
+    */
 }
+
+/*
+
+<h3>Mina listor</h3>
+
+  <div style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px', padding: '15px'}}
+       className="profilepageLists"
+    >
+    {lists_by_user_jxs}
+  </div>
+
+<h3>Listor jag följer</h3>
+
+*/
 
 const getListStyle = (isDraggingOver) => ({
     background: isDraggingOver ? 'lightblue' : '#68bb8c', // '#eeeeee',
@@ -406,7 +427,8 @@ const useStyles = makeStyles({
     height: '120px',
     width: '120px',
     objectFit: 'cover',
-    borderRadius: 10
+    borderRadius: 10,
+    margin: '5px'
   },
   draggingClass: {
     height: '50px',

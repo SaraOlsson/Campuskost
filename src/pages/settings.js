@@ -11,6 +11,7 @@ import 'firebase/firestore';
 
 import Button from '@material-ui/core/Button';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -28,6 +29,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 function Settings(props) {
 
   const [username_textfield, setUsername_textfield] = useState("");
+  const [fullname_textfield, setFullname_textfield] = useState("");
+  const [bio_textfield, setBio_textfield] = useState("");
+  const [imageUrl, setImageUrl] = useState(undefined);
+
   const [has_changed, setHas_changed] = useState(false);
   const [labelWidth, setLabelWidth] = useState(0);
   const [in_editmode, setIn_editmode] = useState(false);
@@ -35,12 +40,14 @@ function Settings(props) {
   const labelRef = React.useRef(null);
   const [openSetting, setOpenSetting] = useState("");
 
-  const [imageUrl, setImageUrl] = useState(undefined);
+
   const [imageUrlList, setImageUrlList] = useState([]);
 
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
   const history = useHistory();
+
+      console.log(bio_textfield)
 
   React.useEffect(() => {
     setLabelWidth(labelRef.current.offsetWidth);
@@ -62,17 +69,28 @@ function Settings(props) {
   }, []);
 
   React.useEffect(() => {
-    if(store.firestore_user && (username_textfield !== store.firestore_user.username || imageUrl !== store.firestore_user.profile_img_url)) {
-      setHas_changed(true)
+
+    if(store.firestore_user && (username_textfield !== store.firestore_user.username ||
+      imageUrl !== store.firestore_user.profile_img_url ||
+      fullname_textfield !== store.firestore_user.fullname ||
+      (store.firestore_user.bio && bio_textfield !== store.firestore_user.bio) )) {
+      setHas_changed(true);
+    } else {
+      setHas_changed(false);
     }
-  }, [username_textfield, imageUrl]);
+  }, [username_textfield, fullname_textfield, bio_textfield, imageUrl]);
 
   // when information about user signed in arrives, set textfield value
   React.useEffect(() => {
     if(store.firestore_user) {
       setUsername_textfield(store.firestore_user.username)
+      setFullname_textfield(store.firestore_user.fullname)
+
       if (store.firestore_user.profile_img_url !== undefined)
         setImageUrl(store.firestore_user.profile_img_url);
+
+      if (store.firestore_user.bio !== undefined)
+        setBio_textfield(store.firestore_user.bio);
     }
   }, [store.firestore_user]);
 
@@ -83,6 +101,8 @@ function Settings(props) {
     setIn_editmode(false);
     if(has_changed) {
       setUsername_textfield(store.firestore_user.username);
+      setFullname_textfield(store.firestore_user.fullname);
+      setBio_textfield(store.firestore_user.bio);
       setImageUrl(store.firestore_user.profile_img_url);
     }
   }
@@ -136,9 +156,29 @@ function Settings(props) {
   }
 
   // update in Firebase
-  function save_username() {
+  function save_fullname() {
 
     console.log("set username to " + username_textfield)
+
+    // Set the 'username' field of the user
+    store.db.collection('users').doc(store.firestore_user.email).update({fullname: fullname_textfield});
+    setIn_editmode(false);
+  }
+
+  // update in Firebase
+  function save_bio() {
+
+    console.log("set bio to " + bio_textfield)
+
+    // Set the 'username' field of the user
+    store.db.collection('users').doc(store.firestore_user.email).update({bio: bio_textfield});
+    setIn_editmode(false);
+  }
+
+  // update in Firebase
+  function save_username() {
+
+    console.log("set username to " + fullname_textfield)
 
     isAvailableCheck().then((is_available) => {
 
@@ -222,6 +262,8 @@ function Settings(props) {
   // let username = (store.firestore_user) ? store.firestore_user.username : "unset";
 
   // fix if undefined
+  // style={{display: 'inline-block'}}
+
   let img_src = imageUrl; // (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : undefined;
 
   return (
@@ -241,7 +283,7 @@ function Settings(props) {
           >
             <Typography className={classes.heading}>Användarnamn</Typography>
           </ExpansionPanelSummary>
-          <ExpansionPanelDetails style={{display: 'inline-block'}}>
+          <ExpansionPanelDetails>
 
             <FormControl variant="outlined">
               <InputLabel ref={labelRef} htmlFor="component-outlined"> Användarnamn </InputLabel>
@@ -293,6 +335,123 @@ function Settings(props) {
               { !isAvailable &&
               <Typography className={classes.available_text} >Namnet är upptaget</Typography>
               }
+            </React.Fragment>
+            }
+          </ExpansionPanelDetails>
+
+        </ExpansionPanel>
+
+        <ExpansionPanel
+          onChange={(e, expanded) => onExpand(e, expanded, "fullname")}
+          expanded={openSetting === "fullname"}
+          style={{background: '#fbfbfb', marginTop: '8px'}}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Namn</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+
+            <FormControl variant="outlined">
+              <InputLabel ref={labelRef} htmlFor="component-outlined"> Namn </InputLabel>
+              <OutlinedInput
+                value={fullname_textfield}
+                onChange={(e) => setFullname_textfield(e.target.value)}
+                labelWidth={labelWidth}
+                disabled={!in_editmode}
+              />
+            </FormControl>
+
+            { !in_editmode &&
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setIn_editmode(true)}
+              className={classes.buttons}
+            >
+              Ändra namn
+            </Button>
+            }
+            { in_editmode &&
+            <React.Fragment>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => cancel_edit() }
+                className={classes.buttons}
+              >
+                Avbryt
+              </Button>
+
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => save_fullname()}
+                className={classes.buttons}
+                disabled={!has_changed}
+              >
+                Spara namn
+              </Button>
+            </React.Fragment>
+            }
+          </ExpansionPanelDetails>
+
+        </ExpansionPanel>
+
+        <ExpansionPanel
+          onChange={(e, expanded) => onExpand(e, expanded, "bio")}
+          expanded={openSetting === "bio"}
+          style={{background: '#fbfbfb', marginTop: '8px'}}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Biografi</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+
+            <FormControl variant="outlined">
+
+              <TextareaAutosize
+                value={bio_textfield}
+                onChange={(e) => setBio_textfield(e.target.value)}
+                disabled={!in_editmode}
+              />
+            </FormControl>
+
+            { !in_editmode &&
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setIn_editmode(true)}
+              className={classes.buttons}
+            >
+              Ändra biografi
+            </Button>
+            }
+            { in_editmode &&
+            <React.Fragment>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => cancel_edit() }
+                className={classes.buttons}
+              >
+                Avbryt
+              </Button>
+
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => save_bio()}
+                className={classes.buttons}
+                disabled={!has_changed}
+              >
+                Spara biografi
+              </Button>
             </React.Fragment>
             }
           </ExpansionPanelDetails>

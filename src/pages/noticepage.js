@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 // import '../style/GlobalCssButton.css';
 // import * as ui from '../meterialuiimports';
+import LoadSpinner from '../components/loadspinner';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -19,7 +20,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 import ForwardIcon from '@material-ui/icons/Forward';
 import PersonIcon from '@material-ui/icons/Person';
 
-var Spinner = require('react-spinkit');
+// var Spinner = require('react-spinkit');
 
 function generate(element) {
   return [0, 1, 2].map(value =>
@@ -133,13 +134,15 @@ function NoticePage(props) {
   // when url changes, on load and on user click
   useEffect(() => {
 
-    if(store.firestore_user === undefined)
+    if(store.firestore_user === undefined) {
+      setEventList([]);
       return;
+    }
 
     // get email of user
     events_promise(store.firestore_user.email).then((loadedDocs) => {
       // console.log(loadedDocs)
-      setEventList(loadedDocs)
+      setEventList(loadedDocs);
       //setUser(loadedDoc)
     });
 
@@ -156,26 +159,31 @@ function NoticePage(props) {
             let temp_data = doc.data();
             doc_data.push(temp_data);
           });
+
           resolve(doc_data)
         })
     });
   }
 
-
+  let spinnerjsx = <LoadSpinner/> // <div className={classes.spinner}><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
   let eventListjsx = (eventList) ? eventList.map( (event, idx) =>
     <NoticeListItem key={idx} type={event.type} user={event.other_username} recipe={event.recipe || undefined} time="2 dgr" eventimg={event.event_image_url}/>
-  ) : null;
+  ) : spinnerjsx;
+
+  /*
+  { !eventList &&
+    <div className={classes.spinner}><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>
+  }
+  */
 
   return (
 
     <div>
     <h3>Dina notiser</h3>
 
-    { !eventList &&
-      <div className={classes.spinner}><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>
-    }
 
-    { eventList &&
+
+    { (true || eventList) &&
       <List dense={true}>
         {eventListjsx}
       </List>

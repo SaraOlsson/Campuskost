@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom";
 import 'firebase/auth';
 
 import SimpleTabs from '../components/userpagetabs';
-import RecipeGridList from '../components/recipegrid';
+import RecipeGridList from '../components/recipegridlist';
 import FollowerList from '../components/followerlist';
 // import FavoritePage from '../pages/favoritepage';
 import ListPage from '../pages/listpage';
@@ -176,19 +176,19 @@ function ProfilePage(props) {
 
         querySnapshot.forEach( doc => {
 
-          let data = doc.data();
+          let data = {}; //  = doc.data(); // currently no other data
           data.email = doc.id;
           follow_docs.push(data);
-          // console.log(querySnapshot)
+          // console.log(data)
         })
-        callback(current_username, follow_docs, collection);
+        followBuilder(current_username, follow_docs, collection);
     });
   }
 
   // when all followers (emails) are collected
-  function callback (current_username, follow_docs, collection) {
-    followBuilder(current_username, follow_docs, collection);
-  }
+  // function callback (current_username, follow_docs, collection) {
+  //  followBuilder(current_username, follow_docs, collection);
+  //}
 
   // from emails, get further user info
   const followBuilder = (current_username, follow_docs, collection) => {
@@ -203,9 +203,15 @@ function ProfilePage(props) {
       })
     });
 
-    callback2(followers, collection);
+    // callback2(followers, collection);
+    if(collection === "followers")
+      setFollowInfo(followers);
+    else if(collection === "following")
+      setFollowingInfo(followers);
+
   }
 
+  /*
   function callback2 (followers, collection) {
     //console.log('setFollowInfo and setFollowingInfo');
 
@@ -213,7 +219,7 @@ function ProfilePage(props) {
       setFollowInfo(followers);
     else if(collection === "following")
       setFollowingInfo(followers);
-  }
+  } */
 
 
   // fetch recipes for the user profile in view
@@ -302,6 +308,7 @@ function ProfilePage(props) {
   // let followBtn =
 
   let uni = (store.firestore_user != undefined) ? store.firestore_user.university : undefined;
+  let fullname = (store.firestore_user != undefined) ? store.firestore_user.fullname : undefined;
   //let img_src = (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : userchef;
 
   let img_src = userchef; // default user image
@@ -325,8 +332,20 @@ function ProfilePage(props) {
       >
 
         <Grid item xs={6}>
-          <p className={classes.username}>{username_url}</p>
-          <p className={classes.university}>{uni}</p>
+          <span className={classes.username}>{username_url}</span>
+
+          { store.firestore_user != undefined &&
+            <span className={classes.university}> | {store.firestore_user.fullname}</span>
+          }
+
+          { store.firestore_user != undefined &&
+            <p className={classes.university}>🎓{store.firestore_user.university}</p>
+          }
+
+          { (store.firestore_user != undefined && store.firestore_user.bio != undefined ) &&
+            <p className={classes.bio}><i>{store.firestore_user.bio}</i></p>
+          }
+
           {ifUser && <Button
             variant="contained"
             color="primary"
@@ -379,6 +398,10 @@ const useStyles = makeStyles({
  },
  university: {
    margin: '10px 0px'
+ },
+ bio: {
+   fontSize: '13px',
+   maxWidth: '300px'
  }
 });
 

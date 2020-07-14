@@ -218,7 +218,7 @@ function TopMenuBar(props) {
 const useStyles = makeStyles(theme => ({
   grow: {
     flexGrow: 1,
-    marginBottom: '50px'
+    //marginBottom: '50px'
   },
   menuButton: {
     marginRight: 0, // theme.spacing(2),

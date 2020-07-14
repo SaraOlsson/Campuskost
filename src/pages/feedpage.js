@@ -3,8 +3,9 @@ import { BrowserRouter as Link} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 //import { useFirebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
 
-import RecipeGridList from '../components/recipegrid';
+import RecipeGridList from '../components/recipegridlist';
 import RecipeItem from '../components/recipeitem';
 
 import Grid from '@material-ui/core/Grid';
@@ -64,6 +65,7 @@ function FeedPage() {
   return (
     <div>
       <NewsContainer recipes={recipes}/>
+      <h3>Senaste recepten</h3>
       { recipes !== undefined && <div className={classes.grid_background}><RecipeGridList recipes={recipes}/></div> }
       { recipes === undefined && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
     </div>
@@ -114,17 +116,41 @@ function ScrollableRecipes(props) {
 function NewsContainer(props) {
 
   const classes = useStyles();
+  const history = useHistory();
   // className={classes.userinfo}
+
 
   if(props.recipes === undefined || props.recipes.length < 1 )
     return null; // <p style={{margin: 15}}>Sorry chefs, an issue! probably no internet connection.</p>
 
+  let recipe_index = Math.floor(Math.random() * props.recipes.length);
+
   //console.log(props.recipes)
-  let viral_header = (props.recipes !== undefined && props.recipes[1] !== undefined ) ? props.recipes[0].title : "Veckans favvo: ";
+  let viral_header = (props.recipes !== undefined && props.recipes[recipe_index] !== undefined ) ? props.recipes[recipe_index].title : "Veckans favvo: ";
+
+  const handleUserClick = (user) => {
+    history.push("/profile/" + user );
+  };
+
+  let username = props.recipes[recipe_index].user;
+
+  /*
+  <Grid item xs={5}>
+
+    {props.recipes !== undefined &&
+      <GridList><RecipeItem recipe={props.recipes[recipe_index]} smalltiles={false}/></GridList>
+    }
+
+  </Grid>
+  <Grid item xs={7}>
+    <h3>{viral_header}</h3>
+    <h5 onClick={() => handleUserClick(username)} style={{cursor: 'pointer'}}> @username</h5>
+  </Grid>
+  */
 
   return (
     <div>
-    <h3>Senaste recepten</h3>
+    <h3>Nyheter</h3>
     <Grid
       container
       spacing={1}
@@ -133,16 +159,12 @@ function NewsContainer(props) {
       className={classes.newscontainer}
     >
 
-      <Grid item xs={5}>
-
-        {props.recipes !== undefined &&
-          <GridList><RecipeItem recipe={props.recipes[1]} /></GridList>
-        }
-
-      </Grid>
-      <Grid item xs={7}>
-        <h3>{viral_header}</h3>
-        <h5>"Bästa matlådan!"</h5>
+      <Grid item xs={12}>
+        <div style={{padding: '10px'}}>
+        <h3>Välkommen till nya Campuskost 🌱</h3>
+        <p> Campuskost har fått nytt utseende och funktion! Du kan nu skapa ett konto och själv ladda upp och redigera dina recept.
+        Snart kommer funktionalitet såsom att skapa listor och följa dina vänners listor med recept. </p>
+        </div>
       </Grid>
 
     </Grid>
