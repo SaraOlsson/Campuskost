@@ -47,12 +47,11 @@ function NoticeListItem(props) {
   let noticeText;
 
   const userClick = () => {
-    console.log("well hello " + props.user)
     history.push("/profile/" + props.user );
   };
 
   const recipeClick = () => {
-    console.log("well hello " + props.recipe)
+
     // let recipe_title = props.recipe.substring(0, props.recipe.indexOf("-"));
     history.push("/recipe/" + recipe_id_to_title(props.recipe) + "/" + props.recipe );
   };
@@ -154,7 +153,6 @@ function NoticePage(props) {
 
     // get email of user
     events_promise(store.firestore_user.email).then((loadedDocs) => {
-      // console.log(loadedDocs)
       setEventList(loadedDocs);
       //setUser(loadedDoc)
     });

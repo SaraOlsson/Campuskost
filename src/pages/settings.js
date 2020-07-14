@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 // import { useDispatch } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
-//import firebase from 'firebase'; // 'firebase/app';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -46,8 +45,6 @@ function Settings(props) {
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
   const history = useHistory();
-
-      console.log(bio_textfield)
 
   React.useEffect(() => {
     setLabelWidth(labelRef.current.offsetWidth);
@@ -109,8 +106,6 @@ function Settings(props) {
 
   function signOut() {
 
-    console.log("sign out")
-
     // sign out if signed in
     if (firebase.auth().currentUser) {
       firebase.auth().signOut();
@@ -158,8 +153,6 @@ function Settings(props) {
   // update in Firebase
   function save_fullname() {
 
-    console.log("set username to " + username_textfield)
-
     // Set the 'username' field of the user
     store.db.collection('users').doc(store.firestore_user.email).update({fullname: fullname_textfield});
     setIn_editmode(false);
@@ -167,8 +160,6 @@ function Settings(props) {
 
   // update in Firebase
   function save_bio() {
-
-    console.log("set bio to " + bio_textfield)
 
     // Set the 'username' field of the user
     store.db.collection('users').doc(store.firestore_user.email).update({bio: bio_textfield});
@@ -178,13 +169,10 @@ function Settings(props) {
   // update in Firebase
   function save_username() {
 
-    console.log("set username to " + fullname_textfield)
-
     isAvailableCheck().then((is_available) => {
 
       if(is_available === false)
       {
-        console.log("is_available: " + is_available)
         setIsAvailable(false);
         return;
       }
@@ -195,7 +183,7 @@ function Settings(props) {
 
       // update other docs (recipe docs) with this username
       toChangePromise(store.firestore_user.username).then((loadedIds) => {
-        console.log("Yay!! loaded " + loadedIds)
+
         loadedIds.map( _id => {
           store.db.collection('recipes').doc(_id).update({user: username_textfield});
         });
@@ -206,8 +194,6 @@ function Settings(props) {
 
   // update in Firebase
   function save_img() {
-
-    //console.log("set img url to: " + imageUrl)
 
     // Set the 'username' field of the user
     store.db.collection('users').doc(store.firestore_user.email).update({profile_img_url: imageUrl});
@@ -256,7 +242,7 @@ function Settings(props) {
     cancel_edit();
   }
 
-  //console.log("openSetting: " + openSetting)
+
   //let signText = (firebase.auth().currentUser) ? "Logga ut" : "Logga in";
 
   // let username = (store.firestore_user) ? store.firestore_user.username : "unset";

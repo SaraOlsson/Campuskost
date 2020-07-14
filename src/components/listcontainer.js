@@ -21,7 +21,7 @@ function ListContainer(props) {
 
     // now using
     if(props.recipeDocs != undefined) {
-      console.log("what??")
+
       setRecipes(props.recipes);
       return;
     }
@@ -44,8 +44,6 @@ function ListContainer(props) {
 
   const handleaction = (recipe_id) => {
 
-    console.log("delete " + recipe_id + " from " + list_doc.id )
-
     let listsRef = store.db.collection('recipe_lists').doc(list_doc.id);
 
     listsRef.get().then(function(doc) {
@@ -55,7 +53,6 @@ function ListContainer(props) {
       data.recipes[recipe_id] = false; // remove from list // my_map.delete(key)
       store.db.collection("recipe_lists").doc(doc.id).update(data);
 
-      // console.log(data)
 
       //let updated_recipes = data.recipes[recipe_id];
       // const nextState = recipes.map(a => a.id === doc.id ? { ...a, [recipes]: updated_recipes } : a);
@@ -67,8 +64,6 @@ function ListContainer(props) {
 
   // fetch by list of recipe ids
   const recipe_fetcher = (recipe_id_list) => {
-
-    console.log("fetching..")
 
     let temp_recipes = [];
     let ref;
@@ -84,9 +79,7 @@ function ListContainer(props) {
               if (idx == recipe_id_list.length - 1) {
                 setRecipes(temp_recipes);
               }
-          } else {
-              console.log("No such document! recipe_id: " + recipe_id);
-          }
+          } 
       }).catch(function(error) {
           console.log("Error getting document:", error);
       });

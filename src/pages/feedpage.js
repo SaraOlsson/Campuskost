@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Link} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-//import { useFirebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
@@ -24,8 +23,7 @@ function FeedPage() {
   const store = useSelector(state => state.fireReducer);
 
   useEffect(() => {
-    // someFetcher();
-    //usersRef.on('value', function(snap) { console.log(snap.val()); })
+
     let recpiesRef = store.db.collection('recipes');
     recipeFetcher(recpiesRef);
 
@@ -125,7 +123,6 @@ function NewsContainer(props) {
 
   let recipe_index = Math.floor(Math.random() * props.recipes.length);
 
-  //console.log(props.recipes)
   let viral_header = (props.recipes !== undefined && props.recipes[recipe_index] !== undefined ) ? props.recipes[recipe_index].title : "Veckans favvo: ";
 
   const handleUserClick = (user) => {

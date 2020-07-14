@@ -105,21 +105,18 @@ function ListPage() {
 
     let isDragging = false;
 
-    //console.log(lists_by_user)
 
     useEffect(() => {
 
       if( !store.firestore_user) {
-        console.log("not logged in")
         return;
       }
 
       let current_email = store.firestore_user.email;
-      console.log("list for firestore_user: " + current_email)
 
       // lists created by the user
       getListDocsForUser(current_email, true).then((loadedDocs) => {
-        setLists_by_user(loadedDocs); //console.log("Woff! loaded " + loadedDocs)
+        setLists_by_user(loadedDocs);
       });
 
       // lists likes for the user
@@ -129,7 +126,7 @@ function ListPage() {
         if(!like_docs)
           return;
 
-        setLikes(like_docs); // console.log("Mu! loaded " + loadedDoc)
+        setLikes(like_docs);
 
         let liked_recipes_ids = like_docs.liked_recipes;
         if ( liked_recipes_ids != undefined) {
@@ -140,7 +137,7 @@ function ListPage() {
               if(liked_recipes_ids[key] === true)
                 temp_recipes.push(key)
           });
-          //console.log(temp_recipes)
+
           recipe_fetcher(temp_recipes); // Object.keys(props.recipemap)
         }
 
@@ -155,8 +152,6 @@ function ListPage() {
 
         likesRef.get().then(function(doc) {
           let data = doc.data();
-          //data.id = doc.id;
-          //console.log(data)
           resolve(data);
 
         });
@@ -210,10 +205,7 @@ function ListPage() {
                 if (idx == recipe_id_list.length - 1) {
                   setRecipes(temp_recipes);
                   setlistState(temp_recipes);
-                  // console.log(temp_recipes)
                 }
-            } else {
-                console.log("No such document! recipe_id: " + recipe_id);
             }
         }).catch(function(error) {
             console.log("Error getting document:", error);
@@ -222,8 +214,7 @@ function ListPage() {
     }
 
     const onDragStart = result => {
-      console.log("dragging")
-      console.log(result)
+
       //setisDragging(true);
       isDragging = true;
 
@@ -240,7 +231,7 @@ function ListPage() {
 
         // if added to list
         if(destination.droppableId.substring(0, 4) === 'list') {
-          console.log("add item: " + result.draggableId + " to list: " + result.destination.droppableId )
+
           //listState.splice(source.index, 1); // remove from current list
 
           //let listsRef = store.db.collection('recipe_lists').where('list_followers.' + replaced_email, '==', true);
@@ -250,9 +241,6 @@ function ListPage() {
 
           let list = lists_by_user[list_index];
           let recipe_doc_id = result.draggableId;
-          //console.log(list)
-
-          console.log("grabbing list.id: " + list.id)
 
           let listsRef = store.db.collection('recipe_lists').doc(list.id);
 
@@ -264,8 +252,6 @@ function ListPage() {
             store.db.collection("recipe_lists").doc(doc.id).update(data).then(function(what) {
               // history.go(0);
             });
-
-            console.log(data)
 
             let updated_recipes = data.recipes[recipe_doc_id];
             const nextState = lists_by_user.map(a => a.id === doc.id ? { ...a, [recipes]: updated_recipes } : a);
@@ -280,7 +266,7 @@ function ListPage() {
 
         // if just reordered in same list
         if (source.droppableId === destination.droppableId) {
-            console.log("in here")
+
             const updated_items = reorder(
                 listState,
                 source.index,

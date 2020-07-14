@@ -62,7 +62,6 @@ function IngredientsList(props) {
   }, []);
 
   const addIngredient = () => {
-    //console.log("okay add")
 
     let temp_list = ingredients.slice(0);
     let new_obj = {name: "", quantity: "", measure: ""};
@@ -74,7 +73,7 @@ function IngredientsList(props) {
   }
 
   const removeIngredient = () => {
-    //console.log("okay remove")
+
     let temp_list = ingredients.slice(0);
     let ind = temp_list.indexOf(editObject);
     temp_list.splice(ind, 1);
@@ -91,7 +90,7 @@ function IngredientsList(props) {
   }
 
   const listClick = (object) => {
-    console.log("edit ingredient")
+
     setEditObject(object);
 
     setQuantity(object.quantity);
@@ -100,7 +99,6 @@ function IngredientsList(props) {
   }
 
   const saveEdited = () => {
-    //console.log("save values")
 
     let temp_list = ingredients.slice(0);
     let ind = temp_list.indexOf(editObject);
@@ -127,10 +125,7 @@ function IngredientsList(props) {
 
   const enterPress = (ev) => {
 
-    // console.log(`Pressed keyCode ${ev.key}`);
     if (ev.key === 'Enter') {
-      // Do code here
-      // console.log(`Pressed enter`);
       saveEdited();
       ev.preventDefault();
     }

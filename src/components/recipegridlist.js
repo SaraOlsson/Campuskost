@@ -21,7 +21,6 @@ function RecipeGridList(props) {
 
   }, []);
 
-  // console.log("images.length: " + images.length)
 
   // oh loading in parent component is what is taking time
 

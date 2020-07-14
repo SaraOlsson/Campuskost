@@ -23,8 +23,6 @@ function Login(props) {
    */
   function toggleSignIn() {
 
-    console.log("toggleSignIn")
-
     // sign out if signed in
     if (firebase.auth().currentUser) {
       firebase.auth().signOut();
@@ -57,8 +55,6 @@ function Login(props) {
    * Handles the sign up button press.
    */
   function handleSignUp() {
-
-    console.log("handleSignUp")
 
     if (email.length < 4) {
       alert('Ogiltig mailadress, måste innehålla mer än 4 tecken');

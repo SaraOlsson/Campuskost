@@ -112,7 +112,6 @@ function UploadPage(props) {
     storageRef.ref('recept/bananbröd.jpg').getDownloadURL().then(function(url) {
 
       setUrl("temp 1")
-      console.log("url: " + url)
 
     }).catch(function(error) {
       // Handle any errors
@@ -133,12 +132,10 @@ function UploadPage(props) {
   };
 
   const handleIngredientsAdd = length => {
-    console.log("handleIngredientsAdd")
     setValid({ ...valid, ["ingredients"]: length > 1 ? true : false });
   };
 
   const handleDescriptionsAdd = length => {
-    console.log("handleDescriptionsAdd")
     setValid({ ...valid, ["desc"]: length > 1 ? true : false });
   };
 
@@ -178,20 +175,17 @@ function UploadPage(props) {
     }, function() { // Handle successful uploads on complete
 
       uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-        console.log('Successful upload. File available at', downloadURL);
         callback(downloadURL);
       });
     });
   }
 
   const uploadAction = () => {
-    console.log("upload now")
 
     // make sure all valid
     /*
     if(!allValid())
     {
-      console.log("some input is not valid")
       return;
     } */
 
@@ -200,8 +194,6 @@ function UploadPage(props) {
       alert("you have to sign in first")
       return;
     }
-
-    // console.log("editmode: " + upload_store.editmode)
 
     // prepare data
     let username = store.firestore_user.username;
@@ -317,8 +309,6 @@ function UploadPage(props) {
   let ingred_valid = (valid.ingredients || (upload_store.ingredients && upload_store.ingredients.length > 1)) ? true : false;
   let title_valid = (title.length >= 3 );
 
-  //console.log("decs_valid " + decs_valid)
-  //console.log("ingred_valid " + ingred_valid)
 
   return (
 

@@ -70,15 +70,13 @@ function FollowerList(props) {
   // when url changes, on load and on user click
   useEffect(() => {
 
-    //console.log("new props")
     setFollowData(props.followerData);
 
   }, [props.followerData]);
 
-  //console.log(props.followerData)
 
   if (false && props.followerData.length < 1) {
-    //console.log("sad")
+
     return (
       <p>sad, no followers</p>
     );

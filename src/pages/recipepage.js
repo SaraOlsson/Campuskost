@@ -39,13 +39,10 @@ function RecipePage(props) {
 
 
   useEffect(() => {
-    // someFetcher();
 
     let ref = store.db.collection('recipes').doc(id);
-    // ref.on('value', function(snap) { console.log(snap.val()); })
     recipeFetcher(ref);
     // likeFetcher();
-
 
   }, []);
 
@@ -56,13 +53,9 @@ function RecipePage(props) {
       return;
 
     if(recipe.user_doc.username == store.firestore_user.username) {
-      console.log("same as logged in: " + recipe.user_doc.username)
       setIfUser(true);
-    } else {
-      console.log("NOT same as logged in: " + recipe.user_doc.username)
     }
 
-    console.log(store.firestore_user.email)
     //let queryRef = store.db.collection('likes').where('email', '==', store.firestore_user.email);
     //likeFetcher(queryRef);
     likeFetcher(store.firestore_user.email);
@@ -101,18 +94,15 @@ function RecipePage(props) {
   const likeRecipe = () => {
 
     if(!store.firestore_user) {
-      console.log("eh slow down, user not loaded yet")
+      console.log("user not loaded yet..")
       return;
     }
-
-    console.log("likeRecipe")
 
     let likesRef = store.db.collection('recipe_likes').doc(store.firestore_user.email);
 
     likesRef.get().then(function(doc) {
 
       let data;
-      console.log("doc id: " + doc.id)
 
       // add or remove like
       if (doc.exists) {
@@ -137,8 +127,6 @@ function RecipePage(props) {
   };
 
   const editRecipe = () => {
-
-    console.log("edit recipe")
 
     dispatch({
       type: "SETDESCRIPTIONS",
@@ -167,7 +155,6 @@ function RecipePage(props) {
   const removeRecipe = () => {
 
     store.db.collection('recipes').doc(id).delete();
-    console.log("recipe deleted");
     history.push("/home");
 
   }
@@ -181,22 +168,19 @@ function RecipePage(props) {
         if (doc.exists) {
             let data = doc.data()
             data.id = doc.id;
-            // console.log("Document data:", data);
+
             if(data.user_ref) {
               // get user info
               data.user_ref.get().then(function(user_doc) {
                 let user_data = user_doc.data()
                 data.user_doc = user_data; // append to recipe data
-                // console.log("Document USER data:", user_data);
+
                 setRecipe(data);
               });
             } else {
               setRecipe(data);
             }
 
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
         }
     }).catch(function(error) {
         console.log("Error getting document:", error);
@@ -233,8 +217,6 @@ function RecipePage(props) {
     img_src = require('../assets/'+ r_img + '.jpg');
   }
 
-  // console.log(img_src)
-  // <SimpleDialogDemo/>
 
   return (
 
@@ -415,7 +397,6 @@ function RecipeDecsListItem(props) {
   }
 
   let icon = (checked === true ) ? <CheckBoxIcon className={classes.checkIcon}/> : <CheckBoxOutlineBlankIcon className={classes.checkIcon}/> ;
-  // console.log(props.desc)
 
   return (
     <React.Fragment>

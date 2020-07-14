@@ -2,8 +2,6 @@ import React, {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 import { useParams} from "react-router";
 import { useHistory } from "react-router-dom";
-//import { BrowserRouter as Link, Redirect} from "react-router-dom";
-//import firebase from 'firebase/app';
 import 'firebase/auth';
 
 import SimpleTabs from '../components/userpagetabs';
@@ -47,26 +45,19 @@ function ProfilePage(props) {
     recipeFetcher_new(username_url);
 
     if(store.firestore_user && username_url === store.firestore_user.username) {
-      //console.log("firestore_user changed: " + store.firestore_user.username)
-      //console.log("same as logged in")
-      console.log("if")
 
       setIfUser(true)
       followFetcher(username_url, store.firestore_user.email, "followers");
       followFetcher(username_url, store.firestore_user.email, "following");
     } else if ( store.firestore_user && username_url !== store.firestore_user.username ) {
 
-      console.log("else if")
-
-      //console.log("someone else than firestore_user: " + username_url)
-      getEmail(username_url)
+      getEmail(username_url) // fetches followers etc as well..
       setIfUser(false)
     }
 
     // get email of user
     email_promise(username_url).then((loadedDoc) => {
-      //console.log("got email: " + loadedDoc.email)
-      console.log("email_promise")
+
       setUser(loadedDoc)
     });
 
@@ -80,7 +71,7 @@ function ProfilePage(props) {
 
           let doc_data;
           snapshot.forEach(doc => {
-            // console.log(doc.id, '=>', doc.data());
+
             doc_data = doc.data();
           });
           resolve(doc_data)
@@ -89,9 +80,6 @@ function ProfilePage(props) {
   }
 
   const followUser = () => {
-
-    // console.log(store.firestore_user.username + " will follow " + username_url)
-    // console.log(following_this_user)
 
     let firebase_event_id = store.firestore_user.email + "-follows-" + following_this_user.email;
 
@@ -136,7 +124,6 @@ function ProfilePage(props) {
           let doc_email = "";
           if(doc.data().username === url_user) {
             doc_email = doc.id;
-            console.log("found other user email: " + doc_email)
 
             followFetcher(username_url, doc_email, "followers");
             followFetcher(username_url, doc_email, "following");
@@ -148,9 +135,9 @@ function ProfilePage(props) {
           .onSnapshot(function(querySnapshot) {
 
               querySnapshot.forEach( doc => {
-                // console.log(doc.id)
+
                 if(doc.id === doc_email) {
-                  console.log("following " + doc_email)
+
                   found = true;
                   setFollowing_this_user({following: true, email: doc_email});
                 }
@@ -179,7 +166,7 @@ function ProfilePage(props) {
           let data = {}; //  = doc.data(); // currently no other data
           data.email = doc.id;
           follow_docs.push(data);
-          // console.log(data)
+
         })
         followBuilder(current_username, follow_docs, collection);
     });
@@ -213,7 +200,6 @@ function ProfilePage(props) {
 
   /*
   function callback2 (followers, collection) {
-    //console.log('setFollowInfo and setFollowingInfo');
 
     if(collection === "followers")
       setFollowInfo(followers);
@@ -245,7 +231,6 @@ function ProfilePage(props) {
   /*
   const userFetcher = () => {
 
-    console.log('in userFetcher')
     // Create a reference to the cities collection
     let usersRef = store.db.collection('users');
 
@@ -253,7 +238,6 @@ function ProfilePage(props) {
     let queryRef = usersRef.where('username', '==', user);
     let inSnapshot = false;
 
-    //console.log(queryRef)
     queryRef.onSnapshot(function(querySnapshot) {
 
           inSnapshot = true;
@@ -269,7 +253,6 @@ function ProfilePage(props) {
     if(inSnapshot === false)
     {
       setIfUser(false);
-      console.log( "no snapshot");
     }
   }
   */
@@ -318,7 +301,6 @@ function ProfilePage(props) {
     img_src = user.profile_img_url
   }
 
-  //console.log("rerender ")
   return (
 
     <React.Fragment>

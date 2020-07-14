@@ -30,21 +30,20 @@ function FavoritePage(props) {
       return;
 
     let current_email = (props.otheruser) ? props.otheruser.email : store.firestore_user.email;
-    console.log("list for firestore_user: " + current_email)
 
     // lists the user follows
     getListDocsForUser(current_email, false).then((loadedDocs) => {
-      setLists(loadedDocs); //console.log("Mjau! loaded " + loadedDocs)
+      setLists(loadedDocs);
     });
 
     // lists created by the user
     getListDocsForUser(current_email, true).then((loadedDocs) => {
-      setLists_by_user(loadedDocs); //console.log("Woff! loaded " + loadedDocs)
+      setLists_by_user(loadedDocs);
     });
 
     // lists likes for the user
     getLikesDocsForUser(current_email).then((loadedDoc) => {
-      setLikes(loadedDoc); // console.log("Mu! loaded " + loadedDoc)
+      setLikes(loadedDoc); 
     });
 
   }, [store.firestore_user]);

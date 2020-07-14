@@ -44,7 +44,7 @@ function SimpleDialog(props) {
   };
 
   const handleListItemClick = (friend) => {
-    console.log("tips to: ", friend.email)
+
     onClose(friend.email);
 
     let date = new Date();
@@ -83,7 +83,7 @@ function SimpleDialog(props) {
 
         })
         //followBuilder(current_username, follow_docs, collection);
-        //console.log(follow_data)
+
         setMyFriends(follow_data);
     });
   }

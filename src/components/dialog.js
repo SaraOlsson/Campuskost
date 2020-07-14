@@ -15,8 +15,6 @@ export default function MyDialog(props) {
 
   }, [props.open]);
 
-  console.log("open", open)
-
   const handleClickOpen = () => {
     setOpen(true);
   };

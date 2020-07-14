@@ -24,7 +24,6 @@ function DescriptionList(props) {
   const [order, setOrder] = useState(-2);
   const [text, setText] = useState("");
 
-  //console.log("order: " + order)
 
   const [descriptions, setDescriptions] = useState(() => initiate_descriptions());
   const classes = useStyles();
@@ -64,7 +63,6 @@ function DescriptionList(props) {
   }, []);
 
   const addDescription = () => {
-    // console.log("okay add")
 
     let temp_list = descriptions.slice(0);
     let new_obj = {order: descriptions.length + 1, text: ""};
@@ -77,7 +75,7 @@ function DescriptionList(props) {
   }
 
   const removeDescription = () => {
-    //console.log("okay remove")
+
     let temp_list = descriptions.slice(0);
     let ind = temp_list.indexOf(editObject);
     temp_list.splice(ind, 1);
@@ -92,7 +90,7 @@ function DescriptionList(props) {
   }
 
   const listClick = (object) => {
-    console.log("edit descriptions")
+
     setEditObject(object);
 
     // first letter to toUpperCase
@@ -104,12 +102,9 @@ function DescriptionList(props) {
   }
 
   const saveEdited = () => {
-    console.log("save values")
 
     let temp_list = descriptions.slice(0);
     let ind = temp_list.indexOf(editObject);
-
-    //console.log(editObject)
 
     let obj_copy = editObject;
     obj_copy.text = (text.length > 0) ? text[0].toUpperCase() + text.slice(1) : "";
@@ -117,8 +112,6 @@ function DescriptionList(props) {
     // obj_copy.order = order;
 
     temp_list[ind] = obj_copy;
-
-    //console.log(obj_copy)
 
     if(text.length < 1) {
       console.log("not relevant to save")
@@ -130,8 +123,6 @@ function DescriptionList(props) {
     setText("");
     setOrder(-123)
 
-    //console.log("temp_list.length" + temp_list.length)
-
     props.handleAdd(temp_list.length);
     ingredientsDisp();
 
@@ -139,10 +130,8 @@ function DescriptionList(props) {
 
   const enterPress = (ev) => {
 
-    // console.log(`Pressed keyCode ${ev.key}`);
     if (ev.key === 'Enter') {
-      // Do code here
-      console.log(`Pressed enter`);
+
       saveEdited();
       ev.preventDefault();
     }
@@ -152,7 +141,6 @@ function DescriptionList(props) {
   // let ingredients = (props.ingredients != undefined) ? props.ingredients : temp_ingredients;
   // idx < ingredients.length - 1
 
-  //console.log(descriptions)
 
   let descriptionjsx = descriptions.map((desc, idx) =>
   <React.Fragment key={idx}>

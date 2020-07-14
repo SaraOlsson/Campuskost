@@ -50,10 +50,7 @@ export default function SimpleTabs(props) {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    //console.log("value: " + value)
   };
-
-  // console.log(props.children)
 
   return (
     <div className={classes.root}>

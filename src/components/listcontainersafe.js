@@ -42,8 +42,6 @@ function ListContainerSafe(props) {
   // fetch by list of recipe ids
   const recipe_fetcher = (recipe_id_list) => {
 
-    console.log("fetching..")
-
     let temp_recipes = [];
     let ref;
     recipe_id_list.map( (recipe_id, idx) => {
@@ -58,9 +56,7 @@ function ListContainerSafe(props) {
               if (idx == recipe_id_list.length - 1) {
                 setRecipes(temp_recipes);
               }
-          } else {
-              console.log("No such document!");
-          }
+          } 
       }).catch(function(error) {
           console.log("Error getting document:", error);
       });

@@ -21,14 +21,13 @@ export default function MySnackbar(props) {
       return;
     }
 
-    console.log("reason: " + reason)
 
     setOpen(false);
     props.handleClose();
   };
 
   const handleAction = () => {
-    console.log("handleAction")
+
     setOpen(false);
     props.handleClose("remove");
   };

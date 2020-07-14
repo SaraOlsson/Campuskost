@@ -42,12 +42,10 @@ function RecipeItem(props) {
   const [openDialog, setopenDialog] = useState(false);
 
   const onLongPress = result => {
-    console.log("pressss")
     setopenDialog(true);
   }
 
   const handleClose = (action) => {
-    console.log("close")
     setopenDialog(false);
 
     if(action === "remove")
@@ -74,8 +72,6 @@ function RecipeItem(props) {
   const handeRecipeClick = (clicked_recipe) => {
     history.push("/recipe/" + clicked_recipe.title + "/" + clicked_recipe.id );
   };
-
-  // console.log(history)
 
   let enable_press = false;
   let image;
