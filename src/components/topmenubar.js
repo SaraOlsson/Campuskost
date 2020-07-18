@@ -24,56 +24,6 @@ import { useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
 
-function ProfileBtn (props) {
-
-  const classes = useStyles();
-  const history = useHistory();
-  const store = useSelector(state => state.fireReducer);
-
-  let btn = (
-    <div>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => history.push("/login")}
-        className={classes.buttonPad}
-      >
-        logga in
-      </Button>
-    </div> );
-
-  // make sure info is loaded
-  let img_src = (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : undefined;
-
-  // if user has no profile image set in firebase
-  /*
-  if (img_src === undefined) {
-    img_src = <AccountCircleIcon/>;
-  } */
-
-  let icon_content = (img_src !== undefined) ? <img src={img_src} className={classes.smallprofileimage} alt={"profile img"} /> : <AccountCircleIcon/>;
-
-  let jsx_content = props.signedIn ? icon_content : btn;
-
-  if(props.signedIn === true && store.firestore_user)
-  {
-    return (
-      <IconButton
-        edge="start"
-        className={classes.menuButton}
-        color="inherit"
-        aria-label="open profile"
-        onClick={() => history.push("/profile/" + store.firestore_user.username)}
-      >
-      {jsx_content} </IconButton>
-
-    );
-  } else {
-    return btn;
-  }
-
-}
-
 function TopMenuBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -213,6 +163,59 @@ function TopMenuBar(props) {
       {renderMenu}
     </div>
   );
+}
+
+
+function ProfileBtn (props) {
+
+  const classes = useStyles();
+  const history = useHistory();
+  const store = useSelector(state => state.fireReducer);
+
+  let btn = (
+    <div>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => history.push("/login")}
+        className={classes.buttonPad}
+      >
+        logga in
+      </Button>
+    </div> );
+
+  // make sure info is loaded
+  let img_src = (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : undefined;
+
+  // if user has no profile image set in firebase
+  /*
+  if (img_src === undefined) {
+    img_src = <AccountCircleIcon/>;
+  } */
+
+  let icon_content = (img_src !== undefined) ? <img src={img_src} className={classes.smallprofileimage} alt={"profile img"} /> : <AccountCircleIcon/>;
+
+  let jsx_content = props.signedIn ? icon_content : btn;
+
+  if(props.signedIn === true && store.firestore_user)
+  {
+    return (
+      <React.Fragment>
+      <p style={{marginRight: 15, color: 'rgba(255,255,255,0.5)'}}> {store.firestore_user.username} </p>
+      <IconButton
+        edge="start"
+        className={classes.menuButton}
+        color="inherit"
+        aria-label="open profile"
+        onClick={() => history.push("/profile/" + store.firestore_user.username)}
+      >
+      {jsx_content} </IconButton></React.Fragment>
+
+    );
+  } else {
+    return btn;
+  }
+
 }
 
 const useStyles = makeStyles(theme => ({

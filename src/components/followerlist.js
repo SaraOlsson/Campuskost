@@ -31,7 +31,7 @@ function FollowerListItem(props) {
 
   return (
 
-    <ListItem>
+    <ListItem className={classes.pointer}>
       <ListItemAvatar>
         {user_avatar}
       </ListItemAvatar>
@@ -105,6 +105,9 @@ const useStyles = makeStyles({
    },
    smallprofileimage: {
      width: '40px'
+   },
+   pointer: {
+    cursor: 'pointer'
    }
 });
 

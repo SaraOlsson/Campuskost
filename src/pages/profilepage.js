@@ -320,7 +320,7 @@ function ProfilePage(props) {
             <span className={classes.university}> | {user.fullname}</span>
           }
 
-          { user != undefined &&
+          { (user != undefined && user.university != "") &&
             <p className={classes.university}>🎓{user.university}</p>
           }
 
@@ -328,11 +328,14 @@ function ProfilePage(props) {
             <p className={classes.bio}><i>{user.bio}</i></p>
           }
 
+          <br/>
+
           {ifUser && <Button
             variant="contained"
             color="primary"
             startIcon={<SettingsIcon />}
             onClick={() => history.push("/settings")}
+
           >
             Inställningar
           </Button>}
