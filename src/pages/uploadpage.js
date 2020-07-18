@@ -276,6 +276,7 @@ function UploadPage(props) {
   let upload_done_text = (upload_store.editmode) ? "Ändring" : "Uppladding";
   let upload_button_text = (upload_store.editmode) ? "Ändra recept" : "Ladda upp";
   let bottom_content;
+  let upload_disabled = !allValid();
 
   // if working on recipe
   if(upload_wait == false && done == false)
@@ -285,6 +286,7 @@ function UploadPage(props) {
       color="primary"
       startIcon={<CloudUploadIcon />}
       onClick={uploadAction}
+      disabled={upload_disabled}
     >
       {upload_button_text}
     </Button> );
