@@ -39,6 +39,8 @@ function Settings(props) {
   const labelRef = React.useRef(null);
   const [openSetting, setOpenSetting] = useState("");
 
+  console.log(bio_textfield)
+
 
   const [imageUrlList, setImageUrlList] = useState([]);
 
@@ -70,7 +72,7 @@ function Settings(props) {
     if(store.firestore_user && (username_textfield !== store.firestore_user.username ||
       imageUrl !== store.firestore_user.profile_img_url ||
       fullname_textfield !== store.firestore_user.fullname ||
-      (store.firestore_user.bio && bio_textfield !== store.firestore_user.bio) )) {
+      (!store.firestore_user.bio || (store.firestore_user.bio && bio_textfield !== store.firestore_user.bio)) )) {
       setHas_changed(true);
     } else {
       setHas_changed(false);

@@ -198,7 +198,12 @@ function UploadPage(props) {
     // prepare data
     let username = store.firestore_user.username;
     let recipe_name = upload_store.title;
-    const document = store.db.doc('recipes/' + recipe_name + '-' + username);
+    
+    // const document = store.db.doc('recipes/' + recipe_name + '-' + username);
+    //const temp_doc = store.db.collection('recipes').doc();
+    //const _id = recipe_name + '-' + temp_doc.id;
+
+    const document = store.db.collection('recipes').doc();
 
     let r_img = "temp_food1";
     let ref_to_user = store.db.collection('users').doc(store.firestore_user.email);

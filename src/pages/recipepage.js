@@ -4,11 +4,9 @@ import { useHistory } from "react-router-dom";
 import { useParams} from "react-router";
 import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux";
-// import { recipeFetch } from '../actions/RecipeActions';
+
 import SimpleDialog from '../components/simpledialog';
 import PickUserDialog from '../components/pickuserdialog';
-//import DescriptionList from '../components/descriptionlist';
-//import IngredientsList from '../components/ingredientslist';
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -16,14 +14,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-// import Container from '@material-ui/core/container';
 
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import EditIcon from '@material-ui/icons/Edit';
-
 
 function RecipePage(props) {
 
@@ -163,25 +159,40 @@ function RecipePage(props) {
     history.push("/profile/" + recipe.user_doc.username );
   };
 
+
+  var user_promise = function(user_ref) {
+    return new Promise((resolve, reject) => {
+
+      // reject();
+
+      user_ref.get().then(function(doc) {
+
+          if (!doc.exists)
+            reject();
+
+          let doc_data = doc.data(); // append to recipe data
+          resolve(doc_data);
+
+        });
+    });
+  }
+
   const recipeFetcher = (ref) => {
     ref.get().then(function(doc) {
-        if (doc.exists) {
-            let data = doc.data()
-            data.id = doc.id;
+      if (doc.exists) {
+          let data = doc.data()
+          data.id = doc.id;
 
-            if(data.user_ref) {
-              // get user info
-              data.user_ref.get().then(function(user_doc) {
-                let user_data = user_doc.data()
-                data.user_doc = user_data; // append to recipe data
+          user_promise(data.user_ref).then((extended_data) => {
 
-                setRecipe(data);
-              });
-            } else {
-              setRecipe(data);
-            }
+            data.user_doc = extended_data;
+            setRecipe(data);
 
-        }
+          }).catch(() => {
+            console.log("Could not get user data for recipe owner")
+          })
+
+      }
     }).catch(function(error) {
         console.log("Error getting document:", error);
     });

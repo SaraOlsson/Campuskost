@@ -24,7 +24,6 @@ function DescriptionList(props) {
   const [order, setOrder] = useState(-2);
   const [text, setText] = useState("");
 
-
   const [descriptions, setDescriptions] = useState(() => initiate_descriptions());
   const classes = useStyles();
 
@@ -61,6 +60,7 @@ function DescriptionList(props) {
     }
 
   }, []);
+
 
   const addDescription = () => {
 
@@ -102,6 +102,7 @@ function DescriptionList(props) {
   }
 
   const saveEdited = () => {
+
 
     let temp_list = descriptions.slice(0);
     let ind = temp_list.indexOf(editObject);
@@ -155,8 +156,10 @@ function DescriptionList(props) {
   </React.Fragment>
   );
 
+
+
   return (
-    <div>
+    <div >
 
       <Grid className="test"
         container
@@ -178,6 +181,7 @@ function DescriptionList(props) {
               />
             </ListItem>
           }
+
 
         </List>
       </Grid>
