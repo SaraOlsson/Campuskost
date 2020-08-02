@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 
 import SimpleDialog from '../components/simpledialog';
 import PickUserDialog from '../components/pickuserdialog';
+import ReactShare from '../components/ReactShare';
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -32,6 +33,9 @@ function RecipePage(props) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
+
+  //console.log("hi")
+  //console.log(history.location)
 
 
   useEffect(() => {
@@ -232,6 +236,8 @@ function RecipePage(props) {
   return (
 
     <div>
+
+      {/*<ReactShare location={history.location.pathname}/>*/}
 
       { recipe !== undefined &&
         <div>

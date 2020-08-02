@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { BrowserRouter as BrowserRouter, Router, Route, Link, Switch, Redirect } from "react-router-dom";
+import { HashRouter as BrowserRouter, Router, Route, Link, Switch, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -232,7 +232,8 @@ function App(props) {
             <Route path="/search" component={SearchPage} />
             <Route path="/home" component={FeedPage}/>
             <Route path="/lists" component={ListPage}/>
-            <Redirect exact path="/" to="/home" />
+            <Route component={FeedPage} />
+
           </Switch>
 
           <MySnackbar open={openUpdateDialog} handleClose={closeDialog} message={update_message} action={""}/>
