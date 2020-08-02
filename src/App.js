@@ -41,6 +41,8 @@ import LoyaltyRoundedIcon from '@material-ui/icons/LoyaltyRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
+import {Helmet} from "react-helmet";
+
 require('dotenv').config(); // check if we need this
 
 const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
@@ -211,6 +213,12 @@ function App(props) {
   // page content is based on url, defined with Route objects
   return (
     <div className="body">
+
+      <Helmet>
+          <meta charSet="utf-8" />
+          <title>My Title</title>
+          <link rel="canonical" href="https://campuskost.se" />
+      </Helmet>
 
       <BrowserRouter>
       <div>

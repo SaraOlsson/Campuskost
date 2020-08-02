@@ -237,7 +237,7 @@ function RecipePage(props) {
 
     <div>
 
-      {/*<ReactShare location={history.location.pathname}/>*/}
+
 
       { recipe !== undefined &&
         <div>
@@ -273,6 +273,9 @@ function RecipePage(props) {
             <div onClick={recipeToFriend}>
               <PickUserDialog recipeId={recipe.id}/>
             </div>
+
+            <ReactShare location={history.location.pathname} title={recipetitle}/>
+
           </Grid>
         </Grid>
 

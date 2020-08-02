@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '@material-ui/core/Button';
 
 import {
 
@@ -8,34 +9,48 @@ import {
 
 } from "react-share";
 
-import MetaTags from 'react-meta-tags';
+
 
 export default function ReactShare(props) {
 
-  let full_path = 'https://campuskost.se'; //+ props.location;
+  let full_path = 'https://campuskost.se/#' + props.location;
   let shareUrl = full_path; // 'https://campuskost.se/recipe/Bananbr%C3%B6d/Bananbr%C3%B6d-Sporkis';
-  let title = 'Spana in det här receptet på Campuskost&description=Hey';
+  let title = 'Spana in det här receptet på Campuskost! Låter gott med ' + props.title;
 
   console.log(shareUrl)
 
   return (
-    <div>
 
-    <FacebookShareButton
-      url={shareUrl}
-      quote={title}
-      className="Demo__some-network__share-button"
-      >
-      <FacebookIcon size={32} round />
-      </FacebookShareButton>
 
-      <FacebookMessengerShareButton
+
+      <FacebookShareButton
         url={shareUrl}
         quote={title}
         className="Demo__some-network__share-button"
         >
-        <FacebookIcon size={32} round />
-        </FacebookMessengerShareButton>
-    </div>
+
+        <div style={{marginTop: 10}}>
+          <Button variant="contained" color="gray">
+            <span style={{marginRight: 10}}> Dela </span>
+            <FacebookIcon size={32} round />
+          </Button>
+        </div>
+
+        </FacebookShareButton>
+
+
+
   );
 }
+
+/*
+
+<FacebookMessengerShareButton
+  url={shareUrl}
+  quote={title}
+  className="Demo__some-network__share-button"
+  >
+  <FacebookIcon size={32} round />
+  </FacebookMessengerShareButton>
+
+*/

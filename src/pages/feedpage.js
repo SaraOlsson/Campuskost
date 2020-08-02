@@ -145,6 +145,8 @@ function NewsContainer(props) {
   </Grid>
   */
 
+  let feedback_form_link = <a href="https://forms.gle/wUSFkwExgdJbiAUL7" target="_blank" style={{color: '#68bb8c'}}>här</a>;
+
   return (
     <div>
     <h3>Nyheter</h3>
@@ -160,7 +162,8 @@ function NewsContainer(props) {
         <div style={{padding: '10px'}}>
         <h3>Välkommen till nya Campuskost 🌱</h3>
         <p> Campuskost har fått nytt utseende och funktion! Du kan nu skapa ett konto och själv ladda upp och redigera dina recept.
-        Snart kommer funktionalitet såsom att skapa listor och följa dina vänners listor med recept. </p>
+        Snart kommer funktionalitet såsom att skapa listor och följa dina vänners listor med recept. Lämna gärna feedback {feedback_form_link} om du
+        hittar buggar eller har något roligt förslag</p>
         </div>
       </Grid>
 
