@@ -1,30 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-//import store from "./store.js";
 import reducer from "./store.js";
+
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-//import { ReactReduxFirebaseProvider, firebaseReducer } from 'react-redux-firebase';
 
-// const initialState = {}
+// wrapper for the provider to work properly
+const AppWrapper = () => {
+ const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
-const store = createStore(
-   reducer,
-   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
- );
-
-// const store = createStoreWithFirebase(reducer, initialState)
- // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+ return (
+   <Provider store={store}>
+     <App />
+   </Provider>
+ )
+}
 
 const rootElement = document.getElementById('root');
 ReactDOM.render(
 
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <AppWrapper/>,
   rootElement
 );
 
