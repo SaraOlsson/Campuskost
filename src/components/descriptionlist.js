@@ -38,25 +38,15 @@ function DescriptionList(props) {
   }
 
   function initiate_descriptions() {
-
-    let temp_description = [
-    {order: 1, text: "Knäck äggen i en bunke (default data)"},
-    {order: 2, text: "Stek i pannan meed smör eller kokosolja"},
-    {order: 3, text: "Vispa i mjöl, mjölk och salt"}
-    ];
-
-    temp_description = [];
-
-    return (props.description !== undefined) ? props.description : temp_description;
+    return (props.description !== undefined) ? props.description : [];
   }
 
   useEffect(() => {
 
-    let temp_descriptions = upload_store.descriptions;
-    if(temp_descriptions !== undefined)
+    let existing_descriptions = upload_store.descriptions;  // in in edit mode
+    if(existing_descriptions !== undefined)
     {
-      setDescriptions(temp_descriptions);
-      // props.handleAdd(temp_descriptions.length);
+      setDescriptions(existing_descriptions);
     }
 
   }, []);
@@ -177,7 +167,7 @@ function DescriptionList(props) {
 
             <ListItem alignItems="center" onClick={() => addDescription()} className={classes.newListItem}>
               <ListItemText
-                primary="Lägg till"
+                primary="Lägg till beskrivning"
               />
             </ListItem>
           }
@@ -253,7 +243,10 @@ const useStyles = makeStyles(theme => ({
     color: 'red'
   },
   newListItem: {
-    background: '#f3f3f3'
+    background: '#3f51b5',
+    color: 'white',
+    borderRadius: '5px',
+    width: '200px'
   },
   titlediv: {
     background: 'gray'

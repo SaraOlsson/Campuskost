@@ -293,7 +293,7 @@ function BottomMenuBar() {
 
     <BottomNavigation value={value} onChange={ (evt,value) => handleMenuClick(evt, value) } className={classes.bottomMenu}>
       <BottomNavigationAction label="Flöde" value="home" icon={<HomeRoundedIcon />} />
-      <BottomNavigationAction label="Ladda up" value="upload" icon={<PublishIcon />} />
+      <BottomNavigationAction label="Ladda upp" value="upload" icon={<PublishIcon />} />
       <BottomNavigationAction label="Notiser" value="notices" icon={<NotificationsIcon />} />
       <BottomNavigationAction label="Sparat" value="saved" icon={<LoyaltyRoundedIcon />} />
     </BottomNavigation>

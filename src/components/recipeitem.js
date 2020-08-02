@@ -85,7 +85,7 @@ function RecipeItem(props) {
   // if feed or list
   if( props.smalltiles !== undefined && props.smalltiles === false) {
     tile_jsx = (
-    <GridListTile key={r_img} className={classes.listtile} onClick={() => handeRecipeClick(recipe)}>
+    <GridListTile key={r_img} className={classes.listtile + ' ' + classes.pointer } onClick={() => handeRecipeClick(recipe)}>
       {image}
       <GridListTileBar
         title={recipe.title}
@@ -132,6 +132,9 @@ const useStyles = makeStyles({
     maxHeight: '150px',
     maxWidth: '150px',
     padding: '5px',
+  },
+  pointer: {
+   cursor: 'pointer'
   }
 });
 

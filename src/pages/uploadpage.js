@@ -21,6 +21,8 @@ import DescriptionList from '../components/descriptionlist';
 import IngredientsList from '../components/ingredientslist';
 import theme from '../theme';
 
+import RecipeCard from '../components/RecipeCard';
+
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Input from '@material-ui/core/Input';
@@ -30,6 +32,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import FormLabel from '@material-ui/core/FormLabel';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -198,7 +201,7 @@ function UploadPage(props) {
     // prepare data
     let username = store.firestore_user.username;
     let recipe_name = upload_store.title;
-    
+
     // const document = store.db.doc('recipes/' + recipe_name + '-' + username);
     //const temp_doc = store.db.collection('recipes').doc();
     //const _id = recipe_name + '-' + temp_doc.id;
@@ -332,12 +335,10 @@ function UploadPage(props) {
         alignItems="center"
       >
 
-        <ValidCheck checked={title_valid} xs={2}/>
-
-
-        <Grid item xs={9}>
+        {/* TITLE*/}
+        <Grid item xs={12}>
         <FormControl variant="outlined">
-          <InputLabel ref={labelRef} htmlFor="component-outlined"> Rubrik </InputLabel>
+          <InputLabel ref={labelRef} htmlFor="component-outlined"> Namn på recept </InputLabel>
           <OutlinedInput
             value={title}
             onChange={handleChange}
@@ -346,6 +347,7 @@ function UploadPage(props) {
         </FormControl>
         </Grid>
 
+        {/* INGREDIENTS*/}
         <Grid item xs={12}>
         <ExpansionPanel style={{background: '#fbfbfb', marginTop: '8px'}}>
           <ExpansionPanelSummary
@@ -354,12 +356,9 @@ function UploadPage(props) {
             aria-controls="additional-actions1-content"
             id="additional-actions1-header"
           >
-            <FormControlLabel
-              aria-label="Acknowledge"
-              control={<ValidCheck checked={ingred_valid} xs={2}/>}
-              label="Ingredienser"
-              className={classes.formlabel}
-            />
+
+          <FormLabel component="legend" className={classes.formlabel}>Ingredienser</FormLabel>
+
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <IngredientsList handleAdd={handleIngredientsAdd}/>
@@ -367,6 +366,7 @@ function UploadPage(props) {
         </ExpansionPanel>
         </Grid>
 
+        {/* DESCTIPTION*/}
         <Grid item xs={12}>
         <ExpansionPanel style={{background: '#f7f6f6'}}>
           <ExpansionPanelSummary
@@ -375,12 +375,8 @@ function UploadPage(props) {
             aria-controls="additional-actions1-content"
             id="additional-actions1-header"
           >
-            <FormControlLabel
-              aria-label="Acknowledge"
-              control={<ValidCheck checked={decs_valid} xs={2}/>}
-              label="Beskrivning"
-              className={classes.formlabel}
-            />
+          <FormLabel component="legend" className={classes.formlabel}>Beskrivning</FormLabel>
+
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <DescriptionList handleAdd={handleDescriptionsAdd}/>
@@ -388,54 +384,74 @@ function UploadPage(props) {
         </ExpansionPanel>
         </Grid>
 
+        {/* IMAGE */}
+        <Grid item xs={12}>
+        <ExpansionPanel style={{background: '#f7f6f6'}}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-label="Expand"
+            aria-controls="additional-actions1-content"
+            id="additional-actions1-header"
+          >
+          <FormLabel component="legend" className={classes.formlabel}>Receptbild</FormLabel>
+
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+
+                  <Grid container spacing={1}>
+                    <Grid item xs={9} style={{
+                        display: 'flex',
+                        marginBottom: '10px'
+                    }}>
+                    <FileInput value={files} onChange={onFileAdd} />
+                    </Grid>
+
+                  </Grid>
+                  { image != undefined &&
+                  <React.Fragment>
+                    <Grid item xs={9}>
+                      <img src={image} alt={"loadedimage"} className={classes.loadedimage} />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={onFileRemove}
+                        style={{lineHeight: '1.2'}}
+                      >
+                        Ta bort bild
+                      </Button>
+                    </Grid>
+                  </React.Fragment>
+
+          }
+
+
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        </Grid>
+
       </Grid>
 
-      <div className={classes.imagediv} >
-        <ValidCheck checked={valid.image} xs={2}/>
-        <Grid container spacing={1}>
-          <Grid item xs={9} style={{
-              display: 'flex',
-              marginBottom: '10px'
-          }}>
-          <FileInput value={files} onChange={onFileAdd} />
-          </Grid>
 
+
+      <div className={classes.uploaddiv} >
+        <Grid container justify="center" alignItems="center">
+        <Grid item xs={4}>
+        {bottom_content}
         </Grid>
-        { image != undefined &&
-        <React.Fragment>
-          <Grid item xs={9}>
-            <img src={image} alt={"loadedimage"} className={classes.loadedimage} />
-          </Grid>
-          <Grid item xs={3}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={onFileRemove}
-              style={{lineHeight: '1.2'}}
-            >
-              Ta bort bild
-            </Button>
-          </Grid>
-        </React.Fragment>
+        </Grid>
+      </div>
 
-        }
-        </div>
-
-        <div className={classes.uploaddiv} >
-          <Grid container justify="center" alignItems="center">
-          <Grid item xs={4}>
-          {bottom_content}
-          </Grid>
-          </Grid>
-          </div>
       </form>
+
     </div>
 
   );
 
 }
 
-// className="whitebtn"
+// <RecipeCard/>
 
 // material ui design
 const useStyles = makeStyles(theme => ({
@@ -457,7 +473,8 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   formlabel: {
-    marginRight: '30px'
+    marginRight: '30px',
+    fontWeight: 'bold'
   },
   imagediv: {
     background: '#fbfbfb',

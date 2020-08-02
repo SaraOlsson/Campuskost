@@ -200,7 +200,7 @@ function NoticePage(props) {
       </List>
     }
     { (eventList && eventList.length < 1) &&
-      <p> Ledsen, inga händelsen än. Börja interagera med dina kockvänner! 🍳 </p>
+      <p> Ledsen, inga händelser än. Börja interagera med dina kockvänner! 🍳 </p>
     }
 
 

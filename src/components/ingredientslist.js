@@ -17,6 +17,7 @@ import Divider from '@material-ui/core/Divider';
 
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import SaveIcon from '@material-ui/icons/Save';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 function IngredientsList(props) {
 
@@ -167,7 +168,7 @@ function IngredientsList(props) {
 
             <ListItem alignItems="center" onClick={() => addIngredient()} className={classes.newListItem}>
               <ListItemText
-                primary="Lägg till"
+                primary="Lägg till ingrediens"
               />
             </ListItem>
           }
@@ -179,17 +180,17 @@ function IngredientsList(props) {
 
         <React.Fragment>
 
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <TextField required variant="outlined" label="mängd" InputLabelProps={{shrink: true}} value={quantity} onChange={ event => setQuantity(event.target.value.toLowerCase())}/>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <TextField variant="outlined" label="mått" InputLabelProps={{shrink: true}} value={measure} onChange={ event => setMeasure(event.target.value.toLowerCase())}/>
         </Grid>
         <Grid item xs={5}>
           <TextField required variant="outlined" label="ingrediens" InputLabelProps={{shrink: true}} value={name} onChange={ event => setName(event.target.value.toLowerCase())} onKeyPress={(ev) => enterPress(ev)}/>
         </Grid>
         <Grid item xs={1}>
-          <SaveIcon onClick={saveEdited} className={classes.greenicon} />
+          <CheckCircleIcon onClick={saveEdited} className={classes.greenicon} />
         </Grid>
         <Grid item xs={1}>
           <DeleteForeverIcon onClick={removeIngredient} className={classes.redicon} />
@@ -247,7 +248,10 @@ const useStyles = makeStyles(theme => ({
     color: 'red'
   },
   newListItem: {
-    background: '#f3f3f3'
+    background: '#3f51b5',
+    color: 'white',
+    borderRadius: '5px',
+    width: '200px'
   },
   titlediv: {
     background: 'gray'

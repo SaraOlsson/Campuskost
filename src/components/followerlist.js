@@ -42,7 +42,7 @@ function FollowerListItem(props) {
         onClick={() => props.handleChange(user.username)}
       />
 
-      { props.showFollowIcon &&
+      { (false && props.showFollowIcon) &&
       <ListItemSecondaryAction>
         <IconButton edge="end" aria-label="follows">
           <CheckCircleIcon className={(user.follows ? classes.followColor : classes.notfollowColor)}/>

@@ -118,15 +118,19 @@ function TopMenuBar(props) {
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-            onClick={ () => history.goBack() }
-          >
-            <ArrowBackIosIcon />
-          </IconButton>
+
+          <div className={classes.sectionMobile}>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="open drawer"
+              onClick={ () => history.goBack() }
+            >
+              <ArrowBackIosIcon />
+            </IconButton>
+          </div>
+
           <Typography className={classes.title} variant="h6" noWrap>
 
             <LinkUI component={Link} to="/home" style={{ textDecoration: 'none', color: 'white' }}>
