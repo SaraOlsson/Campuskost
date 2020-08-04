@@ -144,7 +144,8 @@ function ProfilePage(props) {
               })
           });
 
-          if(found === false && doc_email !== "") {
+          if(found === false) // && doc_email !== ""
+          {
             setFollowing_this_user({following: false, email: doc_email});
           }
 

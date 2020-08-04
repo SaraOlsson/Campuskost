@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { useSelector } from "react-redux";
-
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 
 //import testImg from '../assets/food-and-restaurant.png'
@@ -19,6 +20,13 @@ function LoginPage() {
   const [state, setState] = useState(SIGNUP_STATE);
 
   const classes = useStyles();
+  const history = useHistory();
+
+  const loginRoute = () => {
+
+    console.log("go to homepage");
+    history.push("/home");
+  }
 
   // render one container and the opposite banner
   return (
@@ -28,8 +36,8 @@ function LoginPage() {
       { // either login container..
         state === LOGIN_STATE &&
         <div>
-          <LoginContainer/>
-          <SignupBanner onAction={() => setState(SIGNUP_STATE)}/>
+          <LoginContainer onLogin={loginRoute}/>
+          <SignupBanner onAction={() => setState(SIGNUP_STATE)} />
         </div>
       }
 
@@ -37,7 +45,7 @@ function LoginPage() {
       { // ..or signup container
         state === SIGNUP_STATE &&
         <div>
-          <SignUpContainer/>
+          <SignUpContainer onLogin={loginRoute}/>
           <LogInBanner onAction={() => setState(LOGIN_STATE)}/>
         </div>
       }
@@ -47,7 +55,7 @@ function LoginPage() {
   );
 }
 
-function SignUpContainer() {
+function SignUpContainer(props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,8 +65,45 @@ function SignUpContainer() {
 
   const [feedback, setFeedback] = useState({color: 'green', message: ""});
 
+  const dispatch = useDispatch(); // be able to dispatch
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
+
+  const create_db_user_doc = () => {
+
+    const usersRef = store.db.collection('users').doc(email);
+    // connect to firebase and check if a user doc for this email exists
+    usersRef.get().then((docSnapshot) => {
+      if (docSnapshot.exists) {
+        // should not be possible
+      } else {
+
+        // prepare to create firestore doc as this user signed in for the first time
+        let userObj = {
+          email: email,
+          username: username.value,
+          university: "",
+          fullname: "",
+          bio: "",
+          profile_img_url: ""
+        };
+
+        console.log("create the document")
+        usersRef.set(userObj); // create the document
+
+        // set redux state
+        dispatch({
+          type: "SETFIREUSER",
+          firestore_user: userObj
+        })
+
+      }
+
+      props.onLogin();
+
+    });
+
+  }
 
   /**
    * Handles the sign up button press.
@@ -74,6 +119,7 @@ function SignUpContainer() {
     firebase.auth().createUserWithEmailAndPassword(email, password).then(function(value) {
 
       setFeedback({color: 'green', message: "Skapade ett konto för " + email});
+      create_db_user_doc();
 
     }).catch(function(error) {
       // Handle Errors here.
@@ -173,7 +219,7 @@ function SignUpContainer() {
 
 }
 
-function LoginContainer() {
+function LoginContainer(props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -201,6 +247,7 @@ function LoginContainer() {
       firebase.auth().signInWithEmailAndPassword(email, password).then( () => {
         setLoginProblem(false);
         setFeedback({color: 'green', message: 'Välkommen tillbaka!'});
+        props.onLogin();
 
       }).catch(function(error) {
         // Handle Errors here.

@@ -41,7 +41,7 @@ import LoyaltyRoundedIcon from '@material-ui/icons/LoyaltyRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-import {Helmet} from "react-helmet";
+// import {Helmet} from "react-helmet";
 
 require('dotenv').config(); // check if we need this
 
@@ -151,6 +151,8 @@ function App(props) {
 
             });
           } else {
+            console.log("in app, user doc doesnt exist yet")
+          }/* else {
 
             // prepare to create firestore doc as this user signed in for the first time
             let userObj = {
@@ -168,7 +170,7 @@ function App(props) {
               type: "SETFIREUSER",
               firestore_user: userObj
             })
-          }
+          } */
       });
 
       } // end if user
@@ -213,12 +215,6 @@ function App(props) {
   // page content is based on url, defined with Route objects
   return (
     <div className="body">
-
-      <Helmet>
-          <meta charSet="utf-8" />
-          <title>My Title</title>
-          <link rel="canonical" href="https://campuskost.se" />
-      </Helmet>
 
       <BrowserRouter>
       <div>

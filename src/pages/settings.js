@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
 
+import AlertDialog from '../components/AlertDialog';
+
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -39,8 +41,7 @@ function Settings(props) {
   const labelRef = React.useRef(null);
   const [openSetting, setOpenSetting] = useState("");
 
-  console.log(bio_textfield)
-
+  const [openAlert, setOpenAlert] = useState(false);
 
   const [imageUrlList, setImageUrlList] = useState([]);
 
@@ -242,6 +243,20 @@ function Settings(props) {
     let openval = expanded ? id : "";
     setOpenSetting(openval);
     cancel_edit();
+  }
+
+  const removeAccount = () => {
+    setOpenAlert(true);
+  }
+
+  const onDeleteAccChoice = (chosedDelete) => {
+
+    console.log(chosedDelete);
+    setOpenAlert(false);
+
+    store.db.collection('users').doc(store.firestore_user.email).delete();
+    history.push("/home");
+
   }
 
 
@@ -511,14 +526,33 @@ function Settings(props) {
 
       </div>
 
+      <div style={{display: 'flex'}}>
       <Button
         variant="contained"
-        color="secondary"
+        color="primary"
         onClick={() => signOut()}
         className={classes.center_btn}
       >
         Logga ut
       </Button>
+
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => removeAccount()}
+        className={classes.center_btn}
+      >
+        Radera konto
+      </Button>
+      </div>
+
+      <AlertDialog
+      open={openAlert}
+      onAlertClose={onDeleteAccChoice}
+      title="Är du säker?"
+      message="Är du säker på att du vill radera ditt konto på Campuskost?"
+      yesOptionText="Ja"
+      NoOptionText="Oj, nej!"/>
 
     </div>
   );

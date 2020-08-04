@@ -126,7 +126,7 @@ function UploadPage(props) {
 
     let value = event.target.value;
     setTitle(value);
-    setValid({ ...valid, ["title"]: value.length > 2 ? true : false });
+    setValid({ ...valid, ["title"]: value.length > 0 ? true : false });
 
     dispatch({
       type: "SETTITLE",
@@ -135,11 +135,11 @@ function UploadPage(props) {
   };
 
   const handleIngredientsAdd = length => {
-    setValid({ ...valid, ["ingredients"]: length > 1 ? true : false });
+    setValid({ ...valid, ["ingredients"]: length > 0 ? true : false });
   };
 
   const handleDescriptionsAdd = length => {
-    setValid({ ...valid, ["desc"]: length > 1 ? true : false });
+    setValid({ ...valid, ["desc"]: length > 0 ? true : false });
   };
 
   const onFileAdd = (files) => {
