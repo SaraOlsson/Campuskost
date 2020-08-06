@@ -1,28 +1,22 @@
-import React from 'react';
-import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button';
-
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import IconButton from '@material-ui/core/IconButton';
+import InputBase from '@material-ui/core/InputBase';
+import LinkUI from '@material-ui/core/Link';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import { fade, makeStyles } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { default as AccountCircle, default as AccountCircleIcon } from '@material-ui/icons/AccountCircle';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-
-
-import { Link } from "react-router-dom";
-import LinkUI from '@material-ui/core/Link';
+import SearchIcon from '@material-ui/icons/Search';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom";
-
+import { Link, useHistory } from "react-router-dom";
 
 function TopMenuBar(props) {
   const classes = useStyles();

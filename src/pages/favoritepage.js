@@ -1,17 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import { useSelector } from "react-redux";
-import { makeStyles } from '@material-ui/core/styles';
-import firebase from 'firebase/app';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import React, { useEffect } from 'react';
 // import _ from 'underscore';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { useSelector } from "react-redux";
+import { useFirestore } from "react-redux-firebase";
 import ListContainer from '../components/listcontainer';
 
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Typography from '@material-ui/core/Typography';
 
 function FavoritePage(props) {
 
@@ -23,6 +21,7 @@ function FavoritePage(props) {
   const [refList, setRefList] = React.useState([]);
 
   const store = useSelector(state => state.fireReducer);
+  const firestore = useFirestore();
 
   useEffect(() => {
 
@@ -52,7 +51,7 @@ function FavoritePage(props) {
     return new Promise((resolve, reject) => {
 
       let replaced_email = current_email.replace(/\./g, ','); // replaces all dots
-      let listsRef = store.db.collection('recipe_lists').where('list_followers.' + replaced_email, '==', true);
+      let listsRef = firestore.collection('recipe_lists').where('list_followers.' + replaced_email, '==', true);
       let list_docs = [];
 
       if (mine === true) {
@@ -80,7 +79,7 @@ function FavoritePage(props) {
   let getLikesDocsForUser = function(current_email) {
     return new Promise((resolve, reject) => {
 
-      let likesRef = store.db.collection('recipe_likes').doc(current_email);
+      let likesRef = firestore.collection('recipe_likes').doc(current_email);
 
       likesRef.get().then(function(doc) {
         let data = doc.data();

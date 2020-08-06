@@ -1,26 +1,23 @@
-import React, {useState, useEffect} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from "react-router-dom";
-import { useParams} from "react-router";
-import { useSelector } from 'react-redux';
-import { useDispatch } from "react-redux";
-
-import SimpleDialog from '../components/simpledialog';
-import PickUserDialog from '../components/pickuserdialog';
-import ReactShare from '../components/ReactShare';
-
-import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import { makeStyles } from '@material-ui/core/styles';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import EditIcon from '@material-ui/icons/Edit';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFirestore } from "react-redux-firebase";
+import { useParams } from "react-router";
+import { useHistory } from "react-router-dom";
+import PickUserDialog from '../components/pickuserdialog';
+import ReactShare from '../components/ReactShare';
+import useFirebaseFetch from "../reducers/useFirebaseFetch";
 
 function RecipePage(props) {
 
@@ -29,18 +26,38 @@ function RecipePage(props) {
   const [ saved, setSaved ] = useState({likes: false, doc_id: undefined});
   const [ tried, setTried ] = useState(false);
   const { recipetitle, id } = useParams();
+  
   const store = useSelector(state => state.fireReducer);
+  const firestore = useFirestore();
+
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
 
-  //console.log("hi")
-  //console.log(history.location)
+  const fireUser = useSelector(state => state.fireReducer.firestore_user);
+
+  let init_recipe_ref = firestore.collection('recipes').doc(id);
+
+  const {data, isLoading, hasErrored, errorMessage, updateDataRecord
+  } = useFirebaseFetch(init_recipe_ref, []);
+
+  // console.log(recipe_data)
+
+  /*
+  useEffect(() => {
+    console.log(isLoading)
+    console.log(hasErrored)
+
+    if(isLoading === false && hasErrored === false) {
+      console.log(data)
+    } 
+
+  }, isLoading); */
 
 
   useEffect(() => {
 
-    let ref = store.db.collection('recipes').doc(id);
+    let ref = firestore.collection('recipes').doc(id);
     recipeFetcher(ref);
     // likeFetcher();
 
@@ -56,7 +73,7 @@ function RecipePage(props) {
       setIfUser(true);
     }
 
-    //let queryRef = store.db.collection('likes').where('email', '==', store.firestore_user.email);
+    //let queryRef = firestore.collection('likes').where('email', '==', store.firestore_user.email);
     //likeFetcher(queryRef);
     likeFetcher(store.firestore_user.email);
 
@@ -64,8 +81,8 @@ function RecipePage(props) {
 
   const likeFetcher = (current_email) => {
 
-    // let recipe_likesRef = store.db.collection('recipe_likes');
-    let likesRef = store.db.collection('recipe_likes').doc(current_email);
+    // let recipe_likesRef = firestore.collection('recipe_likes');
+    let likesRef = firestore.collection('recipe_likes').doc(current_email);
 
     likesRef.get().then(function(doc) {
 
@@ -77,7 +94,7 @@ function RecipePage(props) {
         isliked = ( data.liked_recipes[recipe.id] !== undefined ) ? data.liked_recipes[recipe.id] : false;
 
       } else {
-        store.db.collection('recipe_likes').doc(current_email).set({liked_recipes: {}});
+        firestore.collection('recipe_likes').doc(current_email).set({liked_recipes: {}});
         isliked = false;
       }
 
@@ -98,7 +115,7 @@ function RecipePage(props) {
       return;
     }
 
-    let likesRef = store.db.collection('recipe_likes').doc(store.firestore_user.email);
+    let likesRef = firestore.collection('recipe_likes').doc(store.firestore_user.email);
 
     likesRef.get().then(function(doc) {
 
@@ -109,7 +126,7 @@ function RecipePage(props) {
 
         data = doc.data();
         data.liked_recipes[recipe.id] = (saved.likes) ? false : true;
-        store.db.collection("recipe_likes").doc(doc.id).update(data);
+        firestore.collection("recipe_likes").doc(doc.id).update(data);
       }
 
     });
@@ -154,7 +171,7 @@ function RecipePage(props) {
 
   const removeRecipe = () => {
 
-    store.db.collection('recipes').doc(id).delete();
+    firestore.collection('recipes').doc(id).delete();
     history.push("/home");
 
   }

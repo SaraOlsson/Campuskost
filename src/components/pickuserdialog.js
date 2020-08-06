@@ -1,19 +1,19 @@
-import React, {useState, useEffect} from 'react';
-import { useSelector } from "react-redux";
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import { blue } from '@material-ui/core/colors';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
+import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
-import AddIcon from '@material-ui/icons/Add';
-import Typography from '@material-ui/core/Typography';
-import { blue } from '@material-ui/core/colors';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from "react-redux";
+import { useFirestore } from "react-redux-firebase";
+
 
 // const emails = ['username@gmail.com', 'user02@gmail.com'];
 const useStyles = makeStyles({
@@ -29,6 +29,7 @@ function SimpleDialog(props) {
   const [myFriends, setMyFriends] = useState(undefined);
 
   const store = useSelector(state => state.fireReducer);
+  const firestore = useFirestore();
 
   // when url changes, on load and on user click
   useEffect(() => {
@@ -61,7 +62,7 @@ function SimpleDialog(props) {
 
     let firebase_event_id = store.firestore_user.email + "-tips-" + friend.email + "-" + props.recipeId;
 
-    store.db.collection('events').doc(firebase_event_id).set(event_tips_object);
+    firestore.collection('events').doc(firebase_event_id).set(event_tips_object);
   };
 
   // get email of followers for the user profile in view
@@ -70,12 +71,12 @@ function SimpleDialog(props) {
     let follow_docs = [];
     let follow_data = [];
 
-    store.db.collection("followers").doc(current_user_email).collection(collection)
+    firestore.collection("followers").doc(current_user_email).collection(collection)
     .onSnapshot(function(querySnapshot) {
 
         querySnapshot.forEach( doc => {
 
-          store.db.collection("users").doc(doc.id)
+          firestore.collection("users").doc(doc.id)
           .onSnapshot(function(doc) {
               let data = doc.data();
               follow_data.push({email: doc.id, username: data.username, fullname: data.fullname, profile_img_url: data.profile_img_url, follows: false});

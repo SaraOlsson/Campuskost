@@ -1,14 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from "react-router-dom";
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import MyDialog from '../components/dialog';
+import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import MySnackbar from '../components/snackbar';
-
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import { blue } from '@material-ui/core/colors';
 
 function useLongPress(callback = () => {}, ms = 300) {
   const [startLongPress, setStartLongPress] = useState(false);

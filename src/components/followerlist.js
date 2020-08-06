@@ -19,7 +19,7 @@ function FollowerListItem(props) {
   let user = props.user;
 
   let user_avatar = undefined;
-  if(user.profile_img_url != undefined) {
+  if(user.profile_img_url != undefined && user.profile_img_url != "") {
     user_avatar = <img src={user.profile_img_url} className={classes.smallprofileimage} alt={"profile-img"} />; //
   } else {
     user_avatar = (

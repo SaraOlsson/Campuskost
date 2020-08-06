@@ -1,19 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import { useSelector } from "react-redux";
-
 import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect } from 'react';
+import { useSelector } from "react-redux";
+import { useFirestore } from "react-redux-firebase";
 import RecipeGridList from '../components/recipegridlist';
 
-import Button from '@material-ui/core/Button';
-
 var Spinner = require('react-spinkit');
-// import RecipeGridList from '../components/recipegrid';
 
 function ListContainerSafe(props) {
 
   const [recipes, setRecipes] = React.useState([]);
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
+  const firestore = useFirestore();
 
   useEffect(() => {
 
@@ -46,7 +44,7 @@ function ListContainerSafe(props) {
     let ref;
     recipe_id_list.map( (recipe_id, idx) => {
 
-      ref = store.db.collection('recipes').doc(recipe_id);
+      ref = firestore.collection('recipes').doc(recipe_id);
       ref.get().then(function(doc) {
           if (doc.exists) {
 

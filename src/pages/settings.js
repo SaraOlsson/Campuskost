@@ -1,31 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import { useSelector } from "react-redux";
-// import { useDispatch } from "react-redux";
+import Button from '@material-ui/core/Button';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from "react-router-dom";
-
-import AlertDialog from '../components/AlertDialog';
-
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-
-import Button from '@material-ui/core/Button';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import SaveIcon from '@material-ui/icons/Save';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
-import InputLabel from '@material-ui/core/InputLabel';
-
-
+import React, { useState } from 'react';
+import { useSelector } from "react-redux";
+import { useFirestore } from "react-redux-firebase";
+import { useHistory } from "react-router-dom";
+import AlertDialog from '../components/AlertDialog';
 
 function Settings(props) {
 
@@ -47,6 +38,7 @@ function Settings(props) {
 
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
+  const firestore = useFirestore();
   const history = useHistory();
 
   React.useEffect(() => {
@@ -124,7 +116,7 @@ function Settings(props) {
   var toChangePromise = function(current_username) {
     return new Promise((resolve, reject) => {
 
-      let listsRef = store.db.collection('recipes');
+      let listsRef = firestore.collection('recipes');
       let list_ids = [];
 
       let query = listsRef.where('user', '==', current_username).get()
@@ -143,7 +135,7 @@ function Settings(props) {
 
       // check if available
       let is_available = true;
-      let query = store.db.collection('users').where('username', '==', username_textfield).get()
+      let query = firestore.collection('users').where('username', '==', username_textfield).get()
         .then(snapshot => {
           snapshot.forEach(doc => {
             is_available = false;
@@ -157,7 +149,7 @@ function Settings(props) {
   function save_fullname() {
 
     // Set the 'username' field of the user
-    store.db.collection('users').doc(store.firestore_user.email).update({fullname: fullname_textfield});
+    firestore.collection('users').doc(store.firestore_user.email).update({fullname: fullname_textfield});
     setIn_editmode(false);
   }
 
@@ -165,7 +157,7 @@ function Settings(props) {
   function save_bio() {
 
     // Set the 'username' field of the user
-    store.db.collection('users').doc(store.firestore_user.email).update({bio: bio_textfield});
+    firestore.collection('users').doc(store.firestore_user.email).update({bio: bio_textfield});
     setIn_editmode(false);
   }
 
@@ -181,14 +173,14 @@ function Settings(props) {
       }
 
       // Set the 'username' field of the user
-      store.db.collection('users').doc(store.firestore_user.email).update({username: username_textfield});
+      firestore.collection('users').doc(store.firestore_user.email).update({username: username_textfield});
       setIn_editmode(false);
 
       // update other docs (recipe docs) with this username
       toChangePromise(store.firestore_user.username).then((loadedIds) => {
 
         loadedIds.map( _id => {
-          store.db.collection('recipes').doc(_id).update({user: username_textfield});
+          firestore.collection('recipes').doc(_id).update({user: username_textfield});
         });
       });
     });
@@ -199,7 +191,7 @@ function Settings(props) {
   function save_img() {
 
     // Set the 'username' field of the user
-    store.db.collection('users').doc(store.firestore_user.email).update({profile_img_url: imageUrl});
+    firestore.collection('users').doc(store.firestore_user.email).update({profile_img_url: imageUrl});
   }
 
   function newName() {
@@ -254,7 +246,7 @@ function Settings(props) {
     console.log(chosedDelete);
     setOpenAlert(false);
 
-    store.db.collection('users').doc(store.firestore_user.email).delete();
+    firestore.collection('users').doc(store.firestore_user.email).delete();
     history.push("/home");
 
   }
@@ -557,8 +549,6 @@ function Settings(props) {
     </div>
   );
 }
-// className={classes.formlabel}
-// style={{display: 'flex', flexWrap: 'wrap'}
 
 const useStyles = makeStyles({
   login_div: {

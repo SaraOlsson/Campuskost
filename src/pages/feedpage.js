@@ -1,14 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import { BrowserRouter as Link} from "react-router-dom";
-import { makeStyles } from '@material-ui/core/styles';
-import { useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom";
-
-import RecipeGridList from '../components/recipegridlist';
-import RecipeItem from '../components/recipeitem';
-
 import Grid from '@material-ui/core/Grid';
-import GridList from '@material-ui/core/GridList';
+import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useFirestore } from "react-redux-firebase";
+import { useHistory } from "react-router-dom";
+import RecipeGridList from '../components/recipegridlist';
 
 var Spinner = require('react-spinkit');
 
@@ -22,15 +18,17 @@ function FeedPage() {
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
 
+  const firestore = useFirestore();
+
   useEffect(() => {
 
-    let recpiesRef = store.db.collection('recipes');
+    let recpiesRef = firestore.collection('recipes');
     recipeFetcher(recpiesRef);
 
   }, []);
 
   const recipeFetcher = (recpiesRef) => {
-    store.db.collection("recipes")
+    firestore.collection("recipes")
     .onSnapshot(function(querySnapshot) {
 
         let recipe_docs = [];

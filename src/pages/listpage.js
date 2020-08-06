@@ -1,11 +1,9 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import { useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
-import { useDispatch } from "react-redux";
+import React, { useCallback, useEffect } from 'react';
+import { Droppable } from 'react-beautiful-dnd';
+import { useDispatch, useSelector } from "react-redux";
+import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
-
 import ListContainer from '../components/listcontainer';
 
 var Spinner = require('react-spinkit');
@@ -84,6 +82,7 @@ function ListPage() {
     // const [wasupdated, setwasupdated] = React.useState(false);
 
     const store = useSelector(state => state.fireReducer);
+    const firestore = useFirestore();
     const classes = useStyles();
     const history = useHistory();
 
@@ -148,7 +147,7 @@ function ListPage() {
     let getLikesDocsForUser = function(current_email) {
       return new Promise((resolve, reject) => {
 
-        let likesRef = store.db.collection('recipe_likes').doc(current_email);
+        let likesRef = firestore.collection('recipe_likes').doc(current_email);
 
         likesRef.get().then(function(doc) {
           let data = doc.data();
@@ -163,7 +162,7 @@ function ListPage() {
       return new Promise((resolve, reject) => {
 
         let replaced_email = current_email.replace(/\./g, ','); // replaces all dots
-        let listsRef = store.db.collection('recipe_lists').where('list_followers.' + replaced_email, '==', true);
+        let listsRef = firestore.collection('recipe_lists').where('list_followers.' + replaced_email, '==', true);
         let list_docs = [];
 
         if (mine === true) {
@@ -195,7 +194,7 @@ function ListPage() {
       let ref;
       recipe_id_list.map( (recipe_id, idx) => {
 
-        ref = store.db.collection('recipes').doc(recipe_id);
+        ref = firestore.collection('recipes').doc(recipe_id);
         ref.get().then(function(doc) {
             if (doc.exists) {
 
@@ -234,7 +233,7 @@ function ListPage() {
 
           //listState.splice(source.index, 1); // remove from current list
 
-          //let listsRef = store.db.collection('recipe_lists').where('list_followers.' + replaced_email, '==', true);
+          //let listsRef = firestore.collection('recipe_lists').where('list_followers.' + replaced_email, '==', true);
           // lists_by_user
           let drop_id = result.destination.droppableId;
           let list_index = drop_id.substring(drop_id.indexOf("_")+1);
@@ -242,14 +241,14 @@ function ListPage() {
           let list = lists_by_user[list_index];
           let recipe_doc_id = result.draggableId;
 
-          let listsRef = store.db.collection('recipe_lists').doc(list.id);
+          let listsRef = firestore.collection('recipe_lists').doc(list.id);
 
           listsRef.get().then(function(doc) {
 
             let data = doc.data();
             data.id = doc.id;
             data.recipes[recipe_doc_id] = true; // add to list
-            store.db.collection("recipe_lists").doc(doc.id).update(data).then(function(what) {
+            firestore.collection("recipe_lists").doc(doc.id).update(data).then(function(what) {
               // history.go(0);
             });
 

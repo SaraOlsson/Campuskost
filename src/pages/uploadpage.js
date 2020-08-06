@@ -7,45 +7,28 @@ TODO: let the user add extra information, as time to cook or num portions
 
 */
 
-import React, {useState, useEffect} from 'react';
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { makeStyles, withStyles, ThemeProvider } from '@material-ui/core/styles';
-import firebase from 'firebase'; // 'firebase/app';
-
-import '../style/GlobalCssButton.css';
-import FileInput from '../components/fileinput';
-import ValidCheck from '../components/validcheck';
-import DescriptionList from '../components/descriptionlist';
-import IngredientsList from '../components/ingredientslist';
-import theme from '../theme';
-
-import RecipeCard from '../components/RecipeCard';
-
+import Button from '@material-ui/core/Button';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Input from '@material-ui/core/Input';
+import FormLabel from '@material-ui/core/FormLabel';
+import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import FormLabel from '@material-ui/core/FormLabel';
-
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import SaveIcon from '@material-ui/icons/Save';
+import { makeStyles } from '@material-ui/core/styles';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import firebase from 'firebase'; // REFACTOR
+import React from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { useFirestore } from "react-redux-firebase";
+import { useHistory } from "react-router-dom";
+import DescriptionList from '../components/descriptionlist';
+import FileInput from '../components/fileinput';
+import IngredientsList from '../components/ingredientslist';
+// import { useFirebase } from "react-redux-firebase";
+import '../style/GlobalCssButton.css';
 
 var Spinner = require('react-spinkit');
 
@@ -61,6 +44,16 @@ function UploadPage(props) {
   const labelRef = React.useRef(null);
   const [url, setUrl] = React.useState("temp");
 
+  // const firebase = useFirebase();
+
+  const classes = useStyles();
+  const dispatch = useDispatch(); // be able to dispatch
+  const store = useSelector(state => state.fireReducer);
+  const firestore = useFirestore();
+  const upload_store = useSelector(state => state.uploadReducer);
+  const history = useHistory();
+
+
   // remove these
   const [valid, setValid] = React.useState({
     title: false,
@@ -68,12 +61,6 @@ function UploadPage(props) {
     desc: false,
     image: false
   });
-
-  const classes = useStyles();
-  const dispatch = useDispatch(); // be able to dispatch
-  const store = useSelector(state => state.fireReducer);
-  const upload_store = useSelector(state => state.uploadReducer);
-  const history = useHistory();
 
   const imageDisp = img => {
     dispatch({
@@ -107,20 +94,6 @@ function UploadPage(props) {
     }
 
   }, []);
-
-  /*
-  const getImage = () => {
-
-    let storageRef = firebase.storage();
-    storageRef.ref('recept/bananbröd.jpg').getDownloadURL().then(function(url) {
-
-      setUrl("temp 1")
-
-    }).catch(function(error) {
-      // Handle any errors
-    });
-
-  } */
 
   const handleChange = event => {
 
@@ -165,10 +138,13 @@ function UploadPage(props) {
   // upload image and callback with download URL
   const uploadImage = (callback) => {
 
+    // console.log(firebase)
+    // firebase.uploadFile('recept/' + title + '_image.jpg', image, 'testis', {metadata: {ye: "hej"}});
+    
     setUpload_wait(true);
     // Create a reference to the new image
-    let storageRef = firebase.storage();
-    let newImageRef = storageRef.ref('recept/' + title + '_image.jpg');
+    let storageRef = firebase.storage(); // REFACTOR TO HOOKS
+    let newImageRef = storageRef.ref('recept/' + title + '_image.jpg'); // storageRef.ref('recept/' + title + '_image.jpg');
 
     // Upload image as a Base64 formatted image string.
     let uploadTask = newImageRef.putString(image, 'data_url');
@@ -180,7 +156,7 @@ function UploadPage(props) {
       uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
         callback(downloadURL);
       });
-    });
+    }); 
   }
 
   const uploadAction = () => {
@@ -202,14 +178,14 @@ function UploadPage(props) {
     let username = store.firestore_user.username;
     let recipe_name = upload_store.title;
 
-    // const document = store.db.doc('recipes/' + recipe_name + '-' + username);
-    //const temp_doc = store.db.collection('recipes').doc();
+    // const document = firestore.doc('recipes/' + recipe_name + '-' + username);
+    //const temp_doc = firestore.collection('recipes').doc();
     //const _id = recipe_name + '-' + temp_doc.id;
 
-    const document = store.db.collection('recipes').doc();
+    const document = firestore.collection('recipes').doc();
 
     let r_img = "temp_food1";
-    let ref_to_user = store.db.collection('users').doc(store.firestore_user.email);
+    let ref_to_user = firestore.collection('users').doc(store.firestore_user.email);
 
     // if upload or create new doc
     if(upload_store.editmode == false)
@@ -252,7 +228,7 @@ function UploadPage(props) {
       // either upload with or without image
       if (image == undefined) {
 
-        store.db.collection('recipes').doc(upload_store.recipe_id).update(update_data);
+        firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
         setUpload_wait(false);
         setDone(true);
 
@@ -260,7 +236,7 @@ function UploadPage(props) {
         uploadImage(function(returnValue_downloadURL) {
           // use the return value here instead of like a regular (non-evented) return value
           update_data.img_url = returnValue_downloadURL;
-          store.db.collection('recipes').doc(upload_store.recipe_id).update(update_data);
+          firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
 
           setUpload_wait(false);
           setDone(true);
@@ -315,10 +291,11 @@ function UploadPage(props) {
 
   let page_title = (upload_store.editmode) ? "Ändra recept" : "Ladda upp recept";
 
+  /*
   let decs_valid = (valid.desc || (upload_store.descriptions && upload_store.descriptions.length > 1)) ? true : false;
   let ingred_valid = (valid.ingredients || (upload_store.ingredients && upload_store.ingredients.length > 1)) ? true : false;
   let title_valid = (title.length >= 3 );
-
+  */
 
   return (
 

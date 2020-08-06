@@ -1,22 +1,23 @@
-import React, {useState, useEffect} from 'react';
-import { useSelector } from "react-redux";
-import { useParams} from "react-router";
-import { useHistory } from "react-router-dom";
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+import SettingsIcon from '@material-ui/icons/Settings';
 import 'firebase/auth';
-
-import SimpleTabs from '../components/userpagetabs';
-import RecipeGridList from '../components/recipegridlist';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from "react-redux";
+import { useFirestore } from "react-redux-firebase";
+import { useParams } from "react-router";
+import { useHistory } from "react-router-dom";
+import userchef from '../assets/userchef.png';
 import FollowerList from '../components/followerlist';
+import RecipeGridList from '../components/recipegridlist';
+import SimpleTabs from '../components/userpagetabs';
 // import FavoritePage from '../pages/favoritepage';
 import ListPage from '../pages/listpage';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import SettingsIcon from '@material-ui/icons/Settings';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
-import userchef from '../assets/userchef.png';
+
 
 var Spinner = require('react-spinkit');
 
@@ -35,6 +36,7 @@ function ProfilePage(props) {
 
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
+  const firestore = useFirestore();
   const history = useHistory();
 
   // when url changes, on load and on user click
@@ -66,7 +68,7 @@ function ProfilePage(props) {
   var email_promise = function(url_username) {
     return new Promise((resolve, reject) => {
 
-      store.db.collection('users').where('username', '==', url_username).get()
+      firestore.collection('users').where('username', '==', url_username).get()
         .then(snapshot => {
 
           let doc_data;
@@ -85,13 +87,13 @@ function ProfilePage(props) {
 
     // in following, remove from following list
     if(following_this_user.following) {
-      store.db.collection("followers").doc(store.firestore_user.email).collection("following").doc(following_this_user.email).delete();
-      store.db.collection("followers").doc(following_this_user.email).collection("followers").doc(store.firestore_user.email).delete();
-      store.db.collection('events').doc(firebase_event_id).delete();
+      firestore.collection("followers").doc(store.firestore_user.email).collection("following").doc(following_this_user.email).delete();
+      firestore.collection("followers").doc(following_this_user.email).collection("followers").doc(store.firestore_user.email).delete();
+      firestore.collection('events').doc(firebase_event_id).delete();
 
     } else {
-      store.db.collection("followers").doc(store.firestore_user.email).collection("following").doc(following_this_user.email).set({});
-      store.db.collection("followers").doc(following_this_user.email).collection("followers").doc(store.firestore_user.email).set({});
+      firestore.collection("followers").doc(store.firestore_user.email).collection("following").doc(following_this_user.email).set({});
+      firestore.collection("followers").doc(following_this_user.email).collection("followers").doc(store.firestore_user.email).set({});
 
       let date = new Date();
 
@@ -104,7 +106,7 @@ function ProfilePage(props) {
         seen: false
       };
 
-      store.db.collection('events').doc(firebase_event_id).set(event_follow_object);
+      firestore.collection('events').doc(firebase_event_id).set(event_follow_object);
 
     }
 
@@ -116,7 +118,7 @@ function ProfilePage(props) {
   function getEmail(url_user) {
 
     // loop through all users to find email of user with this username
-    store.db.collection("users")
+    firestore.collection("users")
     .onSnapshot(function(querySnapshot) {
 
         querySnapshot.forEach( doc => {
@@ -131,7 +133,7 @@ function ProfilePage(props) {
 
           let found = false;
           // check if user signed in is following the user of this profile page
-          store.db.collection("followers").doc(store.firestore_user.email).collection("following")
+          firestore.collection("followers").doc(store.firestore_user.email).collection("following")
           .onSnapshot(function(querySnapshot) {
 
               querySnapshot.forEach( doc => {
@@ -159,7 +161,7 @@ function ProfilePage(props) {
 
     let follow_docs = [];
 
-    store.db.collection("followers").doc(current_user_email).collection(collection)
+    firestore.collection("followers").doc(current_user_email).collection(collection)
     .onSnapshot(function(querySnapshot) {
 
         querySnapshot.forEach( doc => {
@@ -184,7 +186,7 @@ function ProfilePage(props) {
     let followers = [];
     follow_docs.forEach((item, i) => {
 
-      store.db.collection("users").doc(item.email)
+      firestore.collection("users").doc(item.email)
       .onSnapshot(function(doc) {
           let data = doc.data();
           followers.push({username: data.username, fullname: data.fullname, profile_img_url: data.profile_img_url, follows: false});
@@ -199,19 +201,9 @@ function ProfilePage(props) {
 
   }
 
-  /*
-  function callback2 (followers, collection) {
-
-    if(collection === "followers")
-      setFollowInfo(followers);
-    else if(collection === "following")
-      setFollowingInfo(followers);
-  } */
-
-
   // fetch recipes for the user profile in view
   const recipeFetcher_new = (current_username) => {
-    store.db.collection("recipes")
+    firestore.collection("recipes")
     .onSnapshot(function(querySnapshot) {
 
         let recipe_docs = [];
@@ -233,7 +225,7 @@ function ProfilePage(props) {
   const userFetcher = () => {
 
     // Create a reference to the cities collection
-    let usersRef = store.db.collection('users');
+    let usersRef = firestore.collection('users');
 
     // Create a query against the collection
     let queryRef = usersRef.where('username', '==', user);

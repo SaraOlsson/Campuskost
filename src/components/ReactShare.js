@@ -1,15 +1,5 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-
-import {
-
-  FacebookShareButton,
-  FacebookIcon,
-  FacebookMessengerShareButton
-
-} from "react-share";
-
-
+import { FacebookIcon, FacebookShareButton } from "react-share";
 
 export default function ReactShare(props) {
 
@@ -21,8 +11,6 @@ export default function ReactShare(props) {
 
   return (
 
-
-
       <FacebookShareButton
         url={shareUrl}
         quote={title}
@@ -30,15 +18,12 @@ export default function ReactShare(props) {
         >
 
         <div style={{marginTop: 10}}>
-          <Button variant="contained" color="gray">
-            <span style={{marginRight: 10}}> Dela </span>
+          
             <FacebookIcon size={32} round />
-          </Button>
+          
         </div>
 
         </FacebookShareButton>
-
-
 
   );
 }

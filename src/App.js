@@ -1,47 +1,34 @@
-import React, {useState, useEffect} from 'react';
-import { HashRouter as BrowserRouter, Router, Route, Link, Switch, Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import { makeStyles } from '@material-ui/core/styles';
+import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
+import LoyaltyRoundedIcon from '@material-ui/icons/LoyaltyRounded';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import PublishIcon from '@material-ui/icons/PublishRounded';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-// import { useHistory } from "react-router-dom";
-// import { incrementdispatch } from './actions/RecipeActions';
-import * as serviceWorker from './serviceWorker';
-
-import MySnackbar from './components/snackbar';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { useFirestore } from "react-redux-firebase";
+import { Route, Switch, useHistory } from "react-router-dom";
 // import our css
 import './App.css';
-import './style/GlobalCssButton.css';
-
+import MySnackbar from './components/snackbar';
+import TopMenuBar from './components/topmenubar';
 // import our page components
 import FeedPage from './pages/feedpage';
-import ProfilePage from './pages/profilepage';
-import NoticePage from './pages/noticepage';
-import FavoritePage from './pages/favoritepage';
-import UploadPage from './pages/uploadpage';
-import RecipePage from './pages/recipepage';
-import Login from './pages/login';
-import Settings from './pages/settings';
-import SearchPage from './pages/searchpage';
-import TopMenuBar from './components/topmenubar';
 import ListPage from './pages/listpage';
+import Login from './pages/login';
+import NoticePage from './pages/noticepage';
+import ProfilePage from './pages/profilepage';
+import RecipePage from './pages/recipepage';
+import SearchPage from './pages/searchpage';
+import Settings from './pages/settings';
+import UploadPage from './pages/uploadpage';
 
-// import material UI components
-import Icon from '@material-ui/core/Icon';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import Badge from '@material-ui/core/Badge';
-import PublishIcon from '@material-ui/icons/PublishRounded';
-import NotificationsActiveRoundedIcon from '@material-ui/icons/NotificationsActiveRounded';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import LoyaltyRoundedIcon from '@material-ui/icons/LoyaltyRounded';
-import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-
-// import {Helmet} from "react-helmet";
+import * as serviceWorker from './serviceWorker';
+import './style/GlobalCssButton.css';
 
 require('dotenv').config(); // check if we need this
 
@@ -67,30 +54,6 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 });
 
-// initiate Firebase
-let db = undefined;
-function initFirebase() {
-
-  console.log("run initFirebase")
-
-  const firebaseConfig = {
-    apiKey: API_KEY, // "AIzaSyAq0vTBf0o5MckjHcCOJiJ_DRK8v_UZY88",
-    authDomain: "campuskost-firebase.firebaseapp.com",
-    databaseURL: "https://campuskost-firebase.firebaseio.com",
-    projectId: "campuskost-firebase",
-    storageBucket: "campuskost-firebase.appspot.com",
-    messagingSenderId: "477692438735",
-    appId: "1:477692438735:web:2e6dce163d7f7ce8baafba",
-    measurementId: "G-MDB52ZHJER"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  //const storage = firebase.storage();
-  let storage = 1;
-
-  return [db, storage];
-}
 
 // main component of the app
 function App(props) {
@@ -103,6 +66,8 @@ function App(props) {
   const dispatch = useDispatch(); // be able to dispatch
   const state_user = useSelector(state => state.userReducer); // subscribe to the redux store
   const store = useSelector(state => state.fireReducer); // subscribe to the redux store
+
+  const firestore = useFirestore();
 
   useEffect(() => {
 
@@ -120,21 +85,14 @@ function App(props) {
     // set listener for authentication changes
     // either only set redux object or also create firestore instance
     firebase.auth().onAuthStateChanged(user => {
-      dispatch({ type: user ? "SIGNIN" : "SIGNOUT" })
+      // dispatch({ type: user ? "SIGNIN" : "SIGNOUT" })
 
       // if user is signed in, set redux object
       if( user ) {
 
-        // dispatch auth info (such as last time logged in etc)
-        dispatch({
-          type: "SETUSER",
-          auth_user: user
-        })
-
-        const user_id = user.uid;
         const user_email = user.email;
 
-        const usersRef = db.collection('users').doc(user_email);
+        const usersRef = firestore.collection('users').doc(user_email);
         // connect to firebase and check if a user doc for this email exists
         usersRef.get()
         .then((docSnapshot) => {
@@ -152,26 +110,14 @@ function App(props) {
             });
           } else {
             console.log("in app, user doc doesnt exist yet")
-          }/* else {
+          }
+        });
 
-            // prepare to create firestore doc as this user signed in for the first time
-            let userObj = {
-              email: user_email,
-              username: "DefaultChef",
-              university: "",
-              fullname: "Master Chef"
-            };
-
-            console.log("create the document")
-            usersRef.set(userObj); // create the document
-
-            // set redux state
-            dispatch({
-              type: "SETFIREUSER",
-              firestore_user: userObj
-            })
-          } */
-      });
+        // dispatch auth info (such as last time logged in etc)
+        dispatch({
+          type: "SETUSER",
+          auth_user: user
+        })
 
       } // end if user
       else {
@@ -184,18 +130,12 @@ function App(props) {
 
       }
 
+      dispatch({ type: user ? "SIGNIN" : "SIGNOUT" })
+
     }); // end auth listener
 
   }, []); // end useEffect
-
-
-  if(db === undefined) // init firebase once
-  {
-    let storage;
-    [db, storage] = initFirebase();
-    dispatch({ type: "SETDB", db: db });
-    dispatch({ type: "SETSTORAGE", storage: storage });
-  }
+  
 
   const closeDialog = (action) => {
     setOpenUpdateDialog(false);
@@ -216,7 +156,7 @@ function App(props) {
   return (
     <div className="body">
 
-      <BrowserRouter>
+      
       <div>
 
         <div className={classes.headerrow}>
@@ -248,7 +188,7 @@ function App(props) {
         </div>
 
       </div>
-      </BrowserRouter>
+      
 
     </div>
   );
@@ -308,8 +248,6 @@ function BottomMenuBar() {
   // <Badge badgeContent={3} color="secondary"><NotificationsIcon /></Badge>
 
 }
-
-// margin: -15px -11px 50px -15px;
 
 const useStyles = makeStyles({
   body: {

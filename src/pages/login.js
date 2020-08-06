@@ -1,14 +1,11 @@
 import React, {useState} from 'react';
 import { useSelector } from "react-redux";
+import { useFirestore } from "react-redux-firebase";
+import { useFirebase } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 
-//import testImg from '../assets/food-and-restaurant.png'
-
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
 
 import Button from '@material-ui/core/Button';
 
@@ -68,10 +65,12 @@ function SignUpContainer(props) {
   const dispatch = useDispatch(); // be able to dispatch
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
+  const firestore = useFirestore();
+  const firebase = useFirebase();
 
   const create_db_user_doc = () => {
 
-    const usersRef = store.db.collection('users').doc(email);
+    const usersRef = firestore.collection('users').doc(email);
     // connect to firebase and check if a user doc for this email exists
     usersRef.get().then((docSnapshot) => {
       if (docSnapshot.exists) {
@@ -167,7 +166,7 @@ function SignUpContainer(props) {
 
       // check if available
       let is_available = true;
-      let query = store.db.collection('users').where('username', '==', username_totry).get()
+      let query = firestore.collection('users').where('username', '==', username_totry).get()
         .then(snapshot => {
           snapshot.forEach(doc => {
             is_available = false;
@@ -227,6 +226,7 @@ function LoginContainer(props) {
   const [loginProblem, setLoginProblem] = useState(false);
 
   const classes = useStyles();
+  const firebase = useFirebase();
 
   /**
    * Handles the sign in button press.

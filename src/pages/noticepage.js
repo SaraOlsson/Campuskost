@@ -1,41 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import { useHistory } from "react-router-dom";
-import { makeStyles } from '@material-ui/core/styles';
-import { useSelector } from "react-redux";
-
-// import '../style/GlobalCssButton.css';
-// import * as ui from '../meterialuiimports';
-import LoadSpinner from '../components/loadspinner';
-
+import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-
-import FolderIcon from '@material-ui/icons/Folder';
-import ForwardIcon from '@material-ui/icons/Forward';
+import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from "react-redux";
+import { useFirestore } from "react-redux-firebase";
+import { useHistory } from "react-router-dom";
+import LoadSpinner from '../components/loadspinner';
 
-// var Spinner = require('react-spinkit');
-
-function generate(element) {
-  return [0, 1, 2].map(value =>
-    React.cloneElement(element, {
-      key: value,
-    }),
-  );
-}
-
-/*
-
-<ListItemText
-  primary= { props.user + " följer nu dig" }
-  secondary={true ? props.time : null}
-/>*/
 
 const B = (props) => <span style={{fontWeight: 'bold'}}>{props.children}</span>
 
@@ -142,6 +117,7 @@ function NoticePage(props) {
 
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
+  const firestore = useFirestore();
 
   // when url changes, on load and on user click
   useEffect(() => {
@@ -162,7 +138,7 @@ function NoticePage(props) {
   var events_promise = function(email) {
     return new Promise((resolve, reject) => {
 
-      store.db.collection('events').where('email', '==', email).get()
+      firestore.collection('events').where('email', '==', email).get()
         .then(snapshot => {
 
           let doc_data = [];
@@ -176,7 +152,7 @@ function NoticePage(props) {
     });
   }
 
-  let spinnerjsx = <LoadSpinner/> // <div className={classes.spinner}><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
+  let spinnerjsx = <LoadSpinner/>
   let eventListjsx = (eventList) ? eventList.map( (event, idx) =>
     <NoticeListItem key={idx} type={event.type} user={event.other_username} recipe={event.recipe || undefined} time="" eventimg={event.event_image_url}/>
   ) : spinnerjsx;

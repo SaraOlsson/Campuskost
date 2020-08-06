@@ -1,13 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-
 import { makeStyles } from '@material-ui/core/styles';
-
-import RecipeGridList from '../components/recipegridlist';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from "react-redux";
+import { useFirestore } from "react-redux-firebase";
+import { useHistory } from "react-router-dom";
 import FollowerList from '../components/followerlist';
-
-import Button from '@material-ui/core/Button';
+import RecipeGridList from '../components/recipegridlist';
 
 var Spinner = require('react-spinkit');
 
@@ -18,6 +15,7 @@ function SearchPage(props) {
 
   const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
+  const firestore = useFirestore();
 
   const history = useHistory();
 
@@ -30,11 +28,10 @@ function SearchPage(props) {
 
   const userFetcher = (collection_name) => {
 
-    store.db.collection(collection_name).onSnapshot(function(querySnapshot) {
+    firestore.collection(collection_name).onSnapshot(function(querySnapshot) {
 
           let temp_users = [];
           querySnapshot.forEach( doc => {
-            //let data = doc.data();
             let data = doc.data();
             data.id = doc.id;
             temp_users.push(data);
@@ -52,23 +49,7 @@ function SearchPage(props) {
     return obj;
   });
 
-  /*
-  {
-    recipes.map( (recipe, idx) =>
-      <RecipeItem recipe={recipe} key={idx}/>
-    )
-  }
-
-  <Button
-    variant="contained"
-    color="primary"
-    onClick={() => history.push('/lists')}
-  >
-    Till ListPage
-  </Button>
-
-  */
-
+  
   // Sök specifikt recept eller användare ovan
 
   return (
