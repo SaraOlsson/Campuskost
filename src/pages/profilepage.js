@@ -210,7 +210,7 @@ function ProfilePage(props) {
         querySnapshot.forEach( doc => {
 
           let data = doc.data();
-          if( data.user == current_username )
+          if( data.user === current_username )
           {
             data.id = doc.id;
             recipe_docs.push(data);
@@ -255,10 +255,10 @@ function ProfilePage(props) {
   </Button>
   <button onClick={ () => firebase.auth().signOut() } name="signout"> Logga ut </button>*/
   let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
-  let recipeContent = (recipes != undefined) ? <RecipeGridList recipes={recipes}/> : spinner_jsx;
+  let recipeContent = (recipes !== undefined) ? <RecipeGridList recipes={recipes}/> : spinner_jsx;
 
   let followBtn;
-  if (store.firestore_user && !ifUser && following_this_user.following == true) {
+  if (store.firestore_user && !ifUser && following_this_user.following === true) {
 
     followBtn = (<Button
       variant="contained"
@@ -280,12 +280,6 @@ function ProfilePage(props) {
       Följ
     </Button>);
   }
-
-  // let followBtn =
-
-  let uni = (store.firestore_user != undefined) ? store.firestore_user.university : undefined;
-  let fullname = (store.firestore_user != undefined) ? store.firestore_user.fullname : undefined;
-  //let img_src = (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : userchef;
 
   let img_src = userchef; // default user image
   if (ifUser && store.firestore_user && store.firestore_user.profile_img_url) {
@@ -309,15 +303,15 @@ function ProfilePage(props) {
         <Grid item xs={6}>
           <span className={classes.username}>{username_url}</span>
 
-          { user != undefined &&
+          { user !== undefined &&
             <span className={classes.university}> | {user.fullname}</span>
           }
 
-          { (user != undefined && user.university != "") &&
+          { (user !== undefined && user.university !== "") &&
             <p className={classes.university}>🎓{user.university}</p>
           }
 
-          { (user != undefined && user.bio != undefined ) &&
+          { (user !== undefined && user.bio !== undefined ) &&
             <p className={classes.bio}><i>{user.bio}</i></p>
           }
 

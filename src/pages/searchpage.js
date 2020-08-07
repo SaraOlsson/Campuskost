@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 import FollowerList from '../components/followerlist';
 import RecipeGridList from '../components/recipegridlist';
 
@@ -14,10 +14,9 @@ function SearchPage(props) {
   const [recipes, setRecipes] = useState(undefined);
 
   const classes = useStyles();
-  const store = useSelector(state => state.fireReducer);
   const firestore = useFirestore();
 
-  const history = useHistory();
+  // const history = useHistory();
 
   let searchstring = "";
 
@@ -59,7 +58,7 @@ function SearchPage(props) {
 
 
 
-      { searchstring === "" && <p> Sökfunktionen kommer snart! Tills dess visas alla användare och recept nedan </p> }
+      { searchstring === "" && <p> Sökfunktionen kommer snart! Tills dess visas alla användare och recept nedan. </p> }
 
       { users.length <= 0 && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
       { users.length > 0 && <React.Fragment>

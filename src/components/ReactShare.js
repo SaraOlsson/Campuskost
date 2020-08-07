@@ -7,7 +7,7 @@ export default function ReactShare(props) {
   let shareUrl = full_path; // 'https://campuskost.se/recipe/Bananbr%C3%B6d/Bananbr%C3%B6d-Sporkis';
   let title = 'Spana in det här receptet på Campuskost! Låter gott med ' + props.title;
 
-  console.log(shareUrl)
+  // console.log(shareUrl)
 
   return (
 

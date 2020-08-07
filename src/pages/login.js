@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import { useFirebase } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
+import Emoji from '../components/Emoji';
 
 
 import Button from '@material-ui/core/Button';
@@ -16,7 +16,6 @@ function LoginPage() {
 
   const [state, setState] = useState(SIGNUP_STATE);
 
-  const classes = useStyles();
   const history = useHistory();
 
   const loginRoute = () => {
@@ -57,14 +56,12 @@ function SignUpContainer(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState({value: "", isValid: false});
-  // const [validUsername, setValidUsername] = useState("");
 
 
   const [feedback, setFeedback] = useState({color: 'green', message: ""});
 
   const dispatch = useDispatch(); // be able to dispatch
   const classes = useStyles();
-  const store = useSelector(state => state.fireReducer);
   const firestore = useFirestore();
   const firebase = useFirebase();
 
@@ -123,7 +120,6 @@ function SignUpContainer(props) {
     }).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
-      var errorMessage = error.message;
 
       if (errorCode === 'auth/email-already-in-use')
         setFeedback({color: 'red', message: 'Ett konto med denna email finns redan.'});
@@ -166,7 +162,7 @@ function SignUpContainer(props) {
 
       // check if available
       let is_available = true;
-      let query = firestore.collection('users').where('username', '==', username_totry).get()
+      firestore.collection('users').where('username', '==', username_totry).get()
         .then(snapshot => {
           snapshot.forEach(doc => {
             is_available = false;
@@ -329,6 +325,7 @@ function LoginContainer(props) {
 
 }
 
+// <span role="img" aria-label="babybottle">🍼</span>
 function SignupBanner(props) {
 
   const classes = useStyles();
@@ -336,7 +333,7 @@ function SignupBanner(props) {
   return (
 
     <div className={classes.login_div}>
-      <h3> Ny på Campuskost? 🍼 </h3>
+      <h3> Ny på Campuskost? <Emoji symbol="🍼"/>  </h3>  
 
       <Button
         variant="contained"
@@ -345,6 +342,8 @@ function SignupBanner(props) {
       >
         Skapa konto
       </Button>
+
+      
 
       <p className={classes.info_font}>
         Det är gratis att ha ett konto på Campuskost. <br/>

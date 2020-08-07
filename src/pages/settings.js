@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import AlertDialog from '../components/AlertDialog';
+import Emoji from '../components/Emoji';
 
 function Settings(props) {
 
@@ -119,7 +120,7 @@ function Settings(props) {
       let listsRef = firestore.collection('recipes');
       let list_ids = [];
 
-      let query = listsRef.where('user', '==', current_username).get()
+      listsRef.where('user', '==', current_username).get()
         .then(snapshot => {
 
           snapshot.forEach(doc => {
@@ -135,7 +136,7 @@ function Settings(props) {
 
       // check if available
       let is_available = true;
-      let query = firestore.collection('users').where('username', '==', username_textfield).get()
+      firestore.collection('users').where('username', '==', username_textfield).get()
         .then(snapshot => {
           snapshot.forEach(doc => {
             is_available = false;
@@ -244,18 +245,17 @@ function Settings(props) {
   const onDeleteAccChoice = (chosedDelete) => {
 
     console.log(chosedDelete);
-    setOpenAlert(false);
 
-    firestore.collection('users').doc(store.firestore_user.email).delete();
-    history.push("/home");
+    if(chosedDelete === true) {
+      firestore.collection('users').doc(store.firestore_user.email).delete();
+      history.push("/home");
+    }
 
   }
 
 
   //let signText = (firebase.auth().currentUser) ? "Logga ut" : "Logga in";
-
   // let username = (store.firestore_user) ? store.firestore_user.username : "unset";
-
   // fix if undefined
   // style={{display: 'inline-block'}}
 
@@ -316,7 +316,7 @@ function Settings(props) {
                 onClick={() => randomName()}
                 className={`${classes.buttons} ${classes.rainbow}`}
               >
-                Slumpa 🤪
+                Slumpa <Emoji symbol="🤪"/>
               </Button>
               <Button
                 variant="contained"
@@ -498,7 +498,7 @@ function Settings(props) {
                 onClick={() => randomImg()}
                 className={`${classes.buttons} ${classes.rainbow}`}
               >
-                Slumpa 🤪
+                Slumpa <Emoji symbol="🤪"/>
               </Button>
               <Button
                 variant="contained"

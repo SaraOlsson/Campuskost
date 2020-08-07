@@ -16,7 +16,6 @@ import '../style/GlobalCssButton.css';
 function DescriptionList(props) {
 
   const [editObject, setEditObject] = useState(undefined);
-  const [order, setOrder] = useState(-2);
   const [text, setText] = useState("");
 
   const [descriptions, setDescriptions] = useState(() => initiate_descriptions());
@@ -55,7 +54,6 @@ function DescriptionList(props) {
     setEditObject(new_obj);
     setDescriptions(temp_list);
 
-    setOrder(descriptions.length + 1);
     ingredientsDisp();
   }
 
@@ -69,7 +67,6 @@ function DescriptionList(props) {
     setEditObject(undefined);
 
     setText("");
-    setOrder(-321); //
     ingredientsDisp();
 
   }
@@ -82,7 +79,7 @@ function DescriptionList(props) {
     object.text = (object.text.length > 0) ? object.text[0].toUpperCase() + object.text.slice(1) : "";
 
     setText(object.text);
-    // setOrder(object.order);
+
 
   }
 
@@ -107,7 +104,6 @@ function DescriptionList(props) {
 
     setEditObject(undefined);
     setText("");
-    setOrder(-123)
 
     props.handleAdd(temp_list.length);
     ingredientsDisp();
@@ -124,7 +120,7 @@ function DescriptionList(props) {
 
   }
 
-  // let ingredients = (props.ingredients != undefined) ? props.ingredients : temp_ingredients;
+  // let ingredients = (props.ingredients !== undefined) ? props.ingredients : temp_ingredients;
   // idx < ingredients.length - 1
 
 

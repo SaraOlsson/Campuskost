@@ -17,6 +17,7 @@ import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import PickUserDialog from '../components/pickuserdialog';
 import ReactShare from '../components/ReactShare';
+import AlertDialog from '../components/AlertDialog';
 import useFirebaseFetch from "../reducers/useFirebaseFetch";
 
 function RecipePage(props) {
@@ -26,6 +27,7 @@ function RecipePage(props) {
   const [ saved, setSaved ] = useState({likes: false, doc_id: undefined});
   const [ tried, setTried ] = useState(false);
   const { recipetitle, id } = useParams();
+  const [openAlert, setOpenAlert] = useState(false);
   
   const store = useSelector(state => state.fireReducer);
   const firestore = useFirestore();
@@ -33,8 +35,6 @@ function RecipePage(props) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-
-  const fireUser = useSelector(state => state.fireReducer.firestore_user);
 
   let init_recipe_ref = firestore.collection('recipes').doc(id);
 
@@ -69,7 +69,7 @@ function RecipePage(props) {
     if(!store.firestore_user || !recipe || !recipe.user_doc.username )
       return;
 
-    if(recipe.user_doc.username == store.firestore_user.username) {
+    if(recipe.user_doc.username === store.firestore_user.username) {
       setIfUser(true);
     }
 
@@ -169,12 +169,6 @@ function RecipePage(props) {
     history.push("/upload" );
   }
 
-  const removeRecipe = () => {
-
-    firestore.collection('recipes').doc(id).delete();
-    history.push("/home");
-
-  }
 
   const handleUserClick = () => {
     history.push("/profile/" + recipe.user_doc.username );
@@ -222,24 +216,7 @@ function RecipePage(props) {
 
   let icon = (saved.likes === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
   let r_img = ( recipe !== undefined) ? recipe.img : 'temp_food1';
-  let triedbyNum = 3;
-  // , zIndex: '-1'
-
-  /*
-
-  <h2 style={{display: 'inline'}}>
-    <Button disableTouchRipple onClick={likeRecipe}
-    style={{display: 'inline', backgroundColor: 'transparent'}}>
-      {icon}
-    </Button>
-    { recipetitle + ' | ' }
-
-  </h2>
-  <h2 onClick={ handleUserClick} style={{display: 'inline'}}>
-    { recipe.user }
-  </h2>
-
-  */
+  // let triedbyNum = 3;
 
   let img_src;
 
@@ -249,6 +226,17 @@ function RecipePage(props) {
     img_src = require('../assets/'+ r_img + '.jpg');
   }
 
+  const onDeleteRecipeChoice = (chosedDelete) => {
+
+    console.log(chosedDelete);
+    setOpenAlert(false);
+
+    if(chosedDelete === true) {
+      firestore.collection('recipes').doc(id).delete();
+      history.push("/home");
+    }
+
+  }
 
   return (
 
@@ -317,7 +305,7 @@ function RecipePage(props) {
             variant="contained"
             color="secondary"
             startIcon={<EditIcon />}
-            onClick={removeRecipe}
+            onClick={ () => setOpenAlert(true) }
           >
             Ta bort recept
           </Button>
@@ -325,6 +313,14 @@ function RecipePage(props) {
 
         </div>
       }
+
+      <AlertDialog
+      open={openAlert}
+      onAlertClose={onDeleteRecipeChoice}
+      title="Är du säker?"
+      message="Är du säker på att du vill ta bort det här receptet?"
+      yesOptionText="Ja"
+      NoOptionText="Oj, nej!"/>
 
     </div>
 
@@ -367,7 +363,7 @@ function IngredientsList(props) {
   {name: 'ägg', quantity: "2", measure: ""}
 ];
 
-  let ingredients = (props.ingredients != undefined) ? props.ingredients : temp_ingredients;
+  let ingredients = (props.ingredients !==  undefined) ? props.ingredients : temp_ingredients;
 
   let ingredientsjsx = ingredients.map((ingred, idx) =>
   <React.Fragment key={idx}>
@@ -403,7 +399,7 @@ function RecipeDecsList(props) {
   {order: 1, text: "Vispa i mjöl, mjölk och salt"}
   ];
 
-  let description = (props.description != undefined) ? props.description : temp_description;
+  let description = (props.description !==  undefined) ? props.description : temp_description;
 
   // sort by order
   description.sort( (desc1, desc2) => desc1.order - desc2.order );

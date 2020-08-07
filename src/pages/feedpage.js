@@ -1,23 +1,19 @@
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import RecipeGridList from '../components/recipegridlist';
+import Emoji from '../components/Emoji';
 
 var Spinner = require('react-spinkit');
 
 function FeedPage() {
 
-  // const [images, setImages] = useState();
   const [recipes, setRecipes] = useState(undefined);
-  //const [docs, setDocs] = useState(undefined);
-  const [scrollview, setScrollview] = useState(true);
+  // const [scrollview, setScrollview] = useState(true);
 
   const classes = useStyles();
-  const store = useSelector(state => state.fireReducer);
-
   const firestore = useFirestore();
 
   useEffect(() => {
@@ -45,6 +41,7 @@ function FeedPage() {
   // <div className={classes.imageContainer}>{images}</div>
   // recipeData.PastaMaster.recipes
 // { recipes != undefined && <RecipeGridList imageData={recipes}/> }
+  /*
   if(scrollview === false )
   {
     return (
@@ -56,7 +53,7 @@ function FeedPage() {
        </div>
 
     );
-  }
+  } */
 
   return (
     <div>
@@ -69,6 +66,7 @@ function FeedPage() {
 
 }
 
+/*
 function ScrollableRecipes(props) {
 
   const classes = useStyles();
@@ -107,14 +105,13 @@ function ScrollableRecipes(props) {
     </Grid>
   );
 }
+*/
 
 // component above the feed at start page
 function NewsContainer(props) {
 
   const classes = useStyles();
   const history = useHistory();
-  // className={classes.userinfo}
-
 
   if(props.recipes === undefined || props.recipes.length < 1 )
     return null; // <p style={{margin: 15}}>Sorry chefs, an issue! probably no internet connection.</p>
@@ -126,22 +123,6 @@ function NewsContainer(props) {
   const handleUserClick = (user) => {
     history.push("/profile/" + user );
   };
-
-  let username = props.recipes[recipe_index].user;
-
-  /*
-  <Grid item xs={5}>
-
-    {props.recipes !== undefined &&
-      <GridList><RecipeItem recipe={props.recipes[recipe_index]} smalltiles={false}/></GridList>
-    }
-
-  </Grid>
-  <Grid item xs={7}>
-    <h3>{viral_header}</h3>
-    <h5 onClick={() => handleUserClick(username)} style={{cursor: 'pointer'}}> @username</h5>
-  </Grid>
-  */
 
   let feedback_form_link = <a href="https://forms.gle/wUSFkwExgdJbiAUL7" target="_blank" style={{color: '#68bb8c'}}>här</a>;
 
@@ -158,7 +139,7 @@ function NewsContainer(props) {
 
       <Grid item xs={12}>
         <div style={{padding: '10px'}}>
-        <h3>Välkommen till nya Campuskost 🌱</h3>
+        <h3>Välkommen till nya Campuskost <Emoji symbol="🌱"/> </h3>
         <p> Campuskost har fått nytt utseende och funktion! Du kan nu skapa ett konto och själv ladda upp och redigera dina recept.
         Snart kommer funktionalitet såsom att skapa listor och följa dina vänners listor med recept. Lämna gärna feedback {feedback_form_link} om du
         hittar buggar eller har något roligt förslag</p>
@@ -170,22 +151,6 @@ function NewsContainer(props) {
     </div>
   );
 }
-
-// used before for testing
-/*
-function ImageContainer(props) {
-
-  const classes = useStyles();
-
-  return (
-    <Link to={"/recipe/" + props.data.title } >
-      <div>
-      <div className={classes.foodImg}></div>
-      {props.data.title}
-      </div>
-    </Link>
-  );
-} */
 
 const useStyles = makeStyles({
   imageContainer: {

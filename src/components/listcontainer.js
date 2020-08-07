@@ -10,7 +10,6 @@ function ListContainer(props) {
 
   const [recipes, setRecipes] = React.useState([]);
   const classes = useStyles();
-  const store = useSelector(state => state.fireReducer);
   const firestore = useFirestore();
 
   const list_doc = props.listdoc;
@@ -18,14 +17,14 @@ function ListContainer(props) {
   useEffect(() => {
 
     // now using
-    if(props.recipeDocs != undefined) {
+    if(props.recipeDocs !== undefined) {
 
       setRecipes(props.recipes);
       return;
     }
 
     // using recipe ids
-    if (list_doc.recipes != undefined) {
+    if (list_doc.recipes !== undefined) {
 
       let temp_recipes = [];
 
@@ -74,7 +73,7 @@ function ListContainer(props) {
               let data = doc.data();
               data.id = doc.id;
               temp_recipes.push(data);
-              if (idx == recipe_id_list.length - 1) {
+              if (idx === recipe_id_list.length - 1) {
                 setRecipes(temp_recipes);
               }
           } 
@@ -89,13 +88,13 @@ function ListContainer(props) {
   let recipeContent = (recipes.length > 0) ? <RecipeGridList handleaction={handleaction} recipes={recipes} smalltiles={true}/> : spinner_jsx;
 
   let header;
-  if (props.noheader == false) {
+  if (props.noheader === false) {
     let listname = (list_doc.listname) ? list_doc.listname : "<listname>"; // "Gillade recept"
     let user_in_header = (props.mine) ? "" : "| " + props.createdby.split("@")[0];
     header = <p className={classes.list_header}> {listname} <i>{user_in_header}</i> </p>;
   }
 
-  let id = 5;
+  // let id = 5;
 
   return (
     <div style={{width: '100%'}}>

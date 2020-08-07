@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import LoadSpinner from '../components/loadspinner';
+import Emoji from '../components/Emoji';
 
 
 const B = (props) => <span style={{fontWeight: 'bold'}}>{props.children}</span>
@@ -56,6 +57,7 @@ function NoticeListItem(props) {
                     <span> har testat ditt recept </span>
                     <span className={classes.pointer} onClick={recipeClick}><B>{recipe_id_to_title(props.recipe)}</B>.</span>
                   </div>;
+      break;
     default:
 
   }
@@ -66,7 +68,7 @@ function NoticeListItem(props) {
 
   let user_avatar = undefined;
 
-  if(props.eventimg != undefined) {
+  if(props.eventimg !== undefined) {
     user_avatar = <img src={props.eventimg} className={classes.smallprofileimage + ' ' + classes.pointer } alt={"profile-img"} />; //
   } else {
     user_avatar = (
@@ -115,7 +117,6 @@ function NoticePage(props) {
 
   const [eventList, setEventList] = useState(undefined);
 
-  const classes = useStyles();
   const store = useSelector(state => state.fireReducer);
   const firestore = useFirestore();
 
@@ -176,7 +177,7 @@ function NoticePage(props) {
       </List>
     }
     { (eventList && eventList.length < 1) &&
-      <p> Ledsen, inga händelser än. Börja interagera med dina kockvänner! 🍳 </p>
+      <p> Ledsen, inga händelser än. Börja interagera med dina kockvänner! <Emoji symbol="🍳"/> </p>
     }
 
 

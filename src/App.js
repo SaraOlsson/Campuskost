@@ -32,7 +32,6 @@ import './style/GlobalCssButton.css';
 
 require('dotenv').config(); // check if we need this
 
-const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
 
 // for PWA - needed?
 let deferredPrompt;
@@ -56,16 +55,13 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 
 // main component of the app
-function App(props) {
+function App() {
 
-  const [value, setValue] = React.useState('default');
-  const [redirect, setRedirect] = React.useState(false);
   const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
 
   const classes = useStyles();
   const dispatch = useDispatch(); // be able to dispatch
   const state_user = useSelector(state => state.userReducer); // subscribe to the redux store
-  const store = useSelector(state => state.fireReducer); // subscribe to the redux store
 
   const firestore = useFirestore();
 
@@ -224,7 +220,7 @@ function BottomMenuBar() {
       title: undefined
     })
 
-    if(val != "upload" && upload_store.editmode == true) {
+    if(val !== "upload" && upload_store.editmode === true) {
       dispatch({
         type: "SETEDITMODE",
         editmode: false

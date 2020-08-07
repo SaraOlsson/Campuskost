@@ -42,7 +42,6 @@ function UploadPage(props) {
   const [done, setDone] = React.useState(false);
   const [labelWidth, setLabelWidth] = React.useState(0);
   const labelRef = React.useRef(null);
-  const [url, setUrl] = React.useState("temp");
 
   // const firebase = useFirebase();
 
@@ -77,18 +76,18 @@ function UploadPage(props) {
   React.useEffect(() => {
     setLabelWidth(labelRef.current.offsetWidth);
     // getImage();
-    if(upload_store.title != undefined)
+    if(upload_store.title !== undefined)
     {
       setTitle(upload_store.title);
       setValid({ ...valid, ["title"]: true });
     }
 
-    if(upload_store.descriptions != undefined)
+    if(upload_store.descriptions !== undefined)
     {
       handleDescriptionsAdd(upload_store.descriptions.length);
     }
 
-    if(upload_store.ingredients != undefined)
+    if(upload_store.ingredients !== undefined)
     {
       handleIngredientsAdd(upload_store.ingredients.length);
     }
@@ -169,7 +168,7 @@ function UploadPage(props) {
     } */
 
     // make sure signed in
-    if(store.firestore_user == undefined) {
+    if(store.firestore_user === undefined) {
       alert("you have to sign in first")
       return;
     }
@@ -188,7 +187,7 @@ function UploadPage(props) {
     let ref_to_user = firestore.collection('users').doc(store.firestore_user.email);
 
     // if upload or create new doc
-    if(upload_store.editmode == false)
+    if(upload_store.editmode === false)
     {
       // when image is uploaded, continue with uploading the rest
       uploadImage(function(returnValue_downloadURL) {
@@ -226,7 +225,7 @@ function UploadPage(props) {
       };
 
       // either upload with or without image
-      if (image == undefined) {
+      if (image===undefined) {
 
         firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
         setUpload_wait(false);
@@ -263,7 +262,7 @@ function UploadPage(props) {
   let upload_disabled = !allValid();
 
   // if working on recipe
-  if(upload_wait == false && done == false)
+  if(upload_wait === false && done === false)
   {
     bottom_content = (<Button
       variant="contained"
@@ -275,7 +274,7 @@ function UploadPage(props) {
       {upload_button_text}
     </Button> );
   }
-  else if ( upload_wait == true ) // if waiting on upload
+  else if ( upload_wait === true ) // if waiting on upload
   {
     bottom_content = (<div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#ffffff" fadeIn="none"/></div>);
   } else // done with upload
@@ -384,7 +383,7 @@ function UploadPage(props) {
                     </Grid>
 
                   </Grid>
-                  { image != undefined &&
+                  { image !== undefined &&
                   <React.Fragment>
                     <Grid item xs={9}>
                       <img src={image} alt={"loadedimage"} className={classes.loadedimage} />

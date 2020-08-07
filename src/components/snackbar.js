@@ -12,10 +12,6 @@ export default function MySnackbar(props) {
     setOpen(props.open);
   }, [props.open]);
 
-  const handleClick = () => {
-    setOpen(true);
-  };
-
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;

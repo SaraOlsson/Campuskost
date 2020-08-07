@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import ListContainer from '../components/listcontainer';
+import Emoji from '../components/Emoji';
 
 var Spinner = require('react-spinkit');
 
@@ -20,6 +21,8 @@ const reorder = (list, startIndex, endIndex) => {
 };
 
 let grid = 15;
+
+/*
 const getReicipeStyle = (isDragging, draggableStyle) => {
 
   return {
@@ -33,18 +36,17 @@ const getReicipeStyle = (isDragging, draggableStyle) => {
 
     // styles we need to apply on draggables
     ...draggableStyle
-}};
+}}; */
 
-
+/*
 const getLikedListStyle = isDraggingOver => ({
   background: isDraggingOver ? 'lightblue' : '#eeeeee',
-    background: '#eeeeee',
     padding: grid,
     width: '90%',
     display: 'flex',
     overflow: 'auto',
     borderRadius: 12,
-});
+}); */
 
 function DraggableRecipe(props) {
 
@@ -54,7 +56,7 @@ function DraggableRecipe(props) {
   // SET IMAGE
   let r_img = ( recipe.img !== undefined) ? recipe.img : 'temp_food1';
   let img_src = ( recipe.img_url !== undefined) ? recipe.img_url : require('../assets/'+ r_img + '.jpg');
-  let image = <img src={img_src} className={classes.listimage} alt={recipe.title} alt={"recipe img"} />;
+  let image = <img src={img_src} className={classes.listimage} alt={recipe.title} />;
 
   // RETURN JSX
   return (
@@ -73,7 +75,7 @@ window.oncontextmenu = function(event) {
 function ListPage() {
 
     const [listState, setlistState] = React.useState(undefined);
-    const [likes, setLikes] = React.useState(undefined);
+    // const [likes, setLikes] = React.useState(undefined);
     const [recipes, setRecipes] = React.useState([]);
     const [lists_by_user, setLists_by_user] = React.useState([]);
     const [, updateState] = React.useState();
@@ -84,7 +86,6 @@ function ListPage() {
     const store = useSelector(state => state.fireReducer);
     const firestore = useFirestore();
     const classes = useStyles();
-    const history = useHistory();
 
     // dragReducer
     const dispatch = useDispatch(); // be able to dispatch
@@ -125,10 +126,10 @@ function ListPage() {
         if(!like_docs)
           return;
 
-        setLikes(like_docs);
+        // setLikes(like_docs);
 
         let liked_recipes_ids = like_docs.liked_recipes;
-        if ( liked_recipes_ids != undefined) {
+        if ( liked_recipes_ids !== undefined) {
 
           let temp_recipes = [];
           // previously liked recipes will persist in the firestore map but be false
@@ -176,7 +177,7 @@ function ListPage() {
 
               let data = doc.data();
               // grab only lists of other users
-              if (mine === true || (mine === false && data.created_by != current_email)) {
+              if (mine === true || (mine === false && data.created_by !== current_email)) {
                 data.id = doc.id;
                 list_docs.push(data);
               }
@@ -201,7 +202,7 @@ function ListPage() {
                 let data = doc.data();
                 data.id = doc.id;
                 temp_recipes.push(data);
-                if (idx == recipe_id_list.length - 1) {
+                if (idx === recipe_id_list.length - 1) {
                   setRecipes(temp_recipes);
                   setlistState(temp_recipes);
                 }
@@ -324,9 +325,9 @@ function ListPage() {
           ))}
         </div>
         <h3>Mina listor</h3>
-        <p>Kommer snart! 🥳 </p>
+        <p>Kommer snart! <Emoji symbol="🥳"/> </p>
       </div>
-    ) : <div><h3>Gillade recept</h3><p> Ledsen, du behöver logga in för att börja spara recept! 🍳 </p></div>;
+    ) : <div><h3>Gillade recept</h3><p> Ledsen, du behöver logga in för att börja spara recept! <Emoji symbol="🍳"/> </p></div>;
 
     /*
     return (listState && listState.length > 0) ? (
