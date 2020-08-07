@@ -27,6 +27,8 @@ import SearchPage from './pages/searchpage';
 import Settings from './pages/settings';
 import UploadPage from './pages/uploadpage';
 import TermsPage from './pages/TermsPage';
+import Todos from "./components/Todos";
+import PrivateRoute from "./components/PrivateRoute";
 
 import * as serviceWorker from './serviceWorker';
 import './style/GlobalCssButton.css';
@@ -175,6 +177,10 @@ function App() {
             <Route path="/home" component={FeedPage}/>
             <Route path="/lists" component={ListPage}/>
             <Route path="/terms" component={TermsPage}/>
+            
+            <PrivateRoute path = "/todos">
+              <Todos />
+            </PrivateRoute>
             <Route component={FeedPage} />
 
           </Switch>

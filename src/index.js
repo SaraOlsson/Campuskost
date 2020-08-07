@@ -19,7 +19,7 @@ import * as serviceWorker from './serviceWorker';
 
 const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
 const firebaseConfig = {
-  apiKey: API_KEY, // "AIzaSyAq0vTBf0o5MckjHcCOJiJ_DRK8v_UZY88",
+  apiKey: API_KEY,
   authDomain: "campuskost-firebase.firebaseapp.com",
   databaseURL: "https://campuskost-firebase.firebaseio.com",
   projectId: "campuskost-firebase",
