@@ -26,9 +26,11 @@ import RecipePage from './pages/recipepage';
 import SearchPage from './pages/searchpage';
 import Settings from './pages/settings';
 import UploadPage from './pages/uploadpage';
+import TermsPage from './pages/TermsPage';
 
 import * as serviceWorker from './serviceWorker';
 import './style/GlobalCssButton.css';
+
 
 require('dotenv').config(); // check if we need this
 
@@ -172,6 +174,7 @@ function App() {
             <Route path="/search" component={SearchPage} />
             <Route path="/home" component={FeedPage}/>
             <Route path="/lists" component={ListPage}/>
+            <Route path="/terms" component={TermsPage}/>
             <Route component={FeedPage} />
 
           </Switch>

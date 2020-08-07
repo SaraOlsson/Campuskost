@@ -329,6 +329,7 @@ function LoginContainer(props) {
 function SignupBanner(props) {
 
   const classes = useStyles();
+  const history = useHistory();
 
   return (
 
@@ -347,7 +348,7 @@ function SignupBanner(props) {
 
       <p className={classes.info_font}>
         Det är gratis att ha ett konto på Campuskost. <br/>
-        Läs mer om vilkor och användardata <a>här</a>.
+        Läs mer om vilkor och användardata <a style={{color: 'blue'}} onClick={ () => history.push('/terms') }>här</a>.
       </p>
     </div>
 
