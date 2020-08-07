@@ -1,87 +1,56 @@
 import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import EditIcon from '@material-ui/icons/Edit';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFirestore } from "react-redux-firebase";
+import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
-import PickUserDialog from '../components/pickuserdialog';
-import ReactShare from '../components/ReactShare';
 import AlertDialog from '../components/AlertDialog';
-import useFirebaseFetch from "../reducers/useFirebaseFetch";
+import ListIngredients from '../components/ListIngredients';
+import RecipeDecsList from '../components/RecipeDecsList';
 
 function RecipePage(props) {
 
-  const [ ifUser, setIfUser] = useState(false);
-  const [ recipe, setRecipe] = useState(undefined);
-  const [ saved, setSaved ] = useState({likes: false, doc_id: undefined});
-  const [ tried, setTried ] = useState(false);
   const { recipetitle, id } = useParams();
+  const [ ifUser, setIfUser] = useState(false);
+  const [ saved, setSaved ] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
-  
-  const store = useSelector(state => state.fireReducer);
-  const firestore = useFirestore();
 
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
+  
+  const firestore = useFirestore();
+  useFirestoreConnect({
+    collection: `recipes`,
+    doc: id,
+    storeAs: "recipeInView",
+  });
 
-  let init_recipe_ref = firestore.collection('recipes').doc(id);
+  const { email } = useSelector((state) => state.firebase.auth);
+  const recipe = useSelector((state) => state.firestore.data.recipeInView);
 
-  const {data, isLoading, hasErrored, errorMessage, updateDataRecord
-  } = useFirebaseFetch(init_recipe_ref, []);
-
-  // console.log(recipe_data)
-
-  /*
   useEffect(() => {
-    console.log(isLoading)
-    console.log(hasErrored)
 
-    if(isLoading === false && hasErrored === false) {
-      console.log(data)
+    if (recipe !== undefined && email !== undefined) {
+      
+      recipe.user_ref.get().then( (doc) => {
+        let is_user = doc.data().email === email;
+        setIfUser( is_user );
+      });
+
+      likeFetcher(email);
     } 
+      
+  }, [recipe] );  
 
-  }, isLoading); */
-
-
-  useEffect(() => {
-
-    let ref = firestore.collection('recipes').doc(id);
-    recipeFetcher(ref);
-    // likeFetcher();
-
-  }, []);
-
-  // know if recipe belongs to this user
-  useEffect(() => {
-    // exit funtion if undefined
-    if(!store.firestore_user || !recipe || !recipe.user_doc.username )
-      return;
-
-    if(recipe.user_doc.username === store.firestore_user.username) {
-      setIfUser(true);
-    }
-
-    //let queryRef = firestore.collection('likes').where('email', '==', store.firestore_user.email);
-    //likeFetcher(queryRef);
-    likeFetcher(store.firestore_user.email);
-
-  }, [store.firestore_user, recipe]);
-
+  // review
   const likeFetcher = (current_email) => {
 
-    // let recipe_likesRef = firestore.collection('recipe_likes');
     let likesRef = firestore.collection('recipe_likes').doc(current_email);
 
     likesRef.get().then(function(doc) {
@@ -91,15 +60,14 @@ function RecipePage(props) {
       if (doc.exists) {
 
         let data = doc.data();
-        isliked = ( data.liked_recipes[recipe.id] !== undefined ) ? data.liked_recipes[recipe.id] : false;
+        isliked = ( data.liked_recipes[id] !== undefined ) ? data.liked_recipes[id] : false;
 
       } else {
         firestore.collection('recipe_likes').doc(current_email).set({liked_recipes: {}});
         isliked = false;
       }
 
-      // if (isliked)
-      setSaved({likes: isliked, doc_id: current_email});
+      setSaved(isliked);
 
     })
     .catch(err => {
@@ -110,39 +78,30 @@ function RecipePage(props) {
 
   const likeRecipe = () => {
 
-    if(!store.firestore_user) {
-      console.log("user not loaded yet..")
-      return;
-    }
-
-    let likesRef = firestore.collection('recipe_likes').doc(store.firestore_user.email);
+    let likesRef = firestore.collection('recipe_likes').doc(email);
 
     likesRef.get().then(function(doc) {
-
-      let data;
 
       // add or remove like
       if (doc.exists) {
 
-        data = doc.data();
-        data.liked_recipes[recipe.id] = (saved.likes) ? false : true;
+        let data = doc.data();
+        data.liked_recipes[id] = (saved) ? false : true;
         firestore.collection("recipe_likes").doc(doc.id).update(data);
       }
 
     });
 
-    setSaved({likes: !saved.likes, doc_id: saved.doc_id});
+    setSaved(!saved);
 
   };
 
-  const tryRecipe = () => {
-    setTried( !tried );
-  };
-
+  /*
   const recipeToFriend = () => {
     //setTried( !tried );
-  };
+  }; */
 
+  // make to reducer
   const editRecipe = () => {
 
     dispatch({
@@ -169,54 +128,8 @@ function RecipePage(props) {
     history.push("/upload" );
   }
 
-
-  const handleUserClick = () => {
-    history.push("/profile/" + recipe.user_doc.username );
-  };
-
-
-  var user_promise = function(user_ref) {
-    return new Promise((resolve, reject) => {
-
-      // reject();
-
-      user_ref.get().then(function(doc) {
-
-          if (!doc.exists)
-            reject();
-
-          let doc_data = doc.data(); // append to recipe data
-          resolve(doc_data);
-
-        });
-    });
-  }
-
-  const recipeFetcher = (ref) => {
-    ref.get().then(function(doc) {
-      if (doc.exists) {
-          let data = doc.data()
-          data.id = doc.id;
-
-          user_promise(data.user_ref).then((extended_data) => {
-
-            data.user_doc = extended_data;
-            setRecipe(data);
-
-          }).catch(() => {
-            console.log("Could not get user data for recipe owner")
-          })
-
-      }
-    }).catch(function(error) {
-        console.log("Error getting document:", error);
-    });
-
-  }
-
-  let icon = (saved.likes === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
+  let icon = (saved === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
   let r_img = ( recipe !== undefined) ? recipe.img : 'temp_food1';
-  // let triedbyNum = 3;
 
   let img_src;
 
@@ -235,34 +148,29 @@ function RecipePage(props) {
       firestore.collection('recipes').doc(id).delete();
       history.push("/home");
     }
-
   }
 
-  return (
+  return (!recipe) ? null : (
 
     <div>
-
-
-
-      { recipe !== undefined &&
-        <div>
+      <div>
 
           <div className={classes.recipeheader}>
-          <span>
-            <Button disableTouchRipple onClick={likeRecipe}
-            style={{display: 'inline', backgroundColor: 'transparent'}}>
-              {icon}
-            </Button>
-            { recipetitle + ' | ' }
 
-          </span>
-          <span>
+            <span>
+              { email && 
+                <Button disableTouchRipple onClick={likeRecipe}>{icon}</Button>
+              }
+              {recipetitle + ' | '}
+            </span>
 
-            <Button disableTouchRipple onClick={handleUserClick}
-            style={{display: 'inline', backgroundColor: 'transparent', textTransform: 'none'}}>
-              { recipe.user_doc.username }
-            </Button>
-          </span>
+            <span>
+              <Button 
+                disableTouchRipple 
+                onClick={() => {history.push("/profile/" + recipe.user)}} >
+                { recipe.user }
+              </Button>
+            </span>
           </div>
 
         <Grid
@@ -275,16 +183,16 @@ function RecipePage(props) {
             <img src={img_src} className={classes.listimage} alt={"recipe img"} />
           </Grid>
           <Grid item xs={4} className={classes.imagesidebar}>
+            {/*
             <div onClick={recipeToFriend}>
               <PickUserDialog recipeId={recipe.id}/>
             </div>
-
-            <ReactShare location={history.location.pathname} title={recipetitle}/>
-
+            Dela på Facebook: <ReactShare location={history.location.pathname} title={recipetitle}/>
+            */}
           </Grid>
         </Grid>
 
-        <IngredientsList ingredients={recipe.ingredients}/>
+        <ListIngredients ingredients={recipe.ingredients}/>
         <RecipeDecsList description={recipe.description}/>
 
         {ifUser &&
@@ -311,8 +219,8 @@ function RecipePage(props) {
           </Button>
         }
 
-        </div>
-      }
+      </div>
+      
 
       <AlertDialog
       open={openAlert}
@@ -320,128 +228,11 @@ function RecipePage(props) {
       title="Är du säker?"
       message="Är du säker på att du vill ta bort det här receptet?"
       yesOptionText="Ja"
-      NoOptionText="Oj, nej!"/>
-
-    </div>
-
-  ); // style={{display: 'inline', backgroundColor: 'transparent', textTransform: 'none'}}
-
-  /*
-
-  // className={classes.triedby}
-
-  { tried === true &&
-  <div className={classes.triedby} >
-    <span className={classes.triedbyText}> Testat av </span>
-    <span className={classes.triedbyNum}> {triedbyNum} </span>
-    <span className={classes.triedbyText}> { triedbyNum > 1 ? "kockar" : "kock" }! </span>
-  </div>
-  }
-  { tried === false &&
-  <div className={classes.triedby} onClick={tryRecipe}>
-    <span className={classes.triedbyText}>
-      Bli den första att testa detta recept!
-    </span>
-  </div>
-  }
-
-  */
-
-}
-
-
-
-function IngredientsList(props) {
-
-  const classes = useStyles();
-
-
-  let temp_ingredients = [
-  {name: 'mjöl (default data)', quantity: "2", measure: "dl"},
-  {name: 'salt', quantity: "1", measure: "tsk"},
-  {name: 'mjölk', quantity: "4", measure: "dl"},
-  {name: 'ägg', quantity: "2", measure: ""}
-];
-
-  let ingredients = (props.ingredients !==  undefined) ? props.ingredients : temp_ingredients;
-
-  let ingredientsjsx = ingredients.map((ingred, idx) =>
-  <React.Fragment key={idx}>
-    <ListItem>
-      <ListItemText
-        primary={ ingred.quantity + " " + ingred.measure + " " + ingred.name }
+      NoOptionText="Oj, nej!"
       />
 
-    </ListItem>
-    { idx < ingredients.length - 1 && <Divider component="li" /> }
-  </React.Fragment>
-  );
-
-  return (
-    <div>
-      <h3> Ingredienser </h3>
-      <List dense={true} className={classes.ingredientslist}>
-        {ingredientsjsx}
-      </List>
     </div>
-  );
-}
-
-
-
-function RecipeDecsList(props) {
-
-  const classes = useStyles();
-
-  let temp_description = [
-  {order: 0, text: "Knäck äggen i en bunke (default data)"},
-  {order: 2, text: "Stek i pannan meed smör eller kokosolja"},
-  {order: 1, text: "Vispa i mjöl, mjölk och salt"}
-  ];
-
-  let description = (props.description !==  undefined) ? props.description : temp_description;
-
-  // sort by order
-  description.sort( (desc1, desc2) => desc1.order - desc2.order );
-
-  let descjsx = description.map((desc, idx) =>
-    <RecipeDecsListItem idx={idx} key={idx} desc={desc.text} len={description.length}/>
-  );
-
-  return (
-    <div>
-      <h3> Gör så här </h3>
-      <List dense={true} className={classes.ingredientslist}>
-        {descjsx}
-      </List>
-    </div>
-  );
-}
-
-function RecipeDecsListItem(props) {
-
-  const [checked, setChecked] = useState(false);
-  const classes = useStyles();
-
-  let idx = props.idx;
-
-  const onIngredClick = (idx) => {
-    setChecked(!checked);
-  }
-
-  let icon = (checked === true ) ? <CheckBoxIcon className={classes.checkIcon}/> : <CheckBoxOutlineBlankIcon className={classes.checkIcon}/> ;
-
-  return (
-    <React.Fragment>
-      <ListItem
-        onClick={() => onIngredClick(idx)}
-      >
-        {icon}
-        <ListItemText primary={ props.desc }/>
-      </ListItem>
-      { idx < props.len - 1 && <Divider component="li" /> }
-    </React.Fragment>
-  );
+  ); 
 }
 
 const useStyles = makeStyles({
@@ -456,32 +247,11 @@ const useStyles = makeStyles({
   imagesidebar: {
     padding: 5
   },
-  triedby: {
-    background: '#f1f1f1',
-    borderRadius: '4px',
-    padding: 5,
-    textAlign: 'center',
-    marginTop: 5
-  },
-  triedbyText: {
-    margin: '0',
-  },
-  triedbyNum: {
-    fontWeight: 'bold',
-    display: 'block',
-    fontSize: '2em'
-  },
-  ingredientslist: {
-   marginTop: '20px',
- },
- checkIcon: {
-   marginRight: '10px',
-   color: '#68bb8c'
- },
- recipeheader: {
+  recipeheader: {
    margin: '20px 0px',
    fontWeight: 'bold'
- }
+  }
 });
 
 export default RecipePage;
+// 488 rows before refactor..

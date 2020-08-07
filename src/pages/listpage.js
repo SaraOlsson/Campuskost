@@ -307,7 +307,7 @@ function ListPage() {
       </Droppable>
     );
 
-    //                  recipeDocs={list_doc.recipeDocs}
+    // recipeDocs={list_doc.recipeDocs}
     // className={isDragging ? classes.displayNone : null}
 
     let starter_content = (<div>

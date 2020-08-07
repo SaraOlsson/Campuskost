@@ -5,12 +5,12 @@ export const rootReducer = combineReducers({
     firebase: firebaseReducer,
     firestore: firestoreReducer,
     fireReducer: fireReducer,
-    testReducers: testreducer,
     uploadReducer: uploadReducer,
     userReducer: userReducer,
     dragReducer: dragReducer
 });
 
+// remove
 function testreducer(state = { num: 0, url: "hey" }, action) {
     switch (action.type) {
       case "INCREMENT":
@@ -66,6 +66,7 @@ function testreducer(state = { num: 0, url: "hey" }, action) {
     }
   }
   
+  // try to remove
   function userReducer(state = { signedIn: false }, action) {
     switch (action.type) {
       case "SIGNIN":
@@ -83,6 +84,7 @@ function testreducer(state = { num: 0, url: "hey" }, action) {
     }
   }
   
+  // try to remove
   function fireReducer(state = { db: undefined, storage: undefined, auth_user: undefined, firestore_user: undefined }, action) {
     switch (action.type) {
       case "SETDB":
@@ -110,6 +112,7 @@ function testreducer(state = { num: 0, url: "hey" }, action) {
     }
   }
   
+  // try to remove
   function dragReducer(state = { isDragging: false, draggableId: undefined, enableDrag: false }, action) {
     switch (action.type) {
       case "SETISDRAGGING":
