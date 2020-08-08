@@ -6,8 +6,7 @@ import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import ListContainer from '../components/listcontainer';
 import Emoji from '../components/Emoji';
-
-var Spinner = require('react-spinkit');
+import LoadSpinner from '../components/loadspinner';
 
 // ********************************* */
 
@@ -278,7 +277,7 @@ function ListPage() {
         }
     };
 
-
+    // <Spinner name="ball-scale-ripple" color="white" className={classes.spinner}/>
 
     let lists_by_user_jxs = lists_by_user.map((list_doc, i) =>
       <Droppable key={"list_" + i} droppableId={"list_" + i} direction="horizontal">
@@ -290,7 +289,8 @@ function ListPage() {
                   style={getListStyle(snapshot.isDraggingOver)}
                   className={isDragging ? null : classes.displayNone}>
                     <p> {list_doc.listname} </p>
-                    <Spinner name="ball-scale-ripple" color="white" className={classes.spinner}/>
+                    
+                    <LoadSpinner name="ball-scale-ripple" color="white"/>
                 </div>
 
                 { !isDragging &&
@@ -422,12 +422,13 @@ const useStyles = makeStyles({
     objectFit: 'cover',
     borderRadius: 10
   },
+  /*
   spinner: {
     color: 'white',
     marginRight: 'auto',
     marginLeft: 'auto',
     width: 'fit-content'
-  },
+  }, */
   displayNone: {
     display: 'none'
   }

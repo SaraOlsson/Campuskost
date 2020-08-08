@@ -153,10 +153,9 @@ function NoticePage(props) {
     });
   }
 
-  let spinnerjsx = <LoadSpinner/>
   let eventListjsx = (eventList) ? eventList.map( (event, idx) =>
     <NoticeListItem key={idx} type={event.type} user={event.other_username} recipe={event.recipe || undefined} time="" eventimg={event.event_image_url}/>
-  ) : spinnerjsx;
+  ) : <LoadSpinner/>;
 
   /*
   { !eventList &&

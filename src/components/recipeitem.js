@@ -44,7 +44,7 @@ function RecipeItem(props) {
     setopenDialog(false);
 
     if(action === "remove")
-      props.handleaction(props.recipe.id);
+      props.handleaction(props.recipeID);
   }
 
   const backspaceLongPress = useLongPress(onLongPress, 500);
@@ -65,7 +65,7 @@ function RecipeItem(props) {
   }
 
   const handeRecipeClick = (clicked_recipe) => {
-    history.push("/recipe/" + clicked_recipe.title + "/" + clicked_recipe.id );
+    history.push("/recipe/" + clicked_recipe.title + "/" + clicked_recipe.recipeID );
   };
 
   let enable_press = false;

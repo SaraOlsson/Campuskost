@@ -1,128 +1,38 @@
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
-import { useFirestore } from "react-redux-firebase";
-import { useHistory } from "react-router-dom";
-import RecipeGridList from '../components/recipegridlist';
+import React from 'react';
+import { useSelector } from "react-redux";
+import { useFirestoreConnect } from "react-redux-firebase";
 import Emoji from '../components/Emoji';
-
-var Spinner = require('react-spinkit');
+import LoadSpinner from '../components/loadspinner';
+import RecipeGridList from '../components/recipegridlist';
 
 function FeedPage() {
 
-  const [recipes, setRecipes] = useState(undefined);
-  // const [scrollview, setScrollview] = useState(true);
-
   const classes = useStyles();
-  const firestore = useFirestore();
 
-  useEffect(() => {
+  useFirestoreConnect({
+    collection: `recipes`,
+    storeAs: "recipes",
+  });
 
-    let recpiesRef = firestore.collection('recipes');
-    recipeFetcher(recpiesRef);
-
-  }, []);
-
-  const recipeFetcher = (recpiesRef) => {
-    firestore.collection("recipes")
-    .onSnapshot(function(querySnapshot) {
-
-        let recipe_docs = [];
-        querySnapshot.forEach( doc => {
-          let data = doc.data();
-          data.id = doc.id;
-          recipe_docs.push(data);
-        });
-
-        setRecipes(recipe_docs);
-    });
-  }
-
-  // <div className={classes.imageContainer}>{images}</div>
-  // recipeData.PastaMaster.recipes
-// { recipes != undefined && <RecipeGridList imageData={recipes}/> }
-  /*
-  if(scrollview === false )
-  {
-    return (
-
-      <div>
-
-      { recipes !== undefined && <ScrollableRecipes recipes={recipes}/> }
-
-       </div>
-
-    );
-  } */
+  const recipes = useSelector((state) => state.firestore.data.recipes); 
 
   return (
     <div>
-      <NewsContainer recipes={recipes}/>
+      <NewsContainer/>
       <h3>Senaste recepten</h3>
-      { recipes !== undefined && <div className={classes.grid_background}><RecipeGridList recipes={recipes}/></div> }
-      { recipes === undefined && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
+      { recipes && <div className={classes.grid_background}><RecipeGridList recipes={Object.values(recipes)}/></div> }
+      { recipes === undefined &&  <LoadSpinner/> }
     </div>
   );
 
 }
 
-/*
-function ScrollableRecipes(props) {
-
-  const classes = useStyles();
-  // className={classes.userinfo}
-
-  let recipes = props.recipes.concat(props.recipes);
-  recipes = recipes.concat(recipes);
-
-  return (
-    <Grid
-      container
-      spacing={1}
-      justify="center"
-
-    >
-      {
-        recipes.map((recipe, idx) =>
-        <div className={classes.scrolldiv} key={idx}>
-        <Grid item xs={12}>
-        <h3 className={classes.scrolltitle}>
-          { recipe.title + ' | ' + recipe.user }
-        </h3>
-        </Grid>
-        <Grid item xs={12} >
-          <img src={require('../assets/'+ 'temp_food1' + '.jpg')} className={classes.scrollimage} alt={"recipe img"} />
-        </Grid>
-        <Grid item xs={12}>
-        <p className={classes.scrolltext}>
-          { 'Some text' }
-        </p>
-        </Grid>
-        </div>
-      )
-
-      }
-    </Grid>
-  );
-}
-*/
-
 // component above the feed at start page
 function NewsContainer(props) {
 
   const classes = useStyles();
-  const history = useHistory();
-
-  if(props.recipes === undefined || props.recipes.length < 1 )
-    return null; // <p style={{margin: 15}}>Sorry chefs, an issue! probably no internet connection.</p>
-
-  let recipe_index = Math.floor(Math.random() * props.recipes.length);
-
-  let viral_header = (props.recipes !== undefined && props.recipes[recipe_index] !== undefined ) ? props.recipes[recipe_index].title : "Veckans favvo: ";
-
-  const handleUserClick = (user) => {
-    history.push("/profile/" + user );
-  };
 
   let feedback_form_link = <a href="https://forms.gle/wUSFkwExgdJbiAUL7" target="_blank" style={{color: '#68bb8c'}}>här</a>;
 
@@ -182,11 +92,6 @@ const useStyles = makeStyles({
     margin: '15px',
     borderRadius: '10px'
   },
-  spinner: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: 100
-  },
   imagesidebar: {
     padding: 5
   },
@@ -195,21 +100,6 @@ const useStyles = makeStyles({
     borderRadius: '4px',
     padding: 5,
     textAlign: 'center'
-  },
-  scrollimage: {
-    maxWidth: '300px',
-  },
-  scrolltitle: {
-    alignSelf: 'flex-start'
-  },
-  scrolldiv: {
-    background: '#f2f2f2',
-    padding: '25px',
-    margin: '15px',
-    borderRadius: '12px'
-  },
-  scrolltext: {
-    color: 'black'
   }
 });
 

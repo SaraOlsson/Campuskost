@@ -129,14 +129,14 @@ function RecipePage(props) {
   }
 
   let icon = (saved === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
-  let r_img = ( recipe !== undefined) ? recipe.img : 'temp_food1';
+  // let r_img = ( recipe !== undefined) ? recipe.img : 'temp_food1';
 
   let img_src;
 
   if  ( recipe !== undefined && recipe.img_url !== undefined) {
     img_src = recipe.img_url;
   } else {
-    img_src = require('../assets/'+ r_img + '.jpg');
+    img_src = require('../assets/temp_food1.jpg');
   }
 
   const onDeleteRecipeChoice = (chosedDelete) => {

@@ -194,8 +194,9 @@ function UploadPage(props) {
         // use the return value here instead of like a regular (non-evented) return value
         let downloadURL = returnValue_downloadURL;
 
-        // Enter new data into the document.
-        document.set({
+        firestore
+        .collection("recipes")
+        .add({
           user: username,
           title: recipe_name,
           img: r_img,
@@ -203,15 +204,17 @@ function UploadPage(props) {
           ingredients: upload_store.ingredients,
           description: upload_store.descriptions,
           user_ref: ref_to_user
-        }).then((test) => {
+        })
+        .then((docRef) => {
+          docRef.update({
+            recipeID: docRef.id,
+          });
           // Document created successfully.
           console.log( "Document created/updated successfully.")
           setUpload_wait(false);
           setDone(true);
+          setId(docRef.id);
         });
-
-        // to be able to direct to recipe page
-        setId(document.id);
 
       }); // end of image upload callback
 

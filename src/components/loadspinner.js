@@ -9,7 +9,7 @@ function LoadSpinner(props) {
 
   return (
     <div className={classes.spinner}>
-      <Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/>
+      <Spinner name={props.name || "ball-scale-multiple"} color={props.color || "#68BB8C"} fadeIn="none"/>
     </div>
   );
 }
