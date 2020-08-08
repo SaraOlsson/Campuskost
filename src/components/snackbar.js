@@ -4,6 +4,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
+// <MySnackbar open={openDialog} handleClose={handleClose} message={recipe.title} action={"ta bort från lista"}/>
+
 export default function MySnackbar(props) {
 
   const [open, setOpen] = useState(props.open);

@@ -1,58 +1,31 @@
 import GridList from '@material-ui/core/GridList';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import RecipeItem from '../components/recipeitem';
 
-
-function RecipeGridList(props) {
+function RecipeGridList({recipes, smalltiles}) {
 
   const classes = useStyles();
 
-  const [images, setImages] = useState([]);
-  let smalltiles = (props.smalltiles) ? props.smalltiles : false;
-
-  useEffect(() => {
-
-    let images_temp = props.recipes.map((recipe, idx) =>
-      <RecipeItem recipe={recipe} key={idx} smalltiles={smalltiles} id={idx} handleaction={props.handleaction}/>
-    );
-
-    setImages(images_temp);
-
-  }, []);
-
-
-  // oh loading in parent component is what is taking time
-
   return (
-    <div className={classes.root}>
+    <div className={classes.grid_root}>
       <GridList>
-      {images.length > 0 && images }
+        {
+          recipes.map((recipe, idx) =>
+            <RecipeItem recipe={recipe} key={idx + recipe.title} smalltiles={smalltiles}/>
+          )
+        }
       </GridList>
     </div>
   );
 }
-//    backgroundColor: '#f1f1f1',
-//    padding: '10px'
+
 const useStyles = makeStyles({
-  root: {
+  grid_root: {
    display: 'flex',
    flexWrap: 'wrap',
    justifyContent: 'center',
    overflow: 'hidden'
-  },
-  icon: {
-    color: 'rgba(255, 255, 255, 0.54)',
-  },
-  listimage: {
-    maxHeight: '150px',
-    maxWidth: '150px',
-    padding: '5px'
-  },
-  spinner: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: 100
   }
 });
 
