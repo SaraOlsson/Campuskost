@@ -59,7 +59,7 @@ function RecipePage(props) {
 
       if (doc.exists) {
 
-        let data = doc.data();
+        let data = doc.data();  
         isliked = ( data.liked_recipes[id] !== undefined ) ? data.liked_recipes[id] : false;
 
       } else {
@@ -86,8 +86,16 @@ function RecipePage(props) {
       if (doc.exists) {
 
         let data = doc.data();
-        data.liked_recipes[id] = (saved) ? false : true;
-        firestore.collection("recipe_likes").doc(doc.id).update(data);
+
+        if (!data.liked_recipes) {
+
+          let obj = {};
+          obj[id] = true;
+          firestore.collection('recipe_likes').doc(doc.id).set({liked_recipes: obj});
+        } else {
+          data.liked_recipes[id] = (saved) ? false : true;
+          firestore.collection("recipe_likes").doc(doc.id).update(data);
+        }
       }
 
     });
@@ -129,15 +137,6 @@ function RecipePage(props) {
   }
 
   let icon = (saved === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
-  // let r_img = ( recipe !== undefined) ? recipe.img : 'temp_food1';
-
-  let img_src;
-
-  if  ( recipe !== undefined && recipe.img_url !== undefined) {
-    img_src = recipe.img_url;
-  } else {
-    img_src = require('../assets/temp_food1.jpg');
-  }
 
   const onDeleteRecipeChoice = (chosedDelete) => {
 
@@ -149,6 +148,9 @@ function RecipePage(props) {
       history.push("/home");
     }
   }
+
+  const image = recipe ? <img src={recipe.img_url} className={classes.listimage} alt={recipe.title}/> : null;
+  // <img src={img_src} className={classes.listimage} alt={"recipe img"} />
 
   return (!recipe) ? null : (
 
@@ -180,7 +182,7 @@ function RecipePage(props) {
 
         >
           <Grid item xs={6} >
-            <img src={img_src} className={classes.listimage} alt={"recipe img"} />
+            {image}
           </Grid>
           <Grid item xs={4} className={classes.imagesidebar}>
             {/*

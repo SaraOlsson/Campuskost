@@ -20,6 +20,12 @@ function RecipeGridList({recipes, smalltiles}) {
   );
 }
 
+/*
+import PropTypes from 'prop-types';
+RecipeGridList.propTypes = {
+  recipes: PropTypes.array.isRequired
+}; */
+
 const useStyles = makeStyles({
   grid_root: {
    display: 'flex',

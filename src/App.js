@@ -17,15 +17,15 @@ import './App.css';
 import MySnackbar from './components/snackbar';
 import TopMenuBar from './components/topmenubar';
 // import our page components
-import FeedPage from './pages/feedpage';
-import ListPage from './pages/listpage';
-import Login from './pages/login';
-import NoticePage from './pages/noticepage';
-import ProfilePage from './pages/profilepage';
-import RecipePage from './pages/recipepage';
-import SearchPage from './pages/searchpage';
-import Settings from './pages/settings';
-import UploadPage from './pages/uploadpage';
+import FeedPage from './pages/FeedPage';
+import ListPage from './pages/ListPage';
+import LoginPage from './pages/LoginPage';
+import NoticePage from './pages/NoticePage';
+import ProfilePage from './pages/ProfilePage';
+import RecipePage from './pages/RecipePage';
+import SearchPage from './pages/SearchPage';
+import SettingsPage from './pages/SettingsPage';
+import UploadPage from './pages/UploadPage';
 import TermsPage from './pages/TermsPage';
 import Todos from "./components/Todos";
 import PrivateRoute from "./components/PrivateRoute";
@@ -166,8 +166,9 @@ function App() {
         <div className={classes.mainContainer}>
 
           <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/settings" component={Settings} />
+            <Route exact path="/home" component={FeedPage}/>
+            <Route path="/login" component={LoginPage} />
+            <Route path="/settings" component={SettingsPage} />
             <Route path="/profile/:username_url" component={ProfilePage} />
             <Route path="/upload" component={UploadPage} />
             <Route path="/notices" component={NoticePage} />
@@ -177,7 +178,6 @@ function App() {
             <Route path="/home" component={FeedPage}/>
             <Route path="/lists" component={ListPage}/>
             <Route path="/terms" component={TermsPage}/>
-            
             <PrivateRoute path = "/todos">
               <Todos />
             </PrivateRoute>
@@ -198,6 +198,12 @@ function App() {
     </div>
   );
 }
+
+/*
+<PrivateRoute path = "/todos">
+  <Todos />
+</PrivateRoute>
+*/
 
 // extract as individual component
 function BottomMenuBar() {

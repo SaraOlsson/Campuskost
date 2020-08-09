@@ -18,7 +18,7 @@ function RecipeItem({recipe, smalltiles}) {
     history.push("/recipe/" + clicked_recipe.title + "/" + clicked_recipe.recipeID );
   };
 
-  const image = <div><img src={recipe.img_url} className={classes.listimage} alt={recipe.title} alt={"recipe img"} /></div>;
+  const image = <div><img src={recipe.img_url} className={classes.listimage} alt={recipe.title} /></div>;
   
   return (
 

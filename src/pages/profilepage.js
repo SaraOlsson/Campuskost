@@ -14,10 +14,7 @@ import userchef from '../assets/userchef.png';
 import FollowerList from '../components/followerlist';
 import RecipeGridList from '../components/recipegridlist';
 import SimpleTabs from '../components/userpagetabs';
-// import FavoritePage from '../pages/favoritepage';
-import ListPage from '../pages/listpage';
-
-
+import ListPage from './ListPage';
 
 var Spinner = require('react-spinkit');
 
