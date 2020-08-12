@@ -94,7 +94,7 @@ function ListPage() {
 
   return  (
     <div> 
-      <h3> Liked recipes </h3>
+      <h3> Gillade recept </h3>
       {
         likedRecipes.length < 1 ? 
           <LoadSpinner/> 
