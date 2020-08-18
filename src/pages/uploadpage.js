@@ -32,6 +32,69 @@ import '../style/GlobalCssButton.css';
 
 var Spinner = require('react-spinkit');
 
+function CollapsedGrid(props) {
+
+  const classes = useStyles();
+
+  return (
+
+    <Grid item xs={12}>
+      <ExpansionPanel style={{background: '#f7f6f6', marginTop: '8px'}}>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-label="Expand"
+          aria-controls="additional-actions1-content"
+          id="additional-actions1-header"
+        >
+
+        <FormLabel component="legend" className={classes.formlabel}> {props.label} </FormLabel>
+
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          {props.children}
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+    </Grid>
+
+  );
+
+}
+
+function AddImage(props) {
+
+  const classes = useStyles();
+
+  return (
+    <React.Fragment>
+      <Grid container spacing={1}>
+        <Grid item xs={9} style={{
+            display: 'flex',
+            marginBottom: '10px'
+        }}>
+        <FileInput value={props.files} onChange={props.onFileAdd} />
+        </Grid>
+      </Grid>
+      { props.image !== undefined &&
+      <React.Fragment>
+        <Grid item xs={9}>
+          <img src={props.image} alt={"loadedimage"} className={classes.loadedimage} />
+        </Grid>
+        <Grid item xs={3}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={props.onFileRemove}
+            style={{lineHeight: '1.2'}}
+          >
+            Ta bort bild
+          </Button>
+        </Grid>
+      </React.Fragment>
+      }
+    </React.Fragment>
+  );
+}
+
 function UploadPage(props) {
 
   const [title, setTitle] = React.useState('');
@@ -61,6 +124,8 @@ function UploadPage(props) {
     image: false
   });
 
+  console.log(valid)
+
   const imageDisp = img => {
     dispatch({
       type: "SETIMAGE",
@@ -75,11 +140,15 @@ function UploadPage(props) {
 
   React.useEffect(() => {
     setLabelWidth(labelRef.current.offsetWidth);
-    // getImage();
+
     if(upload_store.title !== undefined)
     {
       setTitle(upload_store.title);
-      setValid({ ...valid, ["title"]: true });
+    }
+
+    if(upload_store.image !== undefined)
+    {
+      setImage(upload_store.image);
     }
 
     if(upload_store.descriptions !== undefined)
@@ -90,10 +159,19 @@ function UploadPage(props) {
     if(upload_store.ingredients !== undefined)
     {
       handleIngredientsAdd(upload_store.ingredients.length);
+    
+      // should check the other too..
+      setValid ({
+        title: true,
+        ingredients: true,
+        desc: true,
+        image: true
+      });
     }
 
   }, []);
 
+  // hande title change
   const handleChange = event => {
 
     let value = event.target.value;
@@ -160,14 +238,7 @@ function UploadPage(props) {
 
   const uploadAction = () => {
 
-    // make sure all valid
-    /*
-    if(!allValid())
-    {
-      return;
-    } */
-
-    // make sure signed in
+    // make sure signed in, let pop up earlier..
     if(store.firestore_user === undefined) {
       alert("you have to sign in first")
       return;
@@ -177,13 +248,6 @@ function UploadPage(props) {
     let username = store.firestore_user.username;
     let recipe_name = upload_store.title;
 
-    // const document = firestore.doc('recipes/' + recipe_name + '-' + username);
-    //const temp_doc = firestore.collection('recipes').doc();
-    //const _id = recipe_name + '-' + temp_doc.id;
-
-    const document = firestore.collection('recipes').doc();
-
-    let r_img = "temp_food1";
     let ref_to_user = firestore.collection('users').doc(store.firestore_user.email);
 
     // if upload or create new doc
@@ -199,7 +263,6 @@ function UploadPage(props) {
         .add({
           user: username,
           title: recipe_name,
-          img: r_img,
           img_url: downloadURL,
           ingredients: upload_store.ingredients,
           description: upload_store.descriptions,
@@ -227,8 +290,8 @@ function UploadPage(props) {
         description: upload_store.descriptions,
       };
 
-      // either upload with or without image
-      if (image===undefined) {
+      // either upload with or without image (no new imag needed of recipe _update_)
+      if (image === undefined) {
 
         firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
         setUpload_wait(false);
@@ -293,12 +356,6 @@ function UploadPage(props) {
 
   let page_title = (upload_store.editmode) ? "Ändra recept" : "Ladda upp recept";
 
-  /*
-  let decs_valid = (valid.desc || (upload_store.descriptions && upload_store.descriptions.length > 1)) ? true : false;
-  let ingred_valid = (valid.ingredients || (upload_store.ingredients && upload_store.ingredients.length > 1)) ? true : false;
-  let title_valid = (title.length >= 3 );
-  */
-
   return (
 
 
@@ -326,99 +383,30 @@ function UploadPage(props) {
         </FormControl>
         </Grid>
 
-        {/* INGREDIENTS*/}
-        <Grid item xs={12}>
-        <ExpansionPanel style={{background: '#fbfbfb', marginTop: '8px'}}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-label="Expand"
-            aria-controls="additional-actions1-content"
-            id="additional-actions1-header"
-          >
+        <CollapsedGrid label="Ingredienser">
+          <IngredientsList handleAdd={handleIngredientsAdd}/>
+        </CollapsedGrid>
 
-          <FormLabel component="legend" className={classes.formlabel}>Ingredienser</FormLabel>
+        <CollapsedGrid label="Beskrivning">
+          <DescriptionList handleAdd={handleDescriptionsAdd}/>
+        </CollapsedGrid>
 
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <IngredientsList handleAdd={handleIngredientsAdd}/>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        </Grid>
+        <CollapsedGrid label="Receptbild">
+          <AddImage image={image} files={files} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>
+        </CollapsedGrid>
 
-        {/* DESCTIPTION*/}
-        <Grid item xs={12}>
-        <ExpansionPanel style={{background: '#f7f6f6'}}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-label="Expand"
-            aria-controls="additional-actions1-content"
-            id="additional-actions1-header"
-          >
-          <FormLabel component="legend" className={classes.formlabel}>Beskrivning</FormLabel>
-
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <DescriptionList handleAdd={handleDescriptionsAdd}/>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        </Grid>
-
-        {/* IMAGE */}
-        <Grid item xs={12}>
-        <ExpansionPanel style={{background: '#f7f6f6'}}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-label="Expand"
-            aria-controls="additional-actions1-content"
-            id="additional-actions1-header"
-          >
-          <FormLabel component="legend" className={classes.formlabel}>Receptbild</FormLabel>
-
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-
-                  <Grid container spacing={1}>
-                    <Grid item xs={9} style={{
-                        display: 'flex',
-                        marginBottom: '10px'
-                    }}>
-                    <FileInput value={files} onChange={onFileAdd} />
-                    </Grid>
-
-                  </Grid>
-                  { image !== undefined &&
-                  <React.Fragment>
-                    <Grid item xs={9}>
-                      <img src={image} alt={"loadedimage"} className={classes.loadedimage} />
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={onFileRemove}
-                        style={{lineHeight: '1.2'}}
-                      >
-                        Ta bort bild
-                      </Button>
-                    </Grid>
-                  </React.Fragment>
-
-          }
-
-
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        </Grid>
+        {/*
+        <CollapsedGrid label="Extra (valfritt)">
+          <p> Well hello</p>
+        </CollapsedGrid> */}
 
       </Grid>
 
-
-
       <div className={classes.uploaddiv} >
         <Grid container justify="center" alignItems="center">
-        <Grid item xs={4}>
-        {bottom_content}
-        </Grid>
+          <Grid item xs={4}>
+          {bottom_content}
+          </Grid>
         </Grid>
       </div>
 
@@ -427,7 +415,6 @@ function UploadPage(props) {
     </div>
 
   );
-
 }
 
 // <RecipeCard/>

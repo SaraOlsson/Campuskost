@@ -128,6 +128,11 @@ function RecipePage(props) {
     })
 
     dispatch({
+      type: "SETIMAGE",
+      image: recipe.img_url
+    })
+
+    dispatch({
       type: "SETEDITMODE",
       editmode: true,
       recipe_id: id
@@ -191,8 +196,13 @@ function RecipePage(props) {
             </div>
             Dela på Facebook: <ReactShare location={history.location.pathname} title={recipetitle}/>
             */}
+            { recipe.freetext &&
+              <p style={{fontSize: '13px'}} > {recipe.freetext} </p>
+            }
           </Grid>
         </Grid>
+
+        
 
         <ListIngredients ingredients={recipe.ingredients}/>
         <RecipeDecsList description={recipe.description}/>

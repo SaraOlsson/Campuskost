@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
 import LoadSpinner from '../components/loadspinner';
 import RecipeGridList from '../components/recipegridlist';
+import Emoji from '../components/Emoji';
 
 const useNewLikesRecipes = () => {
 
@@ -101,6 +102,8 @@ function ListPage() {
           : 
           <RecipeGridList recipes={Object.values(likedRecipes)} />    
       }
+      <h3>Receptlistor</h3>
+      <p>Kommer snart! <Emoji symbol="🥳"/> </p>
     </div>
   );
 }
