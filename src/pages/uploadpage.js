@@ -27,7 +27,7 @@ import { useHistory } from "react-router-dom";
 import DescriptionList from '../components/descriptionlist';
 import FileInput from '../components/fileinput';
 import IngredientsList from '../components/ingredientslist';
-// import { useFirebase } from "react-redux-firebase";
+
 import '../style/GlobalCssButton.css';
 
 var Spinner = require('react-spinkit');
@@ -106,14 +106,14 @@ function UploadPage(props) {
   const [labelWidth, setLabelWidth] = React.useState(0);
   const labelRef = React.useRef(null);
 
-  // const firebase = useFirebase();
-
   const classes = useStyles();
   const dispatch = useDispatch(); // be able to dispatch
   const store = useSelector(state => state.fireReducer);
   const firestore = useFirestore();
   const upload_store = useSelector(state => state.uploadReducer);
   const history = useHistory();
+
+ 
 
 
   // remove these
@@ -123,8 +123,6 @@ function UploadPage(props) {
     desc: false,
     image: false
   });
-
-  console.log(valid)
 
   const imageDisp = img => {
     dispatch({
@@ -214,9 +212,6 @@ function UploadPage(props) {
 
   // upload image and callback with download URL
   const uploadImage = (callback) => {
-
-    // console.log(firebase)
-    // firebase.uploadFile('recept/' + title + '_image.jpg', image, 'testis', {metadata: {ye: "hej"}});
     
     setUpload_wait(true);
     // Create a reference to the new image
@@ -237,6 +232,12 @@ function UploadPage(props) {
   }
 
   const uploadAction = () => {
+
+    if(!allValid()) {
+      alert("not all valid")
+      console.log(valid)
+      return;
+    }
 
     // make sure signed in, let pop up earlier..
     if(store.firestore_user === undefined) {
@@ -266,7 +267,8 @@ function UploadPage(props) {
           img_url: downloadURL,
           ingredients: upload_store.ingredients,
           description: upload_store.descriptions,
-          user_ref: ref_to_user
+          user_ref: ref_to_user,
+          timestamp: Date()
         })
         .then((docRef) => {
           docRef.update({
@@ -291,7 +293,7 @@ function UploadPage(props) {
       };
 
       // either upload with or without image (no new imag needed of recipe _update_)
-      if (image === undefined) {
+      if (files.length < 1) {
 
         firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
         setUpload_wait(false);

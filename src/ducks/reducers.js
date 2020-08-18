@@ -51,7 +51,7 @@ function testreducer(state = { num: 0, url: "hey" }, action) {
             descriptions: action.descriptions
           };
         case "SETIMAGE":
-          console.log(action.image)
+         
           return {
             ...state,
             image: action.image

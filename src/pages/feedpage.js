@@ -14,6 +14,7 @@ function FeedPage() {
   useFirestoreConnect({
     collection: `recipes`,
     storeAs: "recipes",
+    orderBy: ['timestamp', 'desc']
   });
 
   const recipes = useSelector((state) => state.firestore.data.recipes); 

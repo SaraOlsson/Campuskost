@@ -157,6 +157,9 @@ function RecipePage(props) {
   const image = recipe ? <img src={recipe.img_url} className={classes.listimage} alt={recipe.title}/> : null;
   // <img src={img_src} className={classes.listimage} alt={"recipe img"} />
 
+  const timee = recipe ? recipe.timestamp : undefined;
+  console.log(timee)
+
   return (!recipe) ? null : (
 
     <div>
@@ -189,7 +192,7 @@ function RecipePage(props) {
           <Grid item xs={6} >
             {image}
           </Grid>
-          <Grid item xs={4} className={classes.imagesidebar}>
+          <Grid item xs={4} className={classes.freetext}>
             {/*
             <div onClick={recipeToFriend}>
               <PickUserDialog recipeId={recipe.id}/>
@@ -197,7 +200,10 @@ function RecipePage(props) {
             Dela på Facebook: <ReactShare location={history.location.pathname} title={recipetitle}/>
             */}
             { recipe.freetext &&
-              <p style={{fontSize: '13px'}} > {recipe.freetext} </p>
+              <p style={{fontSize: '13px', margin: '10px'}} > {recipe.freetext} </p>
+            }
+            { recipe.timestamp &&
+              <p style={{fontSize: '13px', margin: '10px'}} ><i> Uppladdat {recipe.timestamp.toDate().toLocaleDateString()} </i></p>
             }
           </Grid>
         </Grid>
@@ -256,12 +262,15 @@ const useStyles = makeStyles({
     minHeight: '150px',
     maxWidth: '150px'
   },
-  imagesidebar: {
-    padding: 5
-  },
   recipeheader: {
    margin: '20px 0px',
    fontWeight: 'bold'
+  },
+  freetext: {
+    background: '#68bb8c',
+    color: 'white',
+    borderRadius: '5px',
+    padding: '10px'
   }
 });
 
