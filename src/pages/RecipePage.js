@@ -157,8 +157,12 @@ function RecipePage(props) {
   const image = recipe ? <img src={recipe.img_url} className={classes.listimage} alt={recipe.title}/> : null;
   // <img src={img_src} className={classes.listimage} alt={"recipe img"} />
 
-  const timee = recipe ? recipe.timestamp : undefined;
-  console.log(timee)
+  //const timee = recipe ? recipe.timestamp.toDate() : undefined;
+  //console.log(timee)
+  //let myDate = recipe ? Date(timee) : undefined;
+  //console.log(myDate.toLocaleDateString())
+
+  // {recipe.timestamp.toDate().toLocaleDateString()}
 
   return (!recipe) ? null : (
 
@@ -189,9 +193,10 @@ function RecipePage(props) {
           justify="center"
 
         >
-          <Grid item xs={6} >
+          <Grid item xs={recipe.freetext ? 6 : 10} >
             {image}
           </Grid>
+          { recipe.freetext && 
           <Grid item xs={4} className={classes.freetext}>
             {/*
             <div onClick={recipeToFriend}>
@@ -202,10 +207,11 @@ function RecipePage(props) {
             { recipe.freetext &&
               <p style={{fontSize: '13px', margin: '10px'}} > {recipe.freetext} </p>
             }
-            { recipe.timestamp &&
-              <p style={{fontSize: '13px', margin: '10px'}} ><i> Uppladdat {recipe.timestamp.toDate().toLocaleDateString()} </i></p>
-            }
+            {/* recipe.timestamp &&
+              <p style={{fontSize: '13px', margin: '10px'}} ><i> Uppladdat XX </i></p>
+            */}
           </Grid>
+          }
         </Grid>
 
         

@@ -258,6 +258,7 @@ function UploadPage(props) {
       uploadImage(function(returnValue_downloadURL) {
         // use the return value here instead of like a regular (non-evented) return value
         let downloadURL = returnValue_downloadURL;
+        let date_now = Date();
 
         firestore
         .collection("recipes")
@@ -268,7 +269,7 @@ function UploadPage(props) {
           ingredients: upload_store.ingredients,
           description: upload_store.descriptions,
           user_ref: ref_to_user,
-          timestamp: Date()
+          timestamp: date_now
         })
         .then((docRef) => {
           docRef.update({

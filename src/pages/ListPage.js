@@ -77,7 +77,7 @@ const useNewLikesRecipes = () => {
               if (idx === recipe_id_list.length - 1) {
                 setlikedRecipes(temp_recipes);
                 //setlistState(temp_recipes);
-                console.log(temp_recipes)
+                // console.log(temp_recipes)
               }
           }
       }).catch(function(error) {
