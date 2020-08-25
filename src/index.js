@@ -17,6 +17,16 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import ReactGA from 'react-ga';
+
+const trackingId = "UA-176407801-1"; // Replace with your Google Analytics tracking ID
+ReactGA.initialize(trackingId);
+ReactGA.set({
+  userId: "testis-ID",
+  // any data that is relevant to the user session
+  // that you would like to track with google analytics
+})
+
 const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
 const firebaseConfig = {
   apiKey: API_KEY,

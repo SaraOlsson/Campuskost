@@ -13,6 +13,8 @@ import AlertDialog from '../components/AlertDialog';
 import ListIngredients from '../components/ListIngredients';
 import RecipeDecsList from '../components/RecipeDecsList';
 
+import ReactGA from 'react-ga';
+
 function RecipePage(props) {
 
   const { recipetitle, id } = useParams();
@@ -77,6 +79,11 @@ function RecipePage(props) {
   }
 
   const likeRecipe = () => {
+
+    ReactGA.event({
+      category: "Sign Up",
+      action: "User pressed the big blue sign up button",
+    });
 
     let likesRef = firestore.collection('recipe_likes').doc(email);
 
