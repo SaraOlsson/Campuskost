@@ -18,6 +18,7 @@ import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import AlertDialog from '../components/AlertDialog';
 import Emoji from '../components/Emoji';
+import ReactGA from 'react-ga';
 
 function Settings(props) {
 
@@ -43,6 +44,12 @@ function Settings(props) {
   const history = useHistory();
 
   React.useEffect(() => {
+
+    ReactGA.event({
+      category: "Settings",
+      action: "User enters settings",
+    });
+
     setLabelWidth(labelRef.current.offsetWidth);
 
     const storageRef = firebase.storage().ref().child('profileimages');
@@ -216,6 +223,11 @@ function Settings(props) {
   }
 
   const randomImg = () => {
+
+    ReactGA.event({
+      category: "Settings",
+      action: "User tries random image",
+    });
 
     let continue_search = true;
     let img_index, temp_url;
