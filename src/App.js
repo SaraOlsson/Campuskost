@@ -235,6 +235,11 @@ function BottomMenuBar() {
       title: undefined
     })
 
+    dispatch({
+      type: "SETIMAGE",
+      title: undefined
+    })
+
     if(val !== "upload" && upload_store.editmode === true) {
       dispatch({
         type: "SETEDITMODE",

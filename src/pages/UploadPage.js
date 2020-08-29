@@ -210,13 +210,18 @@ function UploadPage(props) {
     setImage(undefined);
   };
 
+  const generateImageFilename = () => {
+    return 'recept/' + title + '_' + store.auth_user.uid + '.jpg';
+  };
+
   // upload image and callback with download URL
   const uploadImage = (callback) => {
     
     setUpload_wait(true);
     // Create a reference to the new image
     let storageRef = firebase.storage(); // REFACTOR TO HOOKS
-    let newImageRef = storageRef.ref('recept/' + title + '_image.jpg'); // storageRef.ref('recept/' + title + '_image.jpg');
+    let image_filename = generateImageFilename();
+    let newImageRef = storageRef.ref(image_filename); // storageRef.ref('recept/' + title + '_image.jpg');
 
     // Upload image as a Base64 formatted image string.
     let uploadTask = newImageRef.putString(image, 'data_url');
@@ -240,7 +245,7 @@ function UploadPage(props) {
     }
 
     // make sure signed in, let pop up earlier..
-    if(store.firestore_user === undefined) {
+    if(store.auth_user === undefined || store.firestore_user === undefined) {
       alert("you have to sign in first")
       return;
     }
@@ -248,8 +253,10 @@ function UploadPage(props) {
     // prepare data
     let username = store.firestore_user.username;
     let recipe_name = upload_store.title;
+    let image_filename = generateImageFilename();
 
     let ref_to_user = firestore.collection('users').doc(store.firestore_user.email);
+    let firestore_timestamp = firebase.firestore.Timestamp.now();
 
     // if upload or create new doc
     if(upload_store.editmode === false)
@@ -266,10 +273,11 @@ function UploadPage(props) {
           user: username,
           title: recipe_name,
           img_url: downloadURL,
+          img_filename: image_filename,
           ingredients: upload_store.ingredients,
           description: upload_store.descriptions,
           user_ref: ref_to_user,
-          timestamp: date_now
+          timestamp: firestore_timestamp
         })
         .then((docRef) => {
           docRef.update({
@@ -289,6 +297,7 @@ function UploadPage(props) {
       // UPDATE MODE
       let update_data = {
         title: recipe_name,
+        img_filename: image_filename,
         ingredients: upload_store.ingredients,
         description: upload_store.descriptions,
       };
@@ -358,6 +367,8 @@ function UploadPage(props) {
   }
 
   let page_title = (upload_store.editmode) ? "Ändra recept" : "Ladda upp recept";
+
+  // console.log(firebase.firestore.Timestamp.now())
 
   return (
 

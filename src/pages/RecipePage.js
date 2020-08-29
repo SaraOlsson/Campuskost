@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import AlertDialog from '../components/AlertDialog';
 import ListIngredients from '../components/ListIngredients';
 import RecipeDecsList from '../components/RecipeDecsList';
+import firebase from 'firebase'; // REFACTOR
 
 import ReactGA from 'react-ga';
 
@@ -33,12 +34,12 @@ function RecipePage(props) {
     storeAs: "recipeInView",
   });
 
-  const { email } = useSelector((state) => state.firebase.auth);
+  const { email, uid } = useSelector((state) => state.firebase.auth);
   const recipe = useSelector((state) => state.firestore.data.recipeInView);
 
   useEffect(() => {
 
-    if (recipe !== undefined && email !== undefined) {
+    if (recipe !== undefined && email !== undefined && recipe.recipeID === id) {
       
       recipe.user_ref.get().then( (doc) => {
         let is_user = doc.data().email === email;
@@ -46,9 +47,38 @@ function RecipePage(props) {
       });
 
       likeFetcher(email);
-    } 
+
+      findSmallerImage();
+    } else if(recipe !== undefined && recipe.recipeID !== id) {
+
+      console.log("oups this was the previous recipe")
+    }
       
-  }, [recipe] );  
+  }, [recipe] );
+
+  const generateImageFilename = () => {
+    return 'recept/' + recipe.title + '_' + uid + '.jpg';
+  };
+  
+  const findSmallerImage = () => {
+
+    //  && recipe.img_filename
+    if(!recipe.img_url_small && recipe.img_filename) { 
+
+      let str = recipe.img_filename;
+
+      console.log("findSmallerImage")
+
+      let storageRef = firebase.storage(); // REFACTOR TO HOOKS?
+      let small_filename = str.substring(0, str.indexOf(".jpg")) + "_500x500" + str.substring(str.indexOf(".jpg")); // 'recept/' + 
+      let smallImageRef = storageRef.ref(small_filename);
+
+      smallImageRef.getDownloadURL().then(function(downloadURL) {
+        firestore.collection('recipes').doc(id).update({img_url_small: downloadURL});
+      }); 
+
+    } 
+  }
 
   // review
   const likeFetcher = (current_email) => {
@@ -148,8 +178,6 @@ function RecipePage(props) {
     history.push("/upload" );
   }
 
-  let icon = (saved === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
-
   const onDeleteRecipeChoice = (chosedDelete) => {
 
     console.log(chosedDelete);
@@ -161,16 +189,24 @@ function RecipePage(props) {
     }
   }
 
-  const image = recipe ? <img src={recipe.img_url} className={classes.listimage} alt={recipe.title}/> : null;
-  // <img src={img_src} className={classes.listimage} alt={"recipe img"} />
+  const generateTimeString = (timestamp) => {
 
-  //const timee = recipe ? recipe.timestamp.toDate() : undefined;
-  //console.log(timee)
-  //let myDate = recipe ? Date(timee) : undefined;
-  //console.log(myDate.toLocaleDateString())
+    let string_result = undefined;
+    try {
+      let time = timestamp.toDate();
+      let months = ["jan", "feb", "mars", "april", "maj", "juni", "juli", "aug", "sept", "okt", "nov", "dec"];
+      string_result = time.getDate() + " " + months[time.getMonth()];
+    }
+    catch(err) {
+      console.log(err.message);
+    }
+    return string_result;
+  }
 
-  // {recipe.timestamp.toDate().toLocaleDateString()}
-
+  const icon = (saved === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
+  const timestring = recipe ? generateTimeString(recipe.timestamp) : undefined;
+  const image = recipe ? <img src={recipe.img_url} className={classes.recipeImage} alt={recipe.title}/> : null;
+  
   return (!recipe) ? null : (
 
     <div>
@@ -193,35 +229,23 @@ function RecipePage(props) {
               </Button>
             </span>
           </div>
-
-        <Grid
-          container
-          spacing={1}
-          justify="center"
-
-        >
-          <Grid item xs={recipe.freetext ? 6 : 10} >
+              
+          <div className={classes.recipeContainer}>
             {image}
-          </Grid>
-          { recipe.freetext && 
-          <Grid item xs={4} className={classes.freetext}>
-            {/*
-            <div onClick={recipeToFriend}>
-              <PickUserDialog recipeId={recipe.id}/>
-            </div>
-            Dela på Facebook: <ReactShare location={history.location.pathname} title={recipetitle}/>
-            */}
-            { recipe.freetext &&
-              <p style={{fontSize: '13px', margin: '10px'}} > {recipe.freetext} </p>
-            }
-            {/* recipe.timestamp &&
-              <p style={{fontSize: '13px', margin: '10px'}} ><i> Uppladdat XX </i></p>
-            */}
-          </Grid>
-          }
-        </Grid>
+          </div> 
 
-        
+          
+          { recipe.freetext &&
+          <div className={classes.freetext}> 
+            {recipe.freetext}
+          </div>
+          }
+          { timestring && 
+          <div className={classes.timestamp}> 
+            {timestring}
+          </div>
+          }
+          
 
         <ListIngredients ingredients={recipe.ingredients}/>
         <RecipeDecsList description={recipe.description}/>
@@ -267,23 +291,31 @@ function RecipePage(props) {
 }
 
 const useStyles = makeStyles({
-  listimage: {
-    maxHeight: '100%',
-    maxWidth: '100%',
-    borderRadius: '4px',
-    objectFit: 'cover',
-    minHeight: '150px',
-    maxWidth: '150px'
+  recipeContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  recipeImage: {
+    maxWidth: '90%',
+    borderRadius: '5px',
+    maxHeight: '500px'
   },
   recipeheader: {
    margin: '20px 0px',
    fontWeight: 'bold'
   },
   freetext: {
-    background: '#68bb8c',
-    color: 'white',
+    //background: '#68bb8c',
+    //color: 'white',
+    fontSize: 'small',
+    marginTop: '30px',
     borderRadius: '5px',
     padding: '10px'
+  },
+  timestamp: {
+    fontSize: 'x-small',
+    padding: '10px',
+    color: 'gray'
   }
 });
 

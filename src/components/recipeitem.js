@@ -18,8 +18,10 @@ function RecipeItem({recipe, smalltiles}) {
     history.push("/recipe/" + clicked_recipe.title + "/" + clicked_recipe.recipeID );
   };
 
-  const image = <div><img src={recipe.img_url} className={classes.listimage} alt={recipe.title} /></div>;
-  
+  let img_url_temp = recipe.img_url_small ? recipe.img_url_small : recipe.img_url;
+  const image = <div><img src={img_url_temp} className={classes.listimage} alt={recipe.title} /></div>;
+
+
   return (
 
     <React.Fragment>
