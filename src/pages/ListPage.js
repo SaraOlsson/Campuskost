@@ -5,10 +5,12 @@ import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
 import LoadSpinner from '../components/loadspinner';
 import RecipeGridList from '../components/recipegridlist';
 import Emoji from '../components/Emoji';
+import useFirebaseFetch from '../reducers/useFirebaseFetch.js'
 
 const useNewLikesRecipes = () => {
 
   const [likedRecipes, setlikedRecipes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   //const { email } = useSelector((state) => state.firebase.auth);
   const email = useSelector(
@@ -18,9 +20,8 @@ const useNewLikesRecipes = () => {
   const firestore = useFirestore();
 
   useEffect(() => {
-
-    getLikes();
-
+    if(email !== "")
+      getLikes();
   }, [email]);
 
   let getLikesDocsForUser = function(current_email) {
@@ -76,31 +77,63 @@ const useNewLikesRecipes = () => {
               temp_recipes.push(data);
               if (idx === recipe_id_list.length - 1) {
                 setlikedRecipes(temp_recipes);
-                //setlistState(temp_recipes);
-                // console.log(temp_recipes)
               }
           }
+          
       }).catch(function(error) {
           console.log("Error getting document:", error);
       });
     })
+    setIsLoading(false);
+
   }
 
-  return likedRecipes;
+  return {likedRecipes, isLoading};
 }
+
+const useGetRefByEmail = (email, preRef) => {
+
+  const [db_Ref, set_db_Ref] = useState(undefined);
+
+  useEffect(() => {
+    if(email !== undefined) {
+      console.log("ready to run")
+      set_db_Ref( preRef.doc(email) );
+    }
+  }, [email]);
+
+  return db_Ref;
+};
 
 function ListPage() {
 
-  const likedRecipes = useNewLikesRecipes();
+  const {likedRecipes, isLoading} = useNewLikesRecipes();
+
+  /*
+  const firestore = useFirestore();
+  const { email } = useSelector((state) => state.firebase.auth);
+  const ref = useGetRefByEmail(email, firestore.collection('recipe_likes')); */
+  //const {isLoading, hasErrored, errorMessage, data, updateDataRecord} = useFirebaseFetch(ref, []);
+  /*
+  
+  const firestore = useFirestore();
+  let likesRef = firestore.collection('recipe_likes').doc(email);
+  const {isLoading, hasErrored, errorMessage, data, updateDataRecord} = useFirebaseFetch(likesRef, []); */
+
+  // console.log(ref)
+  //console.log(data)
 
   return  (
     <div> 
       <h3> Gillade recept </h3>
       {
-        likedRecipes.length < 1 ? 
+        (likedRecipes.length < 1 && isLoading == true) ? 
           <LoadSpinner/> 
           : 
           <RecipeGridList recipes={Object.values(likedRecipes)} />    
+      }
+      {(likedRecipes.length < 1 && isLoading == false) &&
+         <p> Du har inga gillade recept än. </p>    
       }
       <h3>Receptlistor</h3>
       <p>Kommer snart! <Emoji symbol="🥳"/> </p>

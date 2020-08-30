@@ -89,6 +89,7 @@ function registerValidSW(swUrl, config) {
                   window.location.reload();
                 });
               }); */
+              window.location.reload();
 
               console.log(
                 'New content is available and will be used when all ' +

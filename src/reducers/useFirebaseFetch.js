@@ -48,6 +48,10 @@ const useFirebaseFetch = (firebaseRef, initialData) => {
   });
 
   useEffect(() => {
+
+    if(db_Ref === undefined)
+      return;
+
     let didCancel = false;
 
     const fetchData = async () => {
@@ -82,7 +86,7 @@ const useFirebaseFetch = (firebaseRef, initialData) => {
     return () => {
       didCancel = true;
     };
-
+    
   }, [db_Ref]);
 
   const updateDataRecord = record => {

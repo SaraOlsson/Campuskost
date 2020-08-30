@@ -71,11 +71,17 @@ function RecipePage(props) {
 
       let storageRef = firebase.storage(); // REFACTOR TO HOOKS?
       let small_filename = str.substring(0, str.indexOf(".jpg")) + "_500x500" + str.substring(str.indexOf(".jpg")); // 'recept/' + 
-      let smallImageRef = storageRef.ref(small_filename);
-
-      smallImageRef.getDownloadURL().then(function(downloadURL) {
-        firestore.collection('recipes').doc(id).update({img_url_small: downloadURL});
-      }); 
+      
+      try {
+        // console.log(storageRef)
+        let smallImageRef = storageRef.ref(small_filename);
+        smallImageRef.getDownloadURL().then(function(downloadURL) {
+          firestore.collection('recipes').doc(id).update({img_url_small: downloadURL});
+        }); 
+      }
+      catch(err) {
+        console.log(err.message);
+      }
 
     } 
   }

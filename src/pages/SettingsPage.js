@@ -18,6 +18,7 @@ import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import AlertDialog from '../components/AlertDialog';
 import Emoji from '../components/Emoji';
+import AddImage from '../components/AddImage';
 import ReactGA from 'react-ga';
 
 function Settings(props) {
@@ -33,6 +34,9 @@ function Settings(props) {
   const [isAvailable, setIsAvailable] = useState(true);
   const labelRef = React.useRef(null);
   const [openSetting, setOpenSetting] = useState("");
+
+  const [files, setFiles] = React.useState([]);
+  const [image, setImage] = React.useState(undefined);
 
   const [openAlert, setOpenAlert] = useState(false);
 
@@ -73,12 +77,13 @@ function Settings(props) {
     if(store.firestore_user && (username_textfield !== store.firestore_user.username ||
       imageUrl !== store.firestore_user.profile_img_url ||
       fullname_textfield !== store.firestore_user.fullname ||
-      (!store.firestore_user.bio || (store.firestore_user.bio && bio_textfield !== store.firestore_user.bio)) )) {
+      (!store.firestore_user.bio || (store.firestore_user.bio && bio_textfield !== store.firestore_user.bio)) || 
+      image !== undefined )) {
       setHas_changed(true);
     } else {
       setHas_changed(false);
     }
-  }, [username_textfield, fullname_textfield, bio_textfield, imageUrl]);
+  }, [username_textfield, fullname_textfield, bio_textfield, imageUrl, image]);
 
   // when information about user signed in arrives, set textfield value
   React.useEffect(() => {
@@ -242,6 +247,8 @@ function Settings(props) {
       }
 
     } while(continue_search);
+
+    onFileRemove();
   }
 
   const onExpand = (e, expanded, id) => {
@@ -265,13 +272,33 @@ function Settings(props) {
 
   }
 
+  const onFileAdd = (files) => {
+    setFiles(files);
+
+    console.log("onFileAdd  ")
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      setImage(e.target.result);
+      // console.log(e.target.result)
+    }
+
+    reader.readAsDataURL(files[0]);
+  };
+
+  const onFileRemove = () => {
+    setFiles([]);
+    setImage(undefined);
+  };
+
 
   //let signText = (firebase.auth().currentUser) ? "Logga ut" : "Logga in";
   // let username = (store.firestore_user) ? store.firestore_user.username : "unset";
   // fix if undefined
   // style={{display: 'inline-block'}}
 
-  let img_src = imageUrl; // (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : undefined;
+  // let img_src = imageUrl; // (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : undefined;
+  let img_src = image ? image : imageUrl;
 
   return (
 
@@ -512,6 +539,7 @@ function Settings(props) {
               >
                 Slumpa <Emoji symbol="🤪"/>
               </Button>
+              {/*<AddImage files={files} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>*/}
               <Button
                 variant="contained"
                 color="primary"
@@ -590,7 +618,11 @@ const useStyles = makeStyles({
 profileimage: {
   marginLeft: 'auto',
   marginRight: 'auto',
-  marginBottom: '15px'
+  marginBottom: '15px',
+  height: '90px',
+  width: '90px',
+  borderRadius: '100px',
+  objectFit: 'cover'
 },
 fullrow: {
   flex: '0 0 100%',

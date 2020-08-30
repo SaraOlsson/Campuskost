@@ -1,55 +1,30 @@
 import React from "react";
+import Button from '@material-ui/core/Button';
 
 const noop = () => {};
 
 const FileInput = ({ value, onChange = noop, ...rest }) => (
   <div>
-    {Boolean(value.length) && (
-      <div>Selected files: {value.map(f => f.name).join(", ")}</div>
-    )}
-    <label style={{
 
-      padding: '6px 16px',
-      fontSize: '0.875rem',
-      minWidth: '64px',
-      boxSizing: 'border-box',
-      transition: 'background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-      fontWeight: '500',
-      lineHeight: '1.75',
-      borderRadius: '4px',
-      letterSpacing: '0.02857em',
-      backgroundColor: '#3f51b5',
-      color: 'white',
-      boxShadow: '0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)'
-
-    }}>
-
-     Välj bild
-
+    <label htmlFor="upload-photo">
       <input
         {...rest}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
+        id="upload-photo"
+        name="upload-photo"
         type="file"
+        files={value}
         onChange={e => {
           onChange([...e.target.files]);
         }}
       />
+
+      <Button color="primary" variant="contained" component="span" style={{margin: '5px'}}>
+      Ladda upp bild
+      </Button>
     </label>
+
   </div>
 );
-
-/*
-
-<Button
-  variant="contained"
-  color="primary"
-  startIcon={<PhotoCamera />}
-  style={{ textTransform: 'unset' }}
->
-  Välj bild
-</Button>
-
-*/
 
 export default FileInput;
