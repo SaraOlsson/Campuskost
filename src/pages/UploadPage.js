@@ -1,65 +1,29 @@
 /*
-
 Component: Page where recipes are uplaoded or edited.
 TODO: refactor - a lot of code right now!
 TODO: it should be possible to reorder ingredients (use Draggable?)
 TODO: let the user add extra information, as time to cook or num portions
-
 */
 
 import Button from '@material-ui/core/Button';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { makeStyles } from '@material-ui/core/styles';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import firebase from 'firebase'; // REFACTOR
 import React from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
-import DescriptionList from '../components/descriptionlist';
-import FileInput from '../components/fileinput';
-import IngredientsList from '../components/ingredientslist';
 import AddImage from '../components/AddImage';
-
+import CollapseGrid from '../components/CollapseGrid';
+import DescriptionList from '../components/descriptionlist';
+import IngredientsList from '../components/ingredientslist';
 import '../style/GlobalCssButton.css';
 
 var Spinner = require('react-spinkit');
-
-function CollapsedGrid(props) {
-
-  const classes = useStyles();
-
-  return (
-
-    <Grid item xs={12}>
-      <ExpansionPanel style={{background: '#f7f6f6', marginTop: '8px'}}>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-label="Expand"
-          aria-controls="additional-actions1-content"
-          id="additional-actions1-header"
-        >
-
-        <FormLabel component="legend" className={classes.formlabel}> {props.label} </FormLabel>
-
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          {props.children}
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-    </Grid>
-
-  );
-
-}
 
 function UploadPage(props) {
 
@@ -78,9 +42,6 @@ function UploadPage(props) {
   const firestore = useFirestore();
   const upload_store = useSelector(state => state.uploadReducer);
   const history = useHistory();
-
- 
-
 
   // remove these
   const [valid, setValid] = React.useState({
@@ -334,8 +295,6 @@ function UploadPage(props) {
 
   let page_title = (upload_store.editmode) ? "Ändra recept" : "Ladda upp recept";
 
-  // console.log(firebase.firestore.Timestamp.now())
-
   return (
 
 
@@ -363,22 +322,17 @@ function UploadPage(props) {
         </FormControl>
         </Grid>
 
-        <CollapsedGrid label="Ingredienser">
+        <CollapseGrid label="Ingredienser">
           <IngredientsList handleAdd={handleIngredientsAdd}/>
-        </CollapsedGrid>
+        </CollapseGrid>
 
-        <CollapsedGrid label="Beskrivning">
+        <CollapseGrid label="Beskrivning">
           <DescriptionList handleAdd={handleDescriptionsAdd}/>
-        </CollapsedGrid>
+        </CollapseGrid>
 
-        <CollapsedGrid label="Receptbild">
+        <CollapseGrid label="Receptbild">
           <AddImage image={image} files={files} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>
-        </CollapsedGrid>
-
-        {/*
-        <CollapsedGrid label="Extra (valfritt)">
-          <p> Well hello</p>
-        </CollapsedGrid> */}
+        </CollapseGrid>
 
       </Grid>
 
@@ -417,10 +371,6 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     width: '100%',
-  },
-  formlabel: {
-    marginRight: '30px',
-    fontWeight: 'bold'
   },
   imagediv: {
     background: '#fbfbfb',

@@ -10,7 +10,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { useFirestore } from "react-redux-firebase";
+import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
 import { Route, Switch, useHistory } from "react-router-dom";
 // import our css
 import './App.css';
@@ -66,6 +66,13 @@ function App() {
   const classes = useStyles();
   const dispatch = useDispatch(); // be able to dispatch
   const state_user = useSelector(state => state.userReducer); // subscribe to the redux store
+  const userEmail = useSelector(state => state.firebase.auth.email);
+
+  useFirestoreConnect({
+    collection: `users`,
+    doc: userEmail,
+    storeAs: "userdoc",
+  });
 
   const firestore = useFirestore();
 

@@ -20,10 +20,12 @@ import AlertDialog from '../components/AlertDialog';
 import Emoji from '../components/Emoji';
 import AddImage from '../components/AddImage';
 import ReactGA from 'react-ga';
+import CollapseGrid from '../components/CollapseGrid';
+import UsernameSetting from '../components/settings/UsernameSetting';
 
 function Settings(props) {
 
-  const [username_textfield, setUsername_textfield] = useState("");
+  //const [username_textfield, setUsername_textfield] = useState("");
   const [fullname_textfield, setFullname_textfield] = useState("");
   const [bio_textfield, setBio_textfield] = useState("");
   const [imageUrl, setImageUrl] = useState(undefined);
@@ -31,7 +33,6 @@ function Settings(props) {
   const [has_changed, setHas_changed] = useState(false);
   const [labelWidth, setLabelWidth] = useState(0);
   const [in_editmode, setIn_editmode] = useState(false);
-  const [isAvailable, setIsAvailable] = useState(true);
   const labelRef = React.useRef(null);
   const [openSetting, setOpenSetting] = useState("");
 
@@ -54,7 +55,7 @@ function Settings(props) {
       action: "User enters settings",
     });
 
-    setLabelWidth(labelRef.current.offsetWidth);
+    // setLabelWidth(labelRef.current.offsetWidth); fix if needed 
 
     const storageRef = firebase.storage().ref().child('profileimages');
     const available_images = [];
@@ -74,8 +75,8 @@ function Settings(props) {
 
   React.useEffect(() => {
 
-    if(store.firestore_user && (username_textfield !== store.firestore_user.username ||
-      imageUrl !== store.firestore_user.profile_img_url ||
+    // (username_textfield !== store.firestore_user.username ||
+    if(store.firestore_user && (imageUrl !== store.firestore_user.profile_img_url ||
       fullname_textfield !== store.firestore_user.fullname ||
       (!store.firestore_user.bio || (store.firestore_user.bio && bio_textfield !== store.firestore_user.bio)) || 
       image !== undefined )) {
@@ -83,12 +84,12 @@ function Settings(props) {
     } else {
       setHas_changed(false);
     }
-  }, [username_textfield, fullname_textfield, bio_textfield, imageUrl, image]);
+  }, [fullname_textfield, bio_textfield, imageUrl, image]); // username_textfield, 
 
   // when information about user signed in arrives, set textfield value
   React.useEffect(() => {
     if(store.firestore_user) {
-      setUsername_textfield(store.firestore_user.username)
+      //setUsername_textfield(store.firestore_user.username)
       setFullname_textfield(store.firestore_user.fullname)
 
       if (store.firestore_user.profile_img_url !== undefined)
@@ -105,7 +106,7 @@ function Settings(props) {
 
     setIn_editmode(false);
     if(has_changed) {
-      setUsername_textfield(store.firestore_user.username);
+      //setUsername_textfield(store.firestore_user.username);
       setFullname_textfield(store.firestore_user.fullname);
       setBio_textfield(store.firestore_user.bio);
       setImageUrl(store.firestore_user.profile_img_url);
@@ -119,43 +120,6 @@ function Settings(props) {
       firebase.auth().signOut();
       history.push("/login");
     }
-  }
-
-  const editUsername = (new_value) => {
-    setUsername_textfield(new_value);
-    setIsAvailable(true);
-  }
-
-  var toChangePromise = function(current_username) {
-    return new Promise((resolve, reject) => {
-
-      let listsRef = firestore.collection('recipes');
-      let list_ids = [];
-
-      listsRef.where('user', '==', current_username).get()
-        .then(snapshot => {
-
-          snapshot.forEach(doc => {
-            list_ids.push(doc.id);
-          });
-          resolve(list_ids)
-        })
-    });
-  }
-
-  var isAvailableCheck = function() {
-    return new Promise((resolve, reject) => {
-
-      // check if available
-      let is_available = true;
-      firestore.collection('users').where('username', '==', username_textfield).get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            is_available = false;
-          });
-          resolve(is_available)
-        })
-    });
   }
 
   // update in Firebase
@@ -175,56 +139,10 @@ function Settings(props) {
   }
 
   // update in Firebase
-  function save_username() {
-
-    isAvailableCheck().then((is_available) => {
-
-      if(is_available === false)
-      {
-        setIsAvailable(false);
-        return;
-      }
-
-      // Set the 'username' field of the user
-      firestore.collection('users').doc(store.firestore_user.email).update({username: username_textfield});
-      setIn_editmode(false);
-
-      // update other docs (recipe docs) with this username
-      toChangePromise(store.firestore_user.username).then((loadedIds) => {
-
-        loadedIds.map( _id => {
-          firestore.collection('recipes').doc(_id).update({user: username_textfield});
-        });
-      });
-    });
-  }
-
-
-  // update in Firebase
   function save_img() {
 
     // Set the 'username' field of the user
     firestore.collection('users').doc(store.firestore_user.email).update({profile_img_url: imageUrl});
-  }
-
-  function newName() {
-
-    let preNames = ["Master", "Lill", "Pro"];
-    let postNames = ["Chef", "Sleven", "Pasta", "Vego"];
-
-    let rand1 = Math.floor(Math.random() * preNames.length);
-    let rand2 = Math.floor(Math.random() * postNames.length);
-
-    let pre_n = preNames[rand1];
-    let post_n = postNames[rand2];
-
-    // props
-    return pre_n + post_n;
-  }
-
-  const randomName = () => {
-    let temp_username = newName();
-    setUsername_textfield(temp_username);
   }
 
   const randomImg = () => {
@@ -291,8 +209,12 @@ function Settings(props) {
     setImage(undefined);
   };
 
+  const isOpen = (collaps_name) => {
+    return collaps_name === openSetting;
+  }
 
-  //let signText = (firebase.auth().currentUser) ? "Logga ut" : "Logga in";
+
+  // let signText = (firebase.auth().currentUser) ? "Logga ut" : "Logga in";
   // let username = (store.firestore_user) ? store.firestore_user.username : "unset";
   // fix if undefined
   // style={{display: 'inline-block'}}
@@ -306,87 +228,20 @@ function Settings(props) {
       <div className={classes.login_div}>
         <h3>Inställningar</h3>
 
-        <ExpansionPanel
-          onChange={(e, expanded) => onExpand(e, expanded, "username")}
-          expanded={openSetting === "username"}
-          style={{background: '#fbfbfb', marginTop: '8px'}}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography className={classes.heading}>Användarnamn</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+        <CollapseGrid label="Användarnamn" 
+                      controlName="username" 
+                      expandedCheck={isOpen}
+                      onExpand={onExpand}>
 
-            <FormControl variant="outlined">
-              <InputLabel ref={labelRef} htmlFor="component-outlined"> Användarnamn </InputLabel>
-              <OutlinedInput
-                value={username_textfield}
-                onChange={(e) => editUsername(e.target.value)}
-                labelWidth={labelWidth}
-                disabled={!in_editmode}
-              />
-            </FormControl>
+          <UsernameSetting></UsernameSetting>
 
-            { !in_editmode &&
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setIn_editmode(true)}
-              className={classes.buttons}
-            >
-              Ändra användarnamn
-            </Button>
-            }
-            { in_editmode &&
-            <React.Fragment>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => cancel_edit() }
-                className={classes.buttons}
-              >
-                Avbryt
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => randomName()}
-                className={`${classes.buttons} ${classes.rainbow}`}
-              >
-                Slumpa <Emoji symbol="🤪"/>
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => save_username()}
-                className={classes.buttons}
-                disabled={!has_changed}
-              >
-                Spara nytt användarnamn
-              </Button>
-              { !isAvailable &&
-              <Typography className={classes.available_text} >Namnet är upptaget</Typography>
-              }
-            </React.Fragment>
-            }
-          </ExpansionPanelDetails>
+        </CollapseGrid> 
+        
+        <CollapseGrid label="Namn" 
+                      controlName="fullname" 
+                      expandedCheck={isOpen}
+                      onExpand={onExpand}>
 
-        </ExpansionPanel>
-
-        <ExpansionPanel
-          onChange={(e, expanded) => onExpand(e, expanded, "fullname")}
-          expanded={openSetting === "fullname"}
-          style={{background: '#fbfbfb', marginTop: '8px'}}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography className={classes.heading}>Namn</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
 
             <FormControl variant="outlined">
               <InputLabel ref={labelRef} htmlFor="component-outlined"> Namn </InputLabel>
@@ -430,81 +285,64 @@ function Settings(props) {
               </Button>
             </React.Fragment>
             }
-          </ExpansionPanelDetails>
 
-        </ExpansionPanel>
+        </CollapseGrid>         
 
-        <ExpansionPanel
-          onChange={(e, expanded) => onExpand(e, expanded, "bio")}
-          expanded={openSetting === "bio"}
-          style={{background: '#fbfbfb', marginTop: '8px'}}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography className={classes.heading}>Biografi</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+        <CollapseGrid label="Biografi" 
+                      controlName="bio" 
+                      expandedCheck={isOpen}
+                      onExpand={onExpand}>
 
             <FormControl variant="outlined">
 
-              <TextareaAutosize
-                value={bio_textfield}
-                onChange={(e) => setBio_textfield(e.target.value)}
-                disabled={!in_editmode}
-              />
+            <TextareaAutosize
+              value={bio_textfield}
+              onChange={(e) => setBio_textfield(e.target.value)}
+              disabled={!in_editmode}
+            />
             </FormControl>
 
             { !in_editmode &&
             <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setIn_editmode(true)}
-              className={classes.buttons}
+            variant="contained"
+            color="primary"
+            onClick={() => setIn_editmode(true)}
+            className={classes.buttons}
             >
-              Ändra biografi
+            Ändra biografi
             </Button>
             }
             { in_editmode &&
             <React.Fragment>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => cancel_edit() }
-                className={classes.buttons}
-              >
-                Avbryt
-              </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => cancel_edit() }
+              className={classes.buttons}
+            >
+              Avbryt
+            </Button>
 
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => save_bio()}
-                className={classes.buttons}
-                disabled={!has_changed}
-              >
-                Spara biografi
-              </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => save_bio()}
+              className={classes.buttons}
+              disabled={!has_changed}
+            >
+              Spara biografi
+            </Button>
             </React.Fragment>
             }
-          </ExpansionPanelDetails>
 
-        </ExpansionPanel>
+        </CollapseGrid>
 
-        <ExpansionPanel
-          onChange={(e, expanded) => onExpand(e, expanded, "profileimage")}
-          expanded={openSetting === "profileimage"}
-          style={{background: '#fbfbfb', marginTop: '8px'}}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography className={classes.heading}>Profilbild</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails style={{display: 'flex', flexWrap: 'wrap'}}>
+        <CollapseGrid label="Profilbild" 
+                      controlName="profileimage" 
+                      expandedCheck={isOpen}
+                      onExpand={onExpand}>
 
+            {/* style={{display: 'flex', flexWrap: 'wrap'}}> */}
             { img_src &&
             <div className={classes.fullrow}>
               <img src={img_src} className={classes.profileimage}  alt={"profile img"} />
@@ -552,9 +390,9 @@ function Settings(props) {
             </React.Fragment>
             }
 
-          </ExpansionPanelDetails>
+        </CollapseGrid>
 
-        </ExpansionPanel>
+          {/*<AddImage files={files} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>*/}
 
       </div>
 
@@ -631,3 +469,5 @@ fullrow: {
 });
 
 export default Settings;
+
+// before refactor: 633 lines..
