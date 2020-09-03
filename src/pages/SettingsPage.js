@@ -1,29 +1,23 @@
 import Button from '@material-ui/core/Button';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { makeStyles } from '@material-ui/core/styles';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState } from 'react';
+// import AddImage from '../components/AddImage';
+import ReactGA from 'react-ga';
 import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import AlertDialog from '../components/AlertDialog';
-import Emoji from '../components/Emoji';
-import AddImage from '../components/AddImage';
-import ReactGA from 'react-ga';
 import CollapseGrid from '../components/CollapseGrid';
+import Emoji from '../components/Emoji';
+import TextSetting from '../components/settings/TextSetting';
 import UsernameSetting from '../components/settings/UsernameSetting';
 
 function Settings(props) {
+
+  const userdoc = useSelector(state => state.firestore.data.userdoc);
 
   //const [username_textfield, setUsername_textfield] = useState("");
   const [fullname_textfield, setFullname_textfield] = useState("");
@@ -77,26 +71,20 @@ function Settings(props) {
 
     // (username_textfield !== store.firestore_user.username ||
     if(store.firestore_user && (imageUrl !== store.firestore_user.profile_img_url ||
-      fullname_textfield !== store.firestore_user.fullname ||
-      (!store.firestore_user.bio || (store.firestore_user.bio && bio_textfield !== store.firestore_user.bio)) || 
       image !== undefined )) {
       setHas_changed(true);
     } else {
       setHas_changed(false);
     }
-  }, [fullname_textfield, bio_textfield, imageUrl, image]); // username_textfield, 
+  }, [imageUrl, image]); // username_textfield, 
 
   // when information about user signed in arrives, set textfield value
   React.useEffect(() => {
     if(store.firestore_user) {
-      //setUsername_textfield(store.firestore_user.username)
-      setFullname_textfield(store.firestore_user.fullname)
 
       if (store.firestore_user.profile_img_url !== undefined)
         setImageUrl(store.firestore_user.profile_img_url);
 
-      if (store.firestore_user.bio !== undefined)
-        setBio_textfield(store.firestore_user.bio);
     }
   }, [store.firestore_user]);
 
@@ -106,9 +94,7 @@ function Settings(props) {
 
     setIn_editmode(false);
     if(has_changed) {
-      //setUsername_textfield(store.firestore_user.username);
-      setFullname_textfield(store.firestore_user.fullname);
-      setBio_textfield(store.firestore_user.bio);
+
       setImageUrl(store.firestore_user.profile_img_url);
     }
   }
@@ -120,22 +106,6 @@ function Settings(props) {
       firebase.auth().signOut();
       history.push("/login");
     }
-  }
-
-  // update in Firebase
-  function save_fullname() {
-
-    // Set the 'username' field of the user
-    firestore.collection('users').doc(store.firestore_user.email).update({fullname: fullname_textfield});
-    setIn_editmode(false);
-  }
-
-  // update in Firebase
-  function save_bio() {
-
-    // Set the 'username' field of the user
-    firestore.collection('users').doc(store.firestore_user.email).update({bio: bio_textfield});
-    setIn_editmode(false);
   }
 
   // update in Firebase
@@ -213,15 +183,13 @@ function Settings(props) {
     return collaps_name === openSetting;
   }
 
-
-  // let signText = (firebase.auth().currentUser) ? "Logga ut" : "Logga in";
-  // let username = (store.firestore_user) ? store.firestore_user.username : "unset";
-  // fix if undefined
-  // style={{display: 'inline-block'}}
-
-  // let img_src = imageUrl; // (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : undefined;
   let img_src = image ? image : imageUrl;
 
+  // (!userdoc || (userdoc && !userdoc.email)) ? <p> Du behöver vara inloggad </p> : 
+  if (userdoc && !userdoc.email) {
+    history.push("/home");
+  }
+  
   return (
 
     <div>
@@ -242,49 +210,7 @@ function Settings(props) {
                       expandedCheck={isOpen}
                       onExpand={onExpand}>
 
-
-            <FormControl variant="outlined">
-              <InputLabel ref={labelRef} htmlFor="component-outlined"> Namn </InputLabel>
-              <OutlinedInput
-                value={fullname_textfield}
-                onChange={(e) => setFullname_textfield(e.target.value)}
-                labelWidth={labelWidth}
-                disabled={!in_editmode}
-              />
-            </FormControl>
-
-            { !in_editmode &&
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setIn_editmode(true)}
-              className={classes.buttons}
-            >
-              Ändra namn
-            </Button>
-            }
-            { in_editmode &&
-            <React.Fragment>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => cancel_edit() }
-                className={classes.buttons}
-              >
-                Avbryt
-              </Button>
-
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => save_fullname()}
-                className={classes.buttons}
-                disabled={!has_changed}
-              >
-                Spara namn
-              </Button>
-            </React.Fragment>
-            }
+            <TextSetting db_field="fullname" label="namn"/>
 
         </CollapseGrid>         
 
@@ -293,47 +219,8 @@ function Settings(props) {
                       expandedCheck={isOpen}
                       onExpand={onExpand}>
 
-            <FormControl variant="outlined">
+            <TextSetting db_field="bio" label="biografi" multiline="true"/>
 
-            <TextareaAutosize
-              value={bio_textfield}
-              onChange={(e) => setBio_textfield(e.target.value)}
-              disabled={!in_editmode}
-            />
-            </FormControl>
-
-            { !in_editmode &&
-            <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setIn_editmode(true)}
-            className={classes.buttons}
-            >
-            Ändra biografi
-            </Button>
-            }
-            { in_editmode &&
-            <React.Fragment>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => cancel_edit() }
-              className={classes.buttons}
-            >
-              Avbryt
-            </Button>
-
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => save_bio()}
-              className={classes.buttons}
-              disabled={!has_changed}
-            >
-              Spara biografi
-            </Button>
-            </React.Fragment>
-            }
 
         </CollapseGrid>
 

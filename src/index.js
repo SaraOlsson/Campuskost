@@ -59,7 +59,8 @@ firebase.initializeApp(firebaseConfig);
 firebase.firestore();
 
 const initialState = {};
-const store = createStore(rootReducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStore(rootReducer, initialState);
+// Dev: , window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 
 
 const rrfProps = {
@@ -72,18 +73,6 @@ const rrfProps = {
 // wrapper for the provider to work properly
 const AppWrapper = () => {
 
- // const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
- 
-
-/*
- return (
-   <Provider store={store}>
-     <BrowserRouter>
-     <App />
-     </BrowserRouter>
-   </Provider>
- ) */
-
   return (
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
@@ -94,7 +83,6 @@ const AppWrapper = () => {
     </Provider>
 
   )
-
 }
 
 const rootElement = document.getElementById('root');
