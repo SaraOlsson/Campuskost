@@ -8,7 +8,7 @@ import ReactGA from 'react-ga';
 import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import Emoji from '../../components/Emoji';
-// import AddImage from '../components/AddImage';
+import AddImage from '../../components/AddImage';
 
 function ProfileImageSetting(props) {
 
@@ -17,9 +17,9 @@ function ProfileImageSetting(props) {
     const [in_editmode, setIn_editmode] = useState(false);
     const [has_changed, setHas_changed] = useState(false);
 
-    const [files, setFiles] = React.useState([]);
     const [image, setImage] = React.useState(undefined);
     const [imageUrlList, setImageUrlList] = useState([]);
+    const [choosedUploaded, setChoosedUploaded] = useState(false);
 
     const classes = useStyles();
     const firestore = useFirestore();
@@ -33,7 +33,11 @@ function ProfileImageSetting(props) {
         // Find all the prefixes and items.
         storageRef.listAll().then(function(res) {
           res.items.forEach(function(itemRef) {
-            itemRef.getDownloadURL().then((url) => { available_images.push(url); });
+            itemRef.getDownloadURL().then((url) => { 
+
+                // only your own images..
+                available_images.push(url); 
+            });
           });
           setImageUrlList(available_images);
     
@@ -52,8 +56,8 @@ function ProfileImageSetting(props) {
         if(settingValue === "")
             return;
         
-        setHas_changed(settingValue !== userdoc[props.db_field]);
-    }, [settingValue]);
+        setHas_changed(choosedUploaded || settingValue !== userdoc[props.db_field]);
+    }, [settingValue, choosedUploaded]);
 
     const cancel_edit = () => {
         setIn_editmode(false);
@@ -62,8 +66,45 @@ function ProfileImageSetting(props) {
 
     const save_setting = () => {
 
-        setIn_editmode(false);
-        db_save(settingValue);
+        if(choosedUploaded) 
+        {
+            uploadImage(function(returnValue_downloadURL) {
+                let downloadURL = returnValue_downloadURL;
+                db_save(downloadURL);
+            }); 
+
+        } else {
+            db_save(settingValue);
+        }
+
+        setIn_editmode(false); 
+    }
+
+    const generateImageFilename = () => {
+        return 'profileimages/custom/' + userdoc.email + '.jpg';
+      };
+
+     // upload image and callback with download URL
+    const uploadImage = (callback) => {
+        
+        // setUpload_wait(true);
+        // Create a reference to the new image
+        let storageRef = firebase.storage(); // REFACTOR TO HOOKS?
+        let image_filename = generateImageFilename();
+        let newImageRef = storageRef.ref(image_filename); 
+
+        // Upload image as a Base64 formatted image string.
+        let uploadTask = newImageRef.putString(image, 'data_url');
+
+        uploadTask.on('state_changed', function(snapshot){
+            }, function(error) { // Handle unsuccessful uploads
+            }, function() 
+            { // Handle successful uploads on complete
+
+            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                callback(downloadURL);
+            });
+        }); 
     }
 
     // update in Firebase
@@ -78,6 +119,8 @@ function ProfileImageSetting(props) {
     }
 
     const randomImg = () => {
+
+        setChoosedUploaded(false);
 
         ReactGA.event({
           category: "Settings",
@@ -102,21 +145,23 @@ function ProfileImageSetting(props) {
       }
 
       const onFileAdd = (files) => {
-        setFiles(files);
-    
-        console.log("onFileAdd  ")
+
+        setChoosedUploaded(true);
     
         var reader = new FileReader();
         reader.onload = function(e) {
           setImage(e.target.result);
-          // console.log(e.target.result)
         }
     
-        reader.readAsDataURL(files[0]);
+        try {
+            reader.readAsDataURL(files[0]);
+        } catch(err) {
+            console.log(err.message);
+        }
+        
       };
 
       const onFileRemove = () => {
-        setFiles([]);
         setImage(undefined);
       };
 
@@ -158,7 +203,7 @@ function ProfileImageSetting(props) {
               >
                 Slumpa <Emoji symbol="🤪"/>
               </Button>
-              {/*<AddImage files={files} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>*/}
+              <AddImage onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>
               <Button
                 variant="contained"
                 color="primary"
@@ -199,5 +244,3 @@ const useStyles = makeStyles({
 });
 
 export default ProfileImageSetting;
-
-// {/*<AddImage files={files} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>*/}

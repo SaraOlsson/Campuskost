@@ -15,7 +15,7 @@ function AddImage(props) {
               display: 'flex',
               marginBottom: '10px'
           }}>
-          <FileInput value={props.files} onChange={props.onFileAdd} />
+          <FileInput onChange={props.onFileAdd} />
           </Grid>
         </Grid>
         { props.image !== undefined &&
@@ -39,8 +39,7 @@ function AddImage(props) {
       </React.Fragment>
     );
 }
-
-
+ 
 // material ui design
 const useStyles = makeStyles(theme => ({
     loadedimage: {

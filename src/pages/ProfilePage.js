@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
-import userchef from '../assets/userchef.png';
 import FollowerList from '../components/followerlist';
 import RecipeGridList from '../components/recipegridlist';
 import SimpleTabs from '../components/userpagetabs';
@@ -22,11 +21,9 @@ var Spinner = require('react-spinkit');
 function ProfilePage(props) {
 
   const { username_url } = useParams();
-  // const [user, setUser] = useState(url_user); // props.match.params.url_user
   const [user, setUser] = useState(undefined);
   const [ifUser, setIfUser] = useState(false);
   const [recipes, setRecipes] = useState(undefined);
-  //const [signedIn, setSignedIn] = useState(false);
   const [followInfo, setFollowInfo] = useState([]);
   const [followingInfo, setFollowingInfo] = useState([]);
   const [following_this_user, setFollowing_this_user] = useState({following: false, email: ""});
@@ -172,11 +169,6 @@ function ProfilePage(props) {
     });
   }
 
-  // when all followers (emails) are collected
-  // function callback (current_username, follow_docs, collection) {
-  //  followBuilder(current_username, follow_docs, collection);
-  //}
-
   // from emails, get further user info
   const followBuilder = (current_username, follow_docs, collection) => {
 
@@ -217,40 +209,6 @@ function ProfilePage(props) {
     });
   }
 
-  // fetch user correspoding to the url, compare to user signed in
-  /*
-  const userFetcher = () => {
-
-    // Create a reference to the cities collection
-    let usersRef = firestore.collection('users');
-
-    // Create a query against the collection
-    let queryRef = usersRef.where('username', '==', user);
-    let inSnapshot = false;
-
-    queryRef.onSnapshot(function(querySnapshot) {
-
-          inSnapshot = true;
-          querySnapshot.forEach( doc => {
-            let data = doc.data();
-
-            if(data.username === user) {
-              setIfUser(true);
-            }
-          });
-    });
-
-    if(inSnapshot === false)
-    {
-      setIfUser(false);
-    }
-  }
-  */
-  /*
-  <Button onClick={ () => firebase.auth().signOut()} variant="contained" color="primary">
-    Logga ut
-  </Button>
-  <button onClick={ () => firebase.auth().signOut() } name="signout"> Logga ut </button>*/
   let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
   let recipeContent = (recipes !== undefined) ? <RecipeGridList recipes={recipes}/> : spinner_jsx;
 
@@ -278,14 +236,7 @@ function ProfilePage(props) {
     </Button>);
   }
 
-  let img_src = userchef; // default user image
-  if (ifUser && store.firestore_user && store.firestore_user.profile_img_url) {
-    img_src = store.firestore_user.profile_img_url; // page shows profile for this user
-  } else if (!ifUser && user && user.profile_img_url) {
-    img_src = user.profile_img_url
-  }
-
-  return (
+  return !user ? [] : (
 
     <React.Fragment>
 
@@ -326,7 +277,7 @@ function ProfilePage(props) {
           {followBtn}
         </Grid>
         <Grid item xs={3}>
-          <img src={img_src} alt="user-profile-img"/>
+          <img src={user.profile_img_url} alt="user-profile-img" className={classes.profileImage}/>
         </Grid>
 
       </Grid>
@@ -352,6 +303,8 @@ function ProfilePage(props) {
 // followInfo.length > 0 &&
 }
 
+// https://reactgo.com/css-crop-images/
+
 const useStyles = makeStyles({
   userinfo: {
    marginBottom: '20px',
@@ -371,6 +324,13 @@ const useStyles = makeStyles({
  bio: {
    fontSize: '13px',
    maxWidth: '300px'
+ },
+ profileImage: {
+  objectFit: 'cover',
+  backgroundPosition: 'center',
+  borderRadius: '50%',
+  width: '100px',
+  height: '100px'
  }
 });
 

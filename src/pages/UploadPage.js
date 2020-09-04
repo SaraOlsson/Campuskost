@@ -28,7 +28,7 @@ var Spinner = require('react-spinkit');
 function UploadPage(props) {
 
   const [title, setTitle] = React.useState('');
-  const [files, setFiles] = React.useState([]);
+  // const [files, setFiles] = React.useState([]);
   const [image, setImage] = React.useState(undefined);
   const [id, setId] = React.useState(undefined);
   const [upload_wait, setUpload_wait] = React.useState(false);
@@ -118,8 +118,9 @@ function UploadPage(props) {
   };
 
   const onFileAdd = (files) => {
+
     setValid({ ...valid, ["image"]: true });
-    setFiles(files);
+    // setFiles(files);
 
     var reader = new FileReader();
     reader.onload = function(e) {
@@ -127,13 +128,18 @@ function UploadPage(props) {
       imageDisp(e.target.result);
     }
 
-    reader.readAsDataURL(files[0]);
+    try {
+      reader.readAsDataURL(files[0]);
+    } catch(err) {
+        console.log(err.message);
+    }
     imageDisp();
+
   };
 
   const onFileRemove = () => {
     setValid({ ...valid, ["image"]: false });
-    setFiles([]);
+    //setFiles([]);
     setImage(undefined);
   };
 
@@ -154,12 +160,12 @@ function UploadPage(props) {
     let uploadTask = newImageRef.putString(image, 'data_url');
 
     uploadTask.on('state_changed', function(snapshot){
-    }, function(error) { // Handle unsuccessful uploads
-    }, function() { // Handle successful uploads on complete
+      }, function(error) { // Handle unsuccessful uploads
+      }, function() { // Handle successful uploads on complete
 
-      uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-        callback(downloadURL);
-      });
+        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+          callback(downloadURL);
+        });
     }); 
   }
 
@@ -230,7 +236,7 @@ function UploadPage(props) {
       };
 
       // either upload with or without image (no new imag needed of recipe _update_)
-      if (files.length < 1) {
+      if (image === undefined) {
 
         firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
         setUpload_wait(false);
@@ -331,7 +337,7 @@ function UploadPage(props) {
         </CollapseGrid>
 
         <CollapseGrid label="Receptbild">
-          <AddImage image={image} files={files} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>
+          <AddImage image={image} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>
         </CollapseGrid>
 
       </Grid>

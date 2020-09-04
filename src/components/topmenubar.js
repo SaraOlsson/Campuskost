@@ -285,7 +285,13 @@ const useStyles = makeStyles(theme => ({
     fontSize: 'small'
   },
   smallprofileimage: {
-    width: '40px'
+    width: '40px',
+    height: '40px',
+    objectFit: 'cover',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    borderRadius: '100px',
+    marginBottom: '15px',
   }
 }));
 
