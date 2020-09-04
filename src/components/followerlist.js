@@ -104,7 +104,13 @@ const useStyles = makeStyles({
      color: '#e8e8e8'
    },
    smallprofileimage: {
-     width: '40px'
+      width: '40px',
+      height: '40px',
+      objectFit: 'cover',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      borderRadius: '100px',
+      marginBottom: '15px',
    },
    pointer: {
     cursor: 'pointer'
