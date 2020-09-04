@@ -18,26 +18,26 @@ import { useFirestore } from "react-redux-firebase";
 function UsernameSetting(props) {
 
     const userdoc = useSelector(state => state.firestore.data.userdoc);
-    const [username_textfield, setUsername_textfield] = useState("");
+    const [settingValue, SetSettingValue] = useState("");
     const [in_editmode, setIn_editmode] = useState(false);
     const [has_changed, setHas_changed] = useState(false);
     const [isAvailable, setIsAvailable] = useState(true);
 
     const classes = useStyles();
     const firestore = useFirestore();
-    const store = useSelector(state => state.fireReducer);
+    // const store = useSelector(state => state.fireReducer);
   
     useEffect(() => {
-        setUsername_textfield( userdoc ? userdoc.username : "" );
+        SetSettingValue( userdoc ? userdoc.username : "" );
     }, [userdoc]); 
 
     useEffect(() => {
 
-        if(username_textfield === "")
+        if(settingValue === "")
             return;
         
-        setHas_changed(username_textfield !== userdoc.username);
-    }, [username_textfield]);
+        setHas_changed(settingValue !== userdoc.username);
+    }, [settingValue]);
 
     function newName() {
 
@@ -56,27 +56,29 @@ function UsernameSetting(props) {
 
     const randomName = () => {
         let temp_username = newName();
-        setUsername_textfield(temp_username);
+        SetSettingValue(temp_username);
     }
 
     const cancel_edit = () => {
         setIn_editmode(false);
-        setUsername_textfield(userdoc.username);
+        SetSettingValue(userdoc.username);
     }
 
-    const save_username = () => {
+    const save_setting = () => {
 
         // it does not know yet..!
         if(isAvailable)
+        {
             setIn_editmode(true);
-
-        save_username_db(username_textfield);
+        }
+            
+        db_save(settingValue);
     }
 
     // update in Firebase
-    function save_username_db(new_username) {
+    function db_save(new_value) {
 
-        isAvailableCheck(new_username).then((is_available) => {
+        isAvailableCheck(new_value).then((is_available) => {
 
         if(is_available === false)
         {
@@ -84,15 +86,20 @@ function UsernameSetting(props) {
             return;
         }
 
+        // Update the database field of the user
+        var key = props.db_field;
+        var obj = {};
+        obj[key] = new_value;
+
         // Set the 'username' field of the user
-        firestore.collection('users').doc(store.firestore_user.email).update({username: new_username});
+        firestore.collection('users').doc(userdoc.email).update(obj);
         setIn_editmode(false);
 
         // update other docs (recipe docs) with this username
-        toChangePromise(store.firestore_user.username).then((loadedIds) => {
+        toChangePromise(userdoc.username).then((loadedIds) => {
 
             loadedIds.map( _id => {
-            firestore.collection('recipes').doc(_id).update({user: new_username});
+                firestore.collection('recipes').doc(_id).update({user: new_value});
             });
         });
         });
@@ -130,28 +137,16 @@ function UsernameSetting(props) {
         });
     }
 
-    // labelWidth={labelWidth}
-  
     return !userdoc ? null : (
       <React.Fragment>
         <TextField
           id="outlined-disabled"
-          label="Användarnamn"
+          label={props.label.charAt(0).toUpperCase() + props.label.slice(1)}
           variant="outlined"
-          value={username_textfield}
-          onChange={(e) => setUsername_textfield(e.target.value)}
+          value={settingValue}
+          onChange={(e) => SetSettingValue(e.target.value)}
           disabled={!in_editmode}
         />
-        {/*
-        <FormControl variant="outlined">
-            <InputLabel ref={labelRef} htmlFor="component-outlined"> Användarnamn </InputLabel>
-            <OutlinedInput
-            value={username_textfield}
-            onChange={(e) => setUsername_textfield(e.target.value)}
-            labelWidth={labelWidth}
-            disabled={!in_editmode}
-            />
-        </FormControl> */}
 
             { !in_editmode &&
             <Button
@@ -160,7 +155,7 @@ function UsernameSetting(props) {
               onClick={() => setIn_editmode(true)}
               className={classes.buttons}
             >
-              Ändra användarnamn
+              Ändra {props.label}
             </Button>
             }
             { in_editmode &&
@@ -184,11 +179,11 @@ function UsernameSetting(props) {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => save_username(username_textfield)}
+                onClick={() => save_setting(settingValue)}
                 className={classes.buttons}
                 disabled={!has_changed}
               >
-                Spara nytt användarnamn
+                Spara nytt {props.label}
               </Button>
               { (!isAvailable && has_changed) &&
               <Typography className={classes.available_text} >Namnet är upptaget</Typography>
