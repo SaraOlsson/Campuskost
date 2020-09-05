@@ -38,6 +38,10 @@ export function register(config) {
     config.testisCallback("HELLO");
   }
 
+  console.log(process.env)
+  console.log(process.env.PUBLIC_URL)
+  console.log(window.location.href)
+  console.log(window.location.origin)
 
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
@@ -80,11 +84,12 @@ function registerValidSW(swUrl, config) {
     .then(registration => {
       registration.onupdatefound = () => {
 
-        hasUpdates = true;
-        window.location.reload();
+        // hasUpdates = true;
+        //window.location.reload();
 
         const installingWorker = registration.installing;
         if (installingWorker == null) {
+          console.log("installingWorker == null")
           return;
         }
         installingWorker.onstatechange = () => {
@@ -95,10 +100,10 @@ function registerValidSW(swUrl, config) {
               // content until all client tabs are closed.
 
               // Sara added: Reload the page if new content is available
-              
+              console.log("tries to reload")
               navigator.serviceWorker.ready.then(registration => {
                 registration.unregister().then(() => {
-                  console.log("tries to reload")
+                  console.log("reload..")
                   window.location.reload();
                 });
               }); 
@@ -143,6 +148,7 @@ function checkValidServiceWorker(swUrl, config) {
         response.status === 404 ||
         (contentType != null && contentType.indexOf('javascript') === -1)
       ) {
+        console.log("No service worker found.")
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then(registration => {
           registration.unregister().then(() => {
