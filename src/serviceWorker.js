@@ -46,6 +46,8 @@ export function register(config) {
         // This is running on localhost. Let's check if a service worker still exists or not.
         checkValidServiceWorker(swUrl, config);
 
+        console.log("running on localhost")
+
         // Add some additional logging to localhost, pointing developers to the
         // service worker/PWA documentation.
         navigator.serviceWorker.ready.then(() => {
@@ -83,13 +85,13 @@ function registerValidSW(swUrl, config) {
               // content until all client tabs are closed.
 
               // Sara added: Reload the page if new content is available
-              /*
+              
               navigator.serviceWorker.ready.then(registration => {
                 registration.unregister().then(() => {
                   window.location.reload();
                 });
-              }); */
-              window.location.reload();
+              }); 
+              //window.location.reload();
 
               console.log(
                 'New content is available and will be used when all ' +

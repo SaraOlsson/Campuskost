@@ -53,7 +53,7 @@ function NewsContainer(props) {
         <h3>Välkommen till nya Campuskost <Emoji symbol="🌱"/> </h3>
         <p> Campuskost har fått nytt utseende och funktion! Du kan nu skapa ett konto och själv ladda upp och redigera dina recept.
         Snart kommer funktionalitet såsom att skapa listor och följa dina vänners listor med recept. Lämna gärna feedback {feedback_form_link} om du
-        hittar buggar eller har något roligt förslag</p>
+        hittar buggar eller har något roligt förslag.</p>
         </div>
       </Grid>
 
