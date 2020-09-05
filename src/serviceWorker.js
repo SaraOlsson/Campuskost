@@ -20,6 +20,8 @@ const isLocalhost = Boolean(
     )
 );
 
+// https://create-react-app.dev/docs/making-a-progressive-web-app/
+
 export let hasUpdates = false;
 
 /*
@@ -29,6 +31,14 @@ export function checkMyUpdate() {
 }*/
 
 export function register(config) {
+  console.log(config)
+
+  // Execute callback
+  if (config && config.testisCallback) {
+    config.testisCallback("HELLO");
+  }
+
+
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
@@ -88,6 +98,7 @@ function registerValidSW(swUrl, config) {
               
               navigator.serviceWorker.ready.then(registration => {
                 registration.unregister().then(() => {
+                  console.log("tries to reload")
                   window.location.reload();
                 });
               }); 

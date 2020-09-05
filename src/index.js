@@ -59,7 +59,7 @@ firebase.initializeApp(firebaseConfig);
 firebase.firestore();
 
 const initialState = {};
-const store = createStore(rootReducer, initialState);
+const store = createStore(rootReducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 // Dev: , window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 
 
@@ -92,10 +92,26 @@ ReactDOM.render(
   rootElement
 );
 
+// serviceWorker functionallity
+const testisCallback = (input) => {
+  console.log(input)
+}
+
+const onUpdate = (registration) => {
+  console.log(registration)
+  alert('Det finns en ny uppdatering av Campuskost. Stäng alla fönster så hämtas uppdateringen.');
+}
+
+const onSuccess = (registration) => {
+  console.log(registration)
+}
+
+let cutomConfig = {testisCallback, onUpdate, onSuccess};
+
 // ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 // serviceWorker.unregister();
-serviceWorker.register();
+serviceWorker.register(cutomConfig);
