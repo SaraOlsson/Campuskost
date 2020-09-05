@@ -56,9 +56,10 @@ function RecipePage(props) {
       
   }, [recipe] );
 
+  /*
   const generateImageFilename = () => {
     return 'recept/' + recipe.title + '_' + uid + '.jpg';
-  };
+  }; */
   
   const findSmallerImage = () => {
 
@@ -171,6 +172,21 @@ function RecipePage(props) {
     })
 
     dispatch({
+      type: "SETFREETEXT",
+      freetext: recipe.freetext
+    })
+
+    dispatch({
+      type: "SETSERVINGS",
+      servings: recipe.servings
+    })
+
+    dispatch({
+      type: "SETCOOKINGTIME",
+      cookingtime: recipe.cookingtime
+    })
+
+    dispatch({
       type: "SETIMAGE",
       image: recipe.img_url
     })
@@ -240,12 +256,27 @@ function RecipePage(props) {
             {image}
           </div> 
 
-          
+          { (recipe.servings || recipe.cookingtime) &&
+            <div className={classes.timestamp}> 
+              { recipe.servings &&
+              <span> 
+                {recipe.servings} portioner {" | "}
+              </span>
+              }
+              { recipe.cookingtime &&
+              <span> 
+                Tillagningstid: {recipe.cookingtime} minuter
+              </span>
+              }
+            </div>
+          }
+
           { recipe.freetext &&
           <div className={classes.freetext}> 
-            {recipe.freetext}
+            <b>{recipe.user}</b> {recipe.freetext}
           </div>
           }
+          
           { timestring && 
           <div className={classes.timestamp}> 
             {timestring}
@@ -311,16 +342,14 @@ const useStyles = makeStyles({
    fontWeight: 'bold'
   },
   freetext: {
-    //background: '#68bb8c',
-    //color: 'white',
+
     fontSize: 'small',
-    marginTop: '30px',
     borderRadius: '5px',
-    padding: '10px'
+    padding: '10px 20px'
   },
   timestamp: {
     fontSize: 'x-small',
-    padding: '10px',
+    padding: '10px 20px',
     color: 'gray'
   }
 });

@@ -33,12 +33,50 @@ function testreducer(state = { num: 0, url: "hey" }, action) {
     }
   }
   
-  function uploadReducer(state = { editmode: false, recipe_id: undefined, title: undefined, ingredients: undefined, descriptions: undefined, image: undefined }, action) {
+  /*
+  let init_repice_state = { 
+    editmode: false, 
+    recipe_id: undefined, 
+    title: undefined, 
+    ingredients: undefined, 
+    descriptions: undefined, 
+    image: undefined,
+    freetext: undefined,
+    servings: undefined,
+    cookingtime: undefined,
+  }; */
+  
+  function uploadReducer(state = { 
+    editmode: false, 
+    recipe_id: undefined, 
+    title: undefined, 
+    ingredients: undefined, 
+    descriptions: undefined, 
+    image: undefined,
+    freetext: undefined,
+    servings: undefined,
+    cookingtime: undefined,
+  }, action) {
     switch (action.type) {
         case "SETTITLE":
           return {
             ...state,
             title: action.title
+          };
+        case "SETFREETEXT":
+          return {
+            ...state,
+            freetext: action.freetext
+          };
+        case "SETCOOKINGTIME":
+          return {
+            ...state,
+            cookingtime: action.cookingtime
+          };
+        case "SETSERVINGS":
+          return {
+            ...state,
+            servings: action.servings
           };
         case "SETINGREDIENTS":
           return {

@@ -99,11 +99,13 @@ const testisCallback = (input) => {
 
 const onUpdate = (registration) => {
   console.log(registration)
-  alert('Det finns en ny uppdatering av Campuskost. Stäng alla fönster så hämtas uppdateringen.');
+  console.log('Det finns en ny uppdatering av Campuskost. Stäng alla fönster så hämtas uppdateringen.')
+  //alert('Det finns en ny uppdatering av Campuskost. Stäng alla fönster så hämtas uppdateringen.');
 }
 
 const onSuccess = (registration) => {
   console.log(registration)
+  console.log('Content is cached for offline use.');
 }
 
 let cutomConfig = {testisCallback, onUpdate, onSuccess};

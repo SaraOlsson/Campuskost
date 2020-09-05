@@ -6,14 +6,12 @@ TODO: let the user add extra information, as time to cook or num portions
 */
 
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import Grid from '@material-ui/core/Grid';
-import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import firebase from 'firebase'; // REFACTOR
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
@@ -27,14 +25,16 @@ var Spinner = require('react-spinkit');
 
 function UploadPage(props) {
 
-  const [title, setTitle] = React.useState('');
-  // const [files, setFiles] = React.useState([]);
-  const [image, setImage] = React.useState(undefined);
-  const [id, setId] = React.useState(undefined);
-  const [upload_wait, setUpload_wait] = React.useState(false);
-  const [done, setDone] = React.useState(false);
-  const [labelWidth, setLabelWidth] = React.useState(0);
-  const labelRef = React.useRef(null);
+  const [title, setTitle] = useState('');
+  const [freetext, setFreetext] = useState('');
+  const [cookingtime, setCookingTime] = useState('');
+  const [servings, setServings] = useState('');
+  const [image, setImage] = useState(undefined);
+  const [newImage, setNewImage] = useState(false);
+
+  const [id, setId] = useState(undefined);
+  const [upload_wait, setUpload_wait] = useState(false);
+  const [done, setDone] = useState(false);
 
   const classes = useStyles();
   const dispatch = useDispatch(); // be able to dispatch
@@ -42,9 +42,9 @@ function UploadPage(props) {
   const firestore = useFirestore();
   const upload_store = useSelector(state => state.uploadReducer);
   const history = useHistory();
-
+  
   // remove these
-  const [valid, setValid] = React.useState({
+  const [valid, setValid] = useState({
     title: false,
     ingredients: false,
     desc: false,
@@ -63,23 +63,25 @@ function UploadPage(props) {
     return (valid.title && valid.ingredients && valid.desc && valid.image)
   }
 
-  React.useEffect(() => {
-    setLabelWidth(labelRef.current.offsetWidth);
+  useEffect(() => {
 
     if(upload_store.title !== undefined)
-    {
       setTitle(upload_store.title);
-    }
 
     if(upload_store.image !== undefined)
-    {
       setImage(upload_store.image);
-    }
 
     if(upload_store.descriptions !== undefined)
-    {
       handleDescriptionsAdd(upload_store.descriptions.length);
-    }
+
+    if(upload_store.freetext !== undefined)
+      setFreetext(upload_store.freetext);
+    
+    if(upload_store.servings !== undefined)
+      setServings(upload_store.servings);
+    
+    if(upload_store.cookingtime !== undefined)
+      setCookingTime(upload_store.cookingtime);
 
     if(upload_store.ingredients !== undefined)
     {
@@ -125,6 +127,7 @@ function UploadPage(props) {
     var reader = new FileReader();
     reader.onload = function(e) {
       setImage(e.target.result);
+      setNewImage(true);
       imageDisp(e.target.result);
     }
 
@@ -198,13 +201,15 @@ function UploadPage(props) {
       uploadImage(function(returnValue_downloadURL) {
         // use the return value here instead of like a regular (non-evented) return value
         let downloadURL = returnValue_downloadURL;
-        let date_now = Date();
 
         firestore
         .collection("recipes")
         .add({
           user: username,
           title: recipe_name,
+          freetext: freetext,
+          servings: servings,
+          cookingtime: cookingtime,
           img_url: downloadURL,
           img_filename: image_filename,
           ingredients: upload_store.ingredients,
@@ -230,19 +235,23 @@ function UploadPage(props) {
       // UPDATE MODE
       let update_data = {
         title: recipe_name,
+        freetext: freetext,
+        servings: servings,
+        cookingtime: cookingtime,
         img_filename: image_filename,
         ingredients: upload_store.ingredients,
         description: upload_store.descriptions,
       };
 
       // either upload with or without image (no new imag needed of recipe _update_)
-      if (image === undefined) {
+      if (newImage === false) {
 
         firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
         setUpload_wait(false);
         setDone(true);
 
       } else {
+
         uploadImage(function(returnValue_downloadURL) {
           // use the return value here instead of like a regular (non-evented) return value
           update_data.img_url = returnValue_downloadURL;
@@ -257,7 +266,6 @@ function UploadPage(props) {
       // to be able to direct to recipe page
       setId(upload_store.recipe_id);
     }
-
 
   };
 
@@ -300,6 +308,7 @@ function UploadPage(props) {
   }
 
   let page_title = (upload_store.editmode) ? "Ändra recept" : "Ladda upp recept";
+  // </Grid>
 
   return (
 
@@ -307,26 +316,15 @@ function UploadPage(props) {
     <div>
       <h3>{page_title}</h3>
 
-      <form>
+        {/* TITLE */}
 
-      <Grid
-        container
-        spacing={1}
-        justify="center"
-        alignItems="center"
-      >
-
-        {/* TITLE*/}
-        <Grid item xs={12}>
-        <FormControl variant="outlined">
-          <InputLabel ref={labelRef} htmlFor="component-outlined"> Namn på recept </InputLabel>
-          <OutlinedInput
+          <TextField
+            id="recipename-input"
+            label="Namn på recept"
+            variant="outlined"
             value={title}
             onChange={handleChange}
-            labelWidth={labelWidth}
           />
-        </FormControl>
-        </Grid>
 
         <CollapseGrid label="Ingredienser">
           <IngredientsList handleAdd={handleIngredientsAdd}/>
@@ -340,22 +338,64 @@ function UploadPage(props) {
           <AddImage image={image} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>
         </CollapseGrid>
 
-      </Grid>
+        <CollapseGrid label="Övrigt (valfritt)">
+        <TextField
+            id="recipe-extra"
+            className="freetext"
+            label="Fritext"
+            variant="outlined"
+            rows={2}
+            value={freetext}
+            onChange={(e) => setFreetext(e.target.value)}
+            multiline
+          />
+
+          <TextField
+            id="recipe-servings"
+            
+            variant="outlined"
+            type="number"
+            value={servings}
+            onChange={(e) => setServings(e.target.value)}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">Portioner</InputAdornment>
+            }} 
+          />
+
+          <TextField
+            id="recipe-time"
+            
+            variant="outlined"
+            type="number"
+            value={cookingtime}
+            onChange={(e) => setCookingTime(e.target.value)}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">Minuter</InputAdornment>
+            }} 
+          />
+
+        </CollapseGrid>
 
       <div className={classes.uploaddiv} >
+        
+          {bottom_content}
+          
+      </div>
+
+    </div>
+
+  );
+}
+
+/*label="Antal portioner" label="Tillagningstid"
+<div className={classes.uploaddiv} >
         <Grid container justify="center" alignItems="center">
           <Grid item xs={4}>
           {bottom_content}
           </Grid>
         </Grid>
       </div>
-
-      </form>
-
-    </div>
-
-  );
-}
+      */
 
 // <RecipeCard/>
 
@@ -388,7 +428,9 @@ const useStyles = makeStyles(theme => ({
     background: '#68bb8c',
     borderRadius: '4px',
     padding: '40px',
-    marginTop: '8px'
+    marginTop: '8px',
+    display: 'flex',
+    justifyContent: 'center'
   },
   greenicon: {
     color: '#68BB8C'

@@ -55,7 +55,7 @@ function TextSetting(props) {
     return !userdoc ? null : (
       <React.Fragment>
         <TextField
-          id="outlined-disabled"
+          id={"input-" + props.label}
           label={props.label.charAt(0).toUpperCase() + props.label.slice(1)}
           variant="outlined"
           value={settingValue}

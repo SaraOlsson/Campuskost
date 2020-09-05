@@ -31,17 +31,20 @@ export function checkMyUpdate() {
 }*/
 
 export function register(config) {
-  console.log(config)
+  // console.log(config)
 
   // Execute callback
   if (config && config.testisCallback) {
     config.testisCallback("HELLO");
   }
 
-  console.log(process.env)
-  console.log(process.env.PUBLIC_URL)
-  console.log(window.location.href)
-  console.log(window.location.origin)
+  // console.log(process.env)
+  // console.log(process.env.PUBLIC_URL) // ""
+  // console.log(window.location.href) // http://localhost:3000/#/
+  // console.log(window.location.origin) // http://localhost:3000
+
+  // const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
+  // console.log(publicUrl)
 
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.

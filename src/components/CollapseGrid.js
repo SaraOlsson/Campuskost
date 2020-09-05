@@ -23,10 +23,10 @@ function CollapseGrid(props) {
     }
 
     let isExpanded = props.expandedCheck ? props.expandedCheck(props.controlName) : expandedState;
-  
+
     return (
   
-      <Grid item xs={12}>
+      
         <ExpansionPanel className={classes.expanel}
             onChange={(e, expanded) => onExpand(e, expanded, props.controlName)}
             expanded={isExpanded}>
@@ -44,7 +44,7 @@ function CollapseGrid(props) {
             {props.children}
           </ExpansionPanelDetails>
         </ExpansionPanel>
-      </Grid>
+      
   
     );
   
