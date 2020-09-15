@@ -15,6 +15,9 @@ import RecipeGridList from '../components/recipegridlist';
 import SimpleTabs from '../components/userpagetabs';
 import ListPage from './ListPage';
 
+import Avatar from '@material-ui/core/Avatar';
+import PersonIcon from '@material-ui/icons/Person';
+
 var Spinner = require('react-spinkit');
 
 // () =>
@@ -276,9 +279,16 @@ function ProfilePage(props) {
           </Button>}
           {followBtn}
         </Grid>
-        <Grid item xs={3}>
-          <img src={user.profile_img_url} alt="user-profile-img" className={classes.profileImage}/>
-        </Grid>
+        { user.profile_img_url ? 
+          <Grid item xs={3}>
+            <img src={user.profile_img_url} alt="user-profile-img" className={classes.profileImage}/>
+          </Grid> 
+          :
+          <Avatar>
+            <PersonIcon/>
+          </Avatar>
+        }
+        
 
       </Grid>
 

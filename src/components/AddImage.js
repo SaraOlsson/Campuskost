@@ -11,7 +11,7 @@ function AddImage(props) {
     return (
       <React.Fragment>
         <Grid container spacing={1}>
-          <Grid item xs={9} style={{
+          <Grid item xs={12} style={{
               display: 'flex',
               marginBottom: '10px'
           }}>
@@ -20,11 +20,11 @@ function AddImage(props) {
         </Grid>
         { props.image !== undefined &&
         <React.Fragment>
-          <Grid item xs={9}>
+          <Grid item xs={12}>
             <img src={props.image} alt={"loadedimage"} className={classes.loadedimage} />
           </Grid>
           
-          <Grid item xs={3}>
+          <Grid item xs={12}>
             <Button
               variant="contained"
               color="primary"

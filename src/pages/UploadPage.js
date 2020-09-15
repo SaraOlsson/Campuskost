@@ -19,6 +19,7 @@ import AddImage from '../components/AddImage';
 import CollapseGrid from '../components/CollapseGrid';
 import DescriptionList from '../components/descriptionlist';
 import IngredientsList from '../components/ingredientslist';
+import Emoji from '../components/Emoji';
 import '../style/GlobalCssButton.css';
 
 var Spinner = require('react-spinkit');
@@ -335,6 +336,7 @@ function UploadPage(props) {
         </CollapseGrid>
 
         <CollapseGrid label="Receptbild">
+          <p className={classes.copyright}>Obs, Ladda bara upp bilder du har rättigheter till <Emoji symbol="📷"/> </p>
           <AddImage image={image} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>
         </CollapseGrid>
 
@@ -447,6 +449,11 @@ const useStyles = makeStyles(theme => ({
   spinner: {
     display: 'flex',
     justifyContent: 'center',
+  },
+  copyright: {
+    fontSize: 'x-small',
+    fontStyle: 'italic',
+    paddingLeft: '5px',
   }
 }));
 
