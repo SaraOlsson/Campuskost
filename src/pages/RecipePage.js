@@ -41,10 +41,13 @@ function RecipePage(props) {
 
     if (recipe !== undefined && email !== undefined && recipe.recipeID === id) {
       
+      setIfUser( recipe.user_ref === email );
+
+      /*
       recipe.user_ref.get().then( (doc) => {
         let is_user = doc.data().email === email;
         setIfUser( is_user );
-      });
+      }); */
 
       likeFetcher(email);
 
