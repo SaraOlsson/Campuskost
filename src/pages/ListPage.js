@@ -127,13 +127,13 @@ function ListPage() {
     <div> 
       <h3> Gillade recept </h3>
       {
-        (likedRecipes.length < 1 && isLoading == true) ? 
+        (likedRecipes.length < 1 && isLoading === true) ? 
           <LoadSpinner/> 
           : 
           <RecipeGridList recipes={Object.values(likedRecipes)} />    
       }
-      {(likedRecipes.length < 1 && isLoading == false) &&
-         <p> Du har inga gillade recept än. </p>    
+      {(likedRecipes.length < 1 && isLoading === false) &&
+         <p> Inga gillade recept än. </p>    
       }
       <h3>Receptlistor</h3>
       <p>Kommer snart! <Emoji symbol="🥳"/> </p>

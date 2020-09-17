@@ -12,14 +12,14 @@ import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import FollowerList from '../components/followerlist';
 import RecipeGridList from '../components/recipegridlist';
+import RecipeLists from '../components/RecipeLists';
 import SimpleTabs from '../components/userpagetabs';
-import ListPage from './ListPage';
 import { useFirestoreConnect } from "react-redux-firebase";
+import LoadSpinner from '../components/loadspinner';
+import Emoji from '../components/Emoji';
 
 import Avatar from '@material-ui/core/Avatar';
 import PersonIcon from '@material-ui/icons/Person';
-
-var Spinner = require('react-spinkit');
 
 function ProfilePage(props) {
 
@@ -84,7 +84,16 @@ function ProfilePage(props) {
     storeAs: "viewRecipes",
   });
   const recipes = useSelector((state) => {
-    return state.firestore.data.viewRecipes ? Object.values(state.firestore.data.viewRecipes) : []
+
+    let state_obj = state.firestore.data.viewRecipes;
+
+    // no result yet
+    if(state_obj === undefined) 
+      return undefined;
+    else if ( state_obj === null) 
+      return [];
+    else 
+      return Object.values(state_obj);
   });
 
   // get user docs from email list
@@ -144,12 +153,17 @@ function ProfilePage(props) {
 
         firestore.collection('events').doc(firebase_event_id).set(event_follow_object);
       }
-
     }
   }
 
-  let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
-  let recipeContent = (recipes !== undefined) ? <RecipeGridList recipes={recipes}/> : spinner_jsx;
+  let recipeContent;
+  if(!recipes)
+  {
+    recipeContent = <LoadSpinner/>;
+  } else {
+    let no_recipes_content = <div className={classes.noRecipesDiv}> Vi väntar med spänning på första receptet från <i>{user.username}!</i> <Emoji symbol="🍽️"/> </div>;
+    recipeContent = recipes.length > 0 ? <RecipeGridList recipes={recipes}/> : no_recipes_content;
+  }
 
   return !user ? [] : (
 
@@ -211,7 +225,7 @@ function ProfilePage(props) {
         { recipeContent }
         </div>
         <div>
-        <ListPage/>
+        <RecipeLists/>
         </div>
         <div>
         <FollowerList followerData={isUser() ? getUserDocs(followers_users) : getUserDocs(viewuser_followers_users)} showFollowIcon={true}/>
@@ -232,11 +246,6 @@ const useStyles = makeStyles({
   userinfo: {
    marginBottom: '20px',
  },
- spinner: {
-   display: 'flex',
-   justifyContent: 'center',
-   marginTop: 100
- },
  username: {
    fontWeight: 'bold',
    margin: '10px 0px'
@@ -254,6 +263,10 @@ const useStyles = makeStyles({
   borderRadius: '50%',
   width: '100px',
   height: '100px'
+ },
+ noRecipesDiv: {
+   padding: '1rem',
+   fontSize: 'small'
  }
 });
 

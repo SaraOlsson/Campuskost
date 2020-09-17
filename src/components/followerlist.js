@@ -18,7 +18,7 @@ function FollowerListItem(props) {
     user_avatar = <img src={user.profile_img_url} className={classes.smallprofileimage} alt={"profile-img"} />; //
   } else {
     user_avatar = (
-      <Avatar>
+      <Avatar className={classes.avatar}>
           <PersonIcon />
       </Avatar>
     );
@@ -26,7 +26,7 @@ function FollowerListItem(props) {
 
   return (
 
-    <ListItem className={classes.pointer}>
+    <ListItem className={classes.pointer + " " + classes.mylistitem}>
       <ListItemAvatar>
         {user_avatar}
       </ListItemAvatar>
@@ -96,8 +96,14 @@ const useStyles = makeStyles({
       borderRadius: '100px',
       marginBottom: '15px',
    },
+   avatar: {
+    marginBottom: '15px',
+   },
    pointer: {
     cursor: 'pointer'
+   },
+   mylistitem: {
+    alignItems: 'end'
    }
 });
 
