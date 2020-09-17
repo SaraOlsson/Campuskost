@@ -1,17 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import { useHistory } from "react-router-dom";
-import { makeStyles } from '@material-ui/core/styles';
-
+import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from "react-router-dom";
 
 function FollowerListItem(props) {
 
@@ -41,21 +36,10 @@ function FollowerListItem(props) {
         secondary={ user.fullname }
         onClick={() => props.handleChange(user.username)}
       />
-
-      { (false && props.showFollowIcon) &&
-      <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="follows">
-          <CheckCircleIcon className={(user.follows ? classes.followColor : classes.notfollowColor)}/>
-        </IconButton>
-      </ListItemSecondaryAction>
-      }
     </ListItem>
 
   );
-
 }
-
-// className={(user.follows ? 'followColor' : 'notfollowColor')}
 
 function FollowerList(props) {
 

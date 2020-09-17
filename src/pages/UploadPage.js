@@ -192,7 +192,7 @@ function UploadPage(props) {
     let recipe_name = upload_store.title;
     let image_filename = generateImageFilename();
 
-    let ref_to_user = firestore.collection('users').doc(store.firestore_user.email);
+    let ref_to_user = store.firestore_user.email; // firestore.collection('users').doc(store.firestore_user.email);
     let firestore_timestamp = firebase.firestore.Timestamp.now();
 
     // if upload or create new doc

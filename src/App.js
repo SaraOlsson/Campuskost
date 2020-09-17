@@ -74,6 +74,22 @@ function App() {
     storeAs: "userdoc",
   });
 
+  useFirestoreConnect({
+    collection: `users`,
+    storeAs: "allusers",
+  });
+
+  useFirestoreConnect([
+    {
+    collection: `followers/${userEmail}/following`,
+    storeAs: "following",
+    },
+    {
+      collection: `followers/${userEmail}/followers`,
+      storeAs: "followers",
+      }
+  ]);
+
   const firestore = useFirestore();
 
   useEffect(() => {

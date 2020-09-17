@@ -14,230 +14,142 @@ import FollowerList from '../components/followerlist';
 import RecipeGridList from '../components/recipegridlist';
 import SimpleTabs from '../components/userpagetabs';
 import ListPage from './ListPage';
+import { useFirestoreConnect } from "react-redux-firebase";
 
 import Avatar from '@material-ui/core/Avatar';
 import PersonIcon from '@material-ui/icons/Person';
 
 var Spinner = require('react-spinkit');
 
-// () =>
 function ProfilePage(props) {
 
-  const { username_url } = useParams();
-  const [user, setUser] = useState(undefined);
-  const [ifUser, setIfUser] = useState(false);
-  const [recipes, setRecipes] = useState(undefined);
-  const [followInfo, setFollowInfo] = useState([]);
-  const [followingInfo, setFollowingInfo] = useState([]);
-  const [following_this_user, setFollowing_this_user] = useState({following: false, email: ""});
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const classes = useStyles();
-  const store = useSelector(state => state.fireReducer);
   const firestore = useFirestore();
   const history = useHistory();
 
-  // when url changes, on load and on user click
+  // get doc of user in view ***
+  const { username_url } = useParams();
+  useFirestoreConnect({
+    collection: `users`,
+    where: [
+      ['username', '==', username_url],
+    ],
+    storeAs: "viewUser",
+  }); 
+
+  const user = useSelector((state) => {
+    return state.firestore.data.viewUser ? Object.values(state.firestore.data.viewUser)[0] : undefined
+  });
+  const viewUserEmail = user ? user.email : "noemail";
+  
+  useFirestoreConnect(
+    [{
+    collection: `followers/${viewUserEmail}/following`,
+    storeAs: `${viewUserEmail}-following`,
+    },
+    {
+      collection: `followers/${viewUserEmail}/followers`,
+      storeAs: `${viewUserEmail}-followers`,
+    }]
+  );
+  const viewuser_following_users = useSelector((state) => state.firestore.data[`${viewUserEmail}-following`]);
+  const viewuser_followers_users = useSelector((state) => state.firestore.data[`${viewUserEmail}-followers`]);
+
+  // data of user signed in ***
+  const { email } = useSelector((state) => state.firebase.auth); 
+  const followers_users = useSelector((state) => state.firestore.data.followers);
+  const following_users = useSelector((state) => state.firestore.data.following);
+  const all_users = useSelector((state) => state.firestore.data.allusers);
+  const userdoc = useSelector((state) => state.firestore.data.userdoc);
+  
+  // determine if we follow this user
+  useFirestoreConnect({
+    collection: `followers/${email}/following`,
+    doc: viewUserEmail,
+    storeAs: `${email}-follows-${viewUserEmail}`,
+  });
+  const is_following_state = useSelector((state) => state.firestore.data[`${email}-follows-${viewUserEmail}`]);
   useEffect(() => {
+    setIsFollowing(is_following_state ? true : false );
+  }, [is_following_state]) 
 
-    // CLEAN UP - can be done better
+  // get recipes of user in view
+  useFirestoreConnect({
+    collection: `recipes`,
+    where: [
+      ['user', '==', username_url],
+    ],
+    storeAs: "viewRecipes",
+  });
+  const recipes = useSelector((state) => {
+    return state.firestore.data.viewRecipes ? Object.values(state.firestore.data.viewRecipes) : []
+  });
 
-    recipeFetcher_new(username_url);
+  // get user docs from email list
+  const getUserDocs = (email_keys_object) => {
 
-    if(store.firestore_user && username_url === store.firestore_user.username) {
+    if(!email_keys_object || !all_users)
+      return [];
 
-      setIfUser(true)
-      followFetcher(username_url, store.firestore_user.email, "followers");
-      followFetcher(username_url, store.firestore_user.email, "following");
-    } else if ( store.firestore_user && username_url !== store.firestore_user.username ) {
+    let emails = Object.keys(email_keys_object);
 
-      getEmail(username_url) // fetches followers etc as well..
-      setIfUser(false)
-    }
-
-    // get email of user
-    email_promise(username_url).then((loadedDoc) => {
-
-      setUser(loadedDoc)
+    let docs = [];
+    emails.forEach( value => {
+      let found = Object.values(all_users).find( u => u.email === value)
+      if(found)
+        docs.push(found);
     });
 
-  }, [store.firestore_user, username_url]);
+    return docs;
+  }
 
-  var email_promise = function(url_username) {
-    return new Promise((resolve, reject) => {
+  const isUser = () => {
 
-      firestore.collection('users').where('username', '==', url_username).get()
-        .then(snapshot => {
+    if(!email || !user)
+      return false; // should not even call function?
 
-          let doc_data;
-          snapshot.forEach(doc => {
-
-            doc_data = doc.data();
-          });
-          resolve(doc_data)
-        })
-    });
+    return user.email === email;
   }
 
   const followUser = () => {
 
-    let firebase_event_id = store.firestore_user.email + "-follows-" + following_this_user.email;
+    let firebase_event_id = email + "-follows-" + user.email;
 
     // in following, remove from following list
-    if(following_this_user.following) {
-      firestore.collection("followers").doc(store.firestore_user.email).collection("following").doc(following_this_user.email).delete();
-      firestore.collection("followers").doc(following_this_user.email).collection("followers").doc(store.firestore_user.email).delete();
+    if(isFollowing) {
+      firestore.collection("followers").doc(email).collection("following").doc(user.email).delete();
+      firestore.collection("followers").doc(user.email).collection("followers").doc(email).delete();
       firestore.collection('events').doc(firebase_event_id).delete();
+      setIsFollowing(false)
 
     } else {
-      firestore.collection("followers").doc(store.firestore_user.email).collection("following").doc(following_this_user.email).set({});
-      firestore.collection("followers").doc(following_this_user.email).collection("followers").doc(store.firestore_user.email).set({});
+      firestore.collection("followers").doc(email).collection("following").doc(user.email).set({});
+      firestore.collection("followers").doc(user.email).collection("followers").doc(email).set({});
+      setIsFollowing(true)
 
-      let date = new Date();
+      // if document for user who triggered the action is availiable
+      if(userdoc)
+      {
+        let date = new Date();
+        let event_follow_object = {
+          email: userdoc.email,
+          event_image_url: userdoc.profile_img_url,
+          other_username: userdoc.username,
+          timestamp: date,
+          type: "FOLLOWS",
+          seen: false
+        };
 
-      let event_follow_object = {
-        email: following_this_user.email,
-        event_image_url: store.firestore_user.profile_img_url,
-        other_username: store.firestore_user.username,
-        timestamp: date,
-        type: "FOLLOWS",
-        seen: false
-      };
-
-      firestore.collection('events').doc(firebase_event_id).set(event_follow_object);
+        firestore.collection('events').doc(firebase_event_id).set(event_follow_object);
+      }
 
     }
-
-    setFollowing_this_user({following: !following_this_user.following, email: following_this_user.email});
-
-  }
-
-  // get email correspoding to username
-  function getEmail(url_user) {
-
-    // loop through all users to find email of user with this username
-    firestore.collection("users")
-    .onSnapshot(function(querySnapshot) {
-
-        querySnapshot.forEach( doc => {
-
-          let doc_email = "";
-          if(doc.data().username === url_user) {
-            doc_email = doc.id;
-
-            followFetcher(username_url, doc_email, "followers");
-            followFetcher(username_url, doc_email, "following");
-          }
-
-          let found = false;
-          // check if user signed in is following the user of this profile page
-          firestore.collection("followers").doc(store.firestore_user.email).collection("following")
-          .onSnapshot(function(querySnapshot) {
-
-              querySnapshot.forEach( doc => {
-
-                if(doc.id === doc_email) {
-
-                  found = true;
-                  setFollowing_this_user({following: true, email: doc_email});
-                }
-              })
-          });
-
-          if(found === false) // && doc_email !== ""
-          {
-            setFollowing_this_user({following: false, email: doc_email});
-          }
-
-        });
-
-    });
-  }
-
-  // get email of followers for the user profile in view
-  const followFetcher = (current_username, current_user_email, collection) => {
-
-    let follow_docs = [];
-
-    firestore.collection("followers").doc(current_user_email).collection(collection)
-    .onSnapshot(function(querySnapshot) {
-
-        querySnapshot.forEach( doc => {
-
-          let data = {}; //  = doc.data(); // currently no other data
-          data.email = doc.id;
-          follow_docs.push(data);
-
-        })
-        followBuilder(current_username, follow_docs, collection);
-    });
-  }
-
-  // from emails, get further user info
-  const followBuilder = (current_username, follow_docs, collection) => {
-
-    let followers = [];
-    follow_docs.forEach((item, i) => {
-
-      firestore.collection("users").doc(item.email)
-      .onSnapshot(function(doc) {
-          let data = doc.data();
-          followers.push({username: data.username, fullname: data.fullname, profile_img_url: data.profile_img_url, follows: false});
-      })
-    });
-
-    // callback2(followers, collection);
-    if(collection === "followers")
-      setFollowInfo(followers);
-    else if(collection === "following")
-      setFollowingInfo(followers);
-
-  }
-
-  // fetch recipes for the user profile in view
-  const recipeFetcher_new = (current_username) => {
-    firestore.collection("recipes")
-    .onSnapshot(function(querySnapshot) {
-
-        let recipe_docs = [];
-        querySnapshot.forEach( doc => {
-
-          let data = doc.data();
-          if( data.user === current_username )
-          {
-            data.id = doc.id;
-            recipe_docs.push(data);
-          }
-        });
-        setRecipes(recipe_docs);
-    });
   }
 
   let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
   let recipeContent = (recipes !== undefined) ? <RecipeGridList recipes={recipes}/> : spinner_jsx;
-
-  let followBtn;
-  if (store.firestore_user && !ifUser && following_this_user.following === true) {
-
-    followBtn = (<Button
-      variant="contained"
-      color="primary"
-      startIcon={<RemoveIcon />}
-      onClick={() => followUser()}
-    >
-      Sluta följ
-    </Button>);
-
-  } else if (store.firestore_user && !ifUser) {
-
-    followBtn = (<Button
-      variant="contained"
-      color="primary"
-      startIcon={<AddIcon />}
-      onClick={() => followUser()}
-    >
-      Följ
-    </Button>);
-  }
 
   return !user ? [] : (
 
@@ -253,31 +165,34 @@ function ProfilePage(props) {
 
         <Grid item xs={6}>
           <span className={classes.username}>{username_url}</span>
-
-          { user !== undefined &&
-            <span className={classes.university}> | {user.fullname}</span>
-          }
-
-          { (user !== undefined && user.university !== "") &&
-            <p className={classes.university}>🎓{user.university}</p>
-          }
-
-          { (user !== undefined && user.bio !== undefined ) &&
+          <span className={classes.university}> | {user.fullname}</span>
+          
+          { user.bio !== undefined &&
             <p className={classes.bio}><i>{user.bio}</i></p>
           }
-
           <br/>
 
-          {ifUser && <Button
-            variant="contained"
-            color="primary"
-            startIcon={<SettingsIcon />}
-            onClick={() => history.push("/settings")}
-
-          >
+          { isUser() && 
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<SettingsIcon />}
+              onClick={() => history.push("/settings")}
+            >
             Inställningar
           </Button>}
-          {followBtn}
+
+          { !isUser() &&
+            <Button
+            variant="contained"
+            color="primary"
+            startIcon={isFollowing ? <RemoveIcon /> : <AddIcon />}
+            onClick={() => followUser()}
+          >
+            {isFollowing ? "Sluta följ" : "Följ"}
+          </Button>
+          }
+
         </Grid>
         { user.profile_img_url ? 
           <Grid item xs={3}>
@@ -288,7 +203,6 @@ function ProfilePage(props) {
             <PersonIcon/>
           </Avatar>
         }
-        
 
       </Grid>
 
@@ -300,21 +214,20 @@ function ProfilePage(props) {
         <ListPage/>
         </div>
         <div>
-        <FollowerList followerData={followInfo} showFollowIcon={true}/>
+        <FollowerList followerData={isUser() ? getUserDocs(followers_users) : getUserDocs(viewuser_followers_users)} showFollowIcon={true}/>
         </div>
         <div>
-        <FollowerList followerData={followingInfo} showFollowIcon={true}/>
+        <FollowerList followerData={isUser() ? getUserDocs(following_users) : getUserDocs(viewuser_following_users)} showFollowIcon={true}/>
         </div>
       </SimpleTabs>
 
    </React.Fragment>
 
   );
-// followInfo.length > 0 &&
+
 }
 
 // https://reactgo.com/css-crop-images/
-
 const useStyles = makeStyles({
   userinfo: {
    marginBottom: '20px',
