@@ -159,8 +159,12 @@ const useStyles = makeStyles({
     padding: 15
   },
   smallprofileimage: {
-    width: '40px'
-  },
+    width: '40px',
+    height: '40px',
+    objectFit: 'cover',
+    borderRadius: '100px',
+    margin: '5px auto'
+ },
   spinner: {
     display: 'flex',
     justifyContent: 'center',

@@ -6,6 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
 import React, { useEffect, useState } from 'react';
+import Emoji from '../components/Emoji';
 import { useHistory } from "react-router-dom";
 
 function FollowerListItem(props) {
@@ -59,11 +60,12 @@ function FollowerList(props) {
   }, [props.followerData]);
 
 
-  if (false && props.followerData.length < 1) {
+  if (props.followerData.length < 1) {
 
-    return (
-      <p>sad, no followers</p>
-    );
+    if(props.type === "followers") 
+      return <div className={classes.followerlist + " " + classes.noFollowDiv}> Alla har vi en gång varit utan följare.. <Emoji symbol="💌"/> </div>;
+    else if(props.type === "following")
+      return <div className={classes.followerlist + " " + classes.noFollowDiv}> Här följs det ingen än.. <Emoji symbol="🚶"/> </div>
   }
 
   let followersjsx = followData.map((user, idx) =>
@@ -79,7 +81,7 @@ function FollowerList(props) {
 
 const useStyles = makeStyles({
   followerlist: {
-   marginTop: '20px',
+   marginTop: '15px',
  },
    followColor: {
      color: '#39A4B3'
@@ -88,13 +90,11 @@ const useStyles = makeStyles({
      color: '#e8e8e8'
    },
    smallprofileimage: {
-      width: '40px',
-      height: '40px',
-      objectFit: 'cover',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      borderRadius: '100px',
-      marginBottom: '15px',
+    width: '40px',
+    height: '40px',
+    objectFit: 'cover',
+    borderRadius: '100px',
+    margin: '5px auto'
    },
    avatar: {
     marginBottom: '15px',
@@ -104,6 +104,10 @@ const useStyles = makeStyles({
    },
    mylistitem: {
     alignItems: 'end'
+   },
+   noFollowDiv: {
+    padding: '1rem',
+    fontSize: 'small'
    }
 });
 

@@ -276,6 +276,7 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('md')]: {
       display: 'none',
     },
+    alignItems: 'inherit'
   },
   whiteColor: {
     color: 'white'
@@ -290,8 +291,7 @@ const useStyles = makeStyles(theme => ({
     objectFit: 'cover',
     marginLeft: 'auto',
     marginRight: 'auto',
-    borderRadius: '100px',
-    marginBottom: '15px',
+    borderRadius: '100px'
   }
 }));
 

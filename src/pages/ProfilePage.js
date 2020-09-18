@@ -228,10 +228,10 @@ function ProfilePage(props) {
         <RecipeLists/>
         </div>
         <div>
-        <FollowerList followerData={isUser() ? getUserDocs(followers_users) : getUserDocs(viewuser_followers_users)} showFollowIcon={true}/>
+        <FollowerList type="followers" followerData={isUser() ? getUserDocs(followers_users) : getUserDocs(viewuser_followers_users)} showFollowIcon={true}/>
         </div>
         <div>
-        <FollowerList followerData={isUser() ? getUserDocs(following_users) : getUserDocs(viewuser_following_users)} showFollowIcon={true}/>
+        <FollowerList type="following" followerData={isUser() ? getUserDocs(following_users) : getUserDocs(viewuser_following_users)} showFollowIcon={true}/>
         </div>
       </SimpleTabs>
 
