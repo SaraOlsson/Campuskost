@@ -32,6 +32,7 @@ function NoticeListItem(props) {
     history.push("/recipe/" + recipe_id_to_title(props.recipe) + "/" + props.recipe );
   };
 
+  // NEEDS REWRITE AS RECIPE ID IS NOT TITLE
   const recipe_id_to_title = (recipe_id) => {
     let recipe_title = props.recipe.substring(0, props.recipe.indexOf("-"));
     return recipe_title;
@@ -62,27 +63,17 @@ function NoticeListItem(props) {
 
   }
 
-  // if(props.type === "FOLLOWS")
-  //  noticeText = <span><B>{props.user}</B> följer nu dig.</span>;
-
-
   let user_avatar = undefined;
 
-  if(props.eventimg !== undefined) {
+  if(props.eventimg !== undefined && props.eventimg !== "") {
     user_avatar = <img src={props.eventimg} className={classes.smallprofileimage + ' ' + classes.pointer } alt={"profile-img"} />; //
   } else {
     user_avatar = (
-      <Avatar>
+      <Avatar className={classes.pointer}>
           <PersonIcon />
       </Avatar>
     );
   }
-  /*
-  user_avatar = (
-    <Avatar>
-        <PersonIcon />
-    </Avatar>
-  ); */
 
   return (
 
@@ -95,22 +86,9 @@ function NoticeListItem(props) {
         primary= { noticeText }
         secondary={true ? props.time : null}
       />
-
-
     </ListItem>
 
   );
-
-  /*
-
-  <ListItemSecondaryAction>
-    <IconButton edge="end" aria-label="delete">
-      <ForwardIcon />
-    </IconButton>
-  </ListItemSecondaryAction>
-
-  */
-
 }
 
 function NoticePage(props) {
@@ -157,18 +135,11 @@ function NoticePage(props) {
     <NoticeListItem key={idx} type={event.type} user={event.other_username} recipe={event.recipe || undefined} time="" eventimg={event.event_image_url}/>
   ) : <LoadSpinner/>;
 
-  /*
-  { !eventList &&
-    <div className={classes.spinner}><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>
-  }
-  */
 
   return (
 
     <div>
     <h3>Dina notiser</h3>
-
-
 
     { (true || eventList) &&
       <List dense={true}>
@@ -179,11 +150,8 @@ function NoticePage(props) {
       <p> Ledsen, inga händelser än. Börja interagera med dina kockvänner! <Emoji symbol="🍳"/> </p>
     }
 
-
     </div>
-
   );
-
 }
 
 const useStyles = makeStyles({
@@ -202,38 +170,5 @@ const useStyles = makeStyles({
    cursor: 'pointer'
   }
 });
-
-/*
-
-<List dense={true}>
-  <NoticeListItem type="FOLLOWS" user="Vegokocken" time="1 h"/>
-  <NoticeListItem type="TIPS" user="DelicatoKing" recipe="Linsgryta" time="3 h"/>
-  <NoticeListItem type="TESTED" user="PastaMaster" recipe="Korvstroganoff" time="2 dgr"/>
-</List>
-
-*/
-
-
-/*
-
-<ListItem>
-  <ListItemAvatar>
-    <Avatar>
-        <PersonIcon />
-    </Avatar>
-  </ListItemAvatar>
-  <ListItemText
-    primary="Single-line item"
-    secondary={true ? 'Secondary text' : null}
-  />
-  <ListItemSecondaryAction>
-    <IconButton edge="end" aria-label="delete">
-      <ForwardIcon />
-    </IconButton>
-  </ListItemSecondaryAction>
-</ListItem>
-
-*/
-
 
 export default NoticePage;

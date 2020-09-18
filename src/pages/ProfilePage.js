@@ -143,7 +143,7 @@ function ProfilePage(props) {
       {
         let date = new Date();
         let event_follow_object = {
-          email: userdoc.email,
+          email: user.email,
           event_image_url: userdoc.profile_img_url,
           other_username: userdoc.username,
           timestamp: date,
