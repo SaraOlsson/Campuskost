@@ -15,7 +15,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from "react-router-dom";
 
 function TopMenuBar(props) {
@@ -24,9 +24,12 @@ function TopMenuBar(props) {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const searchString = useSelector((state) => state.searchReducer.searchstring);
 
 
   const handleProfileMenuOpen = event => {
@@ -48,8 +51,19 @@ function TopMenuBar(props) {
 
   const handleSearchFocus = () => {
     if(history.location.pathname !== "/search")
-      history.push("/search")
+      history.push("/search")    
   };
+
+  const handleUnFocus = () => {
+    // console.log("onBlur")
+  }
+
+  const handleSearchChange = (searchvalue) => {
+    dispatch({
+      type: "SETSEARCH",
+      searchstring: searchvalue
+    })
+  }
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -142,8 +156,10 @@ function TopMenuBar(props) {
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
-              onBlur={() => console.log("onBlur")}
+              onBlur={() => handleUnFocus()}
               onFocus={() => handleSearchFocus()}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              value={searchString}
             />
           </div>
           <div className={classes.grow} />

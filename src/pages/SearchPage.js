@@ -1,88 +1,88 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
-import { useFirestore } from "react-redux-firebase";
-//import { useHistory } from "react-router-dom";
+import React, {useEffect} from 'react';
+import { useSelector, useDispatch } from "react-redux";
+
 import FollowerList from '../components/followerlist';
 import RecipeGridList from '../components/recipegridlist';
 
-var Spinner = require('react-spinkit');
+import LoadSpinner from '../components/loadspinner';
 
 function SearchPage(props) {
 
-  const [users, setUsers] = useState([]);
-  const [recipes, setRecipes] = useState(undefined);
-
   const classes = useStyles();
-  const firestore = useFirestore();
+  const dispatch = useDispatch();
 
-  // const history = useHistory();
+  const searchString = useSelector((state) => state.searchReducer.searchstring);
 
-  let searchstring = "";
+  const recipes = useSelector((state) => state.firestore.data.allrecipes);
+  const users = useSelector((state) => state.firestore.data.allusers);
 
   useEffect(() => {
-    userFetcher('users');
-    userFetcher('recipes');
-  }, []);
+    
+    // Specify how to clean up after this effect:
+    return function cleanup() {
+      dispatch({
+        type: "SETSEARCH",
+        searchstring: ""
+      })
+    };
 
-  const userFetcher = (collection_name) => {
+  },[]);
 
-    firestore.collection(collection_name).onSnapshot(function(querySnapshot) {
-
-          let temp_users = [];
-          querySnapshot.forEach( doc => {
-            let data = doc.data();
-            data.id = doc.id;
-            temp_users.push(data);
-          });
-
-          if (collection_name === 'users')
-            setUsers(temp_users);
-          if (collection_name === 'recipes')
-            setRecipes(temp_users);
-      });
+  const filterRecipes = (values) => {
+    return values.filter(r => match(r, "title") || match(r, "user"));
   }
 
-  let followingInfo = users.map( user => {
-    let obj = {username: user.username, fullname: user.fullname, profile_img_url: user.profile_img_url, follows: false};
-    return obj;
-  });
+  const filterUsers = (values) => {
+    return values.filter(u => match(u, "username") || match(u, "fullname") );
+  }
 
-  
-  // Sök specifikt recept eller användare ovan
+  const match = (object, attr) => {
+    return object[attr].toLowerCase().includes(searchString.toLowerCase());
+  }
+
+  const filteredRecipes = recipes ? filterRecipes(Object.values(recipes)) : undefined;
+  const filteredUsers = users ? filterUsers(Object.values(users)) : undefined;
 
   return (
 
     <div>
       <h3>Sökresultat</h3>
 
+      { (users && recipes && searchString !== "") &&
+        <p> {filteredRecipes.length+filteredUsers.length} 
+        {filteredRecipes.length+filteredUsers.length > 1 ? " sökträffar" : " sökträff"} 
+        </p>
+      }
+      { searchString === "" &&
+        <p> Du har inte sökt på något än, alla användare och recept visas nedan.</p>
+      }
 
+      { (!users || !recipes) && <LoadSpinner/> }
 
-      { searchstring === "" && <p> Sökfunktionen kommer snart! Tills dess visas alla användare och recept nedan. </p> }
+      { users &&
+      <React.Fragment>
+        <b> Användare: </b>
+        <div>
+          <FollowerList followerData={filteredUsers}/>
+        </div>
+      </React.Fragment>
+      }
+      { recipes &&
+      <React.Fragment>
+        <b> Recept: </b>
+        <div style={{paddingTop: '15px'}}>
+          <RecipeGridList recipes={filteredRecipes}/>
+        </div>
+      </React.Fragment>
+      }
 
-      { users.length <= 0 && <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div> }
-      { users.length > 0 && <React.Fragment>
-      <b> Alla användare: </b>
-      <div>
-      <FollowerList followerData={followingInfo}/>
-      </div>
-      <b> Alla recept: </b>
-      <div style={{paddingTop: '15px'}}>
-      { recipes != undefined && <RecipeGridList recipes={recipes}/> }
-
-      </div>
-      </React.Fragment> }
     </div>
 
   );
 }
 
 const useStyles = makeStyles({
-  spinner: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: 100
-  }
 });
 
 export default SearchPage;

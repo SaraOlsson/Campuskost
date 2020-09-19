@@ -7,29 +7,20 @@ export const rootReducer = combineReducers({
     fireReducer: fireReducer,
     uploadReducer: uploadReducer,
     userReducer: userReducer,
-    dragReducer: dragReducer
+    dragReducer: dragReducer,
+    searchReducer: searchReducer
 });
 
 // remove
-function testreducer(state = { num: 0, url: "hey" }, action) {
+function searchReducer(state = { searchstring: "" }, action) {
     switch (action.type) {
-      case "INCREMENT":
+      case "SETSEARCH":
         return {
           ...state,
-          num: state.num + action.step
-        };
-      case "DECREMENT":
-        return {
-          ...state,
-          num: state.num - action.step
+          searchstring: action.searchstring
         };
       default:
         return state;
-      case "SETURL":
-        return {
-          ...state,
-          url: state.url
-        };
     }
   }
   
