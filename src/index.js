@@ -58,6 +58,60 @@ const rrfConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.firestore();
 
+const messaging = firebase.messaging();
+
+messaging.requestPermission().then(function() {
+  console.log("have permission");
+}).catch(function(err) {
+  console.log("Message error")
+}) 
+
+// Add the public key generated from the console here.
+messaging.usePublicVapidKey("BMIAooArU38LEj_5QHhRn7ijJHnkzFcarwhrJ49xQqt6s8mapaKKhuwke6CfqZQa5cLiZJ1drmd4a0KFh8thrLw");
+
+/*
+messaging.requestPermission().then(function() {
+
+  console.log("have permission");
+  return messaging.getToken();
+
+}).then(function(token){
+  console.log(token)
+
+}).catch(function(err) {
+  console.log("Message error")
+}) */
+
+// Get Instance ID token. Initially this makes a network call, once retrieved
+// subsequent calls to getToken will return from cache.
+/*
+messaging.getToken().then((currentToken) => {
+  if (currentToken) {
+    console.log(currentToken)
+    //sendTokenToServer(currentToken);
+    //updateUIForPushEnabled(currentToken);
+  } else {
+    // Show permission request.
+    console.log('No Instance ID token available. Request permission to generate one.');
+    // Show permission UI.
+    //updateUIForPushPermissionRequired();
+    //setTokenSentToServer(false);
+  }
+}).catch((err) => {
+  console.log('An error occurred while retrieving token. ', err);
+  //showToken('Error retrieving Instance ID token. ', err);
+  //setTokenSentToServer(false);
+}); */
+
+
+// Handle incoming messages. Called when:
+// - a message is received while the app has focus
+// - the user clicks on an app notification created by a service worker
+//   `messaging.setBackgroundMessageHandler` handler.
+messaging.onMessage((payload) => {
+  console.log('Message received. ', payload);
+});
+
 const initialState = {};
 const store = createStore(rootReducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 // Dev: , window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
