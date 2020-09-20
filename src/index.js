@@ -58,18 +58,8 @@ const rrfConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.firestore();
 
-const messaging = firebase.messaging();
-
-messaging.requestPermission().then(function() {
-  console.log("have permission");
-}).catch(function(err) {
-  console.log("Message error")
-}) 
-
-// Add the public key generated from the console here.
-messaging.usePublicVapidKey("BMIAooArU38LEj_5QHhRn7ijJHnkzFcarwhrJ49xQqt6s8mapaKKhuwke6CfqZQa5cLiZJ1drmd4a0KFh8thrLw");
-
 /*
+const messaging = firebase.messaging();
 messaging.requestPermission().then(function() {
 
   console.log("have permission");
@@ -80,37 +70,14 @@ messaging.requestPermission().then(function() {
 
 }).catch(function(err) {
   console.log("Message error")
-}) */
+}) 
 
-// Get Instance ID token. Initially this makes a network call, once retrieved
-// subsequent calls to getToken will return from cache.
-/*
-messaging.getToken().then((currentToken) => {
-  if (currentToken) {
-    console.log(currentToken)
-    //sendTokenToServer(currentToken);
-    //updateUIForPushEnabled(currentToken);
-  } else {
-    // Show permission request.
-    console.log('No Instance ID token available. Request permission to generate one.');
-    // Show permission UI.
-    //updateUIForPushPermissionRequired();
-    //setTokenSentToServer(false);
-  }
-}).catch((err) => {
-  console.log('An error occurred while retrieving token. ', err);
-  //showToken('Error retrieving Instance ID token. ', err);
-  //setTokenSentToServer(false);
-}); */
+// Add the public key generated from the console here.
+messaging.usePublicVapidKey("BMIAooArU38LEj_5QHhRn7ijJHnkzFcarwhrJ49xQqt6s8mapaKKhuwke6CfqZQa5cLiZJ1drmd4a0KFh8thrLw");
 
-
-// Handle incoming messages. Called when:
-// - a message is received while the app has focus
-// - the user clicks on an app notification created by a service worker
-//   `messaging.setBackgroundMessageHandler` handler.
 messaging.onMessage((payload) => {
   console.log('Message received. ', payload);
-});
+}); */
 
 const initialState = {};
 const store = createStore(rootReducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
@@ -158,7 +125,7 @@ const onUpdate = (registration) => {
 }
 
 const onSuccess = (registration) => {
-  // console.log(registration)
+  //console.log(registration)
   console.log('Content is cached for offline use.');
 }
 

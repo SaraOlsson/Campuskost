@@ -36,6 +36,7 @@ import './style/GlobalCssButton.css';
 
 require('dotenv').config(); // check if we need this
 
+/*
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
     .register("firebase-messaging-sw.js")
@@ -45,7 +46,7 @@ if ("serviceWorker" in navigator) {
     .catch(function(err) {
       console.log("Service worker registration failed, error:", err);
     });
-}
+}*/
 
 // for PWA - needed?
 let deferredPrompt;
