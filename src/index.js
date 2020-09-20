@@ -158,7 +158,7 @@ const onUpdate = (registration) => {
 }
 
 const onSuccess = (registration) => {
-  console.log(registration)
+  // console.log(registration)
   console.log('Content is cached for offline use.');
 }
 
