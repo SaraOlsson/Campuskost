@@ -115,7 +115,7 @@ ReactDOM.render(
 
 // serviceWorker functionallity
 const testisCallback = (input) => {
-  console.log(input)
+  // console.log(input)
 }
 
 const onUpdate = (registration) => {

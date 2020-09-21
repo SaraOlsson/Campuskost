@@ -93,7 +93,7 @@ function Settings(props) {
                       controlName="bio" 
                       expandedCheck={isOpen}
                       onExpand={onExpand}>
-            <TextSetting db_field="bio" label="biografi" multiline="true"/>
+            <TextSetting db_field="bio" label="biografi" multiline={true}/>
         </CollapseGrid>
 
         <CollapseGrid label="Profilbild" 

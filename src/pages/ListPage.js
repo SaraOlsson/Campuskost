@@ -7,6 +7,7 @@ import RecipeGridList from '../components/recipegridlist';
 
 function ListPage() {
 
+  const { uid } = useSelector((state) => state.firebase.auth); 
   const all_recipes = useSelector((state) => state.firestore.data.allrecipes);
   const userLikes = useSelector((state) => {
     return state.firestore.data.userLikes ? state.firestore.data.userLikes : undefined
@@ -38,16 +39,16 @@ function ListPage() {
     recipeContent = <LoadSpinner/>;
   } else {
 
-    console.log(userLikes.liked_recipes)
-
     let no_recipes_content = <p> Du har inga gillade recept än. Klicka på <Emoji symbol="♡"/>-symbolen för att börja samla dina favoriter! </p>;
     recipeContent = getRecipeDocs(userLikes).length > 0 ? <RecipeGridList recipes={getRecipeDocs(userLikes)} /> : no_recipes_content;
   }
 
-  return  (
+  let no_account = <p> Du behöver vara inloggad för att se innehåll på den här sidan. </p>
+
+  return (
     <div> 
       <h3> Gillade recept </h3>
-        {recipeContent}
+      { uid ? recipeContent : no_account }
       <h3>Receptlistor</h3>
       <p>Kommer snart! <Emoji symbol="🥳"/> </p>
     </div>

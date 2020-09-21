@@ -13,8 +13,8 @@ import AlertDialog from '../components/AlertDialog';
 import ListIngredients from '../components/ListIngredients';
 import RecipeDecsList from '../components/RecipeDecsList';
 import firebase from 'firebase'; // REFACTOR
-
 import ReactGA from 'react-ga';
+const fallbackImage = require('../assets/noconnection3.png');
 
 function RecipePage(props) {
 
@@ -230,7 +230,7 @@ function RecipePage(props) {
 
   const icon = (saved === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
   const timestring = recipe ? generateTimeString(recipe.timestamp) : undefined;
-  const image = recipe ? <img src={recipe.img_url} className={classes.recipeImage} alt={recipe.title}/> : null;
+  const image = recipe ? <img src={recipe.img_url} className={classes.recipeImage} alt={recipe.title}/> : <img src={fallbackImage} className={classes.recipeImage} alt="offline"/>;
   
   return (!recipe) ? null : (
 

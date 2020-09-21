@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useFirestore } from "react-redux-firebase";
 import { useFirebase } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 import Emoji from '../components/Emoji';
 
@@ -14,15 +14,20 @@ const SIGNUP_STATE = "signup";
 
 function LoginPage() {
 
+  const { uid } = useSelector((state) => state.firebase.auth); 
   const [state, setState] = useState(SIGNUP_STATE);
 
   const history = useHistory();
 
   const loginRoute = () => {
-
-    console.log("go to homepage");
     history.push("/home");
   }
+
+  useEffect(() => {
+    if(uid) {
+      loginRoute();
+    }
+  }, [uid]); 
 
   // render one container and the opposite banner
   return (

@@ -37,6 +37,7 @@ function UploadPage(props) {
   const [upload_wait, setUpload_wait] = useState(false);
   const [done, setDone] = useState(false);
 
+  const { uid } = useSelector((state) => state.firebase.auth);
   const classes = useStyles();
   const dispatch = useDispatch(); // be able to dispatch
   const store = useSelector(state => state.fireReducer);
@@ -61,7 +62,7 @@ function UploadPage(props) {
 
   const allValid = () => {
 
-    return (valid.title && valid.ingredients && valid.desc && valid.image)
+    return (uid && valid.title && valid.ingredients && valid.desc && valid.image)
   }
 
   useEffect(() => {
@@ -313,9 +314,12 @@ function UploadPage(props) {
 
   return (
 
-
     <div>
       <h3>{page_title}</h3>
+
+        { !uid && 
+          <p style={{color: 'orange'}}> Du behöver vara inloggad för att kunna ladda upp recept. </p>
+        }
 
         {/* TITLE */}
 

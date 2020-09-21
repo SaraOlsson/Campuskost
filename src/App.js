@@ -316,7 +316,7 @@ const useStyles = makeStyles({
     paddingTop: '35px'
   },
   mainContainer: {
-    paddingTop: '80px',
+    paddingTop: '60px',
     paddingBottom: '50px'
   },
   footer: {
