@@ -54,7 +54,8 @@ body {
 
 .MuiAppBar-colorPrimary {
     color: #fff;
-    background-color: #68BB8C !important;
+    /*background-color: #68BB8C !important;*/
+    background-image: linear-gradient(to bottom right, #246563, #68bb8c) !important;
 }
 
 .whitebtn .MuiButton-containedPrimary {

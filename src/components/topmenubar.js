@@ -215,7 +215,7 @@ function ProfileBtn (props) {
   {
     return (
       <React.Fragment>
-      <p style={{marginRight: 15, color: 'rgba(255,255,255,0.5)'}}> {store.firestore_user.username} </p>
+      <p style={{marginRight: 15, color: 'rgba(255,255,255,0.9)'}}> {store.firestore_user.username} </p>
       <IconButton
         edge="start"
         className={classes.menuButton}
