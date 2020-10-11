@@ -42,27 +42,16 @@ function RecipePage(props) {
     if (recipe !== undefined && email !== undefined && recipe.recipeID === id) {
       
       setIfUser( recipe.user_ref === email );
-
-      /*
-      recipe.user_ref.get().then( (doc) => {
-        let is_user = doc.data().email === email;
-        setIfUser( is_user );
-      }); */
-
       likeFetcher(email);
 
-      findSmallerImage();
+      // findSmallerImage();
+
     } else if(recipe !== undefined && recipe.recipeID !== id) {
 
       console.log("oups this was the previous recipe")
     }
       
   }, [recipe] );
-
-  /*
-  const generateImageFilename = () => {
-    return 'recept/' + recipe.title + '_' + uid + '.jpg';
-  }; */
   
   const findSmallerImage = () => {
 
@@ -74,7 +63,7 @@ function RecipePage(props) {
       console.log("findSmallerImage")
 
       let storageRef = firebase.storage(); // REFACTOR TO HOOKS?
-      let small_filename = str.substring(0, str.indexOf(".jpg")) + "_500x500" + str.substring(str.indexOf(".jpg")); // 'recept/' + 
+      let small_filename = str.substring(0, str.indexOf(".jpg")) + "_500x500" + str.substring(str.indexOf(".jpg"));  
       
       try {
         // console.log(storageRef)

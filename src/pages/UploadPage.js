@@ -19,8 +19,10 @@ import AddImage from '../components/AddImage';
 import CollapseGrid from '../components/CollapseGrid';
 import DescriptionList from '../components/descriptionlist';
 import IngredientsList from '../components/ingredientslist';
+import ImageDialog from '../components/ImageDialog';
 import Emoji from '../components/Emoji';
 import '../style/GlobalCssButton.css';
+import resizeImage from '../logic/resizeImage'
 
 var Spinner = require('react-spinkit');
 
@@ -31,11 +33,14 @@ function UploadPage(props) {
   const [cookingtime, setCookingTime] = useState('');
   const [servings, setServings] = useState('');
   const [image, setImage] = useState(undefined);
+  const [rawImage, setRawImage] = useState(undefined);
+  const [smallImage, setSmallImage] = useState(undefined);
   const [newImage, setNewImage] = useState(false);
 
   const [id, setId] = useState(undefined);
   const [upload_wait, setUpload_wait] = useState(false);
   const [done, setDone] = useState(false);
+  const [openImageDialog, setOpenImageDialog] = useState(false);
 
   const { uid } = useSelector((state) => state.firebase.auth);
   const classes = useStyles();
@@ -44,7 +49,7 @@ function UploadPage(props) {
   const firestore = useFirestore();
   const upload_store = useSelector(state => state.uploadReducer);
   const history = useHistory();
-  
+
   // remove these
   const [valid, setValid] = useState({
     title: false,
@@ -121,16 +126,31 @@ function UploadPage(props) {
     setValid({ ...valid, ["desc"]: length > 0 ? true : false });
   };
 
+  const onImageDialogChoise = async (chosedYes, croppedImage = null) => {
+
+    setOpenImageDialog(false);
+
+    if(chosedYes === true) {
+      setImage(croppedImage)
+      imageDisp(croppedImage);
+
+      let small_img = await resizeImage(croppedImage);
+      console.log(small_img) 
+      setSmallImage(small_img)
+
+    }
+
+  }
+
   const onFileAdd = (files) => {
 
     setValid({ ...valid, ["image"]: true });
-    // setFiles(files);
 
     var reader = new FileReader();
     reader.onload = function(e) {
-      setImage(e.target.result);
+      setRawImage(e.target.result);
       setNewImage(true);
-      imageDisp(e.target.result);
+      setOpenImageDialog(true);
     }
 
     try {
@@ -138,18 +158,18 @@ function UploadPage(props) {
     } catch(err) {
         console.log(err.message);
     }
-    imageDisp();
 
   };
 
   const onFileRemove = () => {
     setValid({ ...valid, ["image"]: false });
     //setFiles([]);
+    setRawImage(undefined);
     setImage(undefined);
   };
 
   const generateImageFilename = () => {
-    return 'recept/' + title + '_' + store.auth_user.uid + '.jpg';
+    return 'recept/' + title + '_' + store.auth_user.uid;
   };
 
   // upload image and callback with download URL
@@ -158,7 +178,7 @@ function UploadPage(props) {
     setUpload_wait(true);
     // Create a reference to the new image
     let storageRef = firebase.storage(); // REFACTOR TO HOOKS
-    let image_filename = generateImageFilename();
+    let image_filename = generateImageFilename() + '.jpg'
     let newImageRef = storageRef.ref(image_filename); // storageRef.ref('recept/' + title + '_image.jpg');
 
     // Upload image as a Base64 formatted image string.
@@ -174,7 +194,30 @@ function UploadPage(props) {
     }); 
   }
 
-  const uploadAction = () => {
+  // upload image and callback with download URL
+  /*
+  const uploadThumbImage = (callback) => {
+    
+    setUpload_wait(true);
+    // Create a reference to the new image
+    let storageRef = firebase.storage(); // REFACTOR TO HOOKS
+    let image_filename = generateImageFilename() + "_thumb" +  + '.jpg'
+    let newImageRef = storageRef.ref(image_filename); 
+
+    // Upload image as a Base64 formatted image string.
+    let uploadTask = newImageRef.putString(smallImage, 'data_url');
+
+    uploadTask.on('state_changed', function(snapshot){
+      }, function(error) { // Handle unsuccessful uploads
+      }, function() { // Handle successful uploads on complete
+
+        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+          callback(downloadURL);
+        });
+    }); 
+  } */
+
+  const uploadAction = async () => {
 
     if(!allValid()) {
       alert("not all valid")
@@ -254,7 +297,7 @@ function UploadPage(props) {
 
       } else {
 
-        uploadImage(function(returnValue_downloadURL) {
+        await uploadImage(function(returnValue_downloadURL) {
           // use the return value here instead of like a regular (non-evented) return value
           update_data.img_url = returnValue_downloadURL;
           firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
@@ -263,6 +306,25 @@ function UploadPage(props) {
           setDone(true);
 
         }); // end of image upload callback
+
+        // try to upload small image
+        /*
+        if(smallImage !== undefined) {
+
+          await uploadThumbImage(function(returnValue_downloadURL) {
+
+            let update_data = {
+              img_url_small: returnValue_downloadURL
+            }
+            firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
+  
+            setUpload_wait(false);
+            setDone(true);
+  
+          });
+        } */ 
+
+ 
       }
 
       // to be able to direct to recipe page
@@ -388,20 +450,20 @@ function UploadPage(props) {
           
       </div>
 
+      <ImageDialog
+      open={openImageDialog}
+      onAlertClose={onImageDialogChoise}
+      image={rawImage} 
+      title="Är du säker?"
+      message="Är du säker på att du vill ta bort det här receptet?"
+      yesOptionText="Ja"
+      NoOptionText="Oj, nej!"
+      />
+
     </div>
 
   );
 }
-
-/*label="Antal portioner" label="Tillagningstid"
-<div className={classes.uploaddiv} >
-        <Grid container justify="center" alignItems="center">
-          <Grid item xs={4}>
-          {bottom_content}
-          </Grid>
-        </Grid>
-      </div>
-      */
 
 // <RecipeCard/>
 
