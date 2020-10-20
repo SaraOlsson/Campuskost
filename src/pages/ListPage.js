@@ -23,7 +23,7 @@ function ListPage() {
 
       let do_like = likesDict.liked_recipes[key]; // true or false
 
-      let found = Object.values(all_recipes).find( u => u.recipeID === key);
+      let found = Object.values(all_recipes).find( u => (u != null && u.recipeID === key));
       if(found && do_like)
       {
         docs.push(found);

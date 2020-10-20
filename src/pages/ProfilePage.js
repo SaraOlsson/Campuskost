@@ -106,7 +106,7 @@ function ProfilePage(props) {
 
     let docs = [];
     emails.forEach( value => {
-      let found = Object.values(all_users).find( u => u.email === value)
+      let found = Object.values(all_users).find( u => (u != null && u.email === value))
       if(found)
         docs.push(found);
     });
@@ -157,12 +157,17 @@ function ProfilePage(props) {
   }
 
   let recipeContent;
-  if(!recipes)
+  if (user)
   {
-    recipeContent = <LoadSpinner/>;
+    if(!recipes)
+    {
+      recipeContent = <LoadSpinner/>;
+    } else {
+      let no_recipes_content = <div className={classes.noRecipesDiv}> Vi väntar med spänning på första receptet från <i>{user.username}!</i> <Emoji symbol="🍽️"/> </div>;
+      recipeContent = recipes.length > 0 ? <RecipeGridList recipes={recipes}/> : no_recipes_content;
+    }
   } else {
-    let no_recipes_content = <div className={classes.noRecipesDiv}> Vi väntar med spänning på första receptet från <i>{user.username}!</i> <Emoji symbol="🍽️"/> </div>;
-    recipeContent = recipes.length > 0 ? <RecipeGridList recipes={recipes}/> : no_recipes_content;
+    history.push("/home");
   }
 
   return !user ? [] : (

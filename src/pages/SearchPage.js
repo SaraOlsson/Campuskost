@@ -30,11 +30,11 @@ function SearchPage(props) {
   },[]);
 
   const filterRecipes = (values) => {
-    return values.filter(r => match(r, "title") || match(r, "user"));
+    return values.filter(r => ( r != null && (match(r, "title") || match(r, "user") )));
   }
 
   const filterUsers = (values) => {
-    return values.filter(u => match(u, "username") || match(u, "fullname") );
+    return values.filter(u => ( u != null && (match(u, "username") || match(u, "fullname") )));
   }
 
   const match = (object, attr) => {
