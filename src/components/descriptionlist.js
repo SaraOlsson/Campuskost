@@ -11,6 +11,10 @@ import SaveIcon from '@material-ui/icons/Save';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import '../style/GlobalCssButton.css';
+import Button from '@material-ui/core/Button';
+
+const HEADER = "HEADER";
+const DESC = "DESC";
 
 
 function DescriptionList(props) {
@@ -46,10 +50,10 @@ function DescriptionList(props) {
   }, []);
 
 
-  const addDescription = () => {
+  const addDescription = (row_type) => {
 
     let temp_list = descriptions.slice(0);
-    let new_obj = {order: descriptions.length + 1, text: ""};
+    let new_obj = {order: descriptions.length + 1, text: "", type: row_type};
     temp_list.push(new_obj);
     setEditObject(new_obj);
     setDescriptions(temp_list);
@@ -123,12 +127,23 @@ function DescriptionList(props) {
   // let ingredients = (props.ingredients !== undefined) ? props.ingredients : temp_ingredients;
   // idx < ingredients.length - 1
 
+  const getOrder = (desc) => {
+
+    if (desc.type === HEADER) {
+      return "";
+    } else {
+      return '• '; // desc.order + ". ";
+    }
+
+  }
 
   let descriptionjsx = descriptions.map((desc, idx) =>
   <React.Fragment key={idx}>
-    <ListItem onClick={() => listClick(desc)} className={(descriptions.indexOf(editObject) === idx ? 'testis' : '')} style={{minHeight: 40}}>
+    <ListItem onClick={() => listClick(desc)} className={(descriptions.indexOf(editObject) === idx ? 'testis' : '')} 
+      style={{minHeight: 40, paddingLeft: 15}}>
       <ListItemText
-        primary={ desc.order + ". " + desc.text }
+        classes={{ primary: (desc.type === HEADER) ? classes.bold : '' }}
+        primary={ getOrder(desc) + desc.text }
       />
 
     </ListItem>
@@ -155,11 +170,13 @@ function DescriptionList(props) {
           {descriptionjsx}
 
           { editObject === undefined &&
-
-            <ListItem alignItems="center" onClick={() => addDescription()} className={classes.newListItem}>
-              <ListItemText
-                primary="Lägg till beskrivning"
-              />
+            <ListItem alignItems="center">
+              <Button variant="contained" color="primary" onClick={() => addDescription(DESC)} className={classes.marginRight10}>
+                {"Lägg till beskrivning"}
+              </Button>
+              <Button variant="contained" color="primary" onClick={() => addDescription(HEADER)}>
+                {"Lägg till rubrik"}
+              </Button>
             </ListItem>
           }
 
@@ -241,6 +258,12 @@ const useStyles = makeStyles(theme => ({
   },
   titlediv: {
     background: 'gray'
+  },
+  marginRight10: {
+    marginRight: '10px'
+  },
+  bold: {
+    fontWeight: 'bold'
   }
 }));
 

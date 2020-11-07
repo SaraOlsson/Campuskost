@@ -52,6 +52,11 @@ body {
   overflow-y: scroll;
 }
 
+.body .MuiListItem-gutters {
+  padding-left: 0; 
+  padding-right: 0; 
+}
+
 .MuiAppBar-colorPrimary {
     color: #fff;
     /*background-color: #68BB8C !important;*/
