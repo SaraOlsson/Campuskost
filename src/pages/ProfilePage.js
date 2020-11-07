@@ -166,9 +166,10 @@ function ProfilePage(props) {
       let no_recipes_content = <div className={classes.noRecipesDiv}> Vi väntar med spänning på första receptet från <i>{user.username}!</i> <Emoji symbol="🍽️"/> </div>;
       recipeContent = recipes.length > 0 ? <RecipeGridList recipes={recipes}/> : no_recipes_content;
     }
-  } else {
-    history.push("/home");
   }
+  // } else { // HEY MAY NOT BE LOADED YET
+  //   history.push("/home");
+  // }
 
   return !user ? [] : (
 

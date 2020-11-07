@@ -325,9 +325,10 @@ const useStyles = makeStyles({
     justifyContent: 'center',
   },
   recipeImage: {
-    maxWidth: '90%',
+    maxWidth: '90vw',
+    height: '50vh',
     borderRadius: '5px',
-    maxHeight: '500px'
+    objectFit: 'cover',
   },
   recipeheader: {
    margin: '20px 0px',
