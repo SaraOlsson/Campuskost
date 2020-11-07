@@ -52,10 +52,10 @@ body {
   overflow-y: scroll;
 }
 
-.body .MuiListItem-gutters {
+/* .body .MuiListItem-gutters {
   padding-left: 0; 
   padding-right: 0; 
-}
+} */
 
 .MuiAppBar-colorPrimary {
     color: #fff;
