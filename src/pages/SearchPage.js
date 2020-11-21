@@ -9,7 +9,6 @@ import LoadSpinner from '../components/loadspinner';
 
 function SearchPage(props) {
 
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const searchString = useSelector((state) => state.searchReducer.searchstring);

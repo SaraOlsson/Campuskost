@@ -1,5 +1,5 @@
 /*
-Component: Page where recipes are uplaoded or edited.
+Component: Page where recipes are uploaded or edited.
 TODO: refactor - a lot of code right now!
 TODO: it should be possible to reorder ingredients (use Draggable?)
 TODO: let the user add extra information, as time to cook or num portions
@@ -135,7 +135,7 @@ function UploadPage(props) {
       imageDisp(croppedImage);
 
       let small_img = await resizeImage(croppedImage);
-      console.log(small_img) 
+      //console.log(small_img) 
       setSmallImage(small_img)
 
     }
@@ -454,10 +454,6 @@ function UploadPage(props) {
       open={openImageDialog}
       onAlertClose={onImageDialogChoise}
       image={rawImage} 
-      title="Är du säker?"
-      message="Är du säker på att du vill ta bort det här receptet?"
-      yesOptionText="Ja"
-      NoOptionText="Oj, nej!"
       />
 
     </div>

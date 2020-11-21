@@ -33,6 +33,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import * as serviceWorker from './serviceWorker';
 import './style/GlobalCssButton.css';
 
+import AlertDialog from './components/AlertDialog';
 
 require('dotenv').config(); // check if we need this
 
@@ -254,6 +255,8 @@ function App() {
 function BottomMenuBar() {
 
   const [value, setValue] = React.useState('default');
+  const [pendingValue, setPendingValue] = React.useState(undefined);
+  const [openAlert, setOpenAlert] = React.useState(false);
 
   const history = useHistory();
   const classes = useStyles();
@@ -261,49 +264,81 @@ function BottomMenuBar() {
   const dispatch = useDispatch();
 
   const handleMenuClick = (event = undefined, val) => {
-    setValue(val);
-    history.push("/" + val);
 
-    // set as one dispatch instead..
-    dispatch({
-      type: "SETDESCRIPTIONS",
-      descriptions: undefined
-    })
-
-    dispatch({
-      type: "SETINGREDIENTS",
-      ingredients: undefined
-    })
-
-    dispatch({
-      type: "SETTITLE",
-      title: undefined
-    })
-
-    dispatch({
-      type: "SETIMAGE",
-      title: undefined
-    })
-
-    if(val !== "upload" && upload_store.editmode === true) {
-      dispatch({
-        type: "SETEDITMODE",
-        editmode: false
-      })
-
+    if(upload_store.title !== undefined) {
+      setPendingValue(val);
+      setOpenAlert(true);
+    } else {
+      setValue(val);
+      history.push("/" + val);
     }
 
   };
 
+  const onAlertClose = (chosedDelete) => {
+
+    console.log(chosedDelete);
+    setOpenAlert(false);
+
+    if(chosedDelete === true) {
+
+      setValue(pendingValue);
+      history.push("/" + pendingValue);
+
+      // set as one dispatch instead..
+      dispatch({
+        type: "SETDESCRIPTIONS",
+        descriptions: undefined
+      })
+
+      dispatch({
+        type: "SETINGREDIENTS",
+        ingredients: undefined
+      })
+
+      dispatch({
+        type: "SETTITLE",
+        title: undefined
+      })
+
+      dispatch({
+        type: "SETIMAGE",
+        title: undefined
+      })
+
+      dispatch({
+        type: "SETFREETEXT",
+        title: undefined
+      })
+
+      if(pendingValue !== "upload" && upload_store.editmode === true) {
+        dispatch({
+          type: "SETEDITMODE",
+          editmode: false
+        })
+      }
+    }
+  }
+
   return (
+    <React.Fragment>
 
-    <BottomNavigation value={value} onChange={ (evt,value) => handleMenuClick(evt, value) } className={classes.bottomMenu}>
-      <BottomNavigationAction label="Flöde" value="home" icon={<HomeRoundedIcon />} />
-      <BottomNavigationAction label="Ladda upp" value="upload" icon={<PublishIcon />} />
-      <BottomNavigationAction label="Notiser" value="notices" icon={<NotificationsIcon />} />
-      <BottomNavigationAction label="Sparat" value="saved" icon={<LoyaltyRoundedIcon />} />
-    </BottomNavigation>
+      <BottomNavigation value={value} onChange={ (evt,value) => handleMenuClick(evt, value) } className={classes.bottomMenu}>
+        <BottomNavigationAction label="Flöde" value="home" icon={<HomeRoundedIcon />} />
+        <BottomNavigationAction label="Ladda upp" value="upload" icon={<PublishIcon />} />
+        <BottomNavigationAction label="Notiser" value="notices" icon={<NotificationsIcon />} />
+        <BottomNavigationAction label="Sparat" value="saved" icon={<LoyaltyRoundedIcon />} />
+      </BottomNavigation>
 
+      <AlertDialog
+      open={openAlert}
+      onAlertClose={onAlertClose}
+      title="Är du säker?"
+      message="Du har osparade ändringar, är du säker på att du vill avbryta?"
+      yesOptionText="Ja"
+      NoOptionText="Oj, nej!"
+      />
+    </React.Fragment>
   );
 
   // <Badge badgeContent={3} color="secondary"><NotificationsIcon /></Badge>

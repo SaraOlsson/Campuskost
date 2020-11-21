@@ -12,11 +12,10 @@ function RecipeGridList({recipes, smalltiles}) {
       <GridList>
         {
           recipes.map((recipe, idx) =>
-          <React.Fragment key={idx + recipe.title}>
-            { (recipe !== undefined && recipe !== null ) &&
-            <RecipeItem recipe={recipe} smalltiles={smalltiles}/>
+            { 
+              if(recipe !== undefined && recipe !== null ) 
+                return <RecipeItem key={idx + recipe.title} recipe={recipe} smalltiles={smalltiles}/>
             }
-          </React.Fragment>
           )
         }
       </GridList>

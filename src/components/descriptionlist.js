@@ -12,10 +12,19 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import '../style/GlobalCssButton.css';
 import Button from '@material-ui/core/Button';
+import DragNDrop from '../components/DragNDrop';
 
 const HEADER = "HEADER";
 const DESC = "DESC";
 
+const getListStyle = isDraggingOver => ({
+  // background: isDraggingOver ? "lightblue" : "lightgrey",
+});
+
+const getItemStyle = (isDragging, draggableStyle) => ({
+  // styles we need to apply on draggables
+  ...draggableStyle
+});
 
 function DescriptionList(props) {
 
@@ -29,6 +38,13 @@ function DescriptionList(props) {
   const upload_store = useSelector(state => state.uploadReducer);
 
   const ingredientsDisp = () => {
+    dispatch({
+      type: "SETDESCRIPTIONS",
+      descriptions: descriptions
+    })
+  }
+
+  const descriptionsDisp = (descriptions) => {
     dispatch({
       type: "SETDESCRIPTIONS",
       descriptions: descriptions
@@ -49,11 +65,47 @@ function DescriptionList(props) {
 
   }, []);
 
+  const onReorder = (reordered_rows) => {
+
+    let new_descriptions = [];
+
+    reordered_rows.forEach((row, idx) => {
+
+      var d = find_description(row.id);
+      if(d)
+      {
+        let new_obj = {order: idx, text: d.text, type: d.type || DESC}; // .toString()
+        new_descriptions.push(new_obj);
+      }
+      else
+        console.log("row id " + row.id + " not found")
+    });
+
+    setDescriptions(new_descriptions);
+    descriptionsDisp(new_descriptions);
+  }
+  
+  const find_description = (idx) => {
+    return descriptions.find( d => d.order.toString() === idx); // Number(idx)
+  }
+
+  const max_order = () => {
+    let max = 0;
+    descriptions.forEach(d => {
+      if(d.order > max)
+      {
+        max = d.order;
+      }
+    })
+    return max;
+  }
+
 
   const addDescription = (row_type) => {
 
     let temp_list = descriptions.slice(0);
-    let new_obj = {order: descriptions.length + 1, text: "", type: row_type};
+    let new_order = (max_order()+1).toString();
+    let new_obj = {order: new_order, text: "", type: row_type};
     temp_list.push(new_obj);
     setEditObject(new_obj);
     setDescriptions(temp_list);
@@ -114,6 +166,15 @@ function DescriptionList(props) {
 
   }
 
+  const getMyItems = (d_data, datajsx) => {
+
+    const data = datajsx.map((item, idx) => ({
+      id: `${d_data[idx].order}`,
+      content: item
+    }));
+    return data;
+  }
+
   const enterPress = (ev) => {
 
     if (ev.key === 'Enter') {
@@ -152,10 +213,12 @@ function DescriptionList(props) {
   </React.Fragment>
   );
 
-
+// {descriptionjsx}
 
   return (
     <div >
+
+      
 
       <Grid className="test"
         container
@@ -167,7 +230,8 @@ function DescriptionList(props) {
       <Grid item xs={12}>
         <List dense={true} className={classes.ingredientslist}>
 
-          {descriptionjsx}
+          
+          <DragNDrop items={getMyItems(descriptions, descriptionjsx)} getListStyle={getListStyle} getItemStyle={getItemStyle} onReorder={onReorder}/>
 
           { editObject === undefined &&
             <ListItem alignItems="center">

@@ -22,7 +22,7 @@ function RecipeDecsList(props) {
   
     let descjsx = description.map((desc, idx) => {
       if(desc.type && desc.type === "HEADER")
-        return <ListItem><ListItemText classes={{ primary: classes.headerRow }} primary={ desc.text }/></ListItem>;
+        return <ListItem key={idx}><ListItemText classes={{ primary: classes.headerRow }} primary={ desc.text }/></ListItem>;
       else
         return <RecipeDecsListItem idx={idx} key={idx} desc={desc.text} len={description.length}/>
     });
