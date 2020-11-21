@@ -11,6 +11,20 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import '../style/GlobalCssButton.css';
+import DragNDrop from '../components/DragNDrop';
+import Button from '@material-ui/core/Button';
+
+const HEADER = "HEADER";
+const ROW = "ROW";
+
+const getListStyle = isDraggingOver => ({
+  // background: isDraggingOver ? "lightblue" : "lightgrey",
+});
+
+const getItemStyle = (isDragging, draggableStyle) => ({
+  // styles we need to apply on draggables
+  ...draggableStyle
+});
 
 function IngredientsList(props) {
 
@@ -24,11 +38,29 @@ function IngredientsList(props) {
   const dispatch = useDispatch(); // be able to dispatch
   const upload_store = useSelector(state => state.uploadReducer);
 
-  const ingredientsDisp = () => {
+  const ingredientsDisp = (new_ingredients) => {
+
     dispatch({
       type: "SETINGREDIENTS",
-      ingredients: ingredients
+      ingredients: new_ingredients
     })
+    
+    // TODO: make it work
+    // if( !hasOrderProp() ) {
+    //   console.log("add order prop")
+    //   let updated = addOrderProp();
+    //   dispatch({
+    //     type: "SETINGREDIENTS",
+    //     ingredients: updated
+    //   })
+    //   setIngredients(updated);
+    // }
+    // else {
+    //   dispatch({
+    //     type: "SETINGREDIENTS",
+    //     ingredients: ingredients
+    //   })
+    // }
   }
 
   function initiate_ingredients() {
@@ -49,21 +81,65 @@ function IngredientsList(props) {
     let temp_ingredients = upload_store.ingredients;
     if(temp_ingredients !== undefined)
     {
+      // addOrderIfUndefined();
       setIngredients(temp_ingredients);
-      // props.handleAdd(temp_ingredients.length);
+      
     }
 
   }, []);
 
-  const addIngredient = () => {
+  // addOrderIfUndefined
+  const hasOrderProp = () => {
+
+    if( ingredients.length > 0 ) 
+    {
+      let order = ingredients[0].order;
+      return (order !== undefined) ? true : false;
+    } else {
+      return false;
+    }
+  }
+
+  const addOrderProp = () => {
+
+    let updated_ingredients = [];
+
+    ingredients.forEach((row, idx) => {
+
+      let new_obj = {order: idx, name: row.name, quantity: row.quantity, measure: row.measure, type: row.type};
+      updated_ingredients.push(new_obj);
+      
+    });
+
+    
+    return updated_ingredients;
+    // ingredientsDisp(updated_ingredients);
+  }
+
+  const addIngredient = (row_type) => {
 
     let temp_list = ingredients.slice(0);
-    let new_obj = {name: "", quantity: "", measure: ""};
+    let new_order = (max_order()+1).toString();
+    let new_obj = {order: new_order, name: "", quantity: "", measure: "", type: row_type};
     temp_list.push(new_obj);
     setEditObject(new_obj);
     setIngredients(temp_list);
 
-    ingredientsDisp();
+    ingredientsDisp(temp_list);
+  }
+
+  const max_order = () => {
+    let max = 0;
+    if(!hasOrderProp())
+      return max;
+
+    ingredients.forEach(d => {
+      if(d.order > max)
+      {
+        max = d.order;
+      }
+    })
+    return max;
   }
 
   const removeIngredient = () => {
@@ -79,7 +155,7 @@ function IngredientsList(props) {
     setMeasure("");
     setName("");
 
-    ingredientsDisp();
+    ingredientsDisp(temp_list);
 
   }
 
@@ -113,7 +189,7 @@ function IngredientsList(props) {
 
     props.handleAdd(temp_list.length);
 
-    ingredientsDisp();
+    ingredientsDisp(temp_list);
 
   }
 
@@ -126,6 +202,37 @@ function IngredientsList(props) {
 
   }
 
+  const onReorder = (reordered_rows) => {
+
+    let new_ingredients = [];
+
+    reordered_rows.forEach((row, idx) => {
+
+      var d = ingredients.find( d => d.order.toString() === row.id);
+      if(d)
+      {
+        let new_obj = {order: idx, name: d.name, quantity: d.quantity, measure: d.measure, type: d.type};
+        new_ingredients.push(new_obj);
+      }
+      else
+        console.log("row id " + row.id + " not found")
+    });
+
+    console.log(new_ingredients)
+
+    setIngredients(new_ingredients);
+    ingredientsDisp(new_ingredients);
+  }
+
+  const getMyItems = (d_data, datajsx) => {
+
+    const data = datajsx.map((item, idx) => ({
+      id: `${d_data[idx].order}`,
+      content: item
+    }));
+    return data;
+  }
+
   // let ingredients = (props.ingredients != undefined) ? props.ingredients : temp_ingredients;
   // idx < ingredients.length - 1
 
@@ -133,6 +240,7 @@ function IngredientsList(props) {
   <React.Fragment key={idx}>
     <ListItem onClick={() => listClick(ingred)} className={(ingredients.indexOf(editObject) === idx ? 'testis' : '')} style={{minHeight: 40}}>
       <ListItemText
+        classes={{ primary: (ingred.type === HEADER) ? classes.bold : '' }}
         primary={ ingred.quantity + " " + ingred.measure + " " + ingred.name }
       />
 
@@ -141,6 +249,7 @@ function IngredientsList(props) {
 
   </React.Fragment>
   );
+  // {ingredientsjsx}
 
   return (
     <div>
@@ -155,42 +264,66 @@ function IngredientsList(props) {
       <Grid item xs={12}>
         <List dense={true} className={classes.ingredientslist}>
 
-          {ingredientsjsx}
+          { hasOrderProp() ?
+            <DragNDrop items={getMyItems(ingredients, ingredientsjsx)} getListStyle={getListStyle} getItemStyle={getItemStyle} onReorder={onReorder}/>
+            :
+            ingredientsjsx
+          }
+
+
 
           { editObject === undefined &&
 
-            <ListItem alignItems="center" onClick={() => addIngredient()} className={classes.newListItem}>
-              <ListItemText
+            <ListItem alignItems="center">
+              {/* <ListItemText onClick={() => addIngredient()} className={classes.newListItem}
                 primary="Lägg till ingrediens"
-              />
+              /> */}
+              <Button variant="contained" color="primary" onClick={() => addIngredient(ROW)} className={classes.marginRight10}>
+                {"Lägg till ingrediens"}
+              </Button>
+              <Button variant="contained" color="primary" onClick={() => addIngredient(HEADER)}>
+                {"Lägg till rubrik"}
+              </Button>
             </ListItem>
           }
 
         </List>
       </Grid>
 
-      { (editObject !== undefined  ) &&
+      { editObject !== undefined &&
 
         <React.Fragment>
 
-        <Grid item xs={3}>
-          <TextField required variant="outlined" label="mängd" InputLabelProps={{shrink: true}} value={quantity} onChange={ event => setQuantity(event.target.value.toLowerCase())}/>
-        </Grid>
-        <Grid item xs={2}>
-          <TextField variant="outlined" label="mått" InputLabelProps={{shrink: true}} value={measure} onChange={ event => setMeasure(event.target.value.toLowerCase())}/>
-        </Grid>
-        <Grid item xs={5}>
-          <TextField required variant="outlined" label="ingrediens" InputLabelProps={{shrink: true}} value={name} onChange={ event => setName(event.target.value.toLowerCase())} onKeyPress={(ev) => enterPress(ev)}/>
-        </Grid>
-        <Grid item xs={1}>
-          <CheckCircleIcon onClick={saveEdited} className={classes.greenicon} />
-        </Grid>
-        <Grid item xs={1}>
-          <DeleteForeverIcon onClick={removeIngredient} className={classes.redicon} />
-        </Grid>
+        { editObject.type === ROW &&
 
+          <React.Fragment>
+            <Grid item xs={3}>
+              <TextField required variant="outlined" label="mängd" InputLabelProps={{shrink: true}} value={quantity} onChange={ event => setQuantity(event.target.value.toLowerCase())}/>
+            </Grid>
+            <Grid item xs={2}>
+              <TextField variant="outlined" label="mått" InputLabelProps={{shrink: true}} value={measure} onChange={ event => setMeasure(event.target.value.toLowerCase())}/>
+            </Grid>
+            <Grid item xs={5}>
+              <TextField required variant="outlined" label="ingrediens" InputLabelProps={{shrink: true}} value={name} onChange={ event => setName(event.target.value.toLowerCase())} onKeyPress={(ev) => enterPress(ev)}/>
+            </Grid>
+          </React.Fragment>
+        }
+        { editObject.type === HEADER && 
+    
+          <Grid item xs={10}>
+            <TextField variant="outlined" label="rubrik" InputLabelProps={{shrink: true}} value={name} onChange={ event => setName(event.target.value)} onKeyPress={(ev) => enterPress(ev)}/>
+          </Grid>
+        
+        }
+
+          <Grid item xs={1}>
+            <CheckCircleIcon onClick={saveEdited} className={classes.greenicon} />
+          </Grid>
+          <Grid item xs={1}>
+            <DeleteForeverIcon onClick={removeIngredient} className={classes.redicon} />
+          </Grid>
+        
         </React.Fragment>
-
       }
 
       </Grid>
@@ -248,6 +381,12 @@ const useStyles = makeStyles(theme => ({
   },
   titlediv: {
     background: 'gray'
+  },
+  marginRight10: {
+    marginRight: '10px'
+  },
+  bold: {
+    fontWeight: 'bold'
   }
 }));
 

@@ -10,11 +10,15 @@ function ListIngredients(props) {
     const classes = useStyles();
   
     let ingredients = (props.ingredients !==  undefined) ? props.ingredients : [];
+
+    // sort by order
+    ingredients.sort( (ingred1, ingred2) => ingred1.order - ingred2.order );
   
     let ingredientsjsx = ingredients.map((ingred, idx) =>
     <React.Fragment key={idx}>
       <ListItem>
         <ListItemText
+          classes={{ primary: (ingred.type === "HEADER") ? classes.headerRow : '' }}
           primary={ ingred.quantity + " " + ingred.measure + " " + ingred.name }
         />
   
@@ -36,6 +40,10 @@ function ListIngredients(props) {
   const useStyles = makeStyles({
     ingredientslist: {
      marginTop: '20px',
+    },
+    headerRow: {
+      color: '#68bb8c',
+      fontWeight: 'bold'
     }
   });
 
