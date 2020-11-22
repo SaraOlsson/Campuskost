@@ -1,15 +1,18 @@
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
 import { useFirestoreConnect } from "react-redux-firebase";
 import Emoji from '../components/Emoji';
 import LoadSpinner from '../components/loadspinner';
 import RecipeGridList from '../components/recipegridlist';
 
+const VERSION = 1;
+
 function FeedPage() {
 
   const classes = useStyles();
+  const [updateExists, setUpdateExists ] = useState(false);
 
   useFirestoreConnect({
     collection: `recipes`,
@@ -17,10 +20,45 @@ function FeedPage() {
     orderBy: ['timestamp', 'desc']
   });
 
+  useFirestoreConnect({
+    collection: "common",
+    doc: "version",
+    storeAs: "version",
+  });
+
   const recipes = useSelector((state) => state.firestore.data.recipes); 
+  const version = useSelector((state) => state.firestore.data.version); 
+
+  useEffect(() => {
+
+    // console.log(serviceWorker.hasUpdates)
+    if(version && version.release)
+    {
+      console.log(version.release)
+      
+      //let local_version = Number(window.localStorage.getItem('version'));
+      console.log("const version: " + VERSION);
+      //console.log("local version: " + local_version);
+
+      if (VERSION !== version.release)
+        setUpdateExists(true);
+      //else
+      //  window.localStorage.setItem('version', '1'); // version.release.toString());
+    }
+
+
+  }, [version]);
+
+
+
 
   return (
     <div>
+      { updateExists && 
+      <div className={classes.updateBanner}>
+        <p>Det finns en uppdatering av webbappen, stäng alla flikar och ladda om. </p>
+      </div> 
+      }
       <NewsContainer/>
       <h3>Senaste recepten</h3>
       { recipes && <div className={classes.grid_background}><RecipeGridList recipes={Object.values(recipes)}/></div> }
@@ -101,6 +139,14 @@ const useStyles = makeStyles({
     borderRadius: '4px',
     padding: 5,
     textAlign: 'center'
+  },
+  updateBanner: {
+    backgroundColor: '#ffd364',
+    color: 'white',
+    borderRadius: 5,
+    '& p': {
+      padding: 10
+    }
   }
 });
 

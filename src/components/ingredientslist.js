@@ -45,22 +45,6 @@ function IngredientsList(props) {
       ingredients: new_ingredients
     })
     
-    // TODO: make it work
-    // if( !hasOrderProp() ) {
-    //   console.log("add order prop")
-    //   let updated = addOrderProp();
-    //   dispatch({
-    //     type: "SETINGREDIENTS",
-    //     ingredients: updated
-    //   })
-    //   setIngredients(updated);
-    // }
-    // else {
-    //   dispatch({
-    //     type: "SETINGREDIENTS",
-    //     ingredients: ingredients
-    //   })
-    // }
   }
 
   function initiate_ingredients() {
@@ -81,8 +65,8 @@ function IngredientsList(props) {
     let temp_ingredients = upload_store.ingredients;
     if(temp_ingredients !== undefined)
     {
-      // addOrderIfUndefined();
-      setIngredients(temp_ingredients);
+      addOrderProp(temp_ingredients);
+      // setIngredients(temp_ingredients);
       
     }
 
@@ -100,20 +84,23 @@ function IngredientsList(props) {
     }
   }
 
-  const addOrderProp = () => {
+  // and type prop
+  const addOrderProp = (temp_ingredients) => {
 
     let updated_ingredients = [];
 
-    ingredients.forEach((row, idx) => {
+    temp_ingredients.forEach((row, idx) => {
 
-      let new_obj = {order: idx, name: row.name, quantity: row.quantity, measure: row.measure, type: row.type};
+      //console.log("type: " + row.type)
+      let row_type = (row.type !== undefined) ? row.type : ROW;
+      let new_obj = {order: idx, name: row.name, quantity: row.quantity, measure: row.measure, type: row_type};
       updated_ingredients.push(new_obj);
       
     });
 
+    setIngredients(updated_ingredients);
+    ingredientsDisp(updated_ingredients);  
     
-    return updated_ingredients;
-    // ingredientsDisp(updated_ingredients);
   }
 
   const addIngredient = (row_type) => {
@@ -218,8 +205,6 @@ function IngredientsList(props) {
         console.log("row id " + row.id + " not found")
     });
 
-    console.log(new_ingredients)
-
     setIngredients(new_ingredients);
     ingredientsDisp(new_ingredients);
   }
@@ -294,7 +279,15 @@ function IngredientsList(props) {
 
         <React.Fragment>
 
-        { editObject.type === ROW &&
+        {/* may not have type attribute */}
+        { editObject.type === HEADER && 
+    
+          <Grid item xs={10}>
+            <TextField variant="outlined" label="rubrik" InputLabelProps={{shrink: true}} value={name} onChange={ event => setName(event.target.value)} onKeyPress={(ev) => enterPress(ev)}/>
+          </Grid>
+        
+        }
+        { editObject.type !== HEADER &&
 
           <React.Fragment>
             <Grid item xs={3}>
@@ -307,13 +300,6 @@ function IngredientsList(props) {
               <TextField required variant="outlined" label="ingrediens" InputLabelProps={{shrink: true}} value={name} onChange={ event => setName(event.target.value.toLowerCase())} onKeyPress={(ev) => enterPress(ev)}/>
             </Grid>
           </React.Fragment>
-        }
-        { editObject.type === HEADER && 
-    
-          <Grid item xs={10}>
-            <TextField variant="outlined" label="rubrik" InputLabelProps={{shrink: true}} value={name} onChange={ event => setName(event.target.value)} onKeyPress={(ev) => enterPress(ev)}/>
-          </Grid>
-        
         }
 
           <Grid item xs={1}>
