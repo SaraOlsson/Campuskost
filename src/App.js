@@ -216,6 +216,7 @@ function App() {
             <Route path="/login" component={LoginPage} />
             <Route path="/settings" component={SettingsPage} />
             <Route path="/profile/:username_url" component={ProfilePage} />
+            <Route path="/upload/:id_param" component={UploadPage} />
             <Route path="/upload" component={UploadPage} />
             <Route path="/notices" component={NoticePage} />
             <Route path="/saved" component={ListPage} />
@@ -285,30 +286,8 @@ function BottomMenuBar() {
       setValue(pendingValue);
       history.push("/" + pendingValue);
 
-      // set as one dispatch instead..
       dispatch({
-        type: "SETDESCRIPTIONS",
-        descriptions: undefined
-      })
-
-      dispatch({
-        type: "SETINGREDIENTS",
-        ingredients: undefined
-      })
-
-      dispatch({
-        type: "SETTITLE",
-        title: undefined
-      })
-
-      dispatch({
-        type: "SETIMAGE",
-        title: undefined
-      })
-
-      dispatch({
-        type: "SETFREETEXT",
-        title: undefined
+        type: "SETALLDEFAULT"
       })
 
       if(pendingValue !== "upload" && upload_store.editmode === true) {

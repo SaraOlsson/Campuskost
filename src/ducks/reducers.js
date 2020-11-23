@@ -24,18 +24,18 @@ function searchReducer(state = { searchstring: "" }, action) {
     }
   }
   
-  /*
-  let init_repice_state = { 
-    editmode: false, 
-    recipe_id: undefined, 
-    title: undefined, 
-    ingredients: undefined, 
-    descriptions: undefined, 
-    image: undefined,
-    freetext: undefined,
-    servings: undefined,
-    cookingtime: undefined,
-  }; */
+  
+  // const init_repice_state = { 
+  //   editmode: false, 
+  //   recipe_id: undefined, 
+  //   title: undefined, 
+  //   ingredients: undefined, 
+  //   descriptions: undefined, 
+  //   image: undefined,
+  //   freetext: undefined,
+  //   servings: undefined,
+  //   cookingtime: undefined,
+  // }; 
   
   function uploadReducer(state = { 
     editmode: false, 
@@ -91,6 +91,19 @@ function searchReducer(state = { searchstring: "" }, action) {
             editmode: action.editmode,
             recipe_id: action.recipe_id,
           };
+        case "SETALLDEFAULT":
+          return { 
+            editmode: false, 
+            recipe_id: undefined, 
+            title: undefined, 
+            ingredients: undefined, 
+            descriptions: undefined, 
+            image: undefined,
+            freetext: undefined,
+            servings: undefined,
+            cookingtime: undefined,
+          };
+
       default:
         return state;
     }

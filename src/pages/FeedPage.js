@@ -7,7 +7,7 @@ import Emoji from '../components/Emoji';
 import LoadSpinner from '../components/loadspinner';
 import RecipeGridList from '../components/recipegridlist';
 
-const VERSION = 1;
+const VERSION = 2;
 
 function FeedPage() {
 

@@ -23,6 +23,7 @@ import ImageDialog from '../components/ImageDialog';
 import Emoji from '../components/Emoji';
 import '../style/GlobalCssButton.css';
 import resizeImage from '../logic/resizeImage'
+import { useParams } from "react-router";
 
 var Spinner = require('react-spinkit');
 
@@ -50,6 +51,8 @@ function UploadPage(props) {
   const upload_store = useSelector(state => state.uploadReducer);
   const history = useHistory();
 
+  const { id_param } = useParams();
+
   // remove these
   const [valid, setValid] = useState({
     title: false,
@@ -65,6 +68,12 @@ function UploadPage(props) {
     })
   }
 
+  const defaultsDisp = () => {
+    dispatch({
+      type: "SETALLDEFAULT"
+    })
+  }
+
   const allValid = () => {
 
     return (uid && valid.title && valid.ingredients && valid.desc && valid.image)
@@ -72,35 +81,50 @@ function UploadPage(props) {
 
   useEffect(() => {
 
-    if(upload_store.title !== undefined)
-      setTitle(upload_store.title);
-
-    if(upload_store.image !== undefined)
-      setImage(upload_store.image);
-
-    if(upload_store.descriptions !== undefined)
-      handleDescriptionsAdd(upload_store.descriptions.length);
-
-    if(upload_store.freetext !== undefined)
-      setFreetext(upload_store.freetext);
-    
-    if(upload_store.servings !== undefined)
-      setServings(upload_store.servings);
-    
-    if(upload_store.cookingtime !== undefined)
-      setCookingTime(upload_store.cookingtime);
-
-    if(upload_store.ingredients !== undefined)
+  
+    if (id_param !== undefined)
     {
-      handleIngredientsAdd(upload_store.ingredients.length);
+      // quickfix, not my recipe.. Use todo's approach
+      if(upload_store.title === undefined) 
+      {
+        console.log("should not be here");
+        history.push("/upload/");
+      }
+
+      console.log("editing recipe with id: " + id_param)
     
-      // should check the other too..
-      setValid ({
-        title: true,
-        ingredients: true,
-        desc: true,
-        image: true
-      });
+      if(upload_store.title !== undefined)
+        setTitle(upload_store.title);
+
+      if(upload_store.image !== undefined)
+        setImage(upload_store.image);
+
+      if(upload_store.descriptions !== undefined)
+        handleDescriptionsAdd(upload_store.descriptions.length);
+
+      if(upload_store.freetext !== undefined)
+        setFreetext(upload_store.freetext);
+      
+      if(upload_store.servings !== undefined)
+        setServings(upload_store.servings);
+      
+      if(upload_store.cookingtime !== undefined)
+        setCookingTime(upload_store.cookingtime);
+
+      if(upload_store.ingredients !== undefined)
+      {
+        handleIngredientsAdd(upload_store.ingredients.length);
+      
+        // should check the other too..
+        setValid ({
+          title: true,
+          ingredients: true,
+          desc: true,
+          image: true
+        });
+      }
+    } else {
+      console.log("will upload new recipe")
     }
 
   }, []);
@@ -239,8 +263,9 @@ function UploadPage(props) {
     let ref_to_user = store.firestore_user.email; // firestore.collection('users').doc(store.firestore_user.email);
     let firestore_timestamp = firebase.firestore.Timestamp.now();
 
-    // if upload or create new doc
-    if(upload_store.editmode === false)
+    // if create new doc or edit
+    //if(upload_store.editmode === false)
+    if( id_param === undefined)
     {
       // when image is uploaded, continue with uploading the rest
       uploadImage(function(returnValue_downloadURL) {
@@ -270,6 +295,7 @@ function UploadPage(props) {
           console.log( "Document created/updated successfully.")
           setUpload_wait(false);
           setDone(true);
+          defaultsDisp();
           setId(docRef.id);
         });
 
@@ -291,9 +317,10 @@ function UploadPage(props) {
       // either upload with or without image (no new imag needed of recipe _update_)
       if (newImage === false) {
 
-        firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
+        firestore.collection('recipes').doc(id_param).update(update_data);
         setUpload_wait(false);
         setDone(true);
+        defaultsDisp();
 
       } else {
 
@@ -304,6 +331,7 @@ function UploadPage(props) {
 
           setUpload_wait(false);
           setDone(true);
+          defaultsDisp();
 
         }); // end of image upload callback
 

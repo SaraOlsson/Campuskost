@@ -49,6 +49,7 @@ function RecipePage(props) {
     } else if(recipe !== undefined && recipe.recipeID !== id) {
 
       console.log("oups this was the previous recipe")
+      console.log("recipe.recipeID = " + recipe.recipeID + " and id = " + id);
     }
       
   }, [recipe] );
@@ -188,8 +189,8 @@ function RecipePage(props) {
       editmode: true,
       recipe_id: id
     })
-
-    history.push("/upload" );
+    
+    history.push("/upload/" + recipe.recipeID );
   }
 
   const onDeleteRecipeChoice = (chosedDelete) => {
