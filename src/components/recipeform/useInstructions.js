@@ -61,7 +61,7 @@ function useInstructions({
 
     const updated_instruction = reordered_rows.map((row, idx) => {
         let item = find_instruction(row.id)
-        console.log(item)
+        // console.log(item)
         if(item)
         {
             return {
