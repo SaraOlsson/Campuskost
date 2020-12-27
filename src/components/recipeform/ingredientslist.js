@@ -116,46 +116,39 @@ function IngredientsList(props) {
         </List>
       </Grid>
 
+      {/* Adding new row or editing */}
       { editObject !== undefined &&
 
         <React.Fragment>
 
-        {/* may not have type attribute */}
-        { editObject.type === HEADER && 
-    
-          <Grid item xs={10}>
-            <TextField variant="outlined" label="rubrik" InputLabelProps={{shrink: true}} 
-            name="name"
+          {/* note: may not have type attribute */}
+          { editObject.type !== HEADER &&
+
+            <React.Fragment>
+              <Grid item xs={3}>
+                <TextField required variant="outlined" label="mängd" InputLabelProps={{shrink: true}} 
+                value={customFieldsData.quantity} 
+                name="quantity"
+                onChange={onValueChange}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <TextField variant="outlined" label="mått" InputLabelProps={{shrink: true}} 
+                value={customFieldsData.measure} 
+                name="measure"
+                onChange={onValueChange} />
+              </Grid>
+            </React.Fragment>
+
+          }
+
+          <Grid item xs={editObject.type !== HEADER ? 5 : 10}>
+            <TextField required variant="outlined" label="ingrediens" InputLabelProps={{shrink: true}} 
             value={customFieldsData.name} 
-            onChange={onValueChange} 
+            name="name"
+            onChange={onValueChange}
             onKeyPress={(ev) => enterPress(ev)}/>
           </Grid>
-        
-        }
-        { editObject.type !== HEADER &&
-
-          <React.Fragment>
-            <Grid item xs={3}>
-              <TextField required variant="outlined" label="mängd" InputLabelProps={{shrink: true}} 
-              value={customFieldsData.quantity} 
-              name="quantity"
-              onChange={onValueChange}
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <TextField variant="outlined" label="mått" InputLabelProps={{shrink: true}} 
-              value={customFieldsData.measure} 
-              name="measure"
-              onChange={onValueChange} />
-            </Grid>
-            <Grid item xs={5}>
-              <TextField required variant="outlined" label="ingrediens" InputLabelProps={{shrink: true}} 
-              value={customFieldsData.name} 
-              name="name"
-              onChange={onValueChange} />
-            </Grid>
-          </React.Fragment>
-        }
 
           <Grid item xs={1}>
             <CheckCircleIcon onClick={saveEdited} className={classes.greenicon} />
