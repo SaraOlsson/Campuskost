@@ -14,6 +14,9 @@ import DragNDrop from '../DragNDrop';
 import Button from '@material-ui/core/Button';
 import useInstructions from "./useInstructions"
 
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+
 const HEADER = "HEADER";
 const ROW = "ROW";
 
@@ -54,8 +57,8 @@ function IngredientsList(props) {
 
     if( ingredients.length < 1 )
       return false;
-
-    return (ingredients[0].order) ? true : false;
+      
+    return (ingredients[0].order !== undefined) ? true : false;
  
   }
 
@@ -132,12 +135,53 @@ function IngredientsList(props) {
                 onChange={onValueChange}
                 />
               </Grid>
-              <Grid item xs={2}>
+              {/* <Grid item xs={2}>
                 <TextField variant="outlined" label="mått" InputLabelProps={{shrink: true}} 
                 value={customFieldsData.measure} 
                 name="measure"
                 onChange={onValueChange} />
-              </Grid>
+              </Grid> */}
+
+            <Grid item xs={2}>
+              <Select 
+                required
+                autoWidth={false}
+                style={{minWidth: 120}}
+                variant="outlined"
+                label="mått"
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={customFieldsData.measure}
+                name="measure"
+                onChange={onValueChange}
+              >
+                <MenuItem value={"dl"}>dl</MenuItem>
+                <MenuItem value={"msk"}>msk</MenuItem>
+                <MenuItem value={"tsk"}>tsk</MenuItem>
+                <MenuItem value={"kryddmått"}>kryddmått</MenuItem>
+                <MenuItem value={"stycken"}>stycken</MenuItem>
+                <MenuItem value={"gram"}>gram</MenuItem>
+                <MenuItem value={customFieldsData.measure}>{customFieldsData.measure}</MenuItem>
+              </Select>
+            </Grid>
+            
+            {/* <Grid item xs={2}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel id="demo-simple-select-label">Mått</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={customFieldsData.measure}
+                name="measure"
+                onChange={onValueChange}
+              >
+                <MenuItem value={"dl"}>dl</MenuItem>
+                <MenuItem value={"msk"}>msk</MenuItem>
+                <MenuItem value={"tsk"}>tsk</MenuItem>
+              </Select>
+            </FormControl>
+            </Grid> */}
+
             </React.Fragment>
 
           }

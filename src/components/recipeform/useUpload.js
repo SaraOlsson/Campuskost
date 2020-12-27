@@ -27,10 +27,11 @@ function useUpload() {
     const [smallImage, setSmallImage] = useState(undefined);
     const [newImage, setNewImage] = useState(false);
   
-    const [id, setId] = useState(undefined);
+    //const [id, setId] = useState(undefined);
     const [upload_wait, setUpload_wait] = useState(false);
     const [done, setDone] = useState(false);
     const [openImageDialog, setOpenImageDialog] = useState(false);
+    const [recipeURL, setRecipeURL] = useState("")
   
     
     const dispatch = useDispatch(); // be able to dispatch
@@ -40,7 +41,6 @@ function useUpload() {
     const history = useHistory();
   
     const { id_param } = useParams();
-  
 
     const defaultsDisp = () => {
       dispatch({
@@ -67,7 +67,7 @@ function useUpload() {
   
     useEffect(() => {
   
-      const edit_mode = id_param !== undefined
+      const edit_mode = upload_store.editmode//id_param !== undefined
       if (edit_mode)
       {
         console.log("MODE: edit")
@@ -78,6 +78,11 @@ function useUpload() {
   
       } else {
         console.log("MODE: new recipe")
+        if(id_param !== "")
+        {
+          console.log("was not coming from recipe page")
+          history.push("/upload")
+        }
       }
   
       return () => {
@@ -208,7 +213,7 @@ function useUpload() {
             // Document created successfully.
             console.log( "Document created/updated successfully.")
             uploadDone()
-            setId(docRef.id)
+            //setId(docRef.id)
           });
   
         }); // end of image upload callback
@@ -243,14 +248,15 @@ function useUpload() {
           }); // end of image upload callback
    
         }
-  
+
         // to be able to direct to recipe page
-        setId(upload_store.recipe_id);
+        //setId(upload_store.recipe_id); // needed?
       }
   
     };
   
     const uploadDone = () => {
+      setRecipeURL("/recipe/" + data.title + "/" + id_param)
       setUpload_wait(false);
       setDone(true);
       setData(DEFAULT_DATA)
@@ -268,7 +274,7 @@ function useUpload() {
   
     // when done, there's an option to go to recipe page
     const goToRecipe = () => {
-      history.push("/recipe/" + data.title + "/" + id );
+      history.push(recipeURL)
     };
   
     return {
