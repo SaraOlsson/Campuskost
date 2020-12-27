@@ -1,20 +1,16 @@
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import { makeStyles } from '@material-ui/core/styles';
-import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
-import LoyaltyRoundedIcon from '@material-ui/icons/LoyaltyRounded';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import PublishIcon from '@material-ui/icons/PublishRounded';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 // import our css
 import './App.css';
+import PrivateRoute from "./components/PrivateRoute";
 import MySnackbar from './components/snackbar';
+import Todos from "./components/Todos";
 import TopMenuBar from './components/topmenubar';
 // import our page components
 import FeedPage from './pages/FeedPage';
@@ -25,120 +21,81 @@ import ProfilePage from './pages/ProfilePage';
 import RecipePage from './pages/RecipePage';
 import SearchPage from './pages/SearchPage';
 import SettingsPage from './pages/SettingsPage';
-import UploadPage from './pages/UploadPage';
 import TermsPage from './pages/TermsPage';
-import Todos from "./components/Todos";
-import PrivateRoute from "./components/PrivateRoute";
-
+import UploadPage from './pages/UploadPage';
 import * as serviceWorker from './serviceWorker';
 import './style/GlobalCssButton.css';
+import BottomMenuBar from "./components/core/BottomMenuBar"
+import useDataLoad from './components/core/useDataLoad';
 
-import AlertDialog from './components/AlertDialog';
+
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import Draggable from 'react-draggable'; // The default
+import ChatBubbleRoundedIcon from '@material-ui/icons/ChatBubbleRounded';
+import BotDialog from "./components/core/BotDialog"
+import { ClickAwayListener } from '@material-ui/core';
+
+//import {ErrorBoundary} from './pages/ErrorBoundary';
+
+// TODO: needed to dispatch auth info?
 
 require('dotenv').config(); // check if we need this
 
-/*
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("firebase-messaging-sw.js")
-    .then(function(registration) {
-      console.log("Registration successful, scope is:", registration.scope);
-    })
-    .catch(function(err) {
-      console.log("Service worker registration failed, error:", err);
-    });
-}*/
 
-// for PWA - needed?
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Stash the event so it can be triggered later.
-  deferredPrompt = e;
-  deferredPrompt.prompt();
+// TODO: for PWA - needed?
+// let deferredPrompt;
+// window.addEventListener('beforeinstallprompt', (e) => {
+//   // Stash the event so it can be triggered later.
+//   deferredPrompt = e;
+//   deferredPrompt.prompt();
 
-  // Update UI notify the user they can add to home screen
-  deferredPrompt.userChoice
-    .then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the A2HS prompt');
-      } else {
-        console.log('User dismissed the A2HS prompt');
-      }
-      deferredPrompt = null;
-  });
+//   // Update UI notify the user they can add to home screen
+//   deferredPrompt.userChoice
+//     .then((choiceResult) => {
+//       if (choiceResult.outcome === 'accepted') {
+//         console.log('User accepted the A2HS prompt');
+//       } else {
+//         console.log('User dismissed the A2HS prompt');
+//       }
+//       deferredPrompt = null;
+//   });
 
-});
+// });
 
 
 // main component of the app
 function App() {
 
   const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
+  const [openBotDialog, setOpenBotDialog] = React.useState(false);
 
   const classes = useStyles();
   const dispatch = useDispatch(); // be able to dispatch
   const state_user = useSelector(state => state.userReducer); // subscribe to the redux store
   const userEmail = useSelector(state => state.firebase.auth.email);
 
-  useFirestoreConnect({
-    collection: `users`,
-    doc: userEmail,
-    storeAs: "userdoc",
-  });
-
-  useFirestoreConnect({
-    collection: `users`,
-    storeAs: "allusers",
-  });
-
-  useFirestoreConnect({
-    collection: `recipes`,
-    storeAs: "allrecipes",
-  });
-
-  useFirestoreConnect({
-    collection: `recipe_likes`,
-    doc:  `${userEmail}`,
-    storeAs: "userLikes",
-  });
-
-  useFirestoreConnect([
-    {
-    collection: `followers/${userEmail}/following`,
-    storeAs: "following",
-    },
-    {
-    collection: `followers/${userEmail}/followers`,
-    storeAs: "followers",
-    }
-  ]);
+  useDataLoad(userEmail)
 
   const firestore = useFirestore();
 
   useEffect(() => {
-
-    // console.log(serviceWorker.hasUpdates)
-
     if(serviceWorker.hasUpdates === true) {
       setOpenUpdateDialog(true);
     }
-
   }, [serviceWorker.hasUpdates]); // end useEffect
 
-  // runs once on start
   useEffect(() => {
 
-    // set listener for authentication changes
-    // either only set redux object or also create firestore instance
+    // Listen to auth changes. Set redux object and/or create firestore instance
     firebase.auth().onAuthStateChanged(user => {
-      // dispatch({ type: user ? "SIGNIN" : "SIGNOUT" })
 
       // if user is signed in, set redux object
       if( user ) {
 
         const user_email = user.email;
-
         const usersRef = firestore.collection('users').doc(user_email);
+
         // connect to firebase and check if a user doc for this email exists
         usersRef.get()
         .then((docSnapshot) => {
@@ -146,7 +103,6 @@ function App() {
             usersRef.onSnapshot((doc) => {
 
               console.log("user exists in firestore")
-
               // dispatch user doc info (such as username, other info set in the app)
               dispatch({
                 type: "SETFIREUSER",
@@ -187,6 +143,10 @@ function App() {
     setOpenUpdateDialog(false);
   };
 
+  const closeBotDialog = (action) => {
+    setOpenBotDialog(false);
+  };
+
   // used in TopMenuBar, which needs to be refactored
   const handleChange = (event = undefined, newValue) => {
 
@@ -196,20 +156,64 @@ function App() {
 
   let update_message = 'New content is available and will be used when all tabs for this page are closed';
 
-  // jsx code, looks like html
-  // renders top bar, page content and bottom bar.
-  // page content is based on url, defined with Route objects
+  const onBotClick = () => {
+    console.log("onBotClick!")
+    setOpenBotDialog(!openBotDialog)
+  }
+
+  const onTouchStart = () => {
+    console.log("onTouchStart!")
+  }
+
+  const handleClickAway = (event) => {
+    //console.log(event)
+    //console.log("handleClickAway!")
+    if(openBotDialog === true)
+      setOpenBotDialog(false)
+  } // {/* to hold a ref */} bounds="parent" 
+
   return (
+
     <div className="body">
 
-      
       <div>
 
         <div className={classes.headerrow}>
         <TopMenuBar signedIn={state_user.signedIn} handleChange={handleChange}/>
         </div>
 
-        <div className={classes.mainContainer}>
+        <div id="chat" className={`${classes.mainContainer}`}>
+
+          {/* <ClickAwayListener onClickAway={handleClickAway}> */}
+          <div> 
+          <Draggable 
+            axis="y"
+            bounds={{bottom: 0, top: -400}}
+            onMouseDown={onBotClick}
+          >
+            <div 
+              style={{
+              position: 'fixed', 
+              bottom: '70px', 
+              right: '20px',
+              zIndex: '10'
+              }}>
+            <Fab color="primary" aria-label="add">
+              <ChatBubbleRoundedIcon onClick={onBotClick} />
+            </Fab>
+            </div>
+          </Draggable>
+
+            <BotDialog 
+              open={openBotDialog}
+              onAlertClose={closeBotDialog}
+              title="Chatta med Chefina"
+              message="Hej! Du kanske är ny på Campuskost, är det något du undrar?"
+              yesOptionText="Ja"
+              NoOptionText="Nej, stäng fönster"
+            />
+            </div>
+            {/* </ClickAwayListener> */}
 
           <Switch>
             <Route exact path="/home" component={FeedPage}/>
@@ -243,6 +247,7 @@ function App() {
       
 
     </div>
+
   );
 }
 
@@ -252,77 +257,6 @@ function App() {
 </PrivateRoute>
 */
 
-// extract as individual component
-function BottomMenuBar() {
-
-  const [value, setValue] = React.useState('default');
-  const [pendingValue, setPendingValue] = React.useState(undefined);
-  const [openAlert, setOpenAlert] = React.useState(false);
-
-  const history = useHistory();
-  const classes = useStyles();
-  const upload_store = useSelector(state => state.uploadReducer);
-  const dispatch = useDispatch();
-
-  const handleMenuClick = (event = undefined, val) => {
-
-    if(upload_store.title !== undefined) {
-      setPendingValue(val);
-      setOpenAlert(true);
-    } else {
-      setValue(val);
-      history.push("/" + val);
-    }
-
-  };
-
-  const onAlertClose = (chosedDelete) => {
-
-    console.log(chosedDelete);
-    setOpenAlert(false);
-
-    if(chosedDelete === true) {
-
-      setValue(pendingValue);
-      history.push("/" + pendingValue);
-
-      dispatch({
-        type: "SETALLDEFAULT"
-      })
-
-      if(pendingValue !== "upload" && upload_store.editmode === true) {
-        dispatch({
-          type: "SETEDITMODE",
-          editmode: false
-        })
-      }
-    }
-  }
-
-  return (
-    <React.Fragment>
-
-      <BottomNavigation value={value} onChange={ (evt,value) => handleMenuClick(evt, value) } className={classes.bottomMenu}>
-        <BottomNavigationAction label="Flöde" value="home" icon={<HomeRoundedIcon />} />
-        <BottomNavigationAction label="Ladda upp" value="upload" icon={<PublishIcon />} />
-        <BottomNavigationAction label="Notiser" value="notices" icon={<NotificationsIcon />} />
-        <BottomNavigationAction label="Sparat" value="saved" icon={<LoyaltyRoundedIcon />} />
-      </BottomNavigation>
-
-      <AlertDialog
-      open={openAlert}
-      onAlertClose={onAlertClose}
-      title="Är du säker?"
-      message="Du har osparade ändringar, är du säker på att du vill avbryta?"
-      yesOptionText="Ja"
-      NoOptionText="Oj, nej!"
-      />
-    </React.Fragment>
-  );
-
-  // <Badge badgeContent={3} color="secondary"><NotificationsIcon /></Badge>
-
-}
 
 const useStyles = makeStyles({
   body: {
@@ -351,10 +285,10 @@ const useStyles = makeStyles({
   profileBtn: {
     color: 'green'
   },
-  bottomMenu: {
-    width: 500,
+  chatbubble: {
+    background: 'teal',
+    borderRaduis: '15px'
   }
-
 });
 
 

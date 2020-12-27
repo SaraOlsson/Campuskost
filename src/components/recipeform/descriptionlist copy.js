@@ -10,9 +10,9 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import SaveIcon from '@material-ui/icons/Save';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import '../style/GlobalCssButton.css';
+import '../../style/GlobalCssButton.css';
 import Button from '@material-ui/core/Button';
-import DragNDrop from '../components/DragNDrop';
+import DragNDrop from '../DragNDrop';
 
 const HEADER = "HEADER";
 const DESC = "DESC";
@@ -26,7 +26,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle
 });
 
-function DescriptionList(props) {
+function DescriptionListCopy(props) {
 
   const [editObject, setEditObject] = useState(undefined);
   const [text, setText] = useState("");
@@ -331,4 +331,4 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default DescriptionList;
+export default DescriptionListCopy;

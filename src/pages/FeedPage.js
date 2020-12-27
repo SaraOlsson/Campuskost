@@ -1,13 +1,27 @@
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useFirestoreConnect } from "react-redux-firebase";
 import Emoji from '../components/Emoji';
 import LoadSpinner from '../components/loadspinner';
 import RecipeGridList from '../components/recipegridlist';
+import {fetchData} from "../redux/testReducer"
+import {fetchData as fetchFirestoreData} from "../redux/fetchFirestore"
+//import DropZone from "../components/input/DropZone"
 
-const VERSION = 2;
+const VERSION = 3;
+
+function Test(props) {
+  //const count = useSelector(state => state)
+  const dispatch = useDispatch()
+  return (
+      <div>
+          <h1>Test</h1>
+          <button onClick={() => dispatch(fetchData())}>Ladda in data</button>
+      </div>
+  )
+}
 
 function FeedPage() {
 
@@ -34,7 +48,7 @@ function FeedPage() {
     // console.log(serviceWorker.hasUpdates)
     if(version && version.release)
     {
-      console.log(version.release)
+      // console.log(version.release)
       
       //let local_version = Number(window.localStorage.getItem('version'));
       console.log("const version: " + VERSION);
@@ -42,7 +56,7 @@ function FeedPage() {
 
       if (VERSION !== version.release)
         setUpdateExists(true);
-      //else
+      // else
       //  window.localStorage.setItem('version', '1'); // version.release.toString());
     }
 
@@ -74,10 +88,12 @@ function NewsContainer(props) {
   const classes = useStyles();
 
   let feedback_form_link = <a href="https://forms.gle/wUSFkwExgdJbiAUL7" target="_blank" style={{color: '#68bb8c'}}>här</a>;
-
+  // <Test/>
+  
   return (
     <div>
     <h3>Nyheter</h3>
+    
     <Grid
       container
       spacing={1}

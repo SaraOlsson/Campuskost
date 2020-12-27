@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import { HashRouter as BrowserRouter } from "react-router-dom";
 
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import {createStore, compose, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
 // import reducer from "./store.js";
 
 import firebase from "firebase/app";
@@ -40,7 +41,7 @@ ReactGA.initialize(trackingId, {
 
 const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
 const firebaseConfig = {
-  apiKey: API_KEY,
+  apiKey: "AIzaSyAq0vTBf0o5MckjHcCOJiJ_DRK8v_UZY88",//API_KEY, // 
   authDomain: "campuskost-firebase.firebaseapp.com",
   databaseURL: "https://campuskost-firebase.firebaseio.com",
   projectId: "campuskost-firebase",
@@ -79,9 +80,10 @@ messaging.onMessage((payload) => {
   console.log('Message received. ', payload);
 }); */
 
-const initialState = {};
-const store = createStore(rootReducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-// Dev: , window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+// const initialState = {};
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// const store = createStore(rootReducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStore(rootReducer, composeEnhancer(applyMiddleware(thunk)))
 
 
 const rrfProps = {
@@ -113,22 +115,17 @@ ReactDOM.render(
   rootElement
 );
 
-// serviceWorker functionallity
+// ***** serviceWorker functionallity *****
 const testisCallback = (input) => {
-  // console.log(input)
 }
-
 const onUpdate = (registration) => {
   console.log(registration)
   console.log('Det finns en ny uppdatering av Campuskost. Stäng alla fönster så hämtas uppdateringen.')
-  //alert('Det finns en ny uppdatering av Campuskost. Stäng alla fönster så hämtas uppdateringen.');
 }
-
 const onSuccess = (registration) => {
   //console.log(registration)
   console.log('Content is cached for offline use.');
 }
-
 let cutomConfig = {testisCallback, onUpdate, onSuccess};
 
 // ReactDOM.render(<App />, document.getElementById('root'));

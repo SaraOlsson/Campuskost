@@ -1,14 +1,21 @@
 import {combineReducers} from "redux";
 import {firebaseReducer} from "react-redux-firebase";
 import {firestoreReducer} from "redux-firestore";
+import testReducer from "../redux/testReducer"
+import newUploadReducer from "../redux/newUploadReducer"
+//import firebaseFetch from "../redux/fetchFirestore"
+
 export const rootReducer = combineReducers({
     firebase: firebaseReducer,
     firestore: firestoreReducer,
     fireReducer: fireReducer,
-    uploadReducer: uploadReducer,
+    uploadReducer: newUploadReducer,
     userReducer: userReducer,
     dragReducer: dragReducer,
-    searchReducer: searchReducer
+    searchReducer: searchReducer,
+    
+    //newUploadReducer: newUploadReducer,
+    testReducer: testReducer
 });
 
 // remove
@@ -37,7 +44,8 @@ function searchReducer(state = { searchstring: "" }, action) {
   //   cookingtime: undefined,
   // }; 
   
-  function uploadReducer(state = { 
+
+  function uploadReducer(state = {
     editmode: false, 
     recipe_id: undefined, 
     title: undefined, 
@@ -46,51 +54,51 @@ function searchReducer(state = { searchstring: "" }, action) {
     image: undefined,
     freetext: undefined,
     servings: undefined,
-    cookingtime: undefined,
+    cookingtime: undefined
   }, action) {
     switch (action.type) {
         case "SETTITLE":
           return {
             ...state,
             title: action.title
-          };
+          }
         case "SETFREETEXT":
           return {
             ...state,
             freetext: action.freetext
-          };
+          }
         case "SETCOOKINGTIME":
           return {
             ...state,
             cookingtime: action.cookingtime
-          };
+          }
         case "SETSERVINGS":
           return {
             ...state,
             servings: action.servings
-          };
+          }
         case "SETINGREDIENTS":
           return {
             ...state,
             ingredients: action.ingredients
-          };
+          }
         case "SETDESCRIPTIONS":
           return {
             ...state,
             descriptions: action.descriptions
-          };
+          }
         case "SETIMAGE":
          
           return {
             ...state,
             image: action.image
-          };
+          }
         case "SETEDITMODE":
           return {
             ...state,
             editmode: action.editmode,
             recipe_id: action.recipe_id,
-          };
+          }
         case "SETALLDEFAULT":
           return { 
             editmode: false, 
@@ -102,10 +110,9 @@ function searchReducer(state = { searchstring: "" }, action) {
             freetext: undefined,
             servings: undefined,
             cookingtime: undefined,
-          };
-
-      default:
-        return state;
+          }
+        default:
+          return state;
     }
   }
   

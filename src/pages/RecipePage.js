@@ -148,40 +148,23 @@ function RecipePage(props) {
 
   // make to reducer
   const editRecipe = () => {
+    
+    // dispatch({
+    //   type: "SETOBJECT",
+    //   payload: {
+    //     title: recipe.title,
+    //     ingredients: recipe.ingredients,
+    //     descriptions: recipe.description,
+    //     freetext: recipe.freetext,
+    //     servings: recipe.servings,
+    //     cookingtime: recipe.cookingtime,
+    //     image: recipe.img_url,
+    //   }
+    // })
 
     dispatch({
-      type: "SETDESCRIPTIONS",
-      descriptions: recipe.description
-    })
-
-    dispatch({
-      type: "SETINGREDIENTS",
-      ingredients: recipe.ingredients
-    })
-
-    dispatch({
-      type: "SETTITLE",
-      title: recipe.title
-    })
-
-    dispatch({
-      type: "SETFREETEXT",
-      freetext: recipe.freetext
-    })
-
-    dispatch({
-      type: "SETSERVINGS",
-      servings: recipe.servings
-    })
-
-    dispatch({
-      type: "SETCOOKINGTIME",
-      cookingtime: recipe.cookingtime
-    })
-
-    dispatch({
-      type: "SETIMAGE",
-      image: recipe.img_url
+      type: "SETDATA",
+      payload: recipe
     })
 
     dispatch({

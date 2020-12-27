@@ -10,8 +10,8 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import '../style/GlobalCssButton.css';
-import DragNDrop from '../components/DragNDrop';
+import '../../style/GlobalCssButton.css';
+import DragNDrop from '../DragNDrop';
 import Button from '@material-ui/core/Button';
 
 const HEADER = "HEADER";
@@ -40,9 +40,14 @@ function IngredientsList(props) {
 
   const ingredientsDisp = (new_ingredients) => {
 
+    // dispatch({
+    //   type: "SETINGREDIENTS",
+    //   ingredients: new_ingredients
+    // })
+
     dispatch({
-      type: "SETINGREDIENTS",
-      ingredients: new_ingredients
+      type: "SETDATA",
+      payload: {"ingredients": new_ingredients}
     })
     
   }
