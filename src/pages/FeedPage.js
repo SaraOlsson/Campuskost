@@ -11,6 +11,7 @@ import {fetchData as fetchFirestoreData} from "../redux/fetchFirestore"
 //import DropZone from "../components/input/DropZone"
 //import KeyFrames from "../components/framer/KeyFrames"
 import Link from '@material-ui/core/Link';
+import {FadeIn} from "react-anim-kit"
 
 
 const VERSION = 3;
@@ -76,9 +77,17 @@ function FeedPage() {
         <p>Det finns en uppdatering av webbappen, stäng alla flikar och ladda om. </p>
       </div> 
       }
-      <NewsContainer/>
+      <FadeIn right by={300}>
+        <NewsContainer/>
+      </FadeIn>
       <h3>Senaste recepten</h3>
-      { recipes && <div className={classes.grid_background}><RecipeGridList recipes={Object.values(recipes)}/></div> }
+      { recipes && 
+        <div className={classes.grid_background}>
+          
+          <RecipeGridList recipes={Object.values(recipes)}/>
+      
+        </div>
+      }
       { recipes === undefined &&  <LoadSpinner/> }
     </div>
   );

@@ -17,6 +17,7 @@ import SimpleTabs from '../components/userpagetabs';
 import { useFirestoreConnect } from "react-redux-firebase";
 import LoadSpinner from '../components/loadspinner';
 import Emoji from '../components/Emoji';
+import {FadeIn} from "react-anim-kit"
 
 import Avatar from '@material-ui/core/Avatar';
 import PersonIcon from '@material-ui/icons/Person';
@@ -216,7 +217,9 @@ function ProfilePage(props) {
         </Grid>
         { user.profile_img_url ? 
           <Grid item xs={3}>
+            <FadeIn left by={200}>
             <img src={user.profile_img_url} alt="user-profile-img" className={classes.profileImage}/>
+            </FadeIn>
           </Grid> 
           :
           <Avatar>

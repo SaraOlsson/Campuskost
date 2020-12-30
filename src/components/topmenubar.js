@@ -18,6 +18,8 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from "react-router-dom";
 
+let img_src = require('../assets/logo.png');
+
 function TopMenuBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -140,11 +142,12 @@ function TopMenuBar(props) {
           </div>
 
           <Typography className={classes.title} variant="h6" noWrap>
-
+            <img src={img_src} style={{ width: 45}}/>
             <LinkUI component={Link} to="/home" style={{ textDecoration: 'none', color: 'white' }}>
               Campuskost
             </LinkUI>
           </Typography>
+
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -243,7 +246,11 @@ const useStyles = makeStyles(theme => ({
   title: {
     display: 'none',
     [theme.breakpoints.up('sm')]: {
-      display: 'block',
+      //display: 'block',
+      display: 'flex',
+      alignItems: 'center',
+      width: 200,
+      justifyContent: 'space-evenly'
     },
   },
   search: {

@@ -10,6 +10,7 @@
     "framer-motion": "^3.1.1",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
+    "react-anim-kit": "^1.0.19",
     "react-beautiful-dnd": "^13.0.0",
     "react-chat-elements": "^10.13.0",
     "react-chatbot-kit": "^1.1.1",

@@ -2,12 +2,14 @@ import GridList from '@material-ui/core/GridList';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import RecipeItem from '../components/recipeitem';
+import {FadeIn} from "react-anim-kit"
 
 function RecipeGridList({recipes, smalltiles}) {
 
   const classes = useStyles();
 
   return (
+    <FadeIn up by={200}>
     <div className={classes.grid_root}>
       <GridList>
         {
@@ -20,6 +22,7 @@ function RecipeGridList({recipes, smalltiles}) {
         }
       </GridList>
     </div>
+    </FadeIn>
   );
 }
 
