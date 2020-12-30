@@ -8,18 +8,20 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import ListContainer from '../components/listcontainer';
+import { makeStyles } from '@material-ui/core/styles';
 
 function FavoritePage(props) {
 
-  const [lists, setLists] = React.useState([]);
-  const [lists_by_user, setLists_by_user] = React.useState([]);
-  const [likes, setLikes] = React.useState(undefined);
+  const [lists, setLists] = React.useState([])
+  const [lists_by_user, setLists_by_user] = React.useState([])
+  const [likes, setLikes] = React.useState(undefined)
 
-  const [myLists, setMyLists] = React.useState({});
-  const [refList, setRefList] = React.useState([]);
+  const [myLists, setMyLists] = React.useState({})
+  const [refList, setRefList] = React.useState([])
 
-  const store = useSelector(state => state.fireReducer);
-  const firestore = useFirestore();
+  const store = useSelector(state => state.fireReducer)
+  const firestore = useFirestore()
+  const classes = useStyles()
 
   useEffect(() => {
 
@@ -137,7 +139,8 @@ function FavoritePage(props) {
       </Droppable>
     { !props.otheruser &&
 
-      <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}
+      <ExpansionPanel 
+        className={classes.likedPanel}
         defaultExpanded={true}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
@@ -158,15 +161,13 @@ function FavoritePage(props) {
 
     { props.otheruser &&
 
-      <div style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px', padding: '15px'}}
-           className="profilepageLists"
-        >
+      <div className={classes.likedPanel}> {/*className="profilepageLists"*/}
         {lists_by_user_jxs}
       </div>
 
     }
     { !props.otheruser &&
-    <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}>
+    <ExpansionPanel className={classes.likedPanel}>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
@@ -183,7 +184,7 @@ function FavoritePage(props) {
     }
     { !props.otheruser &&
 
-      <ExpansionPanel style={{background: '#f1f1f1', marginTop: '8px', borderRadius: '15px'}}>
+      <ExpansionPanel className={classes.likedPanel}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -203,6 +204,14 @@ function FavoritePage(props) {
     </div>
   );
 }
+
+const useStyles = makeStyles(theme => ({
+  likedPanel: {
+    background: theme.palette.campuskost.lightgrey,
+    marginTop: '8px', 
+    borderRadius: '15px'
+  }
+}));
 
 
 

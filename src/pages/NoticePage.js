@@ -69,7 +69,7 @@ function NoticeListItem(props) {
     user_avatar = <img src={props.eventimg} className={classes.smallprofileimage + ' ' + classes.pointer } alt={"profile-img"} />; //
   } else {
     user_avatar = (
-      <Avatar className={classes.pointer}>
+      <Avatar className={classes.pointer + " " + classes.avatar}>
           <PersonIcon />
       </Avatar>
     );
@@ -154,10 +154,7 @@ function NoticePage(props) {
   );
 }
 
-const useStyles = makeStyles({
-  body: {
-    padding: 15
-  },
+const useStyles = makeStyles(theme => ({
   smallprofileimage: {
     width: '40px',
     height: '40px',
@@ -172,7 +169,12 @@ const useStyles = makeStyles({
   },
   pointer: {
    cursor: 'pointer'
-  }
-});
+  },
+  avatar: {
+    // marginBottom: '15px',
+    color: '#fafafa',
+    backgroundColor: theme.palette.campuskost.teal
+  },
+}));
 
 export default NoticePage;

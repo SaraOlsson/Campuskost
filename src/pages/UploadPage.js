@@ -17,6 +17,7 @@ import ImageDialog from '../components/ImageDialog';
 import DescriptionList from '../components/recipeform/descriptionlist';
 import IngredientsList from '../components/recipeform/ingredientslist';
 import useUpload from '../components/recipeform/useUpload';
+import { useHistory } from "react-router-dom"
 import '../style/GlobalCssButton.css';
 
 var Spinner = require('react-spinkit');
@@ -26,6 +27,7 @@ function UploadPage(props) {
 
   const classes = useStyles();
   const upload_store = useSelector(state => state.uploadReducer);
+  const history = useHistory()
   const { uid } = useSelector((state) => state.firebase.auth);
 
   const {
@@ -49,7 +51,7 @@ function UploadPage(props) {
   } = useUpload()
 
   // configure bottom content
-  let upload_done_text = (upload_store.editmode) ? "Ändring klar" : "Uppladding klar";
+  let upload_done_text = (upload_store.editmode) ? "Ändring klar" : "Uppladding klar, gå till recept";
   let submit_text = (upload_store.editmode) ? "Ändra recept" : "Ladda upp";
   let is_working = (!upload_wait && !done) 
   let button_text = is_working ? submit_text : upload_done_text
@@ -70,6 +72,25 @@ function UploadPage(props) {
 
   let bottom_content = upload_wait ? spinner : button
   let page_title = (upload_store.editmode) ? "Ändra recept" : "Ladda upp recept";
+
+  if(done)
+  {
+    return (
+      <div>
+        <div className={classes.newRecipeContainer}>
+          <Button 
+            onClick={() => history.go("/upload")}
+            variant="contained" color="primary">
+            Skapa nytt recept
+          </Button>
+        </div>
+        <div className={classes.uploaddiv} >
+          {bottom_content} 
+        </div>
+      </div>
+
+    )
+  }
 
   return (
 
@@ -172,7 +193,7 @@ function ValidItem(props) {
 // material ui design
 const useStyles = makeStyles(theme => ({
   uploaddiv: {
-    background: '#68bb8c',
+    background: theme.palette.campuskost.teal,
     borderRadius: '4px',
     padding: '40px',
     marginTop: '8px',
@@ -193,6 +214,12 @@ const useStyles = makeStyles(theme => ({
     fontSize: 'x-small',
     fontStyle: 'italic',
     paddingLeft: '5px',
+  },
+  newRecipeContainer: {
+    display: 'flex',
+    padding: '250px 50px',
+    justifyContent: 'center' 
+
   }
 }));
 

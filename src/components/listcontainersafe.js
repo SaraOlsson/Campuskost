@@ -62,7 +62,7 @@ function ListContainerSafe(props) {
   }
 
   // either spinner or recipe content is to be shown
-  let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" color="#68BB8C" fadeIn="none"/></div>;
+  let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" fadeIn="none"/></div>;
   let recipeContent = (recipes.length > 0) ? <RecipeGridList recipes={recipes} smalltiles={true}/> : spinner_jsx;
 
   let header;
@@ -84,10 +84,10 @@ function ListContainerSafe(props) {
   );
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   listcontainer: {
     borderRadius: 20,
-    backgroundColor: '#f1f1f1',
+    backgroundColor: theme.palette.campuskost.lightgrey,
     marginBottom: 15,
     minHeight: 50
   },
@@ -102,6 +102,6 @@ const useStyles = makeStyles({
     padding: '3px 15px',
     borderRadius: '5px'
 }
-});
+}));
 
 export default ListContainerSafe;

@@ -6,6 +6,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import FaceIcon from '@material-ui/icons/Face';
 import Button from '@material-ui/core/Button';
 import CancelIcon from '@material-ui/icons/Cancel';
+import theme from '../../../theme'
 
 const onClose = () => {
     console.log("WOW close")
@@ -52,9 +53,9 @@ const ChatbotHeader = (props) => {
                 style={{
                     position: 'absolute',
                     right: '10px',
-                    color: '#68bb8c'
+                    color: `${theme.palette.campuskost.teal}`
                 }}>
-                { false && <CancelIcon/> }
+                { true && <CancelIcon/> }
             </Button>
 
         </div>
