@@ -9,6 +9,9 @@ import RecipeGridList from '../components/recipegridlist';
 import {fetchData} from "../redux/testReducer"
 import {fetchData as fetchFirestoreData} from "../redux/fetchFirestore"
 //import DropZone from "../components/input/DropZone"
+//import KeyFrames from "../components/framer/KeyFrames"
+import Link from '@material-ui/core/Link';
+
 
 const VERSION = 3;
 
@@ -87,12 +90,19 @@ function NewsContainer(props) {
 
   const classes = useStyles();
 
-  let feedback_form_link = <a href="https://forms.gle/wUSFkwExgdJbiAUL7" target="_blank" style={{color: '#68bb8c'}}>här</a>;
+  //let feedback_form_link = <a href="https://forms.gle/wUSFkwExgdJbiAUL7" target="_blank" variant="body1">här</a>;
   // <Test/>
+  let feedback_form_link = (
+      <Link href="https://forms.gle/wUSFkwExgdJbiAUL7" target="_blank" variant="body2">
+        här
+      </Link>
+  )
   
   return (
     <div>
     <h3>Nyheter</h3>
+
+    {/* <KeyFrames/> */}
     
     <Grid
       container
@@ -117,41 +127,21 @@ function NewsContainer(props) {
   );
 }
 
-const useStyles = makeStyles({
-  imageContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: 50,
-  },
+const useStyles = makeStyles(theme => ({
   grid_background: {
-    backgroundColor: '#f1f1f1',
+    backgroundColor: theme.palette.campuskost.lightgrey,
     paddingTop: '10px'
-  },
-  foodImg: {
-    backgroundColor: 'pink',
-    height: 100,
-    width: 100,
-    margin: 5,
-    borderRadius: 20
   },
   newscontainer: {
     borderRadius: 20,
-    backgroundColor: '#f1f1f1',
+    backgroundColor: theme.palette.campuskost.lightgrey,
     marginBottom: 15
-  },
-  listimage: {
-    maxHeight: '90px',
-    maxWidth: '90px',
-    padding: '5px',
-    margin: '15px',
-    borderRadius: '10px'
   },
   imagesidebar: {
     padding: 5
   },
   triedby: {
-    background: '#f1f1f1',
+    background: theme.palette.campuskost.lightgrey,
     borderRadius: '4px',
     padding: 5,
     textAlign: 'center'
@@ -164,6 +154,6 @@ const useStyles = makeStyles({
       padding: 10
     }
   }
-});
+}));
 
 export default FeedPage;

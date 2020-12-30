@@ -240,13 +240,13 @@ const useStyles = makeStyles(theme => ({
     marginTop: '8px'
   },
   uploaddiv: {
-    background: '#68bb8c',
+    background: theme.palette.campuskost.teal, 
     borderRadius: '4px',
     padding: '40px',
     marginTop: '8px'
   },
   greenicon: {
-    color: '#68BB8C'
+    color: theme.palette.campuskost.teal
   },
   redicon: {
     color: 'red'

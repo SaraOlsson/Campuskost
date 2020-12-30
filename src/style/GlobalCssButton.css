@@ -6,91 +6,13 @@ body {
     /*background: #d4dcd5;*/
 }
 
-
-.body .freetext .MuiInputBase-root{
-  width: 97%;
-} 
-
-.body .MuiOutlinedInput-multiline {
-  background: white;
-}
-
-.body .MuiFormControl-root {
-  margin: 5px;
-}
-
-.body .MuiAvatar-colorDefault {
-    color: #fafafa;
-    background-color: #68BB8C !important;
-}
-
-.body .MuiTab-root {
-    text-transform: unset !important;
-}
-
-.body .MuiButton-root {
-    text-transform: unset !important;
-}
-
-.body .MuiFormControlLabel-root {
-    margin-left: 0 !important;
-}
-
-.body .MuiExpansionPanel-root:before {
-  display: none;
-}
-
-.body .MuiSnackbarContent-root {
-  background-color: #68BB8C !important;
-}
-
-.body .MuiExpansionPanelDetails-root {
-  padding: 15px;
-  display: block;
-  padding-top: 0px;
-  max-height: 200px;
-  overflow-y: scroll;
-}
-
-/* .body .MuiListItem-gutters {
-  padding-left: 0; 
-  padding-right: 0; 
+/* .body .profilepageLists .MuiGridList-root {
+  justify-content: left;
 } */
 
-.MuiAppBar-colorPrimary {
-    color: #fff;
-    /*background-color: #68BB8C !important;*/
-    background-image: linear-gradient(to bottom right, #246563, #68bb8c) !important;
-}
-
-.whitebtn .MuiButton-containedPrimary {
-    color: #4d504f;
-    background-color: #ffffff;
-}
-
-/*
-.body .MuiTypography-h6 {
-    user-select: none;
+/* .body .MuiExpansionPanelDetails-root .MuiGridList-root {
+  justify-content: left;
 } */
-
-.body .MuiTabs-indicator {
-  background-color: gray !important;
-}
-
-.body .MuiGridList-root {
-  justify-content: center;
-  width: 100%; /* 360px; */
-  /*height: 300px; */
-  margin: 0px;
-}
-
-.body .profilepageLists .MuiGridList-root {
-  justify-content: left;
-}
-
-.body .MuiExpansionPanelDetails-root .MuiGridList-root {
-  justify-content: left;
-}
 
 .body .MuiPaper-elevation1 {
     box-shadow: none;
@@ -104,24 +26,13 @@ body {
     border-radius: 20px;
 }
 
-.body .MuiFormControlLabel-label {
-  margin-left: 27px;
-}
 
 .body .test .MuiOutlinedInput-input {
     padding: 8.5px 10px;
-}
-
-.body .MuiBox-root {
-  padding: 0;
-}
+}   
 
 .testis {
   animation: blinking 3s infinite;
-}
-
-.body .MuiOutlinedInput-input {
-  background: white;
 }
 
 @keyframes blinking {

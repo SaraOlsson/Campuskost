@@ -20,7 +20,7 @@ function FollowerListItem(props) {
   } else {
     user_avatar = (
       <Avatar className={classes.avatar}>
-          <PersonIcon />
+          <PersonIcon/>
       </Avatar>
     );
   }
@@ -79,10 +79,10 @@ function FollowerList(props) {
   );
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   followerlist: {
    marginTop: '15px',
- },
+   },
    followColor: {
      color: '#39A4B3'
    },
@@ -98,6 +98,8 @@ const useStyles = makeStyles({
    },
    avatar: {
     marginBottom: '15px',
+    color: '#fafafa',
+    backgroundColor: theme.palette.campuskost.teal
    },
    pointer: {
     cursor: 'pointer'
@@ -109,6 +111,6 @@ const useStyles = makeStyles({
     padding: '1rem',
     fontSize: 'small'
    }
-});
+}));
 
 export default FollowerList;

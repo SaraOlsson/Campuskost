@@ -32,11 +32,11 @@ function RecipeDecsListItem(props) {
     );
   }
 
-  const useStyles = makeStyles({
+  const useStyles = makeStyles(theme => ({
     checkIcon: {
         marginRight: '10px',
-        color: '#68bb8c'
+        color:  theme.palette.campuskost.teal,
       }
-  });
+  }));
 
 export default RecipeDecsListItem;

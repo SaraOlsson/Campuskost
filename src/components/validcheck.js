@@ -22,11 +22,11 @@ function ValidCheck(props) {
   );
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   nomargin: {
     margin: 0,
-    color: '#68BB8C !important'
+    color: theme.palette.campuskost.teal
   }
-});
+}))
 
 export default ValidCheck;

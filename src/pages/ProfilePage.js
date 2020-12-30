@@ -248,32 +248,37 @@ function ProfilePage(props) {
 }
 
 // https://reactgo.com/css-crop-images/
-const useStyles = makeStyles({
-  userinfo: {
-   marginBottom: '20px',
- },
- username: {
-   fontWeight: 'bold',
-   margin: '10px 0px'
- },
- university: {
-   margin: '10px 0px'
- },
- bio: {
-   fontSize: '13px',
-   maxWidth: '300px'
- },
- profileImage: {
-  objectFit: 'cover',
-  backgroundPosition: 'center',
-  borderRadius: '50%',
-  width: '100px',
-  height: '100px'
- },
- noRecipesDiv: {
-   padding: '1rem',
-   fontSize: 'small'
- }
+const useStyles = makeStyles(theme => {
+  console.log(theme)
+  return {
+    userinfo: {
+    marginBottom: '20px',
+    marginTop: 30
+    },
+    username: {
+      fontWeight: 'bold',
+      margin: '10px 0px'
+    },
+    university: {
+      margin: '10px 0px'
+    },
+    bio: {
+      fontSize: '13px',
+      maxWidth: '300px',
+      color: theme.palette.campuskost.teal
+    },
+    profileImage: {
+      objectFit: 'cover',
+      backgroundPosition: 'center',
+      borderRadius: '50%',
+      width: '100px',
+      height: '100px'
+    },
+    noRecipesDiv: {
+      padding: '1rem',
+      fontSize: 'small'
+    }
+  }
 });
 
 

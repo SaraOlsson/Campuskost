@@ -37,14 +37,14 @@ function RecipeDecsList(props) {
     );
   }
 
-  const useStyles = makeStyles({
+  const useStyles = makeStyles(theme => ({
     ingredientslist: {
      marginTop: '20px',
    },
    headerRow: {
-    color: '#68bb8c',
+    color:  theme.palette.campuskost.teal,
     fontWeight: 'bold'
    }
-  });
+  }));
 
   export default RecipeDecsList;

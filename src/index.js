@@ -18,6 +18,9 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import theme from "./theme"
+
 import ReactGA from 'react-ga';
 
 const trackingId = "UA-176407801-1"; // Replace with your Google Analytics tracking ID
@@ -100,7 +103,9 @@ const AppWrapper = () => {
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
         <BrowserRouter>
-          <App />
+          <MuiThemeProvider theme={theme}>
+            <App />
+          </MuiThemeProvider>
         </BrowserRouter>
       </ReactReduxFirebaseProvider>
     </Provider>

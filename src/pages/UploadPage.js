@@ -193,7 +193,7 @@ function ValidItem(props) {
 // material ui design
 const useStyles = makeStyles(theme => ({
   uploaddiv: {
-    background: '#68bb8c',
+    background: theme.palette.campuskost.teal,
     borderRadius: '4px',
     padding: '40px',
     marginTop: '8px',

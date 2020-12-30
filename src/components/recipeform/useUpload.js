@@ -75,7 +75,7 @@ function useUpload() {
         setData(
           Object.assign({}, data, upload_store.data)
         )
-  
+
       } else {
         console.log("MODE: new recipe")
         if(id_param !== "")
@@ -266,7 +266,7 @@ function useUpload() {
     const validUpload = () => {
       return ( validTitle() && validImage() && validIngredients() && validDescription() )
     }
-  
+
     const validTitle = () => { return data.title ? true : false }
     const validImage = () => { return (upload_store.data.image || upload_store.data.img_url) ? true : false }
     const validIngredients = () => { return (upload_store.data.ingredients && upload_store.data.ingredients.length > 0) ? true : false }

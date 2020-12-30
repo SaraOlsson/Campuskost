@@ -27,7 +27,7 @@ const useStyles = makeStyles({
         color: '#1d1d1d',
         fontSize: '0.8rem',
         margin: '4px 4px',
-        background: 'transparent', // '#68bb8c',
+        background: 'transparent', 
         outline: 'none'
     }
 })
