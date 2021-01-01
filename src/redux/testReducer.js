@@ -1,5 +1,5 @@
-import redux, {applyMiddleware} from "redux"
-import thunk from "redux-thunk"
+//import redux, {applyMiddleware} from "redux"
+//import thunk from "redux-thunk"
 
 export function fetchData() {
     return (dispatch, getState) => {

@@ -1,0 +1,58 @@
+{
+	"main": {
+		"appname": "Campuskost"
+	},
+	"search": {
+		"header": "Sökresultat",
+		"helptext": "Du har inte sökt på något än, alla användare och recept visas nedan.",
+		"hit": "sökträff",
+		"hits": "sökträffar"
+	},
+	"shared": {
+		"description": "Beskrivning",
+		"followers": "Följare",
+		"follows": "Följer",
+		"ingredient": "Ingrediens",
+		"ingredients": "Ingredienser",
+		"lists": "Listor",
+		"recipes": "Recept",
+		"settings": "Inställningar",
+		"users": "Användare"
+	},
+	"upload": {
+		"actions": {
+			"add_description": "Lägg till beskrivning",
+			"add_header": "Lägg till rubrik",
+			"add_ingredient": "Lägg till ingrediens",
+			"edit": "Ändra recept",
+			"remove_image": "Ta bort bild",
+			"upload": "Ladda upp recept",
+			"upload_image": "Ladda upp bild"
+		},
+		"createnew": "Skapa nytt recept",
+		"creditmessage": "Ladda bara upp bilder som du har rättigheter till",
+		"data": {
+			"cookingtime": "Minuter",
+			"freetext": "Fritext",
+			"ingredient": "Ingrediens",
+			"measure": "Mått",
+			"quantity": "Mängd",
+			"servings": "Portioner"
+		},
+		"header_edit": "Ändra recept",
+		"header_upload": "Ladda upp nytt recept",
+		"other": "Övrigt (valfritt)",
+		"recipe_image": "Receptbild",
+		"signin_message": "Du behöver vara inloggad för att kunna ladda upp recept.",
+		"tooltip": {
+			"recipename": "Namn på recept",
+			"step": "Steg"
+		}
+	},
+	"welcome": {
+		"header": "Välkommen till {{appname}} ",
+		"message": "{{appname}} har fått nytt utseende och funktion! Du kan nu skapa ett konto och själv ladda upp och redigera dina recept. Snart kommer funktionalitet såsom att skapa listor och följa dina vänners listor med recept.",
+		"recipesheader": "Senaste recepten",
+		"title": "Välkommen till {{framework}}"
+	}
+}

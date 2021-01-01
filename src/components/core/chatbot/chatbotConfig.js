@@ -55,7 +55,7 @@ const ChatbotHeader = (props) => {
                     right: '10px',
                     color: `${theme.palette.campuskost.teal}`
                 }}>
-                { true && <CancelIcon/> }
+                { false && <CancelIcon/> }
             </Button>
 
         </div>

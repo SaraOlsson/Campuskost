@@ -13,10 +13,12 @@ import { useHistory } from "react-router-dom";
 import FollowerList from '../components/followerlist';
 import RecipeGridList from '../components/recipegridlist';
 import RecipeLists from '../components/RecipeLists';
-import SimpleTabs from '../components/userpagetabs';
+import UserPageTabs from '../components/profile/UserPageTabs';
 import { useFirestoreConnect } from "react-redux-firebase";
 import LoadSpinner from '../components/loadspinner';
 import Emoji from '../components/Emoji';
+import {FadeIn} from "react-anim-kit"
+import {useTranslation} from "react-i18next";
 
 import Avatar from '@material-ui/core/Avatar';
 import PersonIcon from '@material-ui/icons/Person';
@@ -28,6 +30,7 @@ function ProfilePage(props) {
   const classes = useStyles();
   const firestore = useFirestore();
   const history = useHistory();
+  const {t} = useTranslation('common');
 
   // get doc of user in view ***
   const { username_url } = useParams();
@@ -199,7 +202,7 @@ function ProfilePage(props) {
               startIcon={<SettingsIcon />}
               onClick={() => history.push("/settings")}
             >
-            Inställningar
+            {t('shared.settings')}
           </Button>}
 
           { !isUser() &&
@@ -216,7 +219,9 @@ function ProfilePage(props) {
         </Grid>
         { user.profile_img_url ? 
           <Grid item xs={3}>
+            <FadeIn left by={200}>
             <img src={user.profile_img_url} alt="user-profile-img" className={classes.profileImage}/>
+            </FadeIn>
           </Grid> 
           :
           <Avatar>
@@ -226,7 +231,7 @@ function ProfilePage(props) {
 
       </Grid>
 
-      <SimpleTabs value={0}>
+      <UserPageTabs value={0}>
         <div style={{paddingTop: '15px'}}>
         { recipeContent }
         </div>
@@ -239,7 +244,7 @@ function ProfilePage(props) {
         <div>
         <FollowerList type="following" followerData={isUser() ? getUserDocs(following_users) : getUserDocs(viewuser_following_users)} showFollowIcon={true}/>
         </div>
-      </SimpleTabs>
+      </UserPageTabs>
 
    </React.Fragment>
 

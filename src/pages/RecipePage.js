@@ -1,7 +1,7 @@
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import EditIcon from '@material-ui/icons/Edit';
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
+import { makeStyles } from '@material-ui/core/styles'
+import EditIcon from '@material-ui/icons/Edit'
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import React, { useEffect, useState } from 'react';
@@ -14,7 +14,9 @@ import ListIngredients from '../components/ListIngredients';
 import RecipeDecsList from '../components/RecipeDecsList';
 import firebase from 'firebase'; // REFACTOR
 import ReactGA from 'react-ga';
+import {FadeIn} from "react-anim-kit"
 const fallbackImage = require('../assets/noconnection3.png');
+
 
 function RecipePage(props) {
 
@@ -212,6 +214,7 @@ function RecipePage(props) {
 
           <div className={classes.recipeheader}>
 
+
             <span>
               { email && 
                 <Button disableTouchRipple onClick={likeRecipe}>{icon}</Button>
@@ -227,11 +230,14 @@ function RecipePage(props) {
               </Button>
             </span>
           </div>
-              
+          
+          <FadeIn right by={300}>
           <div className={classes.recipeContainer}>
             {image}
           </div> 
+          </FadeIn>
 
+          <FadeIn up by={500}>
           { (recipe.servings || recipe.cookingtime) &&
             <div className={classes.timestamp}> 
               { recipe.servings &&
@@ -262,6 +268,8 @@ function RecipePage(props) {
 
         <ListIngredients ingredients={recipe.ingredients}/>
         <RecipeDecsList description={recipe.description}/>
+
+        </FadeIn>
 
         {ifUser &&
           <Button

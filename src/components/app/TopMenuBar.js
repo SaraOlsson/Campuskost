@@ -1,22 +1,34 @@
-import AppBar from '@material-ui/core/AppBar';
-import Badge from '@material-ui/core/Badge';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
-import LinkUI from '@material-ui/core/Link';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+
 import { fade, makeStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import { default as AccountCircle, default as AccountCircleIcon } from '@material-ui/icons/AccountCircle';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import SearchIcon from '@material-ui/icons/Search';
+
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from "react-router-dom";
+
+import {
+  AppBar,
+  Badge,
+  Button,
+  IconButton,
+  InputBase,
+  Link as LinkUI,
+  Menu, 
+  MenuItem,
+  Toolbar,
+  Typography
+} from '@material-ui/core'
+
+import {
+  ArrowBackIos as ArrowBackIosIcon,
+  Mail as MailIcon,
+  MoreVert as MoreIcon,
+  Notifications as NotificationsIcon,
+  Search as SearchIcon
+} from '@material-ui/icons'
+
+
+let img_src = require('../../assets/logo.png');
 
 function TopMenuBar(props) {
   const classes = useStyles();
@@ -63,7 +75,7 @@ function TopMenuBar(props) {
       type: "SETSEARCH",
       searchstring: searchvalue
     })
-  }
+  } // 
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -140,11 +152,12 @@ function TopMenuBar(props) {
           </div>
 
           <Typography className={classes.title} variant="h6" noWrap>
-
+            <img src={img_src} style={{ width: 45}}/>
             <LinkUI component={Link} to="/home" style={{ textDecoration: 'none', color: 'white' }}>
               Campuskost
             </LinkUI>
           </Typography>
+
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -163,13 +176,55 @@ function TopMenuBar(props) {
             />
           </div>
           <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
+            
+          <ProfileBtn signedIn={props.signedIn}/>
+
+          {/* MENU START */}
+          {/* <div className={classes.sectionDesktop}>
+            <IconButton aria-label="show 4 new mails" color="inherit">
+              <Badge badgeContent={4} color="secondary">
+                <MailIcon />
+              </Badge>
+            </IconButton>
+            <IconButton aria-label="show 17 new notifications" color="inherit">
+              <Badge badgeContent={17} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </div>
+          <div className={classes.sectionMobile}>
+            <IconButton
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </div> */}
+          {/* MENU END */}
+
+
+          {/* <div className={classes.sectionDesktop}>
           <ProfileBtn signedIn={props.signedIn} handleChange={props.handleChange}/>
           </div>
 
           <div className={classes.sectionMobile}>
           <ProfileBtn signedIn={props.signedIn} handleChange={props.handleChange}/>
-          </div>
+          </div> */}
+
+          
 
         </Toolbar>
       </AppBar>
@@ -243,7 +298,11 @@ const useStyles = makeStyles(theme => ({
   title: {
     display: 'none',
     [theme.breakpoints.up('sm')]: {
-      display: 'block',
+      //display: 'block',
+      display: 'flex',
+      alignItems: 'center',
+      width: 200,
+      justifyContent: 'space-evenly'
     },
   },
   search: {

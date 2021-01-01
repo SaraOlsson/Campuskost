@@ -14,11 +14,12 @@ import AddImage from '../components/AddImage';
 import CollapseGrid from '../components/CollapseGrid';
 import Emoji from '../components/Emoji';
 import ImageDialog from '../components/ImageDialog';
-import DescriptionList from '../components/recipeform/descriptionlist';
-import IngredientsList from '../components/recipeform/ingredientslist';
+import DescriptionList from '../components/recipeform/DescriptionList'
+import IngredientsList from '../components/recipeform/IngredientsList'
 import useUpload from '../components/recipeform/useUpload';
 import { useHistory } from "react-router-dom"
 import '../style/GlobalCssButton.css';
+import {useTranslation} from "react-i18next";
 
 var Spinner = require('react-spinkit');
 const DEBUG = (window.location.hostname === 'localhost')
@@ -29,6 +30,7 @@ function UploadPage(props) {
   const upload_store = useSelector(state => state.uploadReducer);
   const history = useHistory()
   const { uid } = useSelector((state) => state.firebase.auth);
+  const {t} = useTranslation('common');  
 
   const {
     data,
@@ -52,7 +54,7 @@ function UploadPage(props) {
 
   // configure bottom content
   let upload_done_text = (upload_store.editmode) ? "Ändring klar" : "Uppladding klar, gå till recept";
-  let submit_text = (upload_store.editmode) ? "Ändra recept" : "Ladda upp";
+  let submit_text = (upload_store.editmode) ? t('upload.actions.edit') : t('upload.actions.upload');
   let is_working = (!upload_wait && !done) 
   let button_text = is_working ? submit_text : upload_done_text
   let onClick_action = is_working ? uploadAction : goToRecipe
@@ -71,7 +73,7 @@ function UploadPage(props) {
   )
 
   let bottom_content = upload_wait ? spinner : button
-  let page_title = (upload_store.editmode) ? "Ändra recept" : "Ladda upp recept";
+  let page_title = (upload_store.editmode) ? t('upload.header_edit') : t('upload.header_upload');
 
   if(done)
   {
@@ -81,7 +83,7 @@ function UploadPage(props) {
           <Button 
             onClick={() => history.go("/upload")}
             variant="contained" color="primary">
-            Skapa nytt recept
+            {t('upload.createnew')}
           </Button>
         </div>
         <div className={classes.uploaddiv} >
@@ -98,14 +100,14 @@ function UploadPage(props) {
       <h3>{page_title}</h3>
 
         { !uid && 
-          <p style={{color: 'orange'}}> Du behöver vara inloggad för att kunna ladda upp recept. </p>
+          <p style={{color: 'orange'}}> {t('upload.signin_message')} </p>
         }
 
         {/* TITLE */}
 
           <TextField
             id="recipename-input"
-            label="Namn på recept"
+            label={t('upload.tooltip.recipename')}
             variant="outlined"
             name="title"
             value={data.title}
@@ -113,26 +115,26 @@ function UploadPage(props) {
           />
 
         {/* INGREDIENTS */}
-        <CollapseGrid label="Ingredienser">
+        <CollapseGrid label={t('shared.ingredients')}>
           <IngredientsList/>
         </CollapseGrid>
 
         {/* DESCRIPTION */}
-        <CollapseGrid label="Beskrivning">
+        <CollapseGrid label={t('shared.description')}>
           <DescriptionList/>
         </CollapseGrid>
 
         {/* IMAGE */}
-        <CollapseGrid label="Receptbild">
-          <p className={classes.copyright}>Obs, Ladda bara upp bilder du har rättigheter till <Emoji symbol="📷"/> </p>
+        <CollapseGrid label={t('upload.recipe_image')}>
+          <p className={classes.copyright}>{t('upload.creditmessage')}<Emoji symbol="📷"/> </p>
           <AddImage image={image} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>
         </CollapseGrid>
 
         {/* OTHER */}
-        <CollapseGrid label="Övrigt (valfritt)">
+        <CollapseGrid label={t('upload.other')}>
         <TextField
             id="recipe-extra" className="freetext" variant="outlined" rows={2} multiline
-            label="Fritext"
+            label={t('upload.data.freetext')}
             name="freetext" value={data.freetext} onChange={onValueChange}
           />
 
@@ -141,7 +143,7 @@ function UploadPage(props) {
             type="number"
             name="servings" value={data.servings} onChange={onValueChange} 
             InputProps={{
-              endAdornment: <InputAdornment position="end">Portioner</InputAdornment>
+              endAdornment: <InputAdornment position="end">{t('upload.data.servings')}</InputAdornment>
             }} 
           />
 
@@ -150,7 +152,7 @@ function UploadPage(props) {
             type="number"
             value={data.cookingtime} name="cookingtime" onChange={onValueChange} 
             InputProps={{
-              endAdornment: <InputAdornment position="end">Minuter</InputAdornment>
+              endAdornment: <InputAdornment position="end">{t('upload.data.cookingtime')}</InputAdornment>
             }} 
           />
 

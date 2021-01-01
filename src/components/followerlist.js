@@ -8,6 +8,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import React, { useEffect, useState } from 'react';
 import Emoji from '../components/Emoji';
 import { useHistory } from "react-router-dom";
+import {FadeIn} from "react-anim-kit"
 
 function FollowerListItem(props) {
 
@@ -73,9 +74,11 @@ function FollowerList(props) {
   );
 
   return (
+    <FadeIn up by={200}>
     <List dense={true} className={classes.followerlist}>
       {followersjsx}
     </List>
+    </FadeIn>
   );
 }
 
