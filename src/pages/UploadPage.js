@@ -14,8 +14,8 @@ import AddImage from '../components/AddImage';
 import CollapseGrid from '../components/CollapseGrid';
 import Emoji from '../components/Emoji';
 import ImageDialog from '../components/ImageDialog';
-import DescriptionList from '../components/recipeform/DescriptionList';
-import IngredientsList from '../components/recipeform/IngredientsList';
+import DescriptionList from '../components/recipeform/DescriptionList'
+import IngredientsList from '../components/recipeform/IngredientsList'
 import useUpload from '../components/recipeform/useUpload';
 import { useHistory } from "react-router-dom"
 import '../style/GlobalCssButton.css';
