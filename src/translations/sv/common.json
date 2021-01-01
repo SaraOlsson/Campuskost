@@ -1,0 +1,11 @@
+{
+	"main": {
+		"appname": "Campuskost"
+	},
+	"welcome": {
+		"header": "Välkommen till {{appname}} ",
+		"message": "{{appname}} har fått nytt utseende och funktion! Du kan nu skapa ett konto och själv ladda upp och redigera dina recept. Snart kommer funktionalitet såsom att skapa listor och följa dina vänners listor med recept.",
+		"recipesheader": "Senaste recepten",
+		"title": "Välkommen till {{framework}}"
+	}
+}

@@ -1,0 +1,11 @@
+{
+	"main": {
+		"appname": "Campuskost"
+	},
+	"welcome": {
+		"header": "Welcome to {{appname}}",
+		"message": "{{appname}} has a new look and functionality! You can now create an account and upload and edit your recipes yourself. Soon there will be features such as creating lists and following your friends' lists with recipes.",
+		"recipesheader": "Latest recipes",
+		"title": "Welcome to {{framework}}"
+	}
+}

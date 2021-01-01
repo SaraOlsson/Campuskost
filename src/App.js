@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
 import { Route, Switch } from "react-router-dom";
@@ -174,6 +174,7 @@ function App() {
 
   return (
 
+    <Suspense fallback="loading">
     <div className="body">
 
       <div>
@@ -204,6 +205,7 @@ function App() {
             </div>
           </Draggable>
 
+          
             <BotDialog 
               open={openBotDialog}
               onAlertClose={closeBotDialog}
@@ -213,6 +215,7 @@ function App() {
               NoOptionText="Nej, stäng fönster"
             />
             </div>
+            
             {/* </ClickAwayListener> */}
 
           <Switch>
@@ -247,6 +250,7 @@ function App() {
       
 
     </div>
+    </Suspense>
 
   );
 }

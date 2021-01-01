@@ -22,6 +22,7 @@ import 'react-chat-elements/dist/main.css';
 // MessageBox component
 import { MessageBox } from 'react-chat-elements';
 import { MessageList } from 'react-chat-elements'
+import {FadeIn} from "react-anim-kit"
 
 export default function BotDialog(props) {
 
@@ -32,12 +33,15 @@ export default function BotDialog(props) {
   };
 
   return !props.open ? null : (
+    
       <div className={classes.appChatbotContainer}>
+        <FadeIn left by={100}>
         <Chatbot
         config={config}
         messageParser={MessageParser}
         actionProvider={ActionProvider}
         />
+        </FadeIn>
     </div>
   )
 

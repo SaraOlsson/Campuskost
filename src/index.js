@@ -21,6 +21,11 @@ import * as serviceWorker from './serviceWorker';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import theme from "./theme"
 
+import {I18nextProvider} from "react-i18next";
+import i18next from "i18next";
+import common_sv from "./translations/sv/common.json";
+import common_en from "./translations/en/common.json";
+
 import ReactGA from 'react-ga';
 
 const trackingId = "UA-176407801-1"; // Replace with your Google Analytics tracking ID
@@ -83,6 +88,20 @@ messaging.onMessage((payload) => {
   console.log('Message received. ', payload);
 }); */
 
+// translation
+i18next.init({
+  interpolation: { escapeValue: false },  // React already does escaping
+  lng: 'sv',                              // language to use
+  resources: {
+      en: {
+          common: common_en               // 'common' is our custom namespace
+      },
+      sv: {
+          common: common_sv
+      },
+  },
+});
+
 // const initialState = {};
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // const store = createStore(rootReducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
@@ -104,7 +123,9 @@ const AppWrapper = () => {
       <ReactReduxFirebaseProvider {...rrfProps}>
         <BrowserRouter>
           <MuiThemeProvider theme={theme}>
-            <App />
+            <I18nextProvider i18n={i18next}>
+              <App />
+            </I18nextProvider>
           </MuiThemeProvider>
         </BrowserRouter>
       </ReactReduxFirebaseProvider>
