@@ -13,6 +13,7 @@ import '../../style/GlobalCssButton.css';
 import DragNDrop from '../DragNDrop';
 import Button from '@material-ui/core/Button';
 import useInstructions from "./useInstructions"
+import {useTranslation} from "react-i18next";
 
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
@@ -32,6 +33,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 function IngredientsList(props) {
 
   const classes = useStyles();
+  const {t} = useTranslation('common');  
 
   const {
     instructions: ingredients,
@@ -108,10 +110,10 @@ function IngredientsList(props) {
 
             <ListItem alignItems="center">
               <Button variant="contained" color="primary" onClick={() => addInstruction(ROW)} className={classes.marginRight10}>
-                {"Lägg till ingrediens"}
+                {t('upload.actions.add_ingredient')}
               </Button>
               <Button variant="contained" color="primary" onClick={() => addInstruction(HEADER)}>
-                {"Lägg till rubrik"}
+              {t('upload.actions.add_header')}
               </Button>
             </ListItem>
           }
@@ -129,7 +131,9 @@ function IngredientsList(props) {
 
             <React.Fragment>
               <Grid item xs={3}>
-                <TextField required variant="outlined" label="mängd" InputLabelProps={{shrink: true}} 
+                <TextField required variant="outlined" 
+                label={t('upload.data.quantity')} 
+                InputLabelProps={{shrink: true}} 
                 value={customFieldsData.quantity} 
                 name="quantity"
                 onChange={onValueChange}
@@ -148,7 +152,7 @@ function IngredientsList(props) {
                 autoWidth={false}
                 style={{minWidth: 120}}
                 variant="outlined"
-                label="mått"
+                label={t('upload.data.measure')}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={customFieldsData.measure}
@@ -187,7 +191,7 @@ function IngredientsList(props) {
           }
 
           <Grid item xs={editObject.type !== HEADER ? 5 : 10}>
-            <TextField required variant="outlined" label="ingrediens" InputLabelProps={{shrink: true}} 
+            <TextField required variant="outlined" label={t('upload.data.ingredient')} InputLabelProps={{shrink: true}} 
             value={customFieldsData.name} 
             name="name"
             onChange={onValueChange}

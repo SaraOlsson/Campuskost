@@ -3,10 +3,12 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import FileInput from '../components/fileinput';
 import { makeStyles } from '@material-ui/core/styles';
+import {useTranslation} from "react-i18next";
 
 function AddImage(props) {
 
     const classes = useStyles();
+    const {t} = useTranslation('common');  
   
     return (
       <React.Fragment>
@@ -15,7 +17,7 @@ function AddImage(props) {
               display: 'flex',
               marginBottom: '10px'
           }}>
-          <FileInput onChange={props.onFileAdd} />
+          <FileInput onChange={props.onFileAdd} uploadText={t('upload.actions.upload_image')}/>
           </Grid>
         </Grid>
         { props.image !== undefined &&
@@ -31,7 +33,7 @@ function AddImage(props) {
               onClick={props.onFileRemove}
               style={{lineHeight: '1.2'}}
             >
-              Ta bort bild
+              {t('upload.actions.remove_image')}
             </Button>
           </Grid>
         </React.Fragment>

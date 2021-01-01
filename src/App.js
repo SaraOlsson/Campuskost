@@ -39,7 +39,7 @@ import './style/GlobalCssButton.css';
 // main component of the app
 function App() {
 
-  const [openUpdateDialog, setOpenUpdateDialog] = React.useState(true);
+  const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
   const [openBotDialog, setOpenBotDialog] = React.useState(false);
 
   const classes = useStyles();

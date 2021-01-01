@@ -2,6 +2,53 @@
 	"main": {
 		"appname": "Campuskost"
 	},
+	"search": {
+		"header": "Search results",
+		"helptext": "You have not searched for anything yet, all users and recipes are shown below.",
+		"hit": "hit",
+		"hits": "hits"
+	},
+	"shared": {
+		"description": "Description",
+		"followers": "Followers",
+		"follows": "Follows",
+		"ingredient": "Ingredient",
+		"ingredients": "Ingredients",
+		"lists": "Lists",
+		"recipes": "Recipes",
+		"settings": "Settings",
+		"users": "Users"
+	},
+	"upload": {
+		"actions": {
+			"add_description": "Add description",
+			"add_header": "Add subheader",
+			"add_ingredient": "Add ingredient",
+			"edit": "Change recipes",
+			"remove_image": "Remove image",
+			"upload": "Upload recipes",
+			"upload_image": "Upload image"
+		},
+		"createnew": "Create a new recipe",
+		"creditmessage": "Only upload images that you have permission to use",
+		"data": {
+			"cookingtime": "Minutes",
+			"freetext": "Free Text",
+			"ingredient": "Ingredient",
+			"measure": "Measure",
+			"quantity": "Amount",
+			"servings": "Servings"
+		},
+		"header_edit": "Edit recipe",
+		"header_upload": "Upload new recipe",
+		"other": "Extras (optional)",
+		"recipe_image": "Recipe image",
+		"signin_message": "You need to be signed in to be able to upload recipes.",
+		"tooltip": {
+			"recipename": "Recipe title",
+			"step": "Step"
+		}
+	},
 	"welcome": {
 		"header": "Welcome to {{appname}}",
 		"message": "{{appname}} has a new look and functionality! You can now create an account and upload and edit your recipes yourself. Soon there will be features such as creating lists and following your friends' lists with recipes.",

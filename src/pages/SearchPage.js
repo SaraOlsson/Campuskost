@@ -1,14 +1,14 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, {useEffect} from 'react';
-import { useSelector, useDispatch } from "react-redux";
-
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import FollowerList from '../components/followerlist';
-import RecipeGridList from '../components/recipegridlist';
-
 import LoadSpinner from '../components/loadspinner';
+import RecipeGridList from '../components/recipegridlist';
+import {useTranslation} from "react-i18next";
 
 function SearchPage(props) {
 
+  const {t} = useTranslation('common');
   const dispatch = useDispatch();
 
   const searchString = useSelector((state) => state.searchReducer.searchstring);
@@ -46,22 +46,22 @@ function SearchPage(props) {
   return (
 
     <div>
-      <h3>Sökresultat</h3>
+      <h3>{t('search.header')}</h3>
 
       { (users && recipes && searchString !== "") &&
-        <p> {filteredRecipes.length+filteredUsers.length} 
-        {filteredRecipes.length+filteredUsers.length > 1 ? " sökträffar" : " sökträff"} 
+        <p> {filteredRecipes.length+filteredUsers.length} {" "}
+        {filteredRecipes.length+filteredUsers.length > 1 ? t('search.hits') : t('search.hit')} 
         </p>
       }
       { searchString === "" &&
-        <p> Du har inte sökt på något än, alla användare och recept visas nedan.</p>
+        <p> {t('search.helptext')}</p>
       }
 
       { (!users || !recipes) && <LoadSpinner/> }
 
       { users &&
       <React.Fragment>
-        <b> Användare: </b>
+        <b> {t('shared.users')}: </b>
         <div>
           <FollowerList followerData={filteredUsers}/>
         </div>
@@ -69,7 +69,7 @@ function SearchPage(props) {
       }
       { recipes &&
       <React.Fragment>
-        <b> Recept: </b>
+        <b> {t('shared.recipes')}: </b>
         <div style={{paddingTop: '15px'}}>
           <RecipeGridList recipes={filteredRecipes}/>
         </div>

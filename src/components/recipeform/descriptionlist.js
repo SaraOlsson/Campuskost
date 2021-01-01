@@ -13,6 +13,7 @@ import '../../style/GlobalCssButton.css';
 import Button from '@material-ui/core/Button';
 import DragNDrop from '../DragNDrop';
 import useInstructions from "./useInstructions"
+import {useTranslation} from "react-i18next";
 
 const HEADER = "HEADER";
 const DESC = "DESC";
@@ -27,6 +28,9 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 });
 
 function DescriptionList(props) {
+
+  const classes = useStyles();
+  const {t} = useTranslation('common');
 
   const {
     instructions: descriptions,
@@ -47,8 +51,6 @@ function DescriptionList(props) {
     HEADER: HEADER,
     DEFAULT: DESC
   })
-
-  const classes = useStyles();
 
   let descriptionjsx = descriptions.map((desc, idx) =>
   <React.Fragment key={idx}>
@@ -87,11 +89,11 @@ function DescriptionList(props) {
             <ListItem alignItems="center">
               <Button variant="contained" color="primary" 
                 onClick={() => addInstruction(DESC)} className={classes.marginRight10}>
-                {"Lägg till beskrivning"}
+                {t('upload.actions.add_description')}
               </Button>
               <Button variant="contained" color="primary" 
                 onClick={() => addInstruction(HEADER)}>
-                {"Lägg till rubrik"}
+                {t('upload.actions.add_header')}
               </Button>
             </ListItem>
           }
@@ -105,7 +107,7 @@ function DescriptionList(props) {
         <React.Fragment>
 
         <Grid item xs={10}>
-          <TextField variant="outlined" label="steg" InputLabelProps={{shrink: true}} 
+          <TextField variant="outlined" label={t('upload.tooltip.step')} InputLabelProps={{shrink: true}} 
           value={customFieldsData.text} 
           onChange={ event => setCustomFieldsData({text: event.target.value})} 
           onKeyPress={(ev) => enterPress(ev)}/>
