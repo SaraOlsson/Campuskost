@@ -38,10 +38,11 @@ const theme = createMuiTheme({
   },
 
   overrides: {
-    MuiFabRoot: { // Name of the component ⚛️ / style sheet
+    MuiFabRoot: { 
       height: 16 // working?
     },
 
+    // IF want to override
     MuiAppBar: {
       colorPrimary: {
         backgroundColor: '#43A58E' // WORKS
@@ -60,12 +61,14 @@ const theme = createMuiTheme({
       }
     },
 
+    // not uppercase on buttons
     MuiButton: {
       root: {
         textTransform: 'unset !important'
       }
     },
 
+    // remove line in expansion header
     MuiExpansionPanel: {
       root: {
         '&::before': {
@@ -74,6 +77,7 @@ const theme = createMuiTheme({
       } 
     },
 
+    // e.g. scroll in recipe/desciption edit view
     MuiExpansionPanelDetails: {
       root: {
         padding: 15,
@@ -84,6 +88,14 @@ const theme = createMuiTheme({
       }
     },
 
+    // remove shadow under e.g. expansion header in upload page
+    MuiPaper: {
+      elevation1: {
+        boxShadow: 'none'
+      }
+    },
+
+    // placement of gridlist
     MuiGridList: {
       root: {
         justifyContent: 'center',
@@ -92,6 +104,7 @@ const theme = createMuiTheme({
       }
     },
 
+    // line under tab to indicate which is active
     MuiTabs: {
       indicator: {
         backgroundColor: '#ffffff73 !important'
@@ -109,6 +122,17 @@ const theme = createMuiTheme({
        marginLeft: 27
       }
     },
+
+    // e.g. for recipe item
+    MuiGridListTile: {
+      tile: {
+        height: '100%',
+        display: 'block',
+        overflow: 'hidden',
+        position: 'relative',
+        borderRadius: 20
+      }
+    }
     
     // MuiOutlinedInput: {
     //   input: {

@@ -2,8 +2,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import FollowerList from '../components/followerlist';
-import LoadSpinner from '../components/loadspinner';
-import RecipeGridList from '../components/recipegridlist';
+import LoadSpinner from '../components/shared/LoadSpinner';
+import RecipeGridList from '../components/shared/RecipeGridList';
 import {useTranslation} from "react-i18next";
 
 function SearchPage(props) {

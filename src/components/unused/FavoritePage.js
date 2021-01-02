@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
-import ListContainer from '../components/listcontainer';
+import ListContainer from './ListContainer';
 import { makeStyles } from '@material-ui/core/styles';
 
 function FavoritePage(props) {

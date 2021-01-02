@@ -6,7 +6,6 @@ import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import resizeImage from '../../logic/resizeImage';
 import _ from "lodash"
-import '../../style/GlobalCssButton.css';
 
 const DEFAULT_DATA = {
     title: "",

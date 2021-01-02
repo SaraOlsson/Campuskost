@@ -10,8 +10,8 @@ import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import AlertDialog from '../components/AlertDialog';
-import ListIngredients from '../components/ListIngredients';
-import RecipeDecsList from '../components/RecipeDecsList';
+import ListIngredients from '../components/recipe/ListIngredients';
+import RecipeDecsList from '../components/recipe/RecipeDecsList';
 import firebase from 'firebase'; // REFACTOR
 import ReactGA from 'react-ga';
 import {FadeIn} from "react-anim-kit"

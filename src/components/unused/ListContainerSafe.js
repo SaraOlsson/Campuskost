@@ -2,62 +2,40 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
-import RecipeGridList from '../components/recipegridlist';
+import RecipeGridList from '../shared/RecipeGridList';
 
 var Spinner = require('react-spinkit');
 
-function ListContainer(props) {
+function ListContainerSafe(props) {
 
   const [recipes, setRecipes] = React.useState([]);
   const classes = useStyles();
+  const store = useSelector(state => state.fireReducer);
   const firestore = useFirestore();
-
-  const list_doc = props.listdoc;
 
   useEffect(() => {
 
     // now using
-    if(props.recipeDocs !== undefined) {
-
+    if(props.recipeDocs != undefined) {
       setRecipes(props.recipes);
       return;
     }
 
     // using recipe ids
-    if (list_doc.recipes !== undefined) {
+    if (props.recipemap != undefined) {
 
       let temp_recipes = [];
 
       // previously liked recipes will persist in the firestore map but be false
-      Object.keys(list_doc.recipes).forEach(function(key) {
-          if(list_doc.recipes[key] === true)
+      Object.keys(props.recipemap).forEach(function(key) {
+          if(props.recipemap[key] === true)
             temp_recipes.push(key)
       });
 
-      recipe_fetcher(temp_recipes);
+      recipe_fetcher(temp_recipes); // Object.keys(props.recipemap)
     }
 
   }, []);
-
-  const handleaction = (recipe_id) => {
-
-    let listsRef = firestore.collection('recipe_lists').doc(list_doc.id);
-
-    listsRef.get().then(function(doc) {
-
-      let data = doc.data();
-      data.id = doc.id;
-      data.recipes[recipe_id] = false; // remove from list // my_map.delete(key)
-      firestore.collection("recipe_lists").doc(doc.id).update(data);
-
-
-      //let updated_recipes = data.recipes[recipe_id];
-      // const nextState = recipes.map(a => a.id === doc.id ? { ...a, [recipes]: updated_recipes } : a);
-      // setRecipes(nextState);
-
-    });
-
-  }
 
   // fetch by list of recipe ids
   const recipe_fetcher = (recipe_id_list) => {
@@ -73,7 +51,7 @@ function ListContainer(props) {
               let data = doc.data();
               data.id = doc.id;
               temp_recipes.push(data);
-              if (idx === recipe_id_list.length - 1) {
+              if (idx == recipe_id_list.length - 1) {
                 setRecipes(temp_recipes);
               }
           } 
@@ -85,23 +63,23 @@ function ListContainer(props) {
 
   // either spinner or recipe content is to be shown
   let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" fadeIn="none"/></div>;
-  let recipeContent = (recipes.length > 0) ? <RecipeGridList handleaction={handleaction} recipes={recipes} smalltiles={true}/> : spinner_jsx;
+  let recipeContent = (recipes.length > 0) ? <RecipeGridList recipes={recipes} smalltiles={true}/> : spinner_jsx;
 
   let header;
-  if (props.noheader === false) {
-    let listname = (list_doc.listname) ? list_doc.listname : "<listname>"; // "Gillade recept"
+  if (props.noheader == false) {
+    let listname = (props.listname) ? props.listname : "<listname>"; // "Gillade recept"
     let user_in_header = (props.mine) ? "" : "| " + props.createdby.split("@")[0];
     header = <p className={classes.list_header}> {listname} <i>{user_in_header}</i> </p>;
   }
 
-  // let id = 5;
+  let id = 5;
 
   return (
     <div style={{width: '100%'}}>
-      {header}
-      <div className={classes.listcontainer}>
-        {recipeContent}
-      </div>
+    {header}
+    <div className={classes.listcontainer}>
+      {recipeContent}
+    </div>
     </div>
   );
 }
@@ -126,4 +104,4 @@ const useStyles = makeStyles(theme => ({
 }
 }));
 
-export default ListContainer;
+export default ListContainerSafe;

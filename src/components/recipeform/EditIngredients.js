@@ -9,11 +9,11 @@ import TextField from '@material-ui/core/TextField';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import React from 'react';
-import '../../style/GlobalCssButton.css';
 import DragNDrop from '../DragNDrop';
 import Button from '@material-ui/core/Button';
 import useInstructions from "./useInstructions"
 import {useTranslation} from "react-i18next";
+import '../../style/Animations.css';
 
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';

@@ -9,7 +9,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import { useSelector } from "react-redux";
 import React, {useEffect, useRef, useState} from 'react';
-import Emoji from '../Emoji';
+import Emoji from '../shared/Emoji';
 import { useFirestore } from "react-redux-firebase";
 
 // small bug when first unvalid name then writes again

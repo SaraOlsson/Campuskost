@@ -6,8 +6,6 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React, {useState} from 'react';
-import '../style/GlobalCssButton.css';
-
 
 function CollapseGrid(props) {
 

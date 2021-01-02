@@ -3,9 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useFirestoreConnect } from "react-redux-firebase";
-import Emoji from '../components/Emoji';
-import LoadSpinner from '../components/loadspinner';
-import RecipeGridList from '../components/recipegridlist';
+import Emoji from '../components/shared/Emoji';
+import LoadSpinner from '../components/shared/LoadSpinner';
+import RecipeGridList from '../components/shared/RecipeGridList';
 import {fetchData} from "../redux/testReducer"
 import {fetchData as fetchFirestoreData} from "../redux/fetchFirestore"
 //import DropZone from "../components/input/DropZone"

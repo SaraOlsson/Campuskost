@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
-import FileInput from '../components/fileinput';
+import FileInput from './FileInput';
 import { makeStyles } from '@material-ui/core/styles';
 import {useTranslation} from "react-i18next";
 

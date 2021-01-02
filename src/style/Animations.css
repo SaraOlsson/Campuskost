@@ -1,0 +1,20 @@
+/* TODO: try to get working at a specific place, with theme override? */
+/* .test .MuiOutlinedInput-input {
+    padding: 8.5px 10px;
+}    */
+
+.testis {
+  animation: blinking 3s infinite;
+}
+
+@keyframes blinking {
+  0% {
+    background-color: #efefef2b;
+  }
+  50% {
+    background-color: #d4d4d457;
+  }
+  100% {
+    background-color: #efefef2b;
+  }
+}

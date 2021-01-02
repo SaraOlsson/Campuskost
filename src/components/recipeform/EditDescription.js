@@ -9,11 +9,11 @@ import TextField from '@material-ui/core/TextField';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import SaveIcon from '@material-ui/icons/Save';
 import React from 'react';
-import '../../style/GlobalCssButton.css';
 import Button from '@material-ui/core/Button';
 import DragNDrop from '../DragNDrop';
 import useInstructions from "./useInstructions"
 import {useTranslation} from "react-i18next";
+import '../../style/Animations.css';
 
 const HEADER = "HEADER";
 const DESC = "DESC";
@@ -185,6 +185,9 @@ const useStyles = makeStyles(theme => ({
   },
   bold: {
     fontWeight: 'bold'
+  },
+  textField: { // not used
+    color: 'green'
   }
 }));
 
