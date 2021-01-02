@@ -15,6 +15,7 @@ import RecipeDecsList from '../components/recipe/RecipeDecsList';
 import firebase from 'firebase'; // REFACTOR
 import ReactGA from 'react-ga';
 import {FadeIn} from "react-anim-kit"
+import {useTranslation} from "react-i18next";
 const fallbackImage = require('../assets/noconnection3.png');
 
 
@@ -28,6 +29,7 @@ function RecipePage(props) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
+  const {t} = useTranslation('common');
   
   const firestore = useFirestore();
   useFirestoreConnect({
@@ -242,12 +244,12 @@ function RecipePage(props) {
             <div className={classes.timestamp}> 
               { recipe.servings &&
               <span> 
-                {recipe.servings} portioner {" | "}
+                {recipe.servings} {t('recipe.servings')} {" | "}
               </span>
               }
               { recipe.cookingtime &&
               <span> 
-                Tillagningstid: {recipe.cookingtime} minuter
+                {t('recipe.cookingtime')}: {recipe.cookingtime} {t('recipe.minutes')}
               </span>
               }
             </div>
@@ -278,7 +280,7 @@ function RecipePage(props) {
             startIcon={<EditIcon />}
             onClick={editRecipe}
           >
-            Ändra recept
+            {t('recipe.edit_recipe')}
           </Button>
         }
 
@@ -291,7 +293,7 @@ function RecipePage(props) {
             startIcon={<EditIcon />}
             onClick={ () => setOpenAlert(true) }
           >
-            Ta bort recept
+            {t('recipe.delete_recipe')}
           </Button>
         }
 

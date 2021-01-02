@@ -2,6 +2,14 @@
 	"main": {
 		"appname": "Campuskost"
 	},
+	"recipe": {
+		"cookingtime": "Cooking time",
+		"delete_recipe": "Delete recipe",
+		"description": "Description",
+		"edit_recipe": "Change recipe",
+		"minutes": "minutes",
+		"servings": "Servings"
+	},
 	"search": {
 		"header": "Search results",
 		"helptext": "You have not searched for anything yet, all users and recipes are shown below.",
