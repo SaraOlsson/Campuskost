@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
 import React, { useEffect, useState } from 'react';
-import Emoji from '../components/Emoji';
+import Emoji from './shared/Emoji';
 import { useHistory } from "react-router-dom";
 import {FadeIn} from "react-anim-kit"
 

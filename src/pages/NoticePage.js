@@ -9,8 +9,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
-import LoadSpinner from '../components/loadspinner';
-import Emoji from '../components/Emoji';
+import LoadSpinner from '../components/shared/LoadSpinner';
+import Emoji from '../components/shared/Emoji';
 
 
 const B = (props) => <span style={{fontWeight: 'bold'}}>{props.children}</span>

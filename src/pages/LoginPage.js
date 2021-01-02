@@ -4,7 +4,7 @@ import { useFirebase } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
-import Emoji from '../components/Emoji';
+import Emoji from '../components/shared/Emoji';
 
 
 import Button from '@material-ui/core/Button';

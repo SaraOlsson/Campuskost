@@ -48,7 +48,7 @@ export default function RecipeReviewCard() {
   };
 
   let r_img = 'temp_food1';
-  let img_src = require('../assets/'+ r_img + '.jpg');
+  let img_src = require('../../assets/'+ r_img + '.jpg');
 
   return (
     <Card className={classes.root}>

@@ -10,15 +10,14 @@ import TextField from '@material-ui/core/TextField';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import React from 'react';
 import { useSelector } from "react-redux";
-import AddImage from '../components/AddImage';
-import CollapseGrid from '../components/CollapseGrid';
-import Emoji from '../components/Emoji';
-import ImageDialog from '../components/ImageDialog';
+import AddImage from '../components/shared/AddImage';
+import CollapseGrid from '../components/shared/CollapseGrid';
+import Emoji from '../components/shared/Emoji';
+import ImageDialog from '../components/recipeform/ImageDialog';
 import DescriptionList from '../components/recipeform/EditDescription'
 import IngredientsList from '../components/recipeform/EditIngredients'
 import useUpload from '../components/recipeform/useUpload';
 import { useHistory } from "react-router-dom"
-import '../style/GlobalCssButton.css';
 import {useTranslation} from "react-i18next";
 
 var Spinner = require('react-spinkit');

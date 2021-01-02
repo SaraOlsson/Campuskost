@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import AlertDialog from '../components/AlertDialog';
-import CollapseGrid from '../components/CollapseGrid';
+import CollapseGrid from '../components/shared/CollapseGrid';
 import ProfileImageSetting from '../components/settings/ProfileImageSetting';
 import TextSetting from '../components/settings/TextSetting';
 import UsernameSetting from '../components/settings/UsernameSetting';

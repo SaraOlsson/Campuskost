@@ -4,8 +4,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { withStyles } from '@material-ui/styles';
 import React, { useCallback, useState } from 'react';
-import ImageCrop from "../components/ImageCrop";
-import getCroppedImg from '../logic/cropImage';
+import ImageCrop from "./ImageCrop";
+import getCroppedImg from '../../logic/cropImage';
 
 function ImageDialog(props) {
 

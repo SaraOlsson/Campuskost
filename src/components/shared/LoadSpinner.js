@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import theme from "../theme"
+import theme from "../../theme"
 
 var Spinner = require('react-spinkit');
 

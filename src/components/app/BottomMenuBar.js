@@ -14,7 +14,6 @@ import { useHistory } from "react-router-dom"
 // import our css
 import '../../App.css'
 import AlertDialog from '../../components/AlertDialog'
-import '../../style/GlobalCssButton.css'
 
 function BottomMenuBar() {
 

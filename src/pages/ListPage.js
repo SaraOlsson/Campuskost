@@ -1,9 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from "react-redux";
-import Emoji from '../components/Emoji';
-import LoadSpinner from '../components/loadspinner';
-import RecipeGridList from '../components/recipegridlist';
+import Emoji from '../components/shared/Emoji';
+import LoadSpinner from '../components/shared/LoadSpinner';
+import RecipeGridList from '../components/shared/RecipeGridList';
 
 function ListPage() {
 

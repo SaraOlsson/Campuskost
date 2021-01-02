@@ -7,8 +7,8 @@ import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
-import Emoji from '../../components/Emoji';
-import AddImage from '../../components/AddImage';
+import Emoji from '../shared/Emoji';
+import AddImage from '../../components/shared/AddImage';
 
 function ProfileImageSetting(props) {
 

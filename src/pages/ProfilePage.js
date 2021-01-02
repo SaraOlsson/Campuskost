@@ -11,12 +11,12 @@ import { useFirestore } from "react-redux-firebase";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import FollowerList from '../components/followerlist';
-import RecipeGridList from '../components/recipegridlist';
+import RecipeGridList from '../components/shared/RecipeGridList';
 import RecipeLists from '../components/RecipeLists';
 import UserPageTabs from '../components/profile/UserPageTabs';
 import { useFirestoreConnect } from "react-redux-firebase";
-import LoadSpinner from '../components/loadspinner';
-import Emoji from '../components/Emoji';
+import LoadSpinner from '../components/shared/LoadSpinner';
+import Emoji from '../components/shared/Emoji';
 import {FadeIn} from "react-anim-kit"
 import {useTranslation} from "react-i18next";
 

@@ -1,7 +1,7 @@
 import List from '@material-ui/core/List';
 import { makeStyles } from '@material-ui/core/styles';
 import React from "react";
-import RecipeDecsListItem from '../components/RecipeDecsListItem';
+import RecipeDecsListItem from './RecipeDecsListItem';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 

@@ -31,7 +31,6 @@ import {
   UploadPage
 } from './pages';
 import * as serviceWorker from './serviceWorker';
-import './style/GlobalCssButton.css';
 
 //import {ErrorBoundary} from './pages/ErrorBoundary';
 // require('dotenv').config(); // check if we need this
@@ -82,7 +81,7 @@ function App() {
   return (
 
     <Suspense fallback="loading">
-    <div className="body">
+    <div className={classes.body}>
 
       <div>
 
@@ -149,7 +148,11 @@ function App() {
 const useStyles = makeStyles({
   body: {
     padding: 15,
-    paddingTop: '35px'
+    paddingTop: '35px',
+    maxWidth: 800,
+    marginLeft: 'auto',
+    marginRight: 'auto'
+    // background: '#d4dcd5'
   },
   mainContainer: {
     paddingTop: '60px',
