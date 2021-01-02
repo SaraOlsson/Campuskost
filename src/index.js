@@ -12,7 +12,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 import { createFirestoreInstance } from "redux-firestore";
-import { rootReducer } from "./ducks/reducers";
+import { rootReducer } from "./redux/rootReducer";
 
 import './index.css';
 import App from './App';

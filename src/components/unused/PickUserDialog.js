@@ -28,17 +28,17 @@ function SimpleDialog(props) {
   const { onClose, selectedValue, open } = props;
   const [myFriends, setMyFriends] = useState(undefined);
 
-  const store = useSelector(state => state.fireReducer);
+  const userdoc = useSelector(state => state.firestore.data.userdoc);
   const firestore = useFirestore();
 
   // when url changes, on load and on user click
   useEffect(() => {
 
-    if(store.firestore_user) {
-      followFetcher(store.firestore_user.email, "following");
+    if(userdoc) {
+      followFetcher(userdoc.email, "following");
     }
 
-  }, [store.firestore_user]);
+  }, [userdoc]);
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -52,15 +52,15 @@ function SimpleDialog(props) {
 
     let event_tips_object = {
       email: friend.email,
-      event_image_url: store.firestore_user.profile_img_url, // change to recipe image
-      other_username: store.firestore_user.username,
+      event_image_url: userdoc.profile_img_url, // change to recipe image
+      other_username: userdoc.username,
       recipe: props.recipeId,
       timestamp: date,
       type: "TIPS",
       seen: false
     };
 
-    let firebase_event_id = store.firestore_user.email + "-tips-" + friend.email + "-" + props.recipeId;
+    let firebase_event_id = userdoc.email + "-tips-" + friend.email + "-" + props.recipeId;
 
     firestore.collection('events').doc(firebase_event_id).set(event_tips_object);
   };

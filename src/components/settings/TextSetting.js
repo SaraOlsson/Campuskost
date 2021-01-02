@@ -16,7 +16,6 @@ function TextSetting(props) {
 
     const classes = useStyles();
     const firestore = useFirestore();
-    const store = useSelector(state => state.fireReducer);
   
     useEffect(() => {
         SetSettingValue( userdoc ? userdoc[props.db_field] : "" );
@@ -49,7 +48,7 @@ function TextSetting(props) {
         var obj = {};
         obj[key] = new_value;
 
-        firestore.collection('users').doc(store.firestore_user.email).update(obj);
+        firestore.collection('users').doc(userdoc.email).update(obj);
     }
 
     return !userdoc ? null : (

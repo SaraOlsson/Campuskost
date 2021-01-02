@@ -43,7 +43,6 @@ function App() {
 
   const classes = useStyles();
   
-  const state_user = useSelector(state => state.userReducer); // subscribe to the redux store
   const userEmail = useSelector(state => state.firebase.auth.email);
 
   useDataLoad(userEmail)
@@ -86,7 +85,7 @@ function App() {
       <div>
 
         <div className={classes.headerrow}>
-          <TopMenuBar signedIn={state_user.signedIn}/>
+          <TopMenuBar/>
         </div>
 
         <div id="chat" className={`${classes.mainContainer}`}>
