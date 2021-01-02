@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import AddTodo from "../components/AddTodo";
+import AddTodo from "./AddTodo";
 import { useFirestoreConnect } from "react-redux-firebase";
-import ToDoItem from "../components/ToDoItem";
+import ToDoItem from "./ToDoItem";
 
 const Todos = () => {
   const { displayName, uid } = useSelector((state) => state.firebase.auth);

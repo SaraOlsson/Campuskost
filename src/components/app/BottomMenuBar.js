@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
 // import our css
 import '../../App.css'
-import AlertDialog from '../../components/AlertDialog'
+import AlertDialog from '../shared/AlertDialog'
 
 function BottomMenuBar() {
 

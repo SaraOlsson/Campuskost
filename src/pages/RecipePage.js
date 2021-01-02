@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
-import AlertDialog from '../components/AlertDialog';
+import AlertDialog from '../components/shared/AlertDialog';
 import ListIngredients from '../components/recipe/ListIngredients';
 import RecipeDecsList from '../components/recipe/RecipeDecsList';
 import firebase from 'firebase'; // REFACTOR
