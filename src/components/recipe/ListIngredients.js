@@ -3,11 +3,13 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
+import {useTranslation} from "react-i18next";
 import React from "react";
 
 function ListIngredients(props) {
 
     const classes = useStyles();
+    const {t} = useTranslation('common');
   
     let ingredients = (props.ingredients !==  undefined) ? props.ingredients : [];
 
@@ -29,7 +31,7 @@ function ListIngredients(props) {
   
     return (
       <div>
-        <h3> Ingredienser </h3>
+        <h3> {t('shared.ingredients')} </h3>
         <List dense={true} className={classes.ingredientslist}>
           {ingredientsjsx}
         </List>

@@ -4,10 +4,12 @@ import React from "react";
 import RecipeDecsListItem from './RecipeDecsListItem';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import {useTranslation} from "react-i18next";
 
 function RecipeDecsList(props) {
 
     const classes = useStyles();
+    const {t} = useTranslation('common');
   
     let temp_description = [
     {order: 0, text: "Knäck äggen i en bunke (default data)"},
@@ -29,7 +31,7 @@ function RecipeDecsList(props) {
   
     return (
       <div>
-        <h3> Gör så här </h3>
+        <h3> {t('recipe.description')} </h3>
         <List dense={true} className={classes.ingredientslist}>
           {descjsx}
         </List>

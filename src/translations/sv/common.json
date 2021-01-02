@@ -2,6 +2,14 @@
 	"main": {
 		"appname": "Campuskost"
 	},
+	"recipe": {
+		"cookingtime": "Tillagningstid",
+		"delete_recipe": "Ta bort recept",
+		"description": "Gör så här",
+		"edit_recipe": "Ändra recept",
+		"minutes": "minuter",
+		"servings": "portioner"
+	},
 	"search": {
 		"header": "Sökresultat",
 		"helptext": "Du har inte sökt på något än, alla användare och recept visas nedan.",
