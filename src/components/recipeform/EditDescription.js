@@ -10,7 +10,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import SaveIcon from '@material-ui/icons/Save';
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import DragNDrop from '../DragNDrop';
+import DragNDrop from '../shared/DragNDrop';
 import useInstructions from "./useInstructions"
 import {useTranslation} from "react-i18next";
 import '../../style/Animations.css';

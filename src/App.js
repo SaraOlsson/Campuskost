@@ -14,9 +14,9 @@ import TopMenuBar from './components/app/TopMenuBar';
 import useAuthUser from './components/app/useAuthUser';
 import BotDialog from "./components/core/BotDialog";
 import useDataLoad from './components/core/useDataLoad';
-import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./components/core/PrivateRoute";
 import Snackbar from './components/app/SnackBar';
-import Todos from "./components/Todos";
+import Todos from "./components/todo-demo/Todos";
 // import our page components
 import {
   FeedPage,
