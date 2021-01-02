@@ -23,7 +23,6 @@ function ProfileImageSetting(props) {
 
     const classes = useStyles();
     const firestore = useFirestore();
-    const store = useSelector(state => state.fireReducer);
   
     React.useEffect(() => {
 
@@ -115,7 +114,7 @@ function ProfileImageSetting(props) {
         var obj = {};
         obj[key] = new_value;
 
-        firestore.collection('users').doc(store.firestore_user.email).update(obj);
+        firestore.collection('users').doc(userdoc.email).update(obj);
     }
 
     const randomImg = () => {

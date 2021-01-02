@@ -25,7 +25,6 @@ function UsernameSetting(props) {
 
     const classes = useStyles();
     const firestore = useFirestore();
-    // const store = useSelector(state => state.fireReducer);
   
     useEffect(() => {
         SetSettingValue( userdoc ? userdoc.username : "" );

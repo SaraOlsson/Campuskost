@@ -22,7 +22,6 @@ function Settings(props) {
   const [openAlert, setOpenAlert] = useState(false);
 
   const classes = useStyles();
-  const store = useSelector(state => state.fireReducer);
   const firestore = useFirestore();
   const history = useHistory();
   
@@ -60,7 +59,7 @@ function Settings(props) {
   const onDeleteAccChoice = (chosedDelete) => {
 
     if(chosedDelete === true) {
-      firestore.collection('users').doc(store.firestore_user.email).delete();
+      firestore.collection('users').doc(userdoc.email).delete();
       history.push("/home");
     }
   }

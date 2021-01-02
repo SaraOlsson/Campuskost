@@ -37,6 +37,7 @@ function TopMenuBar(props) {
 
   const history = useHistory();
   const dispatch = useDispatch();
+  const {uid} = useSelector(state => state.firebase.auth);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -73,7 +74,7 @@ function TopMenuBar(props) {
   const handleSearchChange = (searchvalue) => {
     dispatch({
       type: "SETSEARCH",
-      searchstring: searchvalue
+      payload: searchvalue
     })
   } // 
 
@@ -177,7 +178,7 @@ function TopMenuBar(props) {
           </div>
           <div className={classes.grow} />
             
-          <ProfileBtn signedIn={props.signedIn}/>
+          <ProfileBtn signedIn={uid !== undefined}/>
 
           {/* MENU START */}
           {/* <div className={classes.sectionDesktop}>
@@ -239,7 +240,7 @@ function ProfileBtn (props) {
 
   const classes = useStyles();
   const history = useHistory();
-  const store = useSelector(state => state.fireReducer);
+  const userdoc = useSelector(state => state.firestore.data.userdoc);
 
   let btn = (
     <div>
@@ -254,8 +255,8 @@ function ProfileBtn (props) {
     </div> );
 
   // make sure info is loaded
-  let img_src = (store.firestore_user && store.firestore_user.profile_img_url ) ? store.firestore_user.profile_img_url : undefined;
-
+  let img_src = (userdoc && userdoc.profile_img_url ) ? userdoc.profile_img_url : undefined
+    
   // if user has no profile image set in firebase
   /*
   if (img_src === undefined) {
@@ -266,17 +267,17 @@ function ProfileBtn (props) {
 
   let jsx_content = props.signedIn ? icon_content : btn;
 
-  if(props.signedIn === true && store.firestore_user)
+  if(props.signedIn === true && userdoc)
   {
     return (
       <React.Fragment>
-      <p style={{marginRight: 15, color: 'rgba(255,255,255,0.9)'}}> {store.firestore_user.username} </p>
+      <p style={{marginRight: 15, color: 'rgba(255,255,255,0.9)'}}> {userdoc.username} </p>
       <IconButton
         edge="start"
         className={classes.menuButton}
         color="inherit"
         aria-label="open profile"
-        onClick={() => history.push("/profile/" + store.firestore_user.username)}
+        onClick={() => history.push("/profile/" + userdoc.username)}
       >
       {jsx_content} </IconButton></React.Fragment>
 

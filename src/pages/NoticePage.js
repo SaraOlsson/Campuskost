@@ -95,24 +95,24 @@ function NoticePage(props) {
 
   const [eventList, setEventList] = useState(undefined);
 
-  const store = useSelector(state => state.fireReducer);
+  const userdoc = useSelector(state => state.firestore.data.userdoc);
   const firestore = useFirestore();
 
   // when url changes, on load and on user click
   useEffect(() => {
 
-    if(store.firestore_user === undefined) {
+    if(userdoc === undefined) {
       setEventList([]);
       return;
     }
 
     // get email of user
-    events_promise(store.firestore_user.email).then((loadedDocs) => {
+    events_promise(userdoc.email).then((loadedDocs) => {
       setEventList(loadedDocs);
       //setUser(loadedDoc)
     });
 
-  }, [store.firestore_user]);
+  }, [userdoc]);
 
   var events_promise = function(email) {
     return new Promise((resolve, reject) => {

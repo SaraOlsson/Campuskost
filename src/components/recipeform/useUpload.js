@@ -26,15 +26,16 @@ function useUpload() {
     const [smallImage, setSmallImage] = useState(undefined);
     const [newImage, setNewImage] = useState(false);
   
-    //const [id, setId] = useState(undefined);
     const [upload_wait, setUpload_wait] = useState(false);
     const [done, setDone] = useState(false);
     const [openImageDialog, setOpenImageDialog] = useState(false);
     const [recipeURL, setRecipeURL] = useState("")
   
-    
     const dispatch = useDispatch(); // be able to dispatch
-    const store = useSelector(state => state.fireReducer);
+
+    const userdoc = useSelector(state => state.firestore.data.userdoc);
+    const { uid } = useSelector((state) => state.firebase.auth);
+
     const firestore = useFirestore();
     const upload_store = useSelector(state => state.uploadReducer);
     const history = useHistory();
@@ -133,7 +134,7 @@ function useUpload() {
     };
   
     const generateImageFilename = () => {
-      return 'recept/' + data.title + '_' + store.auth_user.uid;
+      return 'recept/' + data.title + '_' + uid;
     };
   
     // upload image and callback with download URL
@@ -168,17 +169,17 @@ function useUpload() {
       }
   
       // make sure signed in, let pop up earlier..
-      if(store.auth_user === undefined || store.firestore_user === undefined) {
+      if(userdoc === undefined) {
         alert("you have to sign in first")
         return;
       }
   
       // prepare data
-      let username = store.firestore_user.username;
+      let username = userdoc.username;
       //let recipe_name = upload_store.title;
       let image_filename = generateImageFilename();
   
-      let ref_to_user = store.firestore_user.email; // firestore.collection('users').doc(store.firestore_user.email);
+      let ref_to_user = userdoc.email;
       let firestore_timestamp = firebase.firestore.Timestamp.now();
   
       // if create new doc or edit
@@ -211,8 +212,8 @@ function useUpload() {
             })
             // Document created successfully.
             console.log( "Document created/updated successfully.")
-            uploadDone()
-            //setId(docRef.id)
+            uploadDone(docRef.id)
+            // setId(docRef.id)
           });
   
         }); // end of image upload callback
@@ -234,7 +235,7 @@ function useUpload() {
         if (newImage === false) {
   
           firestore.collection('recipes').doc(id_param).update(update_data);
-          uploadDone();
+          uploadDone(upload_store.recipe_id);
   
         } else {
   
@@ -242,20 +243,22 @@ function useUpload() {
             // use the return value here instead of like a regular (non-evented) return value
             update_data.img_url = returnValue_downloadURL;
             firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
-            uploadDone();
+            uploadDone(upload_store.recipe_id);
   
           }); // end of image upload callback
    
         }
 
         // to be able to direct to recipe page
-        //setId(upload_store.recipe_id); // needed?
+        // setId(upload_store.recipe_id); // needed?
       }
   
     };
   
-    const uploadDone = () => {
-      setRecipeURL("/recipe/" + data.title + "/" + id_param)
+    const uploadDone = (recipe_id) => {
+      //const recipe_id = id ? id : id_param
+      console.log("recipe_id: " + recipe_id)
+      setRecipeURL("/recipe/" + data.title + "/" + recipe_id)
       setUpload_wait(false);
       setDone(true);
       setData(DEFAULT_DATA)

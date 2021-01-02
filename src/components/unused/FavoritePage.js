@@ -19,16 +19,16 @@ function FavoritePage(props) {
   const [myLists, setMyLists] = React.useState({})
   const [refList, setRefList] = React.useState([])
 
-  const store = useSelector(state => state.fireReducer)
+  const userdoc = useSelector(state => state.firestore.data.userdoc);
   const firestore = useFirestore()
   const classes = useStyles()
 
   useEffect(() => {
 
-    if( !( props.otheruser || store.firestore_user))
+    if( !( props.otheruser || userdoc))
       return;
 
-    let current_email = (props.otheruser) ? props.otheruser.email : store.firestore_user.email;
+    let current_email = (props.otheruser) ? props.otheruser.email : userdoc.email;
 
     // lists the user follows
     getListDocsForUser(current_email, false).then((loadedDocs) => {
@@ -45,7 +45,7 @@ function FavoritePage(props) {
       setLikes(loadedDoc);
     });
 
-  }, [store.firestore_user]);
+  }, [userdoc]);
 
   let getListDocsForUser = function(current_email, mine) {
     return new Promise((resolve, reject) => {

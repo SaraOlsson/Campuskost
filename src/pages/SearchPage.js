@@ -22,7 +22,7 @@ function SearchPage(props) {
     return function cleanup() {
       dispatch({
         type: "SETSEARCH",
-        searchstring: ""
+        payload: ""
       })
     };
 
