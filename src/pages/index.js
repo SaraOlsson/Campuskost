@@ -8,6 +8,7 @@ import SearchPage from './SearchPage'
 import SettingsPage from './SettingsPage'
 import TermsPage from './TermsPage'
 import UploadPage from './UploadPage'
+import RecipePageNew from './RecipePageNew'
 
 export {
   FeedPage,
@@ -16,6 +17,7 @@ export {
   NoticePage,
   ProfilePage,
   RecipePage,
+  RecipePageNew,
   SearchPage,
   SettingsPage,
   TermsPage,

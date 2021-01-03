@@ -15,7 +15,7 @@ function ListPage() {
 
   const getRecipeDocs = (likesDict) => {
 
-    if(!likesDict || !all_recipes)
+    if(!likesDict || !likesDict.liked_recipes || !all_recipes)
       return [];
 
     let docs = [];

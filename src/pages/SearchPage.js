@@ -5,6 +5,8 @@ import FollowerList from '../components/shared/FollowerList';
 import LoadSpinner from '../components/shared/LoadSpinner';
 import RecipeGridList from '../components/shared/RecipeGridList';
 import {useTranslation} from "react-i18next";
+import useFirebaseFetch from '../components/core/useFirebaseFetch'
+import firebase from "firebase/app"
 
 function SearchPage(props) {
 
@@ -16,8 +18,20 @@ function SearchPage(props) {
   const recipes = useSelector((state) => state.firestore.data.allrecipes);
   const users = useSelector((state) => state.firestore.data.allusers);
 
+  var db = firebase.firestore();
+  let ref = db.collection("users").doc("sara.olsson4s@gmail.com") 
+
+  const {
+    isLoading,
+    hasErrored,
+    errorMessage,
+    data
+  } = useFirebaseFetch(ref, "DOC") 
+
+  console.log(data)
+
   useEffect(() => {
-    
+
     // Specify how to clean up after this effect:
     return function cleanup() {
       dispatch({

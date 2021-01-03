@@ -19,7 +19,7 @@ let src_flag_en = require('../assets/en_flag.png');
 let src_flag_sv = require('../assets/sv_flag.png');
 
 
-const VERSION = 3;
+const VERSION = 4;
 
 
 function TranslateOptions()

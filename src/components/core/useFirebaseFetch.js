@@ -37,8 +37,16 @@ const dataFetchReducer = (state, action) => {
   }
 };
 
-const useFirebaseFetch = (firebaseRef, initialData) => {
-  const [db_Ref] = useState(firebaseRef);
+const DOC = "DOC"
+const COLLECTION = "COLLECTION"
+
+/**
+ * @param firebaseRef example: db.collection("users").doc("myDoc") where db = firebase.firestore();
+ * @param type can be "DOC" or "COLLECTION"
+ * @param initialData is optional
+ */
+const useFirebaseFetch = (firebaseRef, type = DOC, initialData) => {
+  const [db_Ref, set_db_Ref] = useState(firebaseRef);
 
   const [state, dispatch] = useReducer(dataFetchReducer, {
     isLoading: false,
@@ -80,7 +88,33 @@ const useFirebaseFetch = (firebaseRef, initialData) => {
 
     };
 
-    fetchData();
+    const fetchArrayData = async () => {
+
+      dispatch({ type: "FETCH_INIT" });
+      const docs = []
+
+      db_Ref.get().then(async function(querySnapshot) {
+        await Promise.all(querySnapshot.docs.map(async (doc) => {
+          console.log(doc.id, " => ", doc.data());
+          docs.push(doc.data())
+        }));
+      })
+      .catch(err => {
+        if (!didCancel) {
+            dispatch({ type: "FETCH_FAILURE" });
+        }
+      });
+
+      if (!didCancel) {
+        dispatch({ type: "FETCH_SUCCESS", payload: docs });
+      }
+    }
+
+    if(type === DOC)
+      fetchData();
+    else if(type === COLLECTION)
+      fetchArrayData();
+    
 
     // component is unmounted
     return () => {
@@ -96,7 +130,11 @@ const useFirebaseFetch = (firebaseRef, initialData) => {
     });
   };
 
-  return { ...state, updateDataRecord };
+  const triggerFetch = newRef => {
+    set_db_Ref(newRef)
+  }
+
+  return { ...state, triggerFetch, updateDataRecord };
 };
 
 export default useFirebaseFetch;
