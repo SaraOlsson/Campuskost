@@ -16,6 +16,27 @@
 		"hit": "sökträff",
 		"hits": "sökträffar"
 	},
+	"settings": {
+		"actions": {
+			"change_bio": "Ändra biografi",
+			"change_name": "Ändra namn",
+			"change_picture": "Ändra profilbild",
+			"change_username": "Ändra användarnamn",
+			"delete_account": "Radera konto",
+			"sign_out": "Logga ut"
+		},
+		"bio": "Biografi",
+		"delete_alert": {
+			"message": "Är du säker på att du vill radera ditt konto på Campuskost?",
+			"no": "Oj, nej!",
+			"title": "Är du säker?",
+			"yes": "Ja"
+		},
+		"name": "Namn",
+		"profile_image": "Profilbild",
+		"settings": "Inställningar",
+		"username": "Användarnamn"
+	},
 	"shared": {
 		"description": "Beskrivning",
 		"followers": "Följare",
@@ -23,6 +44,12 @@
 		"ingredient": "Ingrediens",
 		"ingredients": "Ingredienser",
 		"lists": "Listor",
+		"metrics": {
+			"cup": "cup (2.4 dl)",
+			"dl": "dl",
+			"tablespoon": "msk",
+			"teaspoon": "tsk"
+		},
 		"recipes": "Recept",
 		"settings": "Inställningar",
 		"users": "Användare"

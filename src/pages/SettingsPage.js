@@ -13,17 +13,19 @@ import CollapseGrid from '../components/shared/CollapseGrid';
 import ProfileImageSetting from '../components/settings/ProfileImageSetting';
 import TextSetting from '../components/settings/TextSetting';
 import UsernameSetting from '../components/settings/UsernameSetting';
+import {useTranslation} from "react-i18next";
 
 function Settings(props) {
 
-  const userdoc = useSelector(state => state.firestore.data.userdoc);
+  const userdoc = useSelector(state => state.firestore.data.userdoc)
 
-  const [openSetting, setOpenSetting] = useState("");
-  const [openAlert, setOpenAlert] = useState(false);
+  const [openSetting, setOpenSetting] = useState("")
+  const [openAlert, setOpenAlert] = useState(false)
 
-  const classes = useStyles();
-  const firestore = useFirestore();
-  const history = useHistory();
+  const classes = useStyles()
+  const firestore = useFirestore()
+  const history = useHistory()
+  const {t} = useTranslation('common')
   
   React.useEffect(() => {
 
@@ -61,6 +63,8 @@ function Settings(props) {
     if(chosedDelete === true) {
       firestore.collection('users').doc(userdoc.email).delete();
       history.push("/home");
+    } else {
+      setOpenAlert(false)
     }
   }
 
@@ -72,30 +76,30 @@ function Settings(props) {
 
     <div>
       <div className={classes.login_div}>
-        <h3>Inställningar</h3>
+        <h3>{t('settings.settings')}</h3>
 
-        <CollapseGrid label="Användarnamn" 
+        <CollapseGrid label={t('settings.username')}
                       controlName="username" 
                       expandedCheck={isOpen}
                       onExpand={onExpand}>
           <UsernameSetting db_field="username" label="användarnamn"/>
         </CollapseGrid> 
         
-        <CollapseGrid label="Namn" 
+        <CollapseGrid label={t('settings.name')}
                       controlName="fullname" 
                       expandedCheck={isOpen}
                       onExpand={onExpand}>
             <TextSetting db_field="fullname" label="namn"/>
         </CollapseGrid>         
 
-        <CollapseGrid label="Biografi" 
+        <CollapseGrid label={t('settings.bio')}
                       controlName="bio" 
                       expandedCheck={isOpen}
                       onExpand={onExpand}>
             <TextSetting db_field="bio" label="biografi" multiline={true}/>
         </CollapseGrid>
 
-        <CollapseGrid label="Profilbild" 
+        <CollapseGrid label={t('settings.profile_image')}
                       controlName="profileimage" 
                       expandedCheck={isOpen}
                       onExpand={onExpand}>
@@ -111,7 +115,7 @@ function Settings(props) {
         onClick={() => signOut()}
         className={classes.center_btn}
       >
-        Logga ut
+        {t('settings.actions.sign_out')}
       </Button>
 
       <Button
@@ -120,17 +124,17 @@ function Settings(props) {
         onClick={() => removeAccount()}
         className={classes.center_btn}
       >
-        Radera konto
+        {t('settings.actions.delete_account')}
       </Button>
       </div>
 
       <AlertDialog
         open={openAlert}
         onAlertClose={onDeleteAccChoice}
-        title="Är du säker?"
-        message="Är du säker på att du vill radera ditt konto på Campuskost?"
-        yesOptionText="Ja"
-        NoOptionText="Oj, nej!"
+        title={t('settings.delete_alert.title')}
+        message={t('settings.delete_alert.message')}
+        yesOptionText={t('settings.delete_alert.yes')}
+        NoOptionText={t('settings.delete_alert.no')}
       />
 
     </div>

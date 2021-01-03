@@ -16,6 +16,27 @@
 		"hit": "hit",
 		"hits": "hits"
 	},
+	"settings": {
+		"actions": {
+			"change_bio": "Change biography",
+			"change_name": "Change name",
+			"change_picture": "Change profile picture",
+			"change_username": "Change Username",
+			"delete_account": "Delete account",
+			"sign_out": "Sign out"
+		},
+		"bio": "Biography",
+		"delete_alert": {
+			"message": "Are you sure you want to delete your account on Campuskost?",
+			"no": "Oh, no!",
+			"title": "Are you sure?",
+			"yes": "Yes"
+		},
+		"name": "Name",
+		"profile_image": "Profile picture",
+		"settings": "Settings",
+		"username": "Username"
+	},
 	"shared": {
 		"description": "Description",
 		"followers": "Followers",
@@ -23,6 +44,12 @@
 		"ingredient": "Ingredient",
 		"ingredients": "Ingredients",
 		"lists": "Lists",
+		"metrics": {
+			"cup": "cup",
+			"dl": "dl (~0.4 cup)",
+			"tablespoon": "tbsp",
+			"teaspoon": "tsp"
+		},
 		"recipes": "Recipes",
 		"settings": "Settings",
 		"users": "Users"
