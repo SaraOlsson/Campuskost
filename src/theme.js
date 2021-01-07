@@ -1,7 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
-import red from '@material-ui/core/colors/red';
-import { yellow, white } from '@material-ui/core/colors';
+import { yellow, white, red } from '@material-ui/core/colors';
 
 const theme = createMuiTheme({
   palette: {
@@ -12,7 +11,6 @@ const theme = createMuiTheme({
       dark: '#002884',
       contrastText: '#fff',
     },
-    // secondary: red,
     campuskost: {
       teal: '#43A58E',// '#17c3b2', //'#68bb8c'
       lightgrey: '#f1f1f1'

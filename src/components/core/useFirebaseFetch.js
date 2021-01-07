@@ -95,8 +95,11 @@ const useFirebaseFetch = (firebaseRef, type = DOC, initialData) => {
 
       db_Ref.get().then(async function(querySnapshot) {
         await Promise.all(querySnapshot.docs.map(async (doc) => {
-          console.log(doc.id, " => ", doc.data());
-          docs.push(doc.data())
+          //console.log(doc.id, " => ", doc.data());
+          let data = doc.data()
+          data.id = doc.id
+          docs.push(data)
+          //docs.push(doc.data())
         }));
       })
       .catch(err => {

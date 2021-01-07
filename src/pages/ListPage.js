@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import Emoji from '../components/shared/Emoji';
 import LoadSpinner from '../components/shared/LoadSpinner';
 import RecipeGridList from '../components/shared/RecipeGridList';
+import RecipeLists from '../components/lists/RecipeLists'
 
 function ListPage() {
 
@@ -51,6 +52,7 @@ function ListPage() {
       { uid ? recipeContent : no_account }
       <h3>Receptlistor</h3>
       <p>Kommer snart! <Emoji symbol="🥳"/> </p>
+      <RecipeLists/>
     </div>
   );
 }

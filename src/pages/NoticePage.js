@@ -11,6 +11,7 @@ import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import LoadSpinner from '../components/shared/LoadSpinner';
 import Emoji from '../components/shared/Emoji';
+import recipe_id_to_title from '../logic/recipeIdToTitle'
 
 
 const B = (props) => <span style={{fontWeight: 'bold'}}>{props.children}</span>
@@ -32,11 +33,7 @@ function NoticeListItem(props) {
     history.push("/recipe/" + recipe_id_to_title(props.recipe) + "/" + props.recipe );
   };
 
-  // NEEDS REWRITE AS RECIPE ID IS NOT TITLE
-  const recipe_id_to_title = (recipe_id) => {
-    let recipe_title = props.recipe.substring(0, props.recipe.indexOf("-"));
-    return recipe_title;
-  }
+  
 
   switch (props.type) {
     case "FOLLOWS":

@@ -7,6 +7,10 @@
   animation: blinking 3s infinite;
 }
 
+.animOpacityBlinking {
+  animation: opacityBlinking 3s infinite;
+}
+
 @keyframes blinking {
   0% {
     background-color: #efefef2b;
@@ -16,5 +20,17 @@
   }
   100% {
     background-color: #efefef2b;
+  }
+}
+
+@keyframes opacityBlinking {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
   }
 }

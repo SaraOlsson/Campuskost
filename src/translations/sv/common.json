@@ -1,4 +1,12 @@
 {
+	"lists": {
+		"delete_alert": {
+			"message": "Är du säker på att du vill ta bort den här listan?",
+			"no": "Oj, nej!",
+			"title": "Är du säker?",
+			"yes": "Ja"
+		}
+	},
 	"main": {
 		"appname": "Campuskost"
 	},
