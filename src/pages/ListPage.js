@@ -5,6 +5,7 @@ import Emoji from '../components/shared/Emoji';
 import LoadSpinner from '../components/shared/LoadSpinner';
 import RecipeGridList from '../components/shared/RecipeGridList';
 import RecipeLists from '../components/lists/RecipeLists'
+import { useTranslation } from "react-i18next"
 
 function ListPage() {
 
@@ -13,6 +14,8 @@ function ListPage() {
   const userLikes = useSelector((state) => {
     return state.firestore.data.userLikes ? state.firestore.data.userLikes : undefined
   });
+
+  const {t} = useTranslation('common')
 
   const getRecipeDocs = (likesDict) => {
 
@@ -39,19 +42,19 @@ function ListPage() {
   {
     recipeContent = <LoadSpinner/>;
   } else {
-
-    let no_recipes_content = <p> Du har inga gillade recept än. Klicka på <Emoji symbol="♡"/>-symbolen för att börja samla dina favoriter! </p>;
+    
+    let no_recipes_content = <p> {t('lists.no_likes_message_1')} <Emoji symbol="♡"/> {t('lists.no_likes_message_2')} </p>;
     recipeContent = getRecipeDocs(userLikes).length > 0 ? <RecipeGridList recipes={getRecipeDocs(userLikes)} /> : no_recipes_content;
   }
 
-  let no_account = <p> Du behöver vara inloggad för att se innehåll på den här sidan. </p>
+  let no_account = <p> {t('lists.sign_in_message')} </p>
 
   return (
     <div> 
-      <h3> Gillade recept </h3>
+      <h3> {t('lists.liked_recipes')} </h3>
       { uid ? recipeContent : no_account }
-      <h3>Receptlistor</h3>
-      <p>Kommer snart! <Emoji symbol="🥳"/> </p>
+      <h3>{t('lists.recipe_lists')}</h3>
+      <p>{t('lists.under_development')} <Emoji symbol="🥳"/> </p>
       <RecipeLists/>
     </div>
   );

@@ -1,11 +1,26 @@
 {
 	"lists": {
+		"actions": {
+			"add_to_list": "Lägg till i lista",
+			"close_dialog": "Stäng",
+			"create_list": "Skapa lista",
+			"remove_from_list": "Lyft ut"
+		},
+		"already_saved": "Redan sparad",
 		"delete_alert": {
 			"message": "Är du säker på att du vill ta bort den här listan?",
 			"no": "Oj, nej!",
 			"title": "Är du säker?",
 			"yes": "Ja"
-		}
+		},
+		"done_message": "Fixat!",
+		"liked_recipes": "Gillade recept",
+		"no_likes_message_1": "Du har inga gillade recept än. Klicka på",
+		"no_likes_message_2": "-symbolen för att börja samla dina favoriter!",
+		"no_recipes_yet": "Inga sparade recept än",
+		"recipe_lists": "",
+		"sign_in_message": "Du behöver vara inloggad för att se innehåll på den här sidan.",
+		"under_development": "Funktionen med receptlistor är under utveckling!"
 	},
 	"main": {
 		"appname": "Campuskost"

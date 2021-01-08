@@ -25,13 +25,13 @@ export default function AddToList({recipe}) {
 
   return  (
     <div> 
-      <Button onClick={() => setOpenDialog(true)} variant="contained" color="primary">Lägg till i lista</Button>
+      <Button onClick={() => setOpenDialog(true)} variant="contained" color="primary">{t('lists.actions.add_to_list')}</Button>
 
       <SaveRecipeDialog
         open={openDialog}
         onAlertClose={() => setOpenDialog(false)}
-        title={'Lägg till i lista'}
-        NoOptionText={'stäng'}
+        title={t('lists.actions.add_to_list')}
+        NoOptionText={t('lists.actions.close_dialog')}
         onAdd={addToList}
         recipeID={recipe.recipeID}
       />

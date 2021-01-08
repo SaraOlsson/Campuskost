@@ -4,10 +4,12 @@ import { useSelector } from "react-redux";
 import { useFirestoreConnect } from "react-redux-firebase";
 import AddRecipeList from './AddRecipeList';
 import RecipeListItem from './RecipeListItem'
+//import {useTranslation} from "react-i18next";
 
 function RecipeLists({onClick}) {
 
   const classes = useStyles();
+  //const {t} = useTranslation('common')
 
   useFirestoreConnect({
     collection: "lists",

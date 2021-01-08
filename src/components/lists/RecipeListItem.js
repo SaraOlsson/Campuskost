@@ -89,7 +89,7 @@ export default function RecipeListItem({list}) {
                                 </div>
                             ) 
                         :
-                            <p>Inga recept här än</p>
+                            <p>{t('lists.no_recipes_yet')}</p>
                     }
                 </>
             </div>

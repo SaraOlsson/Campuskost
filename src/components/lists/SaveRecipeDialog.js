@@ -22,6 +22,7 @@ function ListOption({list, onClick, hasPicked, recipeID}) {
 
   const [pickedThis, setPickedThis] = useState(false)
   const db = firebase.firestore()
+  const {t} = useTranslation('common')
   //const [hasMouseOver, hasMouseOver] = useState(false);
 
   const clicked = () => {
@@ -67,11 +68,11 @@ function ListOption({list, onClick, hasPicked, recipeID}) {
     >
       <span>{list.title} </span> 
       <div> 
-      { pickedThis && <span>Fixat! <Emoji symbol="🗸"/></span> } 
+      { pickedThis && <span>{t('lists.done_message')} <Emoji symbol="🗸"/></span> } 
       { doc_if_saved && 
         <>
-          <span> Redan sparad <Emoji symbol="🐹"/></span>
-          <Button onClick={removeClick}> Lyft ut </Button>
+          <span> {t('lists.already_saved')} <Emoji symbol="🐹"/></span>
+          <Button onClick={removeClick}> {t('lists.actions.remove_from_list')} </Button>
         </>
       }
       </div>

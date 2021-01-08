@@ -3,12 +3,14 @@ import { useFirestore } from "react-redux-firebase";
 import { useSelector } from "react-redux";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import {useTranslation} from "react-i18next";
 
 
 export default function AddRecipeList() {
 
     const [listname, setListname] = useState("");
 
+    const {t} = useTranslation('common')
     const firestore = useFirestore();
     const { email, uid } = useSelector((state) => state.firebase.auth);
 
@@ -54,7 +56,7 @@ export default function AddRecipeList() {
               variant="contained"
               color="primary"
             >
-              Skapa lista
+              {t('lists.actions.create_list')}
             </Button>
 
         </div>
