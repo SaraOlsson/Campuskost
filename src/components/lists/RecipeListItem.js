@@ -1,15 +1,10 @@
-import React, { useState } from "react";
-import { useFirestore } from "react-redux-firebase";
-import { useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
-import Badge from '@material-ui/core/Badge';
-import { useFirestoreConnect } from "react-redux-firebase";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useFirestore } from "react-redux-firebase";
+import { useHistory } from 'react-router-dom';
 import AlertDialog from '../../components/shared/AlertDialog';
-import {useTranslation} from "react-i18next";
 import useFirebaseFetch from '../core/useFirebaseFetch';
-import {useHistory} from 'react-router-dom'
-import recipe_id_to_title from '../../logic/recipeIdToTitle'
-import Button from '@material-ui/core/Button';
 
 export default function RecipeListItem({list}) {
 
@@ -21,6 +16,7 @@ export default function RecipeListItem({list}) {
     const history = useHistory()
     const {t} = useTranslation('common')
 
+    //let db_recipes_ref = firestore.collection("lists").doc(list.listID).where("created_by", "==", "sara.olsson4s@gmail.com").collection("recipes")
     let db_recipes_ref = firestore.collection("lists").doc(list.listID).collection("recipes")
     const {
         data: recipes_in_list

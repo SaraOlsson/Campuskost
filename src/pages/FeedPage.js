@@ -1,21 +1,20 @@
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+//import DropZone from "../components/input/DropZone"
+//import KeyFrames from "../components/framer/KeyFrames"
+import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from "react-redux";
+import { FadeIn } from "react-anim-kit";
+import { useTranslation } from "react-i18next";
+import { Else, If, Then } from 'react-if';
+import { useDispatch, useSelector } from "react-redux";
 import { useFirestoreConnect } from "react-redux-firebase";
 import Emoji from '../components/shared/Emoji';
 import LoadSpinner from '../components/shared/LoadSpinner';
 import RecipeGridList from '../components/shared/RecipeGridList';
-import {fetchData} from "../redux/testReducer"
-import {fetchData as fetchFirestoreData} from "../redux/fetchFirestore"
-//import DropZone from "../components/input/DropZone"
-//import KeyFrames from "../components/framer/KeyFrames"
-import Link from '@material-ui/core/Link';
-import {FadeIn} from "react-anim-kit"
-import {useTranslation} from "react-i18next";
-import Button from '@material-ui/core/Button';
+import { fetchData } from "../redux/testReducer";
 
-import { If, Then, Else, When, Unless, Switch, Case, Default } from 'react-if';
 
 let src_flag_en = require('../assets/en_flag.png');
 let src_flag_sv = require('../assets/sv_flag.png');
@@ -26,8 +25,9 @@ const VERSION = 4;
 
 function TranslateOptions()
 {
+  
     // variant="contained" color="primary"
-    const {t, i18n} = useTranslation('common');
+    const {i18n} = useTranslation('common');
     return (
       <div style={{display: 'flex', justifyContent: 'flex-end'}}>
         <Button onClick={() => i18n.changeLanguage('sv')} 
@@ -62,7 +62,7 @@ function FeedPage() {
 
   const classes = useStyles();
   const [updateExists, setUpdateExists ] = useState(false);
-  const {t, i18n} = useTranslation('common');
+  const {t} = useTranslation('common');
 
   useFirestoreConnect({
     collection: `recipes`,
@@ -138,13 +138,6 @@ function FeedPage() {
 
 }
 
-// { recipes && 
-//   <div className={classes.grid_background}>
-//     <RecipeGridList recipes={Object.values(recipes)}/>
-//   </div>
-// }
-// { recipes === undefined &&  <LoadSpinner/> }
-
 // component above the feed at start page
 function NewsContainer(props) {
 
@@ -160,6 +153,8 @@ function NewsContainer(props) {
         här
       </Link>
   )
+  let feedback_message = (<p>Lämna gärna feedback {feedback_form_link} om du
+    hittar buggar eller har något roligt förslag <Emoji symbol="💡"/></p>)
   
   return (
     <div>
@@ -183,6 +178,7 @@ function NewsContainer(props) {
         Snart kommer funktionalitet såsom att skapa listor och följa dina vänners listor med recept. Lämna gärna feedback {feedback_form_link} om du
         hittar buggar eller har något roligt förslag.</p> */}
         <p>{t('welcome.message', {appname:'Campuskost'})}</p>
+        {i18n.language === 'sv' && feedback_message}
         </div>
       </Grid>
 

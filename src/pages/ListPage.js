@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next"
 
 function ListPage() {
 
-  const { uid } = useSelector((state) => state.firebase.auth); 
+  const { uid, email } = useSelector((state) => state.firebase.auth); 
   const all_recipes = useSelector((state) => state.firestore.data.allrecipes);
   const userLikes = useSelector((state) => {
     return state.firestore.data.userLikes ? state.firestore.data.userLikes : undefined
@@ -55,7 +55,7 @@ function ListPage() {
       { uid ? recipeContent : no_account }
       <h3>{t('lists.recipe_lists')}</h3>
       <p>{t('lists.under_development')} <Emoji symbol="🥳"/> </p>
-      <RecipeLists/>
+      { email && <RecipeLists byUser={email}/> }
     </div>
   );
 }

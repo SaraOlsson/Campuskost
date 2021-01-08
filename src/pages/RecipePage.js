@@ -48,22 +48,26 @@ export default function RecipePage(props) {
 
           <div className={classes.recipeheader}>
 
+            
+            <div>
+              <span>
+                { email && 
+                  <Button disableTouchRipple onClick={likeRecipe}>{icon}</Button>
+                }
+                {recipe.title + ' | '}
+              </span>
+
+              <span>
+                <Button 
+                  disableTouchRipple 
+                  onClick={() => {history.push("/profile/" + recipe.user)}} >
+                  { recipe.user }
+                </Button>
+              </span>
+            </div>
+
             <AddToList recipe={recipe}/>
 
-            <span>
-              { email && 
-                <Button disableTouchRipple onClick={likeRecipe}>{icon}</Button>
-              }
-              {recipe.title + ' | '}
-            </span>
-
-            <span>
-              <Button 
-                disableTouchRipple 
-                onClick={() => {history.push("/profile/" + recipe.user)}} >
-                { recipe.user }
-              </Button>
-            </span>
           </div>
 
           
@@ -162,7 +166,9 @@ const useStyles = makeStyles({
   recipeheader: {
    margin: '20px 0px',
    fontWeight: 'bold',
-   display: 'flex'
+   display: 'flex',
+   justifyContent: 'space-between',
+   flexWrap: 'wrap'
   },
   freetext: {
 

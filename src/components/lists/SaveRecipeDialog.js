@@ -1,18 +1,15 @@
-import { makeStyles } from '@material-ui/core/styles'
-import React, { useState } from 'react'
-import Emoji from '../shared/Emoji'
-import { useTranslation } from "react-i18next"
-import { useFirestore } from "react-redux-firebase"
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import RecipeLists from './RecipeLists'
-import useFirebaseFetch from '../core/useFirebaseFetch';
-import firebase from "firebase/app";
-import {FadeIn} from "react-anim-kit"
+import { makeStyles } from '@material-ui/core/styles'
+import firebase from "firebase/app"
+import React, { useState } from 'react'
+import { useTranslation } from "react-i18next"
+import { useFirestore } from "react-redux-firebase"
+import useFirebaseFetch from '../core/useFirebaseFetch'
+import Emoji from '../shared/Emoji'
+import { useHistory } from "react-router-dom";
 
 // TODO: reorder options so that lists that dont have the recipe appears at the top
 // TODO: mouse-over on desktop
@@ -87,11 +84,12 @@ export default function SaveRecipeDialog(props) {
   const [hasPicked, setHasPicked] = useState(false)
 
   const classes = useStyles()
+  const history = useHistory()
   const firestore = useFirestore()
   const {t} = useTranslation('common')
   const db = firebase.firestore()
 
-  let db_ref = db.collection("lists") // .where("createdBy")
+  let db_ref = db.collection("lists").where("created_by", "==", props.byUser)
   const {
     data: list_data
   } = useFirebaseFetch(db_ref, "COLLECTION")
@@ -121,7 +119,7 @@ export default function SaveRecipeDialog(props) {
         <DialogContent>
 
         <div>
-        { list_data &&
+        { list_data ?
           list_data.map((list, idx) => 
             <ListOption 
               key={list.title+idx} 
@@ -131,7 +129,22 @@ export default function SaveRecipeDialog(props) {
               recipeID={props.recipeID}
             />
           )
-        }
+          :
+          <div 
+            style={{
+              textAlign: 'center',
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'column'
+            }}
+          >
+            <p>{t("lists.no_lists_yet")}</p>
+            <Button variant="contained" color="primary" 
+                    onClick={() => history.push("/saved")}>
+                    {t("lists.actions.create_list")}
+            </Button>
+          </div>
+        } 
         </div>
         
 
@@ -150,6 +163,8 @@ export default function SaveRecipeDialog(props) {
 
 const useStyles = makeStyles({
   overrideDialog: {
-    minWidth: 700
+    maxWidth: '80%',
+    minWidth: '50%',
+    minHeight: '30%'
   }
 });

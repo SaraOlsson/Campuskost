@@ -236,7 +236,7 @@ function ProfilePage(props) {
         { recipeContent }
         </div>
         <div>
-        <RecipeLists/>
+        <RecipeLists byUser={viewUserEmail}/>
         </div>
         <div>
         <FollowerList type="followers" followerData={isUser() ? getUserDocs(followers_users) : getUserDocs(viewuser_followers_users)} showFollowIcon={true}/>
