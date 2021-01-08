@@ -25,7 +25,6 @@ import {
   NoticePage,
   ProfilePage,
   RecipePage,
-  RecipePageNew,
   SearchPage,
   SettingsPage,
   TermsPage,
@@ -110,7 +109,8 @@ function App() {
             <Route path="/upload" component={UploadPage} />
             <Route path="/notices" component={NoticePage} />
             <Route path="/saved" component={ListPage} />
-            <Route path="/recipe/:recipetitle/:id" component={RecipePageNew} />
+            <Route path="/recipe/:recipetitle/:id" component={RecipePage} />
+            <Route path="/recipe/:id" component={RecipePage} />
             <Route path="/search" component={SearchPage} />
             <Route path="/home" component={FeedPage}/>
             <Route path="/lists" component={ListPage}/>

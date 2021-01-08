@@ -15,6 +15,8 @@ import {FadeIn} from "react-anim-kit"
 import {useTranslation} from "react-i18next";
 import Button from '@material-ui/core/Button';
 
+import { If, Then, Else, When, Unless, Switch, Case, Default } from 'react-if';
+
 let src_flag_en = require('../assets/en_flag.png');
 let src_flag_sv = require('../assets/sv_flag.png');
 
@@ -103,28 +105,45 @@ function FeedPage() {
   return (
     <div>
       
-      { updateExists && 
-      <div className={classes.updateBanner}>
-        <p>Det finns en uppdatering av webbappen, stäng alla flikar och ladda om. </p>
-      </div> 
-      }
-      {<TranslateOptions/>}
+      <If condition={updateExists}><Then>
+        
+          <div className={classes.updateBanner}>
+            <p>Det finns en uppdatering av webbappen, stäng alla flikar och ladda om. </p>
+          </div> 
+        
+      </Then></If>
+
+      <TranslateOptions/>
+
       <FadeIn right by={300}>
         <NewsContainer/>
       </FadeIn>
       <h3>{t("welcome.recipesheader")}</h3>
-      { recipes && 
-        <div className={classes.grid_background}>
-          
-          <RecipeGridList recipes={Object.values(recipes)}/>
+
+      <If condition={recipes}>
+        <Then>
+          {() =>
+          <div className={classes.grid_background}>
+            <RecipeGridList recipes={Object.values(recipes)}/>
+          </div>
+          }
+        </Then>
+        <Else>
+          <LoadSpinner/>
+        </Else>
+      </If>
       
-        </div>
-      }
-      { recipes === undefined &&  <LoadSpinner/> }
     </div>
   );
 
 }
+
+// { recipes && 
+//   <div className={classes.grid_background}>
+//     <RecipeGridList recipes={Object.values(recipes)}/>
+//   </div>
+// }
+// { recipes === undefined &&  <LoadSpinner/> }
 
 // component above the feed at start page
 function NewsContainer(props) {

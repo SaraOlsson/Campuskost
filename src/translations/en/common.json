@@ -1,4 +1,27 @@
 {
+	"lists": {
+		"actions": {
+			"add_to_list": "Add to list",
+			"close_dialog": "Close",
+			"create_list": "Create list",
+			"remove_from_list": "Remove"
+		},
+		"already_saved": "Already saved",
+		"delete_alert": {
+			"message": "Are you sure you want to delete this list?",
+			"no": "Oh, no!",
+			"title": "Are you sure?",
+			"yes": "Yes"
+		},
+		"done_message": "Done!",
+		"liked_recipes": "Liked recipe",
+		"no_likes_message_1": "You have no liked recipes yet. Click the",
+		"no_likes_message_2": "symbol to start collecting your favorites!",
+		"no_recipes_yet": "No saved recipes yet",
+		"recipe_lists": "",
+		"sign_in_message": "You need to be signed in to see content on this page.",
+		"under_development": "The feature 'Recipe lists' is under development!"
+	},
 	"main": {
 		"appname": "Campuskost"
 	},

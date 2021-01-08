@@ -1,211 +1,43 @@
 import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import EditIcon from '@material-ui/icons/Edit'
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
-import { useParams } from "react-router";
-import { useHistory } from "react-router-dom";
-import AlertDialog from '../components/shared/AlertDialog';
-import ListIngredients from '../components/recipe/ListIngredients';
-import RecipeDecsList from '../components/recipe/RecipeDecsList';
-import firebase from 'firebase'; // REFACTOR
-import ReactGA from 'react-ga';
-import {FadeIn} from "react-anim-kit"
-import {useTranslation} from "react-i18next";
-const fallbackImage = require('../assets/noconnection3.png');
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
+import React from 'react'
+import { FadeIn } from "react-anim-kit"
+import { useTranslation } from "react-i18next"
+import { useParams } from "react-router"
+import { useHistory } from "react-router-dom"
+import ListIngredients from '../components/recipe/ListIngredients'
+import RecipeDecsList from '../components/recipe/RecipeDecsList'
+import useRecipePage from '../components/recipe/useRecipePage'
+import AlertDialog from '../components/shared/AlertDialog'
+import generateTimeString from '../logic/generateTimeString'
+import AddToList from '../components/lists/AddToList'
+const fallbackImage = require('../assets/noconnection3.png')
 
 
-function RecipePage(props) {
+export default function RecipePage(props) {
 
-  const { recipetitle, id } = useParams();
-  const [ ifUser, setIfUser] = useState(false);
-  const [ saved, setSaved ] = useState(false);
-  const [openAlert, setOpenAlert] = useState(false);
+  // const { recipetitle } = useParams()
 
-  const classes = useStyles();
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const {t} = useTranslation('common');
-  
-  const firestore = useFirestore();
-  useFirestoreConnect({
-    collection: `recipes`,
-    doc: id,
-    storeAs: "recipeInView",
-  });
+  const classes = useStyles()
+  const history = useHistory()
+  const {t} = useTranslation('common')
 
-  const { email, uid } = useSelector((state) => state.firebase.auth);
-  const recipe = useSelector((state) => state.firestore.data.recipeInView);
+  const {
+    recipe,
+    email,
+    ifUser,
+    isLiking,
+    likeRecipe,
+    editRecipe,
+    openAlert,
+    setOpenAlert,
+    onDeleteRecipeChoice
+  } = useRecipePage()
 
-  useEffect(() => {
-
-    if (recipe !== undefined && email !== undefined && recipe.recipeID === id) {
-      
-      setIfUser( recipe.user_ref === email );
-      likeFetcher(email);
-
-      // findSmallerImage();
-
-    } else if(recipe !== undefined && recipe.recipeID !== id) {
-
-      console.log("oups this was the previous recipe")
-      console.log("recipe.recipeID = " + recipe.recipeID + " and id = " + id);
-    }
-      
-  }, [recipe] );
-  
-  const findSmallerImage = () => {
-
-    //  && recipe.img_filename
-    if(!recipe.img_url_small && recipe.img_filename) { 
-
-      let str = recipe.img_filename;
-
-      console.log("findSmallerImage")
-
-      let storageRef = firebase.storage(); // REFACTOR TO HOOKS?
-      let small_filename = str.substring(0, str.indexOf(".jpg")) + "_500x500" + str.substring(str.indexOf(".jpg"));  
-      
-      try {
-        // console.log(storageRef)
-        let smallImageRef = storageRef.ref(small_filename);
-        smallImageRef.getDownloadURL().then(function(downloadURL) {
-          firestore.collection('recipes').doc(id).update({img_url_small: downloadURL});
-        }); 
-      }
-      catch(err) {
-        console.log(err.message);
-      }
-
-    } 
-  }
-
-  // review
-  const likeFetcher = (current_email) => {
-
-    let likesRef = firestore.collection('recipe_likes').doc(current_email);
-
-    likesRef.get().then(function(doc) {
-
-      let isliked;
-
-      if (doc.exists) {
-
-        let data = doc.data();  
-        isliked = ( data.liked_recipes[id] !== undefined ) ? data.liked_recipes[id] : false;
-
-      } else {
-        firestore.collection('recipe_likes').doc(current_email).set({liked_recipes: {}});
-        isliked = false;
-      }
-
-      setSaved(isliked);
-
-    })
-    .catch(err => {
-      console.log('Error getting documents', err);
-    });
-
-  }
-
-  const likeRecipe = () => {
-
-    ReactGA.event({
-      category: "Sign Up",
-      action: "User pressed the big blue sign up button",
-    });
-
-    let likesRef = firestore.collection('recipe_likes').doc(email);
-
-    likesRef.get().then(function(doc) {
-
-      // add or remove like
-      if (doc.exists) {
-
-        let data = doc.data();
-
-        if (!data.liked_recipes) {
-
-          let obj = {};
-          obj[id] = true;
-          firestore.collection('recipe_likes').doc(doc.id).set({liked_recipes: obj});
-        } else {
-          data.liked_recipes[id] = (saved) ? false : true;
-          firestore.collection("recipe_likes").doc(doc.id).update(data);
-        }
-      }
-
-    });
-
-    setSaved(!saved);
-
-  };
-
-  /*
-  const recipeToFriend = () => {
-    //setTried( !tried );
-  }; */
-
-  // make to reducer
-  const editRecipe = () => {
-    
-    // dispatch({
-    //   type: "SETOBJECT",
-    //   payload: {
-    //     title: recipe.title,
-    //     ingredients: recipe.ingredients,
-    //     descriptions: recipe.description,
-    //     freetext: recipe.freetext,
-    //     servings: recipe.servings,
-    //     cookingtime: recipe.cookingtime,
-    //     image: recipe.img_url,
-    //   }
-    // })
-
-    dispatch({
-      type: "SETDATA",
-      payload: recipe
-    })
-
-    dispatch({
-      type: "SETEDITMODE",
-      editmode: true,
-      recipe_id: id
-    })
-    
-    history.push("/upload/" + recipe.recipeID );
-  }
-
-  const onDeleteRecipeChoice = (chosedDelete) => {
-
-    console.log(chosedDelete);
-    setOpenAlert(false);
-
-    if(chosedDelete === true) {
-      firestore.collection('recipes').doc(id).delete();
-      history.push("/home");
-    }
-  }
-
-  const generateTimeString = (timestamp) => {
-
-    let string_result = undefined;
-    try {
-      let time = timestamp.toDate();
-      let months = ["jan", "feb", "mars", "april", "maj", "juni", "juli", "aug", "sept", "okt", "nov", "dec"];
-      string_result = time.getDate() + " " + months[time.getMonth()];
-    }
-    catch(err) {
-      console.log(err.message);
-    }
-    return string_result;
-  }
-
-  const icon = (saved === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
+  const icon = (isLiking() === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
   const timestring = recipe ? generateTimeString(recipe.timestamp) : undefined;
   const image = recipe ? <img src={recipe.img_url} className={classes.recipeImage} onError={(e)=>{e.target.onerror = null; e.target.src=fallbackImage}} alt={recipe.title}/> : null;
 
@@ -216,12 +48,13 @@ function RecipePage(props) {
 
           <div className={classes.recipeheader}>
 
+            <AddToList recipe={recipe}/>
 
             <span>
               { email && 
                 <Button disableTouchRipple onClick={likeRecipe}>{icon}</Button>
               }
-              {recipetitle + ' | '}
+              {recipe.title + ' | '}
             </span>
 
             <span>
@@ -232,6 +65,8 @@ function RecipePage(props) {
               </Button>
             </span>
           </div>
+
+          
           
           <FadeIn right by={300}>
           <div className={classes.recipeContainer}>
@@ -326,7 +161,8 @@ const useStyles = makeStyles({
   },
   recipeheader: {
    margin: '20px 0px',
-   fontWeight: 'bold'
+   fontWeight: 'bold',
+   display: 'flex'
   },
   freetext: {
 
@@ -341,5 +177,4 @@ const useStyles = makeStyles({
   }
 });
 
-export default RecipePage;
 // 488 rows before refactor..
