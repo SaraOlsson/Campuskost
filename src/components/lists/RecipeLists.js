@@ -6,21 +6,26 @@ import AddRecipeList from './AddRecipeList';
 import RecipeListItem from './RecipeListItem'
 //import {useTranslation} from "react-i18next";
 
-function RecipeLists({onClick}) {
+function RecipeLists({onClick, byUser}) {
 
   const classes = useStyles();
+  const {email: authUser} = useSelector((state) => state.firebase.auth)
   //const {t} = useTranslation('common')
 
   useFirestoreConnect({
     collection: "lists",
+    where: [
+      ['created_by', '==', byUser] // "sara.olsson4s@gmail.com"
+    ],
     storeAs: "lists",
   });
+ 
   const lists = useSelector((state) => state.firestore.data.lists);
 
   return  (
     <div className={classes.listContainer}> 
 
-      <AddRecipeList/>
+      {(authUser === byUser) && <AddRecipeList/> }
 
       <div
         style={{
@@ -29,10 +34,13 @@ function RecipeLists({onClick}) {
           flexWrap: 'wrap'
         }}
       >
-        {lists &&
+        {lists ?
           Object.values(lists).map((list, idx) => (
-            list && <RecipeListItem list={list} key={idx + list.title}/>
-          ))}
+            list.listID && <RecipeListItem list={list} key={idx + list.title}/>
+          ))
+          :
+        <p>Inga listor skapade än</p>
+        }
       </div>
 
     </div>

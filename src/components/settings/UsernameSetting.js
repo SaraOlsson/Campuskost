@@ -1,16 +1,13 @@
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import 'firebase/auth';
 import 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
-import React, {useEffect, useRef, useState} from 'react';
-import Emoji from '../shared/Emoji';
 import { useFirestore } from "react-redux-firebase";
+import Emoji from '../shared/Emoji';
 
 // small bug when first unvalid name then writes again
 // in original onChange, isAvailable changes

@@ -25,9 +25,6 @@ export default function useRecipePage() {
 
   let recipe_ref = db.collection("recipes").doc(id) 
   const {
-    isLoading: recipe_isLoading,
-    hasErrored: recipe_hasErrored,
-    errorMessage: recipe_errorMessage,
     data: recipe
   } = useFirebaseFetch(recipe_ref, "DOC")
 
@@ -35,9 +32,6 @@ export default function useRecipePage() {
 
   let userlikes_ref = undefined // wait for email
   const {
-    isLoading: userlikes_isLoading,
-    hasErrored: userlikes_hasErrored,
-    errorMessage: userlikes_errorMessage,
     triggerFetch: userlikes_triggerFetch,
     data: userlikes
   } = useFirebaseFetch(userlikes_ref, "DOC") 

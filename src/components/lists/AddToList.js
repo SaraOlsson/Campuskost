@@ -1,10 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles'
 import React, {useState} from 'react'
-import Emoji from '../shared/Emoji'
+// import Emoji from '../shared/Emoji'
 import { useTranslation } from "react-i18next"
 import { useFirestore } from "react-redux-firebase"
 import Button from '@material-ui/core/Button'
 import SaveRecipeDialog from './SaveRecipeDialog'
+import { useSelector } from "react-redux";
 
 export default function AddToList({recipe}) {
 
@@ -12,6 +13,7 @@ export default function AddToList({recipe}) {
 
   const classes = useStyles()
   const firestore = useFirestore()
+  const { email } = useSelector((state) => state.firebase.auth); 
   const {t} = useTranslation('common')
 
   const addToList = (list_id) => {
@@ -27,6 +29,7 @@ export default function AddToList({recipe}) {
     <div> 
       <Button onClick={() => setOpenDialog(true)} variant="contained" color="primary">{t('lists.actions.add_to_list')}</Button>
 
+      { email &&
       <SaveRecipeDialog
         open={openDialog}
         onAlertClose={() => setOpenDialog(false)}
@@ -34,7 +37,9 @@ export default function AddToList({recipe}) {
         NoOptionText={t('lists.actions.close_dialog')}
         onAdd={addToList}
         recipeID={recipe.recipeID}
+        byUser={email}
       />
+      }
 
     </div>
   );
