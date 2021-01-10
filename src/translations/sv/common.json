@@ -14,12 +14,16 @@
 			"yes": "Ja"
 		},
 		"done_message": "Fixat!",
+		"follows": {
+			"no_list_yet": "Du följer inga listor än",
+			"recipe_lists_i_follow": "Listor jag följer"
+		},
 		"liked_recipes": "Gillade recept",
+		"my_recipe_lists": "Mina listor",
 		"no_likes_message_1": "Du har inga gillade recept än. Klicka på",
 		"no_likes_message_2": "-symbolen för att börja samla dina favoriter!",
 		"no_lists_yet": "Du har inga listor än",
 		"no_recipes_yet": "Inga sparade recept än",
-		"recipe_lists": "",
 		"sign_in_message": "Du behöver vara inloggad för att se innehåll på den här sidan.",
 		"under_development": "Funktionen med receptlistor är under utveckling!"
 	},

@@ -1,6 +1,6 @@
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
 import FormLabel from '@material-ui/core/FormLabel';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -24,10 +24,10 @@ function CollapseGrid(props) {
     return (
   
       
-        <ExpansionPanel className={classes.expanel}
+        <Accordion className={classes.expanel}
             onChange={(e, expanded) => onExpand(e, expanded, props.controlName)}
             expanded={isExpanded}>
-          <ExpansionPanelSummary
+          <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-label="Expand"
             aria-controls="additional-actions1-content"
@@ -36,11 +36,11 @@ function CollapseGrid(props) {
   
           <FormLabel component="legend" className={classes.formlabel}> {props.label} </FormLabel>
   
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+          </AccordionSummary>
+          <AccordionDetails>
             {props.children}
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+          </AccordionDetails>
+        </Accordion>
       
   
     );

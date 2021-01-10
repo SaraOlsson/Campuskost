@@ -1,6 +1,6 @@
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React, { useEffect } from 'react';
@@ -139,22 +139,22 @@ function FavoritePage(props) {
       </Droppable>
     { !props.otheruser &&
 
-      <ExpansionPanel 
+      <Accordion 
         className={classes.likedPanel}
         defaultExpanded={true}>
-        <ExpansionPanelSummary
+        <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
           <Typography style={{fontWeight: 'bold'}}> Gillade recept</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
+        </AccordionSummary>
+        <AccordionDetails>
 
           {likes_by_user_jxs}
 
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+        </AccordionDetails>
+      </Accordion>
 
     }
     { !props.otheruser && <h3>Listor</h3> }
@@ -167,37 +167,37 @@ function FavoritePage(props) {
 
     }
     { !props.otheruser &&
-    <ExpansionPanel className={classes.likedPanel}>
-      <ExpansionPanelSummary
+    <Accordion className={classes.likedPanel}>
+      <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
         <Typography style={{fontWeight: 'bold'}}> Dina listor</Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
+      </AccordionSummary>
+      <AccordionDetails>
 
         {lists_by_user_jxs}
 
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+      </AccordionDetails>
+    </Accordion>
     }
     { !props.otheruser &&
 
-      <ExpansionPanel className={classes.likedPanel}>
-        <ExpansionPanelSummary
+      <Accordion className={classes.likedPanel}>
+        <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
           <Typography style={{fontWeight: 'bold'}}> Listor du följer</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
+        </AccordionSummary>
+        <AccordionDetails>
 
           {lists_jxs}
 
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+        </AccordionDetails>
+      </Accordion>
 
     }
     </DragDropContext>

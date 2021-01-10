@@ -6,21 +6,25 @@ import AddRecipeList from './AddRecipeList';
 import RecipeListItem from './RecipeListItem'
 //import {useTranslation} from "react-i18next";
 
-function RecipeLists({onClick, byUser}) {
+function RecipeLists({onClick, byUser, firebase_query, state_name}) {
 
   const classes = useStyles();
   const {email: authUser} = useSelector((state) => state.firebase.auth)
   //const {t} = useTranslation('common')
 
-  useFirestoreConnect({
-    collection: "lists",
-    where: [
-      ['created_by', '==', byUser] // "sara.olsson4s@gmail.com"
-    ],
-    storeAs: "lists",
-  });
+  // useFirestoreConnect({
+  //   collection: "lists",
+  //   where: [
+  //     ['created_by', '==', byUser] // "sara.olsson4s@gmail.com"
+  //   ],
+  //   storeAs: "lists",
+  // });
+
+  // console.log(firebase_query)
+
+  useFirestoreConnect(firebase_query);
  
-  const lists = useSelector((state) => state.firestore.data.lists);
+  const lists = useSelector((state) => state.firestore.data[state_name]);
 
   return  (
     <div className={classes.listContainer}> 
@@ -36,7 +40,7 @@ function RecipeLists({onClick, byUser}) {
       >
         {lists ?
           Object.values(lists).map((list, idx) => (
-            list.listID && <RecipeListItem list={list} key={idx + list.title}/>
+            (list && list.listID) && <RecipeListItem list={list} key={idx + list.title}/>
           ))
           :
         <p>Inga listor skapade än</p>

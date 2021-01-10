@@ -66,7 +66,7 @@ const theme = createMuiTheme({
     },
 
     // remove line in expansion header
-    MuiExpansionPanel: {
+    MuiAccordion: {
       root: {
         '&::before': {
           display: 'none'
@@ -75,7 +75,7 @@ const theme = createMuiTheme({
     },
 
     // e.g. scroll in recipe/desciption edit view
-    MuiExpansionPanelDetails: {
+    MuiAccordionDetails: {
       root: {
         padding: 15,
         display: 'block',
