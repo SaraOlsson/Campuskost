@@ -49,13 +49,36 @@ function ListPage() {
 
   let no_account = <p> {t('lists.sign_in_message')} </p>
 
+  let query_my_lists = {
+    collection: "lists",
+    where: [
+      ['created_by', '==', email] // "sara.olsson4s@gmail.com"
+    ],
+    storeAs: "my_lists",
+  }
+
+  // let query_followed_lists = email ? {
+  //   collection: `lists_follows/${email}/lists`,
+  //   storeAs: "others_lists"
+  // } : {}
+
+  const get_query_followed_lists = () => {
+    return {
+      collection: `lists_follows/${email}/lists`,
+      storeAs: "others_lists"
+    }
+  }
+
   return (
     <div> 
       <h3> {t('lists.liked_recipes')} </h3>
       { uid ? recipeContent : no_account }
-      <h3>{t('lists.recipe_lists')}</h3>
+      <h3>{t('lists.my_recipe_lists')}</h3>
       <p>{t('lists.under_development')} <Emoji symbol="🥳"/> </p>
-      { email && <RecipeLists byUser={email}/> }
+      { email && <RecipeLists byUser={email} firebase_query={query_my_lists} state_name="my_lists"/> }
+      <h3>{t('lists.follows.recipe_lists_i_follow')}</h3>
+      { email && <RecipeLists byUser={""} firebase_query={get_query_followed_lists()} state_name="others_lists"/> }
+      {/* <p>{t('lists.follows.no_list_yet')}</p> */}
     </div>
   );
 }
