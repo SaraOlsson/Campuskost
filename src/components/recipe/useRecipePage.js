@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import useFirebaseAction from '../core/useFirebaseAction';
 import useFirebaseFetch from '../core/useFirebaseFetch';
+import { useDocumentOnce } from 'react-firebase-hooks/firestore';
 
 
 export default function useRecipePage() {
@@ -35,6 +36,14 @@ export default function useRecipePage() {
     triggerFetch: userlikes_triggerFetch,
     data: userlikes
   } = useFirebaseFetch(userlikes_ref, "DOC") 
+
+  // let temp_email = "sara.olsson4s@gmail.com"
+  // const [likes_this, loading, error] = useDocumentOnce(db.doc('likes/' + temp_email + '/likes/' + id), {} );
+
+  // if(likes_this)
+  // {
+  //   console.log("doc.exists: " + likes_this.exists)
+  // }
 
   useEffect(() => {
 

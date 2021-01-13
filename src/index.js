@@ -49,7 +49,7 @@ ReactGA.initialize(trackingId, {
 
 const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
 const firebaseConfig = {
-  apiKey: "AIzaSyAq0vTBf0o5MckjHcCOJiJ_DRK8v_UZY88",//API_KEY, // 
+  apiKey: API_KEY,
   authDomain: "campuskost-firebase.firebaseapp.com",
   databaseURL: "https://campuskost-firebase.firebaseio.com",
   projectId: "campuskost-firebase",
