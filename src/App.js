@@ -7,6 +7,7 @@ import React, { Suspense, useEffect } from 'react';
 import Draggable from 'react-draggable'; // The default
 import { useSelector } from "react-redux";
 import { Route, Switch } from "react-router-dom";
+
 // import our css
 import './App.css';
 import BottomMenuBar from "./components/app/BottomMenuBar";

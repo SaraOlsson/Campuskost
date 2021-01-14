@@ -159,11 +159,6 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '100px',
     margin: '5px auto'
  },
-  spinner: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: 100
-  },
   pointer: {
    cursor: 'pointer'
   },

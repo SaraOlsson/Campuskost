@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import useFirebaseAction from '../core/useFirebaseAction';
 import useFirebaseFetch from '../core/useFirebaseFetch';
+import { useDocument, useDocumentOnce } from 'react-firebase-hooks/firestore';
 
 
 export default function useRecipePage() {
@@ -13,15 +14,19 @@ export default function useRecipePage() {
   const { id } = useParams()
   const [ ifUser, setIfUser] = useState(false)
   const [ openAlert, setOpenAlert] = useState(false)
+  const [ likeRef, setLikeRef] = useState("")
 
   const history = useHistory()
   const dispatch = useDispatch()
 
-  const {setData} = useFirebaseAction()
+  // const {setData} = useFirebaseAction()
   
   const firestore = useFirestore()
+  
 
   var db = firebase.firestore()
+
+
 
   let recipe_ref = db.collection("recipes").doc(id) 
   const {
@@ -29,17 +34,14 @@ export default function useRecipePage() {
   } = useFirebaseFetch(recipe_ref, "DOC")
 
   const { email } = useSelector((state) => state.firebase.auth);
-
-  let userlikes_ref = undefined // wait for email
-  const {
-    triggerFetch: userlikes_triggerFetch,
-    data: userlikes
-  } = useFirebaseFetch(userlikes_ref, "DOC") 
+  const [likes_this, loading, error] = useDocument(likeRef)
 
   useEffect(() => {
 
     if(email)
-      userlikes_triggerFetch(db.collection('recipe_likes').doc(email))
+    {
+      setLikeRef(db.doc('likes/' + email + '/likes/' + id))
+    }  
 
     if(recipe && recipe.recipeID !== id) // should not happen
       console.log("oups recipeID is not the same as in header")
@@ -51,12 +53,7 @@ export default function useRecipePage() {
 
 
   const isLiking = () => {
-
-    if(!userlikes || !userlikes.liked_recipes) // valid data in db
-      return false
-
-    return (userlikes.liked_recipes[id] !== undefined &&  // has info && liked is true
-            userlikes.liked_recipes[id] === true)
+    return (likes_this && likes_this.exists)
   }
 
   const likeRecipe = () => {
@@ -64,22 +61,10 @@ export default function useRecipePage() {
     if(!email)
       return
 
-    let likesRef = db.collection('recipe_likes').doc(email);
-
-    if (!userlikes.liked_recipes) {
-
-      let obj = {};
-      obj[id] = true;
-      setData(likesRef, {liked_recipes: obj})
-
-    } else {
-
-      const acopy = Object.assign({}, userlikes.liked_recipes);
-      acopy[id] = (isLiking()) ? false : true;
-      setData(likesRef, {liked_recipes: acopy})
-    }
-
-    userlikes_triggerFetch(likesRef) // to update
+    if (isLiking())
+      db.collection('likes/' + email + '/likes/').doc(id).delete()
+    else 
+      db.collection('likes/' + email + '/likes/').doc(id).set({})
   };
 
   // make to reducer

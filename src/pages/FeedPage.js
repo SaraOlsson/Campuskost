@@ -14,6 +14,7 @@ import Emoji from '../components/shared/Emoji';
 import LoadSpinner from '../components/shared/LoadSpinner';
 import RecipeGridList from '../components/shared/RecipeGridList';
 import { fetchData } from "../redux/testReducer";
+// import CacheComponent from '../components/core/CacheComponent'
 
 
 let src_flag_en = require('../assets/en_flag.png');
@@ -87,7 +88,7 @@ function FeedPage() {
       // console.log(version.release)
       
       //let local_version = Number(window.localStorage.getItem('version'));
-      console.log("const version: " + VERSION);
+      //console.log("const version: " + VERSION);
       //console.log("local version: " + local_version);
 
       if (VERSION !== version.release)
@@ -104,6 +105,8 @@ function FeedPage() {
 
   return (
     <div>
+
+      {/* <CacheComponent/> */}
       
       <If condition={updateExists}><Then>
         
@@ -191,7 +194,8 @@ function NewsContainer(props) {
 const useStyles = makeStyles(theme => ({
   grid_background: {
     backgroundColor: theme.palette.campuskost.lightgrey,
-    paddingTop: '10px'
+    paddingTop: '10px',
+    borderRadius: 5
   },
   newscontainer: {
     borderRadius: 20,

@@ -49,7 +49,7 @@ ReactGA.initialize(trackingId, {
 
 const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
 const firebaseConfig = {
-  apiKey: "AIzaSyAq0vTBf0o5MckjHcCOJiJ_DRK8v_UZY88",//API_KEY, // 
+  apiKey: API_KEY,
   authDomain: "campuskost-firebase.firebaseapp.com",
   databaseURL: "https://campuskost-firebase.firebaseio.com",
   projectId: "campuskost-firebase",
@@ -65,6 +65,24 @@ const rrfConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
+firebase.firestore().enablePersistence()
+  .then(function(test) {
+    console.log("enablePersistence enabled")
+    console.log(test)
+  })
+  .catch(function(err) {
+      if (err.code == 'failed-precondition') {
+          // Multiple tabs open, persistence can only be enabled
+          // in one tab at a a time.
+          // ...
+      } else if (err.code == 'unimplemented') {
+          // The current browser does not support all of the
+          // features required to enable persistence
+          // ...
+      }
+  });
+
 firebase.firestore();
 
 /*
