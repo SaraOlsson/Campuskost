@@ -4,12 +4,15 @@ import firebase from "firebase/app"
 import { useSelector } from "react-redux"
 import { makeStyles } from '@material-ui/core/styles'
 import ListContent from './ListContent'
-import { m } from 'framer-motion';
+import AlertDialog from '../shared/AlertDialog'
+import {useTranslation} from "react-i18next";
 
 
 const SavedList = ({ref_listID}) => {
 
+  const {t} = useTranslation('common')
   const {email: authUser} = useSelector((state) => state.firebase.auth)
+  const [openAlert, setOpenAlert] = useState(false)
   const [isMine, setIsMine] = useState(false)
   const [value, loading, error] = useDocumentDataOnce(
     firebase.firestore().doc('lists/' + ref_listID), // 1rOnvDuk8VJoZPWbHZkU
@@ -30,8 +33,19 @@ const SavedList = ({ref_listID}) => {
 
   }, [authUser, value])
 
-  const onRemove = () => {
-    console.log("remove " + ref_listID)
+  // const onRemove = () => {
+  //   console.log("remove " + ref_listID)
+  //   firebase.firestore().doc('lists/' + ref_listID).delete()
+  // }
+
+  const onRemove = (chosedDelete) => {
+
+    if(chosedDelete === true) {
+      console.log("remove " + ref_listID)
+    firebase.firestore().doc('lists/' + ref_listID).delete()
+    } else {
+      setOpenAlert(false)
+    }
   }
 
   return (
@@ -43,10 +57,18 @@ const SavedList = ({ref_listID}) => {
         {value && 
         <>
         {/* <span>Document: {JSON.stringify(value)}</span> */}
-        <ListUI data={value} showRmButton={isMine} onRemove={onRemove}/>
+        <ListUI data={value} showRmButton={isMine} onRemove={() => setOpenAlert(true)}/>
         </>
         }
       
+      <AlertDialog
+        open={openAlert}
+        onAlertClose={onRemove}
+        title={t('lists.delete_alert.title')}
+        message={t('lists.delete_alert.message')}
+        yesOptionText={t('lists.delete_alert.yes')}
+        NoOptionText={t('lists.delete_alert.no')}
+      />
     </>
   );
 };
@@ -70,7 +92,7 @@ const ListUI = ({data, showRmButton, onRemove}) => {
           onMouseLeave={() => setIsHovering(false)}>
             <div className={classes.containerHeader}>
               <b> {data.title} </b>
-              { (isHovering || isTouchDevice() ) && 
+              { (showRmButton && (isHovering || isTouchDevice()) ) && 
                 <div className={classes.removeIcon}
                      onClick={onRemove}> 
                   <b>x</b> 
@@ -80,6 +102,7 @@ const ListUI = ({data, showRmButton, onRemove}) => {
                 
                 <ListContent ref_listID={data.listID}/>
             </div>
+
         </div>
     )
 }

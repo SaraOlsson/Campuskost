@@ -1,10 +1,7 @@
-import { useCollection, useCollectionOnce, useCollectionDataOnce } from 'react-firebase-hooks/firestore';
-import { useDocument, useDocumentOnce, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
-import React from "react"
-import { useHistory } from 'react-router-dom'
-import firebase from "firebase/app"
-import { makeStyles } from '@material-ui/core/styles'
-import RecipeItemInList from './RecipeItemInList'
+import firebase from "firebase/app";
+import React from "react";
+import { useCollectionOnce } from 'react-firebase-hooks/firestore';
+import RecipeItemInList from './RecipeItemInList';
 
 const ListContent = ({ref_listID}) => {
   const [value, loading, error] = useCollectionOnce(

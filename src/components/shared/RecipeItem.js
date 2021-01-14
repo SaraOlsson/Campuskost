@@ -3,6 +3,7 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useHistory } from "react-router-dom";
+const fallbackImage = require('../../assets/err_image.png')
 
 function RecipeItem({recipe, smalltiles}) {
 
@@ -19,7 +20,7 @@ function RecipeItem({recipe, smalltiles}) {
   };
 
   let img_url_temp = recipe.img_url_small ? recipe.img_url_small : recipe.img_url;
-  const image = <div><img src={img_url_temp} className={classes.listimage} alt={recipe.title} /></div>;
+  const image = <div><img src={img_url_temp} className={classes.listimage} onError={(e)=>{e.target.onerror = null; e.target.src=fallbackImage}} alt={recipe.title} /></div>;
 
 
   return (

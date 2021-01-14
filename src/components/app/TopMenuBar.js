@@ -6,6 +6,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from "react-router-dom";
 
+import { Offline, Online } from "react-detect-offline";
+
 import {
   AppBar,
   Badge,
@@ -177,6 +179,12 @@ function TopMenuBar(props) {
             />
           </div>
           <div className={classes.grow} />
+
+          <Offline>
+            <div className={classes.offline}>
+            Offline
+            </div>
+          </Offline>
             
           <ProfileBtn signedIn={uid !== undefined}/>
 
@@ -368,6 +376,12 @@ const useStyles = makeStyles(theme => ({
     marginLeft: 'auto',
     marginRight: 'auto',
     borderRadius: '100px'
+  },
+  offline: {
+    background: theme.palette.primary.main,
+    borderRadius: 15,
+    padding: 6,
+    margin: '0 20px'
   }
 }));
 

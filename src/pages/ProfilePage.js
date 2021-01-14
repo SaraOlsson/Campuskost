@@ -13,6 +13,7 @@ import { useHistory } from "react-router-dom";
 import FollowerList from '../components/shared/FollowerList';
 import RecipeGridList from '../components/shared/RecipeGridList';
 import RecipeLists from '../components/lists/RecipeLists';
+import AllListsByUser from '../components/lists/AllListsByUser'
 import UserPageTabs from '../components/profile/UserPageTabs';
 import { useFirestoreConnect } from "react-redux-firebase";
 import LoadSpinner from '../components/shared/LoadSpinner';
@@ -174,6 +175,11 @@ function ProfilePage(props) {
   //   history.push("/home");
   // }
 
+  const listCSS = {
+    display: 'flex',
+    flexWrap: 'wrap'
+  }
+
   return !user ? [] : (
 
     <React.Fragment>
@@ -236,7 +242,8 @@ function ProfilePage(props) {
         { recipeContent }
         </div>
         <div>
-        <RecipeLists byUser={viewUserEmail}/>
+        {/* <RecipeLists byUser={viewUserEmail}/> */}
+        <AllListsByUser ref_user={viewUserEmail} css_prop={listCSS}/>
         </div>
         <div>
         <FollowerList type="followers" followerData={isUser() ? getUserDocs(followers_users) : getUserDocs(viewuser_followers_users)} showFollowIcon={true}/>

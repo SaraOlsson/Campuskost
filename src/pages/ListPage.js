@@ -9,6 +9,7 @@ import { FadeIn } from "react-anim-kit";
 import AllListsByUser from '../components/lists/AllListsByUser'
 import AllListsUserFollows from '../components/lists/AllListsUserFollows'
 import AllLikesByUser from '../components/lists/AllLikesByUser'
+import AddRecipeList from '../components/lists/AddRecipeList';
 
 function ListPage() {
 
@@ -23,7 +24,7 @@ function ListPage() {
   }
 
   const easing = 0.5
-  const delay = 2
+  const delay = 0
 
   return (
     <div> 
@@ -36,12 +37,13 @@ function ListPage() {
       <h3 style={{marginBottom: 30}}>{t('lists.my_recipe_lists')}</h3>
       <p>{t('lists.under_development')} <Emoji symbol="🥳"/> </p>
       <FadeIn left delayBy={delay} easeTiming={easing}>
-      { email && <AllListsByUser ref_user={email} css_prop={listCSS}/> }
+        { email && <AllListsByUser ref_user={email} css_prop={listCSS}/> }
+        { email && <AddRecipeList/> }
       </FadeIn>
       {/* { email && <RecipeLists byUser={email} firebase_query={query_my_lists} state_name="my_lists"/> } */}
       <h3>{t('lists.follows.recipe_lists_i_follow')}</h3>
       <FadeIn left delayBy={delay} easeTiming={easing}>
-      { email && <AllListsUserFollows ref_user={email} css_prop={listCSS}/>}
+        { email && <AllListsUserFollows ref_user={email} css_prop={listCSS}/>}
       </FadeIn>
       {/* { email && <RecipeLists byUser={""} firebase_query={get_query_followed_lists()} state_name="others_lists"/> } */}
       {/* <p>{t('lists.follows.no_list_yet')}</p> */}

@@ -17,6 +17,7 @@
     "react-beautiful-dnd": "^13.0.0",
     "react-chat-elements": "^10.13.0",
     "react-chatbot-kit": "^1.1.1",
+    "react-detect-offline": "^2.4.1",
     "react-dom": "^16.14.0",
     "react-draggable": "^4.4.3",
     "react-dropzone": "^11.2.4",

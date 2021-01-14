@@ -1,14 +1,14 @@
-import { useCollection, useCollectionOnce, useCollectionDataOnce } from 'react-firebase-hooks/firestore';
-import { useDocument, useDocumentOnce, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
-import React from "react"
-import { useHistory } from 'react-router-dom'
-import firebase from "firebase/app"
 import { makeStyles } from '@material-ui/core/styles'
+import firebase from "firebase/app"
+import React from "react"
+import { useCollectionOnce } from 'react-firebase-hooks/firestore'
 import SavedList from './SavedList'
-import { ContactlessOutlined } from '@material-ui/icons';
+import Emoji from '../shared/Emoji'
+import {useTranslation} from "react-i18next";
 
 const AllListsUserFollows = ({ref_user, css_prop={}}) => {
 
+  const {t} = useTranslation('common')
   const [value, loading, error] = useCollectionOnce(
     firebase.firestore().collection(`lists_follows/${ref_user}/lists`), {}
     
@@ -30,10 +30,14 @@ const AllListsUserFollows = ({ref_user, css_prop={}}) => {
             )}
           </>
         )}
+      {
+        (!loading && value.docs.length < 1) && 
+        <p>{t('lists.follows.no_list_yet')}<Emoji symbol="🍽️"/></p>
+      }
     </div>
   );
 };
-
+// {t('lists.follows.no_list_yet')}
 // <React.Fragment key={doc.id}>
 // {JSON.stringify(doc.data())},{' '}
 // {/* <RecipeItemInList ref_recipeID={doc.id}/> */}
