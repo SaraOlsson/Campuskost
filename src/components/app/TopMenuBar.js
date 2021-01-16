@@ -279,7 +279,7 @@ function ProfileBtn (props) {
   {
     return (
       <React.Fragment>
-      <p style={{marginRight: 15, color: 'rgba(255,255,255,0.9)'}}> {userdoc.username} </p>
+      <p className={classes.username}> {userdoc.username} </p>
       <IconButton
         edge="start"
         className={classes.menuButton}
@@ -295,6 +295,8 @@ function ProfileBtn (props) {
   }
 
 }
+
+// style={{marginRight: 15, color: 'rgba(255,255,255,0.9)'}}
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -382,6 +384,14 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 15,
     padding: 6,
     margin: '0 20px'
+  },
+  username: {
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+      marginRight: 15, 
+      color: 'rgba(255,255,255,0.9)'
+    }
   }
 }));
 

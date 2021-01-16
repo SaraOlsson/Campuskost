@@ -9,9 +9,11 @@ import { useSelector } from "react-redux";
 import { useFirestore } from "react-redux-firebase";
 import Emoji from '../shared/Emoji';
 import AddImage from '../../components/shared/AddImage';
+import {useTranslation} from "react-i18next";
 
 function ProfileImageSetting(props) {
 
+    const {t} = useTranslation('common')
     const userdoc = useSelector(state => state.firestore.data.userdoc);
     const [settingValue, SetSettingValue] = useState("");
     const [in_editmode, setIn_editmode] = useState(false);
@@ -181,7 +183,7 @@ function ProfileImageSetting(props) {
               onClick={() => setIn_editmode(true)}
               className={classes.buttons}
             >
-              Ändra {props.label}
+              {t('shared.edit')} {props.label}
             </Button>
             }
             { in_editmode &&
@@ -192,7 +194,7 @@ function ProfileImageSetting(props) {
                 onClick={() => cancel_edit() }
                 className={classes.buttons}
               >
-                Avbryt
+                {t('shared.cancel')}
               </Button>
               <Button
                 variant="contained"
@@ -200,7 +202,7 @@ function ProfileImageSetting(props) {
                 onClick={() => randomImg()}
                 className={`${classes.buttons} ${classes.rainbow}`}
               >
-                Slumpa <Emoji symbol="🤪"/>
+                {t('shared.random')} <Emoji symbol="🤪"/>
               </Button>
               <AddImage onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>
               <Button
@@ -210,7 +212,7 @@ function ProfileImageSetting(props) {
                 className={classes.buttons}
                 disabled={!has_changed}
               >
-                Spara ny {props.label}
+                {t('settings.save_new')} {props.label}
               </Button>
             </React.Fragment>
             }

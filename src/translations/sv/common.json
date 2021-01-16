@@ -2,11 +2,12 @@
 	"lists": {
 		"actions": {
 			"add_to_list": "Lägg till i lista",
+			"manage_recipe": "Receptet i mina listor",
 			"close_dialog": "Stäng",
 			"create_list": "Skapa lista",
 			"remove_from_list": "Lyft ut"
 		},
-		"already_saved": "Redan sparad",
+		"already_saved": "Sparad här",
 		"delete_alert": {
 			"message": "Är du säker på att du vill ta bort den här listan?",
 			"no": "Oj, nej!",
@@ -63,12 +64,18 @@
 		"name": "Namn",
 		"profile_image": "Profilbild",
 		"settings": "Inställningar",
+		"save_new": "Spara ny",
 		"username": "Användarnamn"
 	},
 	"shared": {
+		"cancel": "Avbryt",
 		"description": "Beskrivning",
+		"edit": "Ändra",
 		"followers": "Följare",
 		"follows": "Följer",
+		"follow": "Följ",
+		"random": "Slumpa",
+		"unfollow": "Avfölj",
 		"ingredient": "Ingrediens",
 		"ingredients": "Ingredienser",
 		"lists": "Listor",

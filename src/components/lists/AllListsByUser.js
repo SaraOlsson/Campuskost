@@ -7,7 +7,7 @@ import SavedList from './SavedList';
 const AllListsByUser = ({ref_user, css_prop={}}) => {
 
   const [value, loading, error] = useCollection(
-    firebase.firestore().collection('/lists').where("created_by", "==", ref_user), {}
+    firebase.firestore().collection('lists').where("created_by", "==", ref_user), {}
   );
 
   return (

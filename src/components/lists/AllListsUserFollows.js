@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles'
 import firebase from "firebase/app"
 import React from "react"
-import { useCollectionOnce } from 'react-firebase-hooks/firestore'
+import { useCollection } from 'react-firebase-hooks/firestore'
 import SavedList from './SavedList'
 import Emoji from '../shared/Emoji'
 import {useTranslation} from "react-i18next";
@@ -9,12 +9,9 @@ import {useTranslation} from "react-i18next";
 const AllListsUserFollows = ({ref_user, css_prop={}}) => {
 
   const {t} = useTranslation('common')
-  const [value, loading, error] = useCollectionOnce(
+  const [value, loading, error] = useCollection(
     firebase.firestore().collection(`lists_follows/${ref_user}/lists`), {}
-    
   );
-
-  // console.log(value)
 
   return (
     <div style={css_prop}>
@@ -24,7 +21,6 @@ const AllListsUserFollows = ({ref_user, css_prop={}}) => {
             {value.docs.map((doc) => {
                 
               let data = doc.data()
-              console.log(data)
               return <SavedList key={doc.id} ref_listID={data.listID}/>
             }
             )}
@@ -37,11 +33,6 @@ const AllListsUserFollows = ({ref_user, css_prop={}}) => {
     </div>
   );
 };
-// {t('lists.follows.no_list_yet')}
-// <React.Fragment key={doc.id}>
-// {JSON.stringify(doc.data())},{' '}
-// {/* <RecipeItemInList ref_recipeID={doc.id}/> */}
-// </React.Fragment>
 
 
 const useStyles = makeStyles(theme => ({

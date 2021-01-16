@@ -2,11 +2,12 @@
 	"lists": {
 		"actions": {
 			"add_to_list": "Add to list",
+			"manage_recipe": "This recipe in my lists",
 			"close_dialog": "Close",
 			"create_list": "Create list",
 			"remove_from_list": "Remove"
 		},
-		"already_saved": "Already saved",
+		"already_saved": "Saved here",
 		"delete_alert": {
 			"message": "Are you sure you want to delete this list?",
 			"no": "Oh, no!",
@@ -63,12 +64,18 @@
 		"name": "Name",
 		"profile_image": "Profile picture",
 		"settings": "Settings",
+		"save_new": "Save new",
 		"username": "Username"
 	},
 	"shared": {
+		"cancel": "Avbryt",
 		"description": "Description",
+		"edit": "Edit",
 		"followers": "Followers",
 		"follows": "Follows",
+		"follow": "Follow",
+		"random": "Slumpa",
+		"unfollow": "Unfollow",
 		"ingredient": "Ingredient",
 		"ingredients": "Ingredients",
 		"lists": "Lists",

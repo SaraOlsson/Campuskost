@@ -5,7 +5,9 @@ import { useTranslation } from "react-i18next"
 import { useFirestore } from "react-redux-firebase"
 import Button from '@material-ui/core/Button'
 import SaveRecipeDialog from './SaveRecipeDialog'
+import useHasRecipeInList from './useHasRecipeInList'
 import { useSelector } from "react-redux";
+
 
 export default function AddToList({recipe}) {
 
@@ -15,6 +17,8 @@ export default function AddToList({recipe}) {
   const firestore = useFirestore()
   const { email } = useSelector((state) => state.firebase.auth); 
   const {t} = useTranslation('common')
+
+  // const {has_recipe} = useHasRecipeInList("sara.olsson4s@gmail.com", recipe.recipeID)
 
   const addToList = (list_id) => {
     firestore
@@ -27,7 +31,11 @@ export default function AddToList({recipe}) {
 
   return  (
     <div> 
-      <Button onClick={() => setOpenDialog(true)} variant="contained" color="primary">{t('lists.actions.add_to_list')}</Button>
+      <Button onClick={() => setOpenDialog(true)} 
+              variant="contained" 
+              color="primary">
+        {t('lists.actions.add_to_list')}
+      </Button>
 
       { email &&
       <SaveRecipeDialog
@@ -44,11 +52,6 @@ export default function AddToList({recipe}) {
     </div>
   );
 }
-
-// title={t('settings.delete_alert.title')}
-// message={t('settings.delete_alert.message')}
-// yesOptionText={t('settings.delete_alert.yes')}
-// NoOptionText={t('settings.delete_alert.no')}
 
 const useStyles = makeStyles({
     

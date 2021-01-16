@@ -4,10 +4,11 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core/styles'
 import firebase from "firebase/app"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from "react-i18next"
 import { useFirestore } from "react-redux-firebase"
 import useFirebaseFetch from '../core/useFirebaseFetch'
+import { useDocument, useCollection, useCollectionData } from 'react-firebase-hooks/firestore';
 import Emoji from '../shared/Emoji'
 import { useHistory } from "react-router-dom";
 
@@ -18,57 +19,60 @@ import { useHistory } from "react-router-dom";
 function ListOption({list, onClick, hasPicked, recipeID}) {
 
   const [pickedThis, setPickedThis] = useState(false)
+  const [isSaved, setIsSaved] = useState(false)
   const db = firebase.firestore()
   const {t} = useTranslation('common')
   //const [hasMouseOver, hasMouseOver] = useState(false);
 
+  let db_doc_ref = db.collection("lists").doc(list.listID).collection("recipes").doc(recipeID)
+  const [savedDoc] = useDocument(db_doc_ref)
+
+  useEffect(() => {
+
+    if(savedDoc)
+      setIsSaved(savedDoc.exists)
+
+  }, [savedDoc])
+
+  const removeClick = () => {
+    db.collection("lists").doc(list.listID).collection("recipes").doc(recipeID).delete();
+    setPickedThis(!pickedThis)
+  }
+
   const clicked = () => {
 
-    if(doc_if_saved)
+    if(isSaved)
       return
 
     setPickedThis(!pickedThis)
     onClick(list.listID)
   }
 
-  const removeClick = () => {
-    console.log("remove " + recipeID + " from " + list.title)
-    db.collection("lists").doc(list.listID).collection("recipes").doc(recipeID).delete();
-    setPickedThis(!pickedThis)
-  }
-
-  let db_doc_ref = db.collection("lists").doc(list.listID).collection("recipes").doc(recipeID)
-  const {
-    data: doc_if_saved
-  } = useFirebaseFetch(db_doc_ref, "DOC")
-
-  // console.log(doc_if_saved)
-
   return (
     
     <div 
       onClick={clicked}
       style={{
-        background: (doc_if_saved) ? '#43a58e' : '#0081b3',
+        background: (isSaved) ? '#43a58e' : '#0081b3',
         borderRadius: 5,
         padding: '15px 15px',
         margin: 5,
         color: 'white',
         textAlign: 'center',
-        cursor: !doc_if_saved ? 'pointer' : 'unset',
+        cursor: !isSaved ? 'pointer' : 'unset',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center'
         
       }}
-      className={(doc_if_saved || hasPicked) ? '' : 'animOpacityBlinking'}
+      className={(isSaved || hasPicked) ? '' : 'animOpacityBlinking'}
     >
       <span>{list.title} </span> 
       <div> 
-      { pickedThis && <span>{t('lists.done_message')} <Emoji symbol="🗸"/></span> } 
-      { doc_if_saved && 
+      { pickedThis && <span>{t('lists.done_message')}</span> } 
+      { isSaved && 
         <>
-          <span> {t('lists.already_saved')} <Emoji symbol="🐹"/></span>
+          <span> {t('lists.already_saved')} </span>
           <Button onClick={removeClick}> {t('lists.actions.remove_from_list')} </Button>
         </>
       }
@@ -78,6 +82,8 @@ function ListOption({list, onClick, hasPicked, recipeID}) {
     
   )
 }
+
+// <Emoji symbol="🗸"/>
 
 export default function SaveRecipeDialog(props) {
 
@@ -90,9 +96,11 @@ export default function SaveRecipeDialog(props) {
   const db = firebase.firestore()
 
   let db_ref = db.collection("lists").where("created_by", "==", props.byUser)
-  const {
-    data: list_data
-  } = useFirebaseFetch(db_ref, "COLLECTION")
+  // const {
+  //   data: list_data
+  // } = useFirebaseFetch(db_ref, "COLLECTION")
+
+  const [list_data] = useCollectionData(db_ref)
 
   const handleClose = (chosedYes) => {
     props.onAlertClose(chosedYes);
