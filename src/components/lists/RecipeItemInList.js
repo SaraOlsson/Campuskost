@@ -3,13 +3,29 @@ import firebase from "firebase/app";
 import React from "react";
 import { useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 import { useHistory } from 'react-router-dom';
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import Button from '@material-ui/core/Button'
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
-const RecipeItemInList = ({ref_recipeID, css_prop = {}}) => {
+// TODO: fav icon
+
+const RecipeItemInList = ({ref_recipeID, isLiking = null, toggleLike = () => {}, css_prop = {}}) => {
     const [value, loading, error] = useDocumentDataOnce(
         firebase.firestore().doc('recipes/' + ref_recipeID), {} );
 
     const history = useHistory()
     const classes = useStyles()
+
+    const icon = (isLiking === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
+    const likeBtn = isLiking ? (
+        <Button 
+        disableTouchRipple 
+        onClick={(e) => toggleLike(e, ref_recipeID)}
+        classes={{
+            root: classes.likeButton
+        }}>
+            {icon}
+        </Button>) : null
 
     return (
         <>
@@ -22,7 +38,12 @@ const RecipeItemInList = ({ref_recipeID, css_prop = {}}) => {
             {/* <span> {value.title}{' | '}{value.user}</span> */}
             <img src={value.img_url} className={classes.listImage} alt={value.title} />
             <div className={classes.recipeLink} key={ref_recipeID}>
+                <div>
                 {value.title}{' | '}<br/>{value.user}
+                </div>
+                <div>
+                    {likeBtn}
+                </div>
             </div>
         </div>
         }
@@ -38,6 +59,7 @@ const useStyles = makeStyles(theme => ({
         margin: 5,
         color: 'white',
         textAlign: 'left',
+        display: 'flex'
     },
     listImage: {
       maxHeight: '50px',
@@ -51,6 +73,9 @@ const useStyles = makeStyles(theme => ({
       display: 'flex',
       alignItems: 'center',
       cursor: 'pointer'
+    },
+    likeButton: {
+        color: '#ffffff52' //'white'
     }
 }))
 

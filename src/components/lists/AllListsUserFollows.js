@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles'
 import firebase from "firebase/app"
 import React from "react"
-import { useCollectionOnce } from 'react-firebase-hooks/firestore'
+import { useCollection } from 'react-firebase-hooks/firestore'
 import SavedList from './SavedList'
 import Emoji from '../shared/Emoji'
 import {useTranslation} from "react-i18next";
@@ -9,7 +9,7 @@ import {useTranslation} from "react-i18next";
 const AllListsUserFollows = ({ref_user, css_prop={}}) => {
 
   const {t} = useTranslation('common')
-  const [value, loading, error] = useCollectionOnce(
+  const [value, loading, error] = useCollection(
     firebase.firestore().collection(`lists_follows/${ref_user}/lists`), {}
     
   );

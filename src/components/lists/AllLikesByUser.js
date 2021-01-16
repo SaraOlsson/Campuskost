@@ -12,11 +12,18 @@ import LoadSpinner from '../shared/LoadSpinner';
 // get which recipe IDs this user likes
 const AllLikesByUser = ({ref_user, css_prop={}}) => {
 
-  const [value, loading, error] = useCollectionOnce(
+  const [value, loading, error] = useCollection(
     firebase.firestore().collection(`likes/${ref_user}/likes`), {}
   );
 
   // <RecipeGridList recipes={getRecipeDocs(userLikes)} />
+
+  const toggleLike = (event, ref_recipeID) => {
+    event.stopPropagation();
+    
+    firebase.firestore().collection(`likes/${ref_user}/likes`).doc(ref_recipeID).delete()
+
+  }
 
   const css_prop_item = {
     background: '#43a58e',
@@ -41,7 +48,10 @@ const AllLikesByUser = ({ref_user, css_prop={}}) => {
             {value.docs.map((doc) => (
               <React.Fragment key={doc.id}>
                 {/* {JSON.stringify(doc.data())},{' '} */}
-                <RecipeItemInList ref_recipeID={doc.id} css_prop={css_prop_item}/>
+                <RecipeItemInList isLiking={true} 
+                                  toggleLike={toggleLike}
+                                  ref_recipeID={doc.id} 
+                                  css_prop={css_prop_item}/>
               </React.Fragment>
             ))}
           </>

@@ -63,12 +63,18 @@
 		"name": "Name",
 		"profile_image": "Profile picture",
 		"settings": "Settings",
+		"save_new": "Save new",
 		"username": "Username"
 	},
 	"shared": {
+		"cancel": "Avbryt",
 		"description": "Description",
+		"edit": "Edit",
 		"followers": "Followers",
 		"follows": "Follows",
+		"follow": "Follow",
+		"random": "Slumpa",
+		"unfollow": "Unfollow",
 		"ingredient": "Ingredient",
 		"ingredients": "Ingredients",
 		"lists": "Lists",

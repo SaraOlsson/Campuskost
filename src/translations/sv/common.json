@@ -63,12 +63,18 @@
 		"name": "Namn",
 		"profile_image": "Profilbild",
 		"settings": "Inställningar",
+		"save_new": "Spara ny",
 		"username": "Användarnamn"
 	},
 	"shared": {
+		"cancel": "Avbryt",
 		"description": "Beskrivning",
+		"edit": "Ändra",
 		"followers": "Följare",
 		"follows": "Följer",
+		"follow": "Följ",
+		"random": "Slumpa",
+		"unfollow": "Avfölj",
 		"ingredient": "Ingrediens",
 		"ingredients": "Ingredienser",
 		"lists": "Listor",
