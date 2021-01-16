@@ -16,19 +16,12 @@ const SavedList = ({ref_listID}) => {
   const {email: authUser} = useSelector((state) => state.firebase.auth)
   const [openAlert, setOpenAlert] = useState(false)
   const [isMine, setIsMine] = useState(false)
-  const [value, loading, error] = useDocumentDataOnce(
-    db.doc('lists/' + ref_listID), // 1rOnvDuk8VJoZPWbHZkU
-    {
-      // snapshotListenOptions: { includeMetadataChanges: true },
-    }
-  );
+  const [value] = useDocumentDataOnce(db.doc('lists/' + ref_listID));
 
   const [follows, setFollows] = useState(false)
   const [followRef, setFollowRef] = useState('')
   const [followDoc] = useDocument(followRef)
 
-
-  
 
   useEffect(() => {
 
@@ -49,11 +42,6 @@ const SavedList = ({ref_listID}) => {
       setFollows(followDoc.exists)
 
   }, [followDoc])
-
-  // const onRemove = () => {
-  //   console.log("remove " + ref_listID)
-  //   firebase.firestore().doc('lists/' + ref_listID).delete()
-  // }
 
   const onRemove = (chosedDelete) => {
 
@@ -144,7 +132,7 @@ const ListUI = ({data, showRmButton, onRemove, showFollowBtn, follows, toggleFol
               </div>}
               { (showFollowBtn && (isHovering || isTouchDevice())) &&
               <div className={classes.removeIcon}> 
-                  <Button onClick={toggleFollow} variant={!follows && "contained"} 
+                  <Button onClick={toggleFollow} variant={!follows ? "contained" : "text"} 
                           color={follows ? "secondary" : "primary"}>
                     {follows ? t('shared.unfollow') : t('shared.follow') }
                   </Button> 
