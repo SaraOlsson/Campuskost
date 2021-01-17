@@ -64,13 +64,13 @@ class ActionProvider {
             "Campuskost är en plattform du kan använda för att samla recept som du själv eller andra skapat"
         );
 
-        const message2 = this.createChatBotMessage(
-            "Läs mer här om utvecklingen av Campuskost",
-            {
-                withAvatar: false,
-                delay: 1500,
-            }
-        );
+        // const message2 = this.createChatBotMessage(
+        //     "Läs mer här om utvecklingen av Campuskost",
+        //     {
+        //         withAvatar: false,
+        //         delay: 1500,
+        //     }
+        // );
   
         this.addMessageToBotState([message1, this.getReplayOptionMessage()]);
     }

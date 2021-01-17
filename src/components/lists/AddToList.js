@@ -1,11 +1,8 @@
-import { makeStyles } from '@material-ui/core/styles'
 import React, {useState} from 'react'
-// import Emoji from '../shared/Emoji'
 import { useTranslation } from "react-i18next"
 import { useFirestore } from "react-redux-firebase"
 import Button from '@material-ui/core/Button'
 import SaveRecipeDialog from './SaveRecipeDialog'
-import useHasRecipeInList from './useHasRecipeInList'
 import { useSelector } from "react-redux";
 
 
@@ -13,7 +10,6 @@ export default function AddToList({recipe}) {
 
   const [openDialog, setOpenDialog] = useState(false)
 
-  const classes = useStyles()
   const firestore = useFirestore()
   const { email } = useSelector((state) => state.firebase.auth); 
   const {t} = useTranslation('common')
@@ -52,7 +48,3 @@ export default function AddToList({recipe}) {
     </div>
   );
 }
-
-const useStyles = makeStyles({
-    
-});

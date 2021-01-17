@@ -1,10 +1,9 @@
-import { makeStyles } from '@material-ui/core/styles'
 import firebase from "firebase/app"
 import React from "react"
 import { useCollection } from 'react-firebase-hooks/firestore'
-import SavedList from './SavedList'
+import { useTranslation } from "react-i18next"
 import Emoji from '../shared/Emoji'
-import {useTranslation} from "react-i18next";
+import SavedList from './SavedList'
 
 const AllListsUserFollows = ({ref_user, css_prop={}}) => {
 
@@ -33,31 +32,5 @@ const AllListsUserFollows = ({ref_user, css_prop={}}) => {
     </div>
   );
 };
-
-
-const useStyles = makeStyles(theme => ({
-    recipeLink: {
-        // background: theme.palette.primary.main,
-        borderRadius: 5,
-        padding: '10px 15px',
-        margin: 5,
-        color: 'white',
-        textAlign: 'left',
-    },
-    listImage: {
-      maxHeight: '50px',
-      maxWidth: '50px',
-      minWidth: '50px',
-      minHeight: '50px',
-      objectFit: 'cover',
-      borderRadius: 5
-    },
-    row: {
-      display: 'flex',
-      alignItems: 'center',
-      cursor: 'pointer'
-    }
-}))
-
 
 export default AllListsUserFollows

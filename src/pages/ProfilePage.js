@@ -1,28 +1,27 @@
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
-import SettingsIcon from '@material-ui/icons/Settings';
-import 'firebase/auth';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
-import { useFirestore } from "react-redux-firebase";
-import { useParams } from "react-router";
-import { useHistory } from "react-router-dom";
-import FollowerList from '../components/shared/FollowerList';
-import RecipeGridList from '../components/shared/RecipeGridList';
-import RecipeLists from '../components/lists/RecipeLists';
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
+import { makeStyles } from '@material-ui/core/styles'
+import AddIcon from '@material-ui/icons/Add'
+import RemoveIcon from '@material-ui/icons/Remove'
+import SettingsIcon from '@material-ui/icons/Settings'
+import 'firebase/auth'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useFirestore } from 'react-redux-firebase'
+import { useParams } from 'react-router'
+import { useHistory } from 'react-router-dom'
+import FollowerList from '../components/shared/FollowerList'
+import RecipeGridList from '../components/shared/RecipeGridList'
 import AllListsByUser from '../components/lists/AllListsByUser'
-import UserPageTabs from '../components/profile/UserPageTabs';
-import { useFirestoreConnect } from "react-redux-firebase";
-import LoadSpinner from '../components/shared/LoadSpinner';
-import Emoji from '../components/shared/Emoji';
-import {FadeIn} from "react-anim-kit"
-import {useTranslation} from "react-i18next";
+import UserPageTabs from '../components/profile/UserPageTabs'
+import { useFirestoreConnect } from 'react-redux-firebase'
+import LoadSpinner from '../components/shared/LoadSpinner'
+import Emoji from '../components/shared/Emoji'
+import {FadeIn} from 'react-anim-kit'
+import {useTranslation} from 'react-i18next'
 
-import Avatar from '@material-ui/core/Avatar';
-import PersonIcon from '@material-ui/icons/Person';
+import Avatar from '@material-ui/core/Avatar'
+import PersonIcon from '@material-ui/icons/Person'
 
 function ProfilePage(props) {
 
@@ -242,7 +241,6 @@ function ProfilePage(props) {
         { recipeContent }
         </div>
         <div>
-        {/* <RecipeLists byUser={viewUserEmail}/> */}
         <AllListsByUser ref_user={viewUserEmail} css_prop={listCSS}/>
         </div>
         <div>

@@ -15,6 +15,7 @@
 			"yes": "Ja"
 		},
 		"done_message": "Fixat!",
+		"empty_list": "Tom lista",
 		"follows": {
 			"no_list_yet": "Du följer inga listor än",
 			"recipe_lists_i_follow": "Listor jag följer"

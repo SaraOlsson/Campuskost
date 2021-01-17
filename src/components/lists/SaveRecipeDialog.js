@@ -4,13 +4,11 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core/styles'
 import firebase from "firebase/app"
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useCollectionData, useDocument } from 'react-firebase-hooks/firestore'
 import { useTranslation } from "react-i18next"
 import { useFirestore } from "react-redux-firebase"
-import useFirebaseFetch from '../core/useFirebaseFetch'
-import { useDocument, useCollection, useCollectionData } from 'react-firebase-hooks/firestore';
-import Emoji from '../shared/Emoji'
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom"
 
 // TODO: reorder options so that lists that dont have the recipe appears at the top
 // TODO: mouse-over on desktop

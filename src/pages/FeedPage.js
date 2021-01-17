@@ -1,52 +1,29 @@
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-//import DropZone from "../components/input/DropZone"
-//import KeyFrames from "../components/framer/KeyFrames"
-import Link from '@material-ui/core/Link';
-import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
-import { FadeIn } from "react-anim-kit";
-import { useTranslation } from "react-i18next";
-import { Else, If, Then } from 'react-if';
-import { useDispatch, useSelector } from "react-redux";
-import { useFirestoreConnect } from "react-redux-firebase";
-import Emoji from '../components/shared/Emoji';
-import LoadSpinner from '../components/shared/LoadSpinner';
-import RecipeGridList from '../components/shared/RecipeGridList';
-import { fetchData } from "../redux/testReducer";
+import Grid from '@material-ui/core/Grid'
+import Link from '@material-ui/core/Link'
+import { makeStyles } from '@material-ui/core/styles'
+import firebase from "firebase/app"
+import React, { useEffect, useState } from 'react'
+import { FadeIn } from "react-anim-kit"
+import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore'
+import { useTranslation } from "react-i18next"
+import { Else, If, Then } from 'react-if'
+import { useDispatch } from "react-redux"
+import Emoji from '../components/shared/Emoji'
+import LoadSpinner from '../components/shared/LoadSpinner'
+import RecipeGridList from '../components/shared/RecipeGridList'
+import { fetchData } from "../redux/testReducer"
+import TranslateOptions from "../components/core/TranslateOptions"
+
 // import CacheComponent from '../components/core/CacheComponent'
-
-
-let src_flag_en = require('../assets/en_flag.png');
-let src_flag_sv = require('../assets/sv_flag.png');
+// import DropZone from "../components/input/DropZone"
+// import KeyFrames from "../components/framer/KeyFrames"
+// import BouncyDiv from "../components/animations/BouncyDiv"
+// import FavoriteIcon from '@material-ui/icons/Favorite'
+// import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
 
 const VERSION = 4;
 
-
-function TranslateOptions()
-{
-  
-    // variant="contained" color="primary"
-    const {i18n} = useTranslation('common');
-    return (
-      <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-        <Button onClick={() => i18n.changeLanguage('sv')} 
-        style={{
-          margin: 15
-        }}>
-          Svenska <img src={src_flag_sv} style={{ width: 20, marginLeft: 8}}/>
-        </Button>
-        
-        <Button onClick={() => i18n.changeLanguage('en')}
-        style={{
-          margin: 15
-        }}>
-          English <img src={src_flag_en} style={{ width: 20, marginLeft: 8}}/>
-        </Button>
-      </div>
-    )
-}
 
 function Test(props) {
   //const count = useSelector(state => state)
@@ -65,27 +42,16 @@ function FeedPage() {
   const [updateExists, setUpdateExists ] = useState(false);
   const {t} = useTranslation('common');
 
-  useFirestoreConnect({
-    collection: `recipes`,
-    storeAs: "recipes",
-    orderBy: ['timestamp', 'desc']
-  });
-
-  useFirestoreConnect({
-    collection: "common",
-    doc: "version",
-    storeAs: "version",
-  });
-
-  const recipes = useSelector((state) => state.firestore.data.recipes); 
-  const version = useSelector((state) => state.firestore.data.version); 
+  const db = firebase.firestore()
+  const [version] = useDocumentData(db.collection('common').doc('version'))
+  const [recipes] = useCollectionData(db.collection('recipes'))
 
   useEffect(() => {
 
     // console.log(serviceWorker.hasUpdates)
     if(version && version.release)
     {
-      // console.log(version.release)
+      console.log(version.release)
       
       //let local_version = Number(window.localStorage.getItem('version'));
       //console.log("const version: " + VERSION);
@@ -97,7 +63,6 @@ function FeedPage() {
       //  window.localStorage.setItem('version', '1'); // version.release.toString());
     }
 
-
   }, [version]);
 
 
@@ -107,6 +72,7 @@ function FeedPage() {
     <div>
 
       {/* <CacheComponent/> */}
+      {/* <BouncyDiv trigger={true}> <FavoriteIcon/> </BouncyDiv> */}
       
       <If condition={updateExists}><Then>
         
