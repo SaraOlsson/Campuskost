@@ -1,19 +1,19 @@
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
-import React, { useState } from 'react';
-import ReactGA from 'react-ga';
-import { useSelector } from "react-redux";
-import { useFirestore } from "react-redux-firebase";
-import { useHistory } from "react-router-dom";
-import AlertDialog from '../components/shared/AlertDialog';
-import CollapseGrid from '../components/shared/CollapseGrid';
-import ProfileImageSetting from '../components/settings/ProfileImageSetting';
-import TextSetting from '../components/settings/TextSetting';
-import UsernameSetting from '../components/settings/UsernameSetting';
-import {useTranslation} from "react-i18next";
+import Button from '@material-ui/core/Button'
+import { makeStyles } from '@material-ui/core/styles'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
+import React, { useState } from 'react'
+import ReactGA from 'react-ga'
+import { useSelector } from "react-redux"
+import { useFirestore } from "react-redux-firebase"
+import { useHistory } from "react-router-dom"
+import AlertDialog from '../components/shared/AlertDialog'
+import CollapseGrid from '../components/shared/CollapseGrid'
+import ProfileImageSetting from '../components/settings/ProfileImageSetting'
+import TextSetting from '../components/settings/TextSetting'
+import UsernameSetting from '../components/settings/UsernameSetting'
+import {useTranslation} from "react-i18next"
 
 function Settings(props) {
 
@@ -40,18 +40,18 @@ function Settings(props) {
 
     // sign out if signed in
     if (firebase.auth().currentUser) {
-      firebase.auth().signOut();
-      history.push("/login");
+      firebase.auth().signOut()
+      history.push("/login")
     }
   }
 
   const onExpand = (e, expanded, id) => {
-    let openval = expanded ? id : "";
-    setOpenSetting(openval);
+    let openval = expanded ? id : ""
+    setOpenSetting(openval)
   }
 
   const isOpen = (collaps_name) => {
-    return collaps_name === openSetting;
+    return collaps_name === openSetting
   }
 
   const removeAccount = () => {
@@ -61,15 +61,15 @@ function Settings(props) {
   const onDeleteAccChoice = (chosedDelete) => {
 
     if(chosedDelete === true) {
-      firestore.collection('users').doc(userdoc.email).delete();
-      history.push("/home");
+      firestore.collection('users').doc(userdoc.email).delete()
+      history.push("/home")
     } else {
       setOpenAlert(false)
     }
   }
 
   if (userdoc && !userdoc.email) {
-    history.push("/home");
+    history.push("/home")
   }
   
   return (

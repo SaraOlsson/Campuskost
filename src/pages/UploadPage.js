@@ -3,33 +3,33 @@ Component: Page where recipes are uploaded or edited.
 TODO: notice if something differs from prev saved data 
 */
 
-import Button from '@material-ui/core/Button';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import React from 'react';
-import { useSelector } from "react-redux";
-import AddImage from '../components/shared/AddImage';
-import CollapseGrid from '../components/shared/CollapseGrid';
-import Emoji from '../components/shared/Emoji';
-import ImageDialog from '../components/recipeform/ImageDialog';
+import Button from '@material-ui/core/Button'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
+import CloudUploadIcon from '@material-ui/icons/CloudUpload'
+import React from 'react'
+import { useSelector } from "react-redux"
+import AddImage from '../components/shared/AddImage'
+import CollapseGrid from '../components/shared/CollapseGrid'
+import Emoji from '../components/shared/Emoji'
+import ImageDialog from '../components/recipeform/ImageDialog'
 import DescriptionList from '../components/recipeform/EditDescription'
 import IngredientsList from '../components/recipeform/EditIngredients'
-import useUpload from '../components/recipeform/useUpload';
+import useUpload from '../components/recipeform/useUpload'
 import { useHistory } from "react-router-dom"
-import {useTranslation} from "react-i18next";
+import {useTranslation} from "react-i18next"
 
-var Spinner = require('react-spinkit');
+var Spinner = require('react-spinkit')
 const DEBUG = (window.location.hostname === 'localhost')
 
 function UploadPage(props) {
 
-  const classes = useStyles();
-  const upload_store = useSelector(state => state.uploadReducer);
+  const classes = useStyles()
+  const upload_store = useSelector(state => state.uploadReducer)
   const history = useHistory()
-  const { uid } = useSelector((state) => state.firebase.auth);
-  const {t} = useTranslation('common');  
+  const { uid } = useSelector((state) => state.firebase.auth)
+  const {t} = useTranslation('common')
 
   const {
     data,
@@ -52,8 +52,8 @@ function UploadPage(props) {
   } = useUpload()
 
   // configure bottom content
-  let upload_done_text = (upload_store.editmode) ? "Ändring klar" : "Uppladding klar, gå till recept";
-  let submit_text = (upload_store.editmode) ? t('upload.actions.edit') : t('upload.actions.upload');
+  let upload_done_text = (upload_store.editmode) ? "Ändring klar" : "Uppladding klar, gå till recept"
+  let submit_text = (upload_store.editmode) ? t('upload.actions.edit') : t('upload.actions.upload')
   let is_working = (!upload_wait && !done) 
   let button_text = is_working ? submit_text : upload_done_text
   let onClick_action = is_working ? uploadAction : goToRecipe
@@ -72,7 +72,7 @@ function UploadPage(props) {
   )
 
   let bottom_content = upload_wait ? spinner : button
-  let page_title = (upload_store.editmode) ? t('upload.header_edit') : t('upload.header_upload');
+  let page_title = (upload_store.editmode) ? t('upload.header_edit') : t('upload.header_upload')
 
   if(done)
   {
@@ -224,4 +224,4 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default UploadPage;
+export default UploadPage

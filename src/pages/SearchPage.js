@@ -1,12 +1,10 @@
-import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import FollowerList from '../components/shared/FollowerList';
-import LoadSpinner from '../components/shared/LoadSpinner';
-import RecipeGridList from '../components/shared/RecipeGridList';
-import {useTranslation} from "react-i18next";
-// import useFirebaseFetch from '../components/core/useFirebaseFetch'
-// import firebase from "firebase/app"
+import { makeStyles } from '@material-ui/core/styles'
+import React, { useEffect } from 'react'
+import { useTranslation } from "react-i18next"
+import { useDispatch, useSelector } from "react-redux"
+import FollowerList from '../components/shared/FollowerList'
+import LoadSpinner from '../components/shared/LoadSpinner'
+import RecipeGridList from '../components/shared/RecipeGridList'
 
 function SearchPage(props) {
 

@@ -13,13 +13,8 @@ export default function AddRecipeList() {
     const classes = useStyles()
     const {t} = useTranslation('common')
     const firestore = useFirestore();
-    const { email, uid } = useSelector((state) => state.firebase.auth);
+    const { email } = useSelector((state) => state.firebase.auth);
 
-    const handleChange = ({ currentTarget: { name, value } }) => {
-        if (name === "addList") {
-            setListname(value);
-        }
-    };
 
     const addNewTodo = (todo) => {
         firestore

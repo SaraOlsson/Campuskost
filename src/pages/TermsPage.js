@@ -1,9 +1,9 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 
 function TermsPage() {
 
-    const classes = useStyles();
+    const classes = useStyles()
 
     return(
 
@@ -28,4 +28,4 @@ const useStyles = makeStyles({
     }
 });
 
-export default TermsPage;
+export default TermsPage

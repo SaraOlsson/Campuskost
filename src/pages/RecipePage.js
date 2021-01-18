@@ -3,23 +3,23 @@ import { makeStyles } from '@material-ui/core/styles'
 import EditIcon from '@material-ui/icons/Edit'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FadeIn } from "react-anim-kit"
 import { useTranslation } from "react-i18next"
-import { useParams } from "react-router"
 import { useHistory } from "react-router-dom"
+import BouncyDiv from "../components/animations/BouncyDiv"
+import AddToList from '../components/lists/AddToList'
 import ListIngredients from '../components/recipe/ListIngredients'
 import RecipeDecsList from '../components/recipe/RecipeDecsList'
 import useRecipePage from '../components/recipe/useRecipePage'
 import AlertDialog from '../components/shared/AlertDialog'
 import generateTimeString from '../logic/generateTimeString'
-import AddToList from '../components/lists/AddToList'
 const fallbackImage = require('../assets/noconnection3.png')
 
 
 export default function RecipePage(props) {
 
-  // const { recipetitle } = useParams()
+  const [triggerLikeAnim, setTriggerLikeAnim] = useState(false)
 
   const classes = useStyles()
   const history = useHistory()
@@ -29,7 +29,7 @@ export default function RecipePage(props) {
     recipe,
     email,
     ifUser,
-    isLiking,
+    likesBool,
     likeRecipe,
     editRecipe,
     openAlert,
@@ -37,7 +37,11 @@ export default function RecipePage(props) {
     onDeleteRecipeChoice
   } = useRecipePage()
 
-  const icon = (isLiking() === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
+  useEffect(() => {
+    setTriggerLikeAnim(!triggerLikeAnim) // false or true doesn't matter
+  }, [likesBool])
+
+  const icon = likesBool ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
   const timestring = recipe ? generateTimeString(recipe.timestamp) : undefined;
   const image = recipe ? <img src={recipe.img_url} className={classes.recipeImage} onError={(e)=>{e.target.onerror = null; e.target.src=fallbackImage}} alt={recipe.title}/> : null;
 
@@ -52,7 +56,9 @@ export default function RecipePage(props) {
             <div>
               <span>
                 { email && 
-                  <Button disableTouchRipple onClick={likeRecipe}>{icon}</Button>
+                  <Button disableTouchRipple onClick={likeRecipe}>
+                    <BouncyDiv trigger={triggerLikeAnim}> {icon} </BouncyDiv>
+                  </Button>
                 }
                 {recipe.title + ' | '}
               </span>
@@ -168,7 +174,9 @@ const useStyles = makeStyles({
    fontWeight: 'bold',
    display: 'flex',
    justifyContent: 'space-between',
-   flexWrap: 'wrap'
+   alignItems: 'center',
+   flexWrap: 'wrap',
+   minHeight: 45
   },
   freetext: {
 

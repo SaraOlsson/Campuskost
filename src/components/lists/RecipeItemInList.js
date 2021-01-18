@@ -7,7 +7,6 @@ import FavoriteIcon from '@material-ui/icons/Favorite'
 import Button from '@material-ui/core/Button'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
-// TODO: fav icon
 
 const RecipeItemInList = ({ref_recipeID, isLiking = null, toggleLike = () => {}, css_prop = {}}) => {
     const [value, loading, error] = useDocumentDataOnce(

@@ -19,11 +19,11 @@ function useDataLoad(userEmail) {
         storeAs: "allrecipes",
     });
     
-    useFirestoreConnect({
-        collection: `recipe_likes`,
-        doc:  `${userEmail}`,
-        storeAs: "userLikes",
-    });
+    // useFirestoreConnect({
+    //     collection: `recipe_likes`,
+    //     doc:  `${userEmail}`,
+    //     storeAs: "userLikes",
+    // });
     
     useFirestoreConnect([
     {
