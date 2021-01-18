@@ -47,6 +47,8 @@ ReactGA.initialize(trackingId, {
   }
 });
 
+const DEBUG = (window.location.hostname === 'localhost')
+
 const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
 const firebaseConfig = {
   apiKey: API_KEY,
@@ -121,7 +123,9 @@ i18next.init({
 });
 
 // const initialState = {};
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const use_devtools = (DEBUG === true)
+console.log("use devtools: " + use_devtools)
+const composeEnhancer = use_devtools ? (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose) : compose;
 // const store = createStore(rootReducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 const store = createStore(rootReducer, composeEnhancer(applyMiddleware(thunk)))
 

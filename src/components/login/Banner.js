@@ -2,21 +2,24 @@ import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import React from 'react'
 
-export default function LogInBanner(props) {
+export default function Banner(props) {
 
     const classes = useStyles()
   
     return (
   
       <div className={classes.login_div}>
-        <h3> Har du redan ett konto? </h3>
+        <h3> {props.header} {props.emoji}</h3>
         <Button
           variant="contained"
           color="primary"
           onClick={props.onAction}
         >
-          Logga in
+          {props.buttonText}
         </Button>
+
+        {props.children}
+        
       </div>
   
     )

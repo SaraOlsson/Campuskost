@@ -2,11 +2,15 @@ import firebase from "firebase/app"
 import React from "react"
 import { useCollection } from 'react-firebase-hooks/firestore'
 import RecipeItemInList from './RecipeItemInList'
+import {useTranslation} from "react-i18next";
+import Emoji from '../shared/Emoji'
 
 // get which recipe IDs this user likes
 const AllLikesByUser = ({ref_user, css_prop={}}) => {
 
-  const [value] = useCollection(
+  const {t} = useTranslation('common')
+
+  const [value, loading] = useCollection(
     firebase.firestore().collection(`likes/${ref_user}/likes`), {}
   );
 
@@ -45,7 +49,11 @@ const AllLikesByUser = ({ref_user, css_prop={}}) => {
               </React.Fragment>
             ))}
           </>
-        )}
+      )}
+      {
+        (!loading && value.docs.length < 1) && 
+        <p>{t('lists.no_recipes_yet')}<Emoji symbol="🍽️"/></p>
+      }
     </div>
   );
 };
