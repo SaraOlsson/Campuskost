@@ -49,6 +49,9 @@ const theme = createMuiTheme({
     MuiOutlinedInput: {
       multiline: {
         backgroundColor: "white"
+      },
+      input: {
+        backgroundColor: "white"
       }
     },
 

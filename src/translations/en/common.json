@@ -69,7 +69,8 @@
 		"username": "Username"
 	},
 	"shared": {
-		"cancel": "Avbryt",
+		"by": "By",
+		"cancel": "Cancel",
 		"description": "Description",
 		"edit": "Edit",
 		"followers": "Followers",

@@ -69,6 +69,7 @@
 		"username": "Användarnamn"
 	},
 	"shared": {
+		"by": "Av",
 		"cancel": "Avbryt",
 		"description": "Beskrivning",
 		"edit": "Ändra",

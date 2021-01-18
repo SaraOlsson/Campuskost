@@ -1,4 +1,4 @@
-import { useDocument, useDocumentOnce, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
+import { useDocument, useDocumentOnce, useDocumentData, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 import React, {useEffect, useState} from "react"
 import firebase from "firebase/app"
 import { useSelector } from "react-redux"
@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button'
 import ListContent from './ListContent'
 import AlertDialog from '../shared/AlertDialog'
 import {useTranslation} from "react-i18next";
+import { useHistory } from "react-router-dom"
 
 
 const SavedList = ({ref_listID}) => {
@@ -22,6 +23,8 @@ const SavedList = ({ref_listID}) => {
   const [followRef, setFollowRef] = useState('')
   const [followDoc] = useDocument(followRef)
 
+  const [userRef, setUserRef] = useState('')
+  const [userDoc] = useDocumentData(userRef)
 
   useEffect(() => {
 
@@ -30,6 +33,9 @@ const SavedList = ({ref_listID}) => {
 
     if(followRef === '')
       setFollowRef(db.doc(`lists_follows/${authUser}/lists/${ref_listID}`))
+
+    if(userRef === '')
+    setUserRef(db.doc(`users/${value.created_by}`))
 
     // if email agrees
     setIsMine(authUser === value.created_by)
@@ -85,6 +91,7 @@ const SavedList = ({ref_listID}) => {
         <>
         {/* <span>Document: {JSON.stringify(value)}</span> */}
         <ListUI data={value} 
+                userDoc={userDoc}
                 showRmButton={isMine} 
                 showFollowBtn={!isMine} 
                 follows={follows}
@@ -110,10 +117,11 @@ function isTouchDevice() {
   return(window.matchMedia("(pointer: coarse)").matches)
 }
 
-const ListUI = ({data, showRmButton, onRemove, showFollowBtn, follows, toggleFollow}) => {
+const ListUI = ({data, userDoc, showRmButton, onRemove, showFollowBtn, follows, toggleFollow}) => {
 
   const [isHovering, setIsHovering] = useState(false)
   const {t} = useTranslation('common')
+  const history = useHistory()
 
   // console.log(data)
 
@@ -124,7 +132,7 @@ const ListUI = ({data, showRmButton, onRemove, showFollowBtn, follows, toggleFol
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}>
             <div className={classes.containerHeader}>
-              <b> {data.title} </b>
+              <b> {data.title} </b> 
               { (showRmButton && (isHovering || isTouchDevice()) ) && 
                 <div className={classes.removeIcon}
                      onClick={onRemove}> 
@@ -140,9 +148,17 @@ const ListUI = ({data, showRmButton, onRemove, showFollowBtn, follows, toggleFol
               }
             </div>
             <div className={classes.listItem}>
-                
                 <ListContent ref_listID={data.listID}/>
             </div>
+            { (follows && userDoc) && 
+              <p className={classes.byUser}> 
+                {t('shared.by')} 
+                <a className={classes.byUserLink} 
+                   onClick={() => {history.push("/profile/" + userDoc.username)}}>
+                     {' '}{userDoc.username} 
+                </a>
+              </p> 
+            }
 
         </div>
     )
@@ -160,10 +176,10 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'center',
         overflowY: 'auto',
         overflowX: 'hidden', // but should not happen
-        marginTop: 10,
+        // marginTop: 10,
         maxHeight: 200,
         minHeight: 200,
-        
+        boxShadow: '5px 5px 10px rgb(152 152 152 / 30%)'
         
     },
     listContainer: {
@@ -182,6 +198,13 @@ const useStyles = makeStyles(theme => ({
     removeIcon: {
       cursor: 'pointer',
       color: theme.palette.secondary.main
+    },
+    byUser: {
+      textAlign: 'start'
+    },
+    byUserLink: {
+      color: theme.palette.campuskost.teal, 
+      cursor: 'pointer'
     }
 }))
 
