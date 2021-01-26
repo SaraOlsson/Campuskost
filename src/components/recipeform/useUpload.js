@@ -139,6 +139,13 @@ function useUpload() {
   
     // upload image and callback with download URL
     const uploadImage = (callback) => {
+
+      // TODO: dont even go here
+      if(newImage === false)
+      {
+        callback("")
+        return;
+      }
       
       setUpload_wait(true);
       // Create a reference to the new image
@@ -266,7 +273,7 @@ function useUpload() {
     }
   
     const validUpload = () => {
-      return ( validTitle() && validImage() && validIngredients() && validDescription() )
+      return ( validTitle() && validIngredients() && validDescription() ) // validImage() && 
     }
 
     const validTitle = () => { return data.title ? true : false }

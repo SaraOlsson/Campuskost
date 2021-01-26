@@ -43,7 +43,7 @@ export default function RecipePage(props) {
 
   const icon = likesBool ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
   const timestring = recipe ? generateTimeString(recipe.timestamp) : undefined;
-  const image = recipe ? <img src={recipe.img_url} className={classes.recipeImage} onError={(e)=>{e.target.onerror = null; e.target.src=fallbackImage}} alt={recipe.title}/> : null;
+  const image = (recipe && recipe.img_url !== "") ? <img src={recipe.img_url} className={classes.recipeImage} onError={(e)=>{e.target.onerror = null; e.target.src=fallbackImage}} alt={recipe.title}/> : null;
 
   return (!recipe) ? null : (
 

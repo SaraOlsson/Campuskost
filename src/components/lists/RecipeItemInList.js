@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import Button from '@material-ui/core/Button'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
+const fallbackImage = require('../../assets/err_image.png')
 
 
 const RecipeItemInList = ({ref_recipeID, isLiking = null, toggleLike = () => {}, css_prop = {}}) => {
@@ -35,7 +36,11 @@ const RecipeItemInList = ({ref_recipeID, isLiking = null, toggleLike = () => {},
         >
             {/* <span>Document: {JSON.stringify(value)}</span> */}
             {/* <span> {value.title}{' | '}{value.user}</span> */}
-            <img src={value.img_url} className={classes.listImage} alt={value.title} />
+            <img src={value.img_url} 
+                className={classes.listImage} 
+                alt={value.title}
+                onError={(e)=>{e.target.onerror = null; e.target.src=fallbackImage}}
+            />
             <div className={classes.recipeLink} key={ref_recipeID}>
                 <div>
                 {value.title}{' | '}<br/>{value.user}
