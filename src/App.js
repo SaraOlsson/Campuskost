@@ -81,6 +81,7 @@ function App() {
   return (
 
     <Suspense fallback="loading">
+
     <div className={classes.body}>
 
       <div>
@@ -128,6 +129,10 @@ function App() {
 
         <div className={classes.footer}>
           <BottomMenuBar/>
+          {/* <svg viewBox="0 0 1366 74" id="shape-wave" style={{fill: '#43a58e', marginBottom: -10}}> 
+            <path fill-rule="evenodd" d="M0,6.92209776 C305.760417,-8.06143884 556.887773,1.27998827 753.38207,34.9463791 C949.876366,68.6127699 1154.08234,68.6127699 1366,34.9463791 L1366,74 L0,74 L0,6.92209776 Z">
+            </path> 
+        </svg> */}
         </div>
 
       </div>
