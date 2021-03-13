@@ -11,7 +11,8 @@ const DEFAULT_DATA = {
     title: "",
     freetext: "",
     servings: "", // change to int
-    cookingtime: ""
+    cookingtime: "",
+    credit_link: ""
     //     ingredients: undefined, 
     //     descriptions: undefined, 
     //     image: undefined,
@@ -139,6 +140,13 @@ function useUpload() {
   
     // upload image and callback with download URL
     const uploadImage = (callback) => {
+
+      // TODO: dont even go here
+      if(newImage === false)
+      {
+        callback("")
+        return;
+      }
       
       setUpload_wait(true);
       // Create a reference to the new image
@@ -204,7 +212,8 @@ function useUpload() {
             ingredients: upload_store.data.ingredients,
             description: upload_store.data.description,
             user_ref: ref_to_user,
-            timestamp: firestore_timestamp
+            timestamp: firestore_timestamp,
+            credit_link: data.credit_link
           })
           .then((docRef) => {
             docRef.update({
@@ -229,6 +238,7 @@ function useUpload() {
           img_filename: image_filename,
           ingredients: upload_store.data.ingredients,
           description: upload_store.data.description,
+          credit_link: data.credit_link
         };
   
         // either upload with or without image (no new imag needed of recipe _update_)
@@ -266,7 +276,7 @@ function useUpload() {
     }
   
     const validUpload = () => {
-      return ( validTitle() && validImage() && validIngredients() && validDescription() )
+      return ( validTitle() && validIngredients() && validDescription() ) // validImage() && 
     }
 
     const validTitle = () => { return data.title ? true : false }

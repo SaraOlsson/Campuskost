@@ -76,6 +76,7 @@
 		"followers": "Följare",
 		"follows": "Följer",
 		"follow": "Följ",
+		"hide": "Dölj",
 		"random": "Slumpa",
 		"unfollow": "Avfölj",
 		"ingredient": "Ingrediens",
@@ -87,9 +88,11 @@
 			"tablespoon": "msk",
 			"teaspoon": "tsk"
 		},
+		"no": "Nej",
 		"recipes": "Recept",
 		"settings": "Inställningar",
-		"users": "Användare"
+		"users": "Användare",
+		"yes": "Ja"
 	},
 	"upload": {
 		"actions": {
@@ -102,6 +105,8 @@
 			"upload_image": "Ladda upp bild"
 		},
 		"createnew": "Skapa nytt recept",
+		"creditquestion": "Har du hittat det här receptet någonstans?",
+		"creditlinkinfo": "Lägg till länk till orignalreceptet",
 		"creditmessage": "Ladda bara upp bilder som du har rättigheter till",
 		"data": {
 			"cookingtime": "Minuter",
@@ -111,6 +116,7 @@
 			"quantity": "Mängd",
 			"servings": "Portioner"
 		},
+		"enterLink": "Länka",
 		"header_edit": "Ändra recept",
 		"header_upload": "Ladda upp nytt recept",
 		"other": "Övrigt (valfritt)",
@@ -118,7 +124,8 @@
 		"signin_message": "Du behöver vara inloggad för att kunna ladda upp recept.",
 		"tooltip": {
 			"recipename": "Namn på recept",
-			"step": "Steg"
+			"step": "Steg",
+			"credit": "Länk till recept"
 		}
 	},
 	"welcome": {

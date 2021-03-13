@@ -12,9 +12,11 @@ function BouncyDiv(props) {
 
     setAnimNow(true)
     
-    setTimeout(() => {
+    const timer =  setTimeout(() => {
       setAnimNow(false)
     }, 2000);
+
+    return () => clearTimeout(timer);
 
   }, [props.trigger])
 

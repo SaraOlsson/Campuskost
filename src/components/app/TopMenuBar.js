@@ -31,6 +31,7 @@ import {
 
 
 let img_src = require('../../assets/logo.png');
+const fallbackProfileImage = require('../../assets/chefgirl.png')
 
 function TopMenuBar(props) {
   const classes = useStyles();
@@ -271,7 +272,8 @@ function ProfileBtn (props) {
     img_src = <AccountCircleIcon/>;
   } */
 
-  let icon_content = (img_src !== undefined) ? <img src={img_src} className={classes.smallprofileimage} alt={"profile img"} /> : <AccountCircleIcon/>;
+  // fallbackProfileImage
+  let icon_content = (img_src !== undefined) ? <img src={img_src} onError={(e)=>{e.target.onerror = null; e.target.src=fallbackProfileImage}} className={classes.smallprofileimage} alt={"profile img"} /> : <AccountCircleIcon/>;
 
   let jsx_content = props.signedIn ? icon_content : btn;
 

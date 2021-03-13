@@ -76,6 +76,7 @@
 		"followers": "Followers",
 		"follows": "Follows",
 		"follow": "Follow",
+		"hide": "Hide",
 		"random": "Slumpa",
 		"unfollow": "Unfollow",
 		"ingredient": "Ingredient",
@@ -87,9 +88,11 @@
 			"tablespoon": "tbsp",
 			"teaspoon": "tsp"
 		},
+		"no": "No",
 		"recipes": "Recipes",
 		"settings": "Settings",
-		"users": "Users"
+		"users": "Users",
+		"yes": "Yes"
 	},
 	"upload": {
 		"actions": {
@@ -102,6 +105,8 @@
 			"upload_image": "Upload image"
 		},
 		"createnew": "Create a new recipe",
+		"creditquestion": "Did you find this recipe somewhere?",
+		"creditlinkinfo": "Link the original recipe",
 		"creditmessage": "Only upload images that you have permission to use",
 		"data": {
 			"cookingtime": "Minutes",
@@ -111,6 +116,7 @@
 			"quantity": "Amount",
 			"servings": "Servings"
 		},
+		"enterLink": "Link",
 		"header_edit": "Edit recipe",
 		"header_upload": "Upload new recipe",
 		"other": "Extras (optional)",
@@ -118,7 +124,8 @@
 		"signin_message": "You need to be signed in to be able to upload recipes.",
 		"tooltip": {
 			"recipename": "Recipe title",
-			"step": "Step"
+			"step": "Step",
+			"credit": "Credit link"
 		}
 	},
 	"welcome": {

@@ -1,6 +1,6 @@
 import firebase from "firebase/app";
 import { useEffect, useState } from 'react';
-import { useDocument, useDocumentData } from 'react-firebase-hooks/firestore';
+import { useCollection, useDocument, useDocumentData } from 'react-firebase-hooks/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFirestore } from "react-redux-firebase";
 import { useParams } from "react-router";
@@ -27,6 +27,12 @@ export default function useRecipePage() {
   const [likes_this, loading, error] = useDocument(likeRef)
   const [likesBool, setLikesBool] = useState(false)
 
+  const liking_users_ref = db.collection('recipe_likes').doc(id).collection('users')
+  const [liking_users] = useCollection(liking_users_ref)
+
+  if(liking_users)
+    console.log("liking_users: ", liking_users.docs.length)
+
   useEffect(() => {
 
     if(email)
@@ -46,9 +52,6 @@ export default function useRecipePage() {
     setLikesBool(likes_this && likes_this.exists)
   }, [likes_this])
 
-  // const isLiking = () => {
-  //   return (likes_this && likes_this.exists)
-  // }
 
   const likeRecipe = () => {
 
@@ -56,9 +59,16 @@ export default function useRecipePage() {
       return
 
     if (likesBool)
+    {
       db.collection('likes/' + email + '/likes/').doc(id).delete()
+      db.collection('recipe_likes').doc(id).collection('users').doc(email).delete()
+    }
     else 
+    {
       db.collection('likes/' + email + '/likes/').doc(id).set({})
+      db.collection('recipe_likes').doc(id).collection('users').doc(email).set({}) // /' + email + '/likes/
+    }
+      
   };
 
   // make to reducer
@@ -101,7 +111,8 @@ export default function useRecipePage() {
     editRecipe,
     openAlert,
     setOpenAlert,
-    onDeleteRecipeChoice
+    onDeleteRecipeChoice,
+    liking_users
   }
 
 }

@@ -8,7 +8,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
-import React from 'react'
+import React, {useState} from 'react'
 import { useSelector } from "react-redux"
 import AddImage from '../components/shared/AddImage'
 import CollapseGrid from '../components/shared/CollapseGrid'
@@ -30,6 +30,7 @@ function UploadPage(props) {
   const history = useHistory()
   const { uid } = useSelector((state) => state.firebase.auth)
   const {t} = useTranslation('common')
+  const [needCredit, setNeedCredit] = useState(false)
 
   const {
     data,
@@ -112,6 +113,38 @@ function UploadPage(props) {
             value={data.title}
             onChange={onValueChange}
           />
+
+          <div style={{fontStyle: 'italic'}}>
+            <p> {t('upload.creditquestion')}
+              <span style={{color: 'green', marginLeft: 5, cursor: 'pointer'}}
+                 onClick={() => setNeedCredit(true)}
+              >
+                {t('upload.enterLink')}
+              </span> 
+              {
+                needCredit &&
+                <span style={{color: 'red', marginLeft: 5, cursor: 'pointer'}}
+                  onClick={() => setNeedCredit(false)}
+                >
+                  ({t('shared.hide')})
+                </span> 
+              }
+            </p>
+            {
+            needCredit &&
+            <>
+            {/* <p> {t('upload.creditlinkinfo')}</p> */}
+            <TextField
+            id="recipecredit-input"
+            label={t('upload.tooltip.credit')}
+            variant="outlined"
+            name="credit_link"
+            value={data.credit_link}
+            onChange={onValueChange}
+            />
+            </>
+          }
+          </div>
 
         {/* INGREDIENTS */}
         <CollapseGrid label={t('shared.ingredients')}>

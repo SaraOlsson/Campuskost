@@ -99,8 +99,8 @@ const theme = createMuiTheme({
     MuiGridList: {
       root: {
         justifyContent: 'center',
-        width: '100%',
-        margin: 0
+        // width: '100%',
+        // margin: 0
       }
     },
 
@@ -132,7 +132,18 @@ const theme = createMuiTheme({
         position: 'relative',
         borderRadius: 20
       }
-    }
+    },
+
+    // MuiGrid: {
+    //   spacing: {
+    //     xs: {
+    //       3: {
+    //         width: 'auto',
+    //         margin: 'auto'
+    //       }
+    //     }
+    //   }
+    // }
     
     // MuiOutlinedInput: {
     //   input: {

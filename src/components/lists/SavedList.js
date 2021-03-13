@@ -178,7 +178,7 @@ const useStyles = makeStyles(theme => ({
         overflowX: 'hidden', // but should not happen
         // marginTop: 10,
         maxHeight: 200,
-        minHeight: 200,
+        // minHeight: 200,
         boxShadow: '5px 5px 10px rgb(152 152 152 / 30%)'
         
     },
