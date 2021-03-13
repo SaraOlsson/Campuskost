@@ -87,26 +87,36 @@ firebase.firestore().enablePersistence()
 
 firebase.firestore();
 
-/*
+
 const messaging = firebase.messaging();
-messaging.requestPermission().then(function() {
 
-  console.log("have permission");
-  return messaging.getToken();
+// subsequent calls to getToken will return from cache.
+const vapidKey = 'BMIAooArU38LEj_5QHhRn7ijJHnkzFcarwhrJ49xQqt6s8mapaKKhuwke6CfqZQa5cLiZJ1drmd4a0KFh8thrLw'
+messaging.getToken({ vapidKey: vapidKey }).then((currentToken) => {
+  if (currentToken) {
+    // Send the token to your server and update the UI if necessary
+    // ...
+    alert('Notifikationer kan dyka upp!')
+    console.log("got token!")
+    console.log(currentToken)
+  } else {
+    // Show permission request UI
+    console.log('No registration token available. Request permission to generate one.')
+    // ...
+  }
+}).catch((err) => {
+  console.log('An error occurred while retrieving token. ', err)
+  // ...
+});
 
-}).then(function(token){
-  console.log(token)
-
-}).catch(function(err) {
-  console.log("Message error")
-}) 
-
-// Add the public key generated from the console here.
-messaging.usePublicVapidKey("BMIAooArU38LEj_5QHhRn7ijJHnkzFcarwhrJ49xQqt6s8mapaKKhuwke6CfqZQa5cLiZJ1drmd4a0KFh8thrLw");
-
+// Handle incoming messages. Called when:
+// - a message is received while the app has focus
+// - the user clicks on an app notification created by a service worker
+//   `messaging.onBackgroundMessage` handler.
 messaging.onMessage((payload) => {
   console.log('Message received. ', payload);
-}); */
+  alert('Message received. ', payload)
+}); 
 
 // translation
 i18next.init({
@@ -183,3 +193,10 @@ let cutomConfig = {testisCallback, onUpdate, onSuccess};
 // Learn more about service workers: https://bit.ly/CRA-PWA
 // serviceWorker.unregister();
 serviceWorker.register(cutomConfig);
+
+// http://patorjk.com/software/taag/#p=display&f=Doom&t=Campuskost
+console.log(`
+╔═╗┌─┐┌┬┐┌─┐┬ ┬┌─┐┬┌─┌─┐┌─┐┌┬┐
+║  ├─┤│││├─┘│ │└─┐├┴┐│ │└─┐ │ 
+╚═╝┴ ┴┴ ┴┴  └─┘└─┘┴ ┴└─┘└─┘ ┴ 
+"`)
