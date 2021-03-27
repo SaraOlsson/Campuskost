@@ -19,6 +19,8 @@ import IngredientsList from '../components/recipeform/EditIngredients'
 import useUpload from '../components/recipeform/useUpload'
 import { useHistory } from "react-router-dom"
 import {useTranslation} from "react-i18next"
+import AudioRecord from "../components/azureai/AudioRecord"
+import AudioRecordLong from "../components/azureai/AudioRecordLong"
 
 var Spinner = require('react-spinkit')
 const DEBUG = (window.location.hostname === 'localhost')
@@ -98,6 +100,8 @@ function UploadPage(props) {
 
     <div>
       <h3>{page_title}</h3>
+
+        <AudioRecordLong/>
 
         { !uid && 
           <p style={{color: 'orange'}}> {t('upload.signin_message')} </p>

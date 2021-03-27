@@ -7,10 +7,12 @@
     "@material-ui/icons": "^4.11.2",
     "@testing-library/jest-dom": "^5.11.8",
     "@testing-library/react": "^11.2.3",
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "firebase": "^7.24.0",
     "framer-motion": "^3.2.0",
     "i18next": "^19.8.4",
+    "microsoft-cognitiveservices-speech-sdk": "^1.16.0",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-anim-kit": "^1.0.19",
@@ -37,7 +39,8 @@
     "react-spinkit": "^3.0.0",
     "redux": "^4.0.5",
     "redux-firestore": "^0.11.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "universal-cookie": "^4.0.4"
   },
   "scripts": {
     "start": "react-scripts start",
