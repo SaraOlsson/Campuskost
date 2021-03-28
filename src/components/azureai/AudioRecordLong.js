@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { ResultReason } from 'microsoft-cognitiveservices-speech-sdk';
 import React, {useState, useEffect} from 'react'
 import { getTokenOrRefresh } from '../../logic/token_util';
+import {useTranslation} from "react-i18next";
 
 const speechsdk = require('microsoft-cognitiveservices-speech-sdk')
 // docs: https://docs.microsoft.com/en-us/javascript/api/microsoft-cognitiveservices-speech-sdk/?view=azure-node-latest
@@ -17,7 +18,9 @@ export default function AudioRecordLong(props) {
     const [theRecognizer, setTheRecognizer] = useState(null) // raw result
     const [recordList, setRecordList] = useState([]) // raw result
 
-    console.log(recordList)
+    const {t, i18n} = useTranslation('common');
+
+    // console.log(recordList)
 
     useEffect(() => {
 
@@ -32,6 +35,8 @@ export default function AudioRecordLong(props) {
       const newList = [...recordList];
       newList.push(text);
       setRecordList(newList);
+
+      props.recognizedText(text) // send to parent component
   
     },[text])
 
@@ -50,7 +55,11 @@ export default function AudioRecordLong(props) {
   const sttFromMic = async () => {
     const tokenObj = await getTokenOrRefresh();
     const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(tokenObj.authToken, tokenObj.region);
-    speechConfig.speechRecognitionLanguage = 'sv-SE' //  'en-US';
+    // speechConfig.speechRecognitionLanguage = 'sv-SE' //  'en-US';
+
+    const language = i18n.language === 'sv' ? 'sv-SE' : 'en-US'
+    console.log("speechConfig language: " + language)
+    speechConfig.speechRecognitionLanguage = language 
     
     const audioConfig = speechsdk.AudioConfig.fromDefaultMicrophoneInput();
     const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig);
@@ -67,18 +76,13 @@ export default function AudioRecordLong(props) {
     //  The event recognized signals that a final recognition result is received.
     recognizer.recognized = function(s, e){
       let text_result = e.result.text
-      console.log('recognized text', text_result);
+      // console.log('recognized text', text_result);
       // script += e.result.text;
       setText(text_result)
       
+      
     };
   }
-
-  // const addRecognized = (record) => {
-  //   const newList = [...recordList];
-  //   newList.push(record);
-  //   setRecordList(newList);
-  // }
 
   const stopRecord = () => {
     console.log("stop now")
@@ -90,17 +94,10 @@ export default function AudioRecordLong(props) {
     })
   }
 
-  const getRecognized = () => {
-    console.log("getRecognized")
-
-    let listenNow = theRecognizer.recognized
-    console.log(listenNow)
-  }
-  
   return (
   
     <div>
-      <h3> Record tests</h3>
+      {/* <h3> Record tests</h3> */}
       <Button
         variant="contained"
         color="primary"
@@ -115,27 +112,21 @@ export default function AudioRecordLong(props) {
         onClick={() => stopRecord()}
       >
         {'Stop recording'}
-      </Button> 
-
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => getRecognized()}
-      >
-        {'Get Recognized'}
-      </Button>       
+      </Button>    
 
       <div>
         <code>{displayText}</code>
       </div>
 
-      <div>
-        {
-          recordList.map( (r, idx) => 
-            <p key={idx}>{r}</p>
-          )
-        }
-      </div>
+      { props.showList && 
+        <div>
+          {
+            recordList.map( (r, idx) => 
+              <p key={idx}>{r}</p>
+            )
+          }
+        </div>
+      }
 
     </div>
   

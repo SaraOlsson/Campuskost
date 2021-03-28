@@ -14,6 +14,7 @@ import DragNDrop from '../shared/DragNDrop';
 import useInstructions from "./useInstructions"
 import {useTranslation} from "react-i18next";
 import '../../style/Animations.css';
+import AudioRecordLong from "../azureai/AudioRecordLong"
 
 const HEADER = "HEADER";
 const DESC = "DESC";
@@ -44,7 +45,8 @@ function DescriptionList(props) {
     enterPress,
     getOrder,
     getMyItems,
-    listClick
+    listClick,
+    directAdd
   } = useInstructions({
     propertyName: "description",
     customFieldsDefault: {text: ""},
@@ -69,6 +71,15 @@ function DescriptionList(props) {
   </React.Fragment>
   );
 
+  const recognizedText = (textLine) => {
+
+    console.log("got audio description: " + textLine)
+    directAdd(DESC, {text: textLine})
+    // addInstruction(DESC)
+    // setCustomFieldsData({text: textLine})
+    // saveEdited()
+  }
+
   return (
     <div >
 
@@ -78,6 +89,8 @@ function DescriptionList(props) {
         justify="center"
         alignItems="center"
       >
+
+      <AudioRecordLong recognizedText={recognizedText}/>
 
       <Grid item xs={12}>
         <List dense={true} className={classes.ingredientslist}>

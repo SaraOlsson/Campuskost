@@ -101,7 +101,7 @@ function UploadPage(props) {
     <div>
       <h3>{page_title}</h3>
 
-        <AudioRecordLong/>
+        {/* <AudioRecordLong/> */}
 
         { !uid && 
           <p style={{color: 'orange'}}> {t('upload.signin_message')} </p>

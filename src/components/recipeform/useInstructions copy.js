@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash"
 
 // custom hook, input list with drag-n-drop
-function useInstructions({
+function useInstructionsCopy({
     initInstructions, 
     // handleAdd, 
     propertyName, 
@@ -148,18 +148,6 @@ function useInstructions({
 
   }
 
-  const directAdd = (row_type, customValues) => {
-
-    let temp_list = instructions.slice(0);
-    let new_order = (max_order()+1).toString();
-    let new_obj = {order: new_order, type: row_type, ...customValues}; 
-    temp_list.push(new_obj);
-
-    setInstructions(temp_list); // BOTH?
-    instructionsDisp(temp_list); // BOTH?
-
-  }
-
   // attach id to each jsx item, for DnD
   const getMyItems = (d_data, datajsx) => {
 
@@ -202,10 +190,9 @@ function useInstructions({
     enterPress,
     getOrder,
     getMyItems,
-    listClick,
-    directAdd
+    listClick
   }
 
 }
 
-export default useInstructions
+export default useInstructionsCopy
