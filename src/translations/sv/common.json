@@ -102,7 +102,10 @@
 			"edit": "Ändra recept",
 			"remove_image": "Ta bort bild",
 			"upload": "Ladda upp recept",
-			"upload_image": "Ladda upp bild"
+			"upload_image": "Ladda upp bild",
+			"speak_mic": "Tala in i mikrofonen...",
+			"record_start": "Starta inspelning",
+			"record_stop": "Stoppa inspelning"
 		},
 		"createnew": "Skapa nytt recept",
 		"creditquestion": "Har du hittat det här receptet någonstans?",

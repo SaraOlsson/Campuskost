@@ -48,7 +48,7 @@ function useInstructions({
     if(!upload_store.editmode)
     {
       emptyLocalState()
-      console.log("empty local state")
+      // console.log("empty local state")
     }
   }, [upload_store.editmode]);
 

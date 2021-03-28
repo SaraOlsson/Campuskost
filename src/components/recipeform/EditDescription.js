@@ -75,9 +75,7 @@ function DescriptionList(props) {
 
     console.log("got audio description: " + textLine)
     directAdd(DESC, {text: textLine})
-    // addInstruction(DESC)
-    // setCustomFieldsData({text: textLine})
-    // saveEdited()
+    
   }
 
   return (

@@ -11,44 +11,44 @@ const speechsdk = require('microsoft-cognitiveservices-speech-sdk')
 
 export default function AudioRecordLong(props) {
 
-    const classes = useStyles()
-    const [token, setToken] = useState('') 
-    const [displayText, setDisplayText] = useState('...')
-    const [text, setText] = useState('') // raw result
-    const [theRecognizer, setTheRecognizer] = useState(null) // raw result
-    const [recordList, setRecordList] = useState([]) // raw result
+  const classes = useStyles()
+  const [token, setToken] = useState('') 
+  const [displayText, setDisplayText] = useState('')
+  const [text, setText] = useState('') // raw result
+  const [theRecognizer, setTheRecognizer] = useState(null) // raw result
+  const [recordList, setRecordList] = useState([]) // raw result
 
-    const {t, i18n} = useTranslation('common');
+  const {t, i18n} = useTranslation('common');
 
-    // console.log(recordList)
+  // console.log(recordList)
 
-    useEffect(() => {
+  useEffect(() => {
 
-      //console.log(token)
-      if(token !== '')
-          console.log('got token now. Activate sttFromMic')
-  
-    },[token])
+    //console.log(token)
+    if(token !== '')
+        console.log('got token now. Activate sttFromMic')
 
-    useEffect(() => {
+  },[token])
 
-      const newList = [...recordList];
-      newList.push(text);
-      setRecordList(newList);
+  useEffect(() => {
 
-      props.recognizedText(text) // send to parent component
-  
-    },[text])
+    const newList = [...recordList];
+    newList.push(text);
+    setRecordList(newList);
 
-    useEffect(() => {
-      getTokenOrCookie()
-    },[])
+    props.recognizedText(text) // send to parent component
 
-    const getTokenOrCookie = async () => {
-      console.log("check for valid speech key/region")
+  },[text])
 
-      const tokenRes = await getTokenOrRefresh();
-      console.log(tokenRes)
+  useEffect(() => {
+    getTokenOrCookie()
+  },[])
+
+  const getTokenOrCookie = async () => {
+    // console.log("check for valid speech key/region")
+
+    const tokenRes = await getTokenOrRefresh();
+    // console.log(tokenRes)
   }
 
   // sv-SE
@@ -65,7 +65,7 @@ export default function AudioRecordLong(props) {
     const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig);
     setTheRecognizer(recognizer)
 
-    setDisplayText('speak into your microphone...')
+    setDisplayText(t('upload.actions.speak_mic')) // 'speak into your microphone...')
 
     recognizer.startContinuousRecognitionAsync(() => {
       console.log("recording started")
@@ -86,6 +86,7 @@ export default function AudioRecordLong(props) {
 
   const stopRecord = () => {
     console.log("stop now")
+    setDisplayText('')
 
     theRecognizer.stopContinuousRecognitionAsync(() => {
       console.log("recording stopped")
@@ -103,7 +104,7 @@ export default function AudioRecordLong(props) {
         color="primary"
         onClick={() => sttFromMic()}
       >
-        {'Record Audio'}
+        {t('upload.actions.record_start')}
       </Button>
 
       <Button
@@ -111,7 +112,7 @@ export default function AudioRecordLong(props) {
         color="primary"
         onClick={() => stopRecord()}
       >
-        {'Stop recording'}
+        {t('upload.actions.record_stop')}
       </Button>    
 
       <div>

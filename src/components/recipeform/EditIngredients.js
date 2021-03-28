@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button';
 import useInstructions from "./useInstructions"
 import {useTranslation} from "react-i18next";
 import '../../style/Animations.css';
+import AudioRecordLong from "../azureai/AudioRecordLong"
 
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
@@ -47,7 +48,8 @@ function IngredientsList(props) {
     enterPress,
     getOrder,
     getMyItems,
-    listClick
+    listClick,
+    directAdd
   } = useInstructions({
     propertyName: "ingredients",
     customFieldsDefault: {quantity: "", measure: "", name: ""},
@@ -87,6 +89,18 @@ function IngredientsList(props) {
     )
   }
 
+  const recognizedText = (textLine) => {
+
+    if (!textLine)
+      return
+
+    console.log("got audio description: " + textLine)
+
+    const refinedText = textLine.replace('.', '')
+    directAdd(ROW, {quantity: "", measure: "", name: refinedText})
+    
+  }
+
   return (
     <div>
 
@@ -96,6 +110,8 @@ function IngredientsList(props) {
         justify="center"
         alignItems="center"
       >
+
+      <AudioRecordLong recognizedText={recognizedText}/>
 
       <Grid item xs={12}>
         <List dense={true} className={classes.ingredientslist}>
