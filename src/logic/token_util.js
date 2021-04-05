@@ -29,7 +29,7 @@ export async function getTokenOrRefresh() {
             const region = speechRegion;
             cookie.set('speech-token', region + ':' + token, {maxAge: 540, path: '/'});
 
-            console.log('Token fetched from back-end: ' + token);
+            // console.log('Token fetched from back-end: ' + token);
             return { authToken: token, region: region };
         } catch (err) {
 

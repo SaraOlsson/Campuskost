@@ -4,6 +4,8 @@ import { ResultReason } from 'microsoft-cognitiveservices-speech-sdk';
 import React, {useState, useEffect} from 'react'
 import { getTokenOrRefresh } from '../../logic/token_util';
 import {useTranslation} from "react-i18next";
+import MicIcon from '@material-ui/icons/Mic';
+import MicOffIcon from '@material-ui/icons/MicOff';
 
 const speechsdk = require('microsoft-cognitiveservices-speech-sdk')
 // docs: https://docs.microsoft.com/en-us/javascript/api/microsoft-cognitiveservices-speech-sdk/?view=azure-node-latest
@@ -20,11 +22,8 @@ export default function AudioRecordLong(props) {
 
   const {t, i18n} = useTranslation('common');
 
-  // console.log(recordList)
-
   useEffect(() => {
 
-    //console.log(token)
     if(token !== '')
         console.log('got token now. Activate sttFromMic')
 
@@ -45,10 +44,7 @@ export default function AudioRecordLong(props) {
   },[])
 
   const getTokenOrCookie = async () => {
-    // console.log("check for valid speech key/region")
-
     const tokenRes = await getTokenOrRefresh();
-    // console.log(tokenRes)
   }
 
   // sv-SE
@@ -58,7 +54,6 @@ export default function AudioRecordLong(props) {
     // speechConfig.speechRecognitionLanguage = 'sv-SE' //  'en-US';
 
     const language = i18n.language === 'sv' ? 'sv-SE' : 'en-US'
-    console.log("speechConfig language: " + language)
     speechConfig.speechRecognitionLanguage = language 
     
     const audioConfig = speechsdk.AudioConfig.fromDefaultMicrophoneInput();
@@ -85,8 +80,11 @@ export default function AudioRecordLong(props) {
   }
 
   const stopRecord = () => {
-    console.log("stop now")
+
     setDisplayText('')
+
+    if(!theRecognizer)
+      return
 
     theRecognizer.stopContinuousRecognitionAsync(() => {
       console.log("recording stopped")
@@ -97,11 +95,13 @@ export default function AudioRecordLong(props) {
 
   return (
   
-    <div>
+    <div style={{marginTop: 10}}>
       {/* <h3> Record tests</h3> */}
+      
       <Button
         variant="contained"
         color="primary"
+        startIcon={<MicIcon/>}
         onClick={() => sttFromMic()}
       >
         {t('upload.actions.record_start')}
@@ -110,6 +110,7 @@ export default function AudioRecordLong(props) {
       <Button
         variant="contained"
         color="primary"
+        startIcon={<MicOffIcon/>}
         onClick={() => stopRecord()}
       >
         {t('upload.actions.record_stop')}

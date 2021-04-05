@@ -21,6 +21,8 @@ import { useHistory } from "react-router-dom"
 import {useTranslation} from "react-i18next"
 import AudioRecord from "../components/azureai/AudioRecord"
 import AudioRecordLong from "../components/azureai/AudioRecordLong"
+import { computerVision, computerVisionFile, isConfigured as ComputerVisionIsConfigured } from '../components/azureai/azure-cognitiveservices-computervision'
+
 
 var Spinner = require('react-spinkit')
 const DEBUG = (window.location.hostname === 'localhost')
@@ -96,10 +98,46 @@ function UploadPage(props) {
     )
   }
 
+  const callImageAnalysis = () => {
+
+    // fileSelected || 
+    computerVision(null).then((item) => {
+      console.log('analyzed:', item)
+    });
+  }
+
+  const Analyze = () => {
+    return (
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={callImageAnalysis}
+        style={{lineHeight: '1.2'}}
+        >
+            Analyze
+      </Button>
+    )
+  }
+
+  const beforeImageAdd = (files) => {
+
+    
+    console.log("check if good for upload")
+    // const test_blob = URL.createObjectURL(files[0])
+    // computerVisionFile(test_blob).then((item) => {
+    //   console.log('analyzed:', item)
+    // });
+    onFileAdd(files)
+  }
+
   return (
 
     <div>
       <h3>{page_title}</h3>
+
+       {/* {
+          ComputerVisionIsConfigured ? Analyze() : <p> Not ready </p>
+       } */}
 
         {/* <AudioRecordLong/> */}
 
@@ -163,7 +201,7 @@ function UploadPage(props) {
         {/* IMAGE */}
         <CollapseGrid label={t('upload.recipe_image')}>
           <p className={classes.copyright}>{t('upload.creditmessage')}<Emoji symbol="📷"/> </p>
-          <AddImage image={image} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>
+          <AddImage image={image} onFileAdd={beforeImageAdd} onFileRemove={onFileRemove}/>
         </CollapseGrid>
 
         {/* OTHER */}

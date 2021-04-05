@@ -6,6 +6,10 @@ import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import resizeImage from '../../logic/resizeImage';
 import _ from "lodash"
+import axios from 'axios';
+import { computerVision, isConfigured as ComputerVisionIsConfigured } from '../azureai/azure-cognitiveservices-computervision'
+
+const GORE_THRESHOLD = 0.3
 
 const DEFAULT_DATA = {
     title: "",
@@ -22,6 +26,7 @@ function useUpload() {
 
     const [data, setData] = useState(DEFAULT_DATA)
 
+    const [localBlob, setLocalBlob] = useState(undefined);
     const [image, setImage] = useState(undefined);
     const [rawImage, setRawImage] = useState(undefined);
     const [smallImage, setSmallImage] = useState(undefined);
@@ -93,12 +98,25 @@ function useUpload() {
       }
   
     }, []);
+
+    useEffect(() => {
+  
+      if (localBlob)
+      {
+        // trySendRequest()
+        // computerVisionFile(localBlob) not working yet
+      } 
+  
+    }, [localBlob]);
   
     const onImageDialogChoise = async (chosedYes, croppedImage = null) => {
   
       setOpenImageDialog(false);
   
       if(chosedYes === true) {
+
+        // trySendRequest(croppedImage)
+
         setImage(croppedImage)
         fieldDisp("image", croppedImage)
         //imageDisp(croppedImage);
@@ -109,6 +127,40 @@ function useUpload() {
       }
   
     }
+
+    // send request to custom vision API
+    const trySendRequest = async () => {
+
+      // console.log(imageData)
+      console.log("trySendRequest")
+
+      const customVisionKey = process.env.REACT_APP_CUSTOMVISIONKEY || ''
+
+      const headers = { 
+          headers: {
+              'Prediction-Key': customVisionKey,
+              'Content-Type': 'application/octet-stream'
+          }
+      };
+      // 'application/octet-stream'
+      // 'application/json'
+
+      const body = {"Url": "https://eruzawastestorage.blob.core.windows.net/event-images/plastic/1616245404771.jpg"};
+      //const body = {"Url": fileSelected};
+      const url_url = 'https://customvisionhhs.cognitiveservices.azure.com/customvision/v3.0/Prediction/c11ba780-1341-49b1-8e6b-d536093afe00/detect/iterations/Iteration1/url'
+      const url_image = 'https://customvisionhhs.cognitiveservices.azure.com/customvision/v3.0/Prediction/c11ba780-1341-49b1-8e6b-d536093afe00/detect/iterations/Iteration1/image'
+
+      try {
+          const detectResponse = await axios.post(url_image, localBlob, headers);
+          
+          console.log(detectResponse);
+
+      } catch (err) {
+
+          console.log('error');
+      }
+      
+  };
   
     const onFileAdd = (files) => {
   
@@ -116,13 +168,22 @@ function useUpload() {
   
       var reader = new FileReader();
       reader.onload = function(e) {
-        setRawImage(e.target.result);
+        const rawImage = e.target.result
+        setRawImage(rawImage);
         setNewImage(true);
         setOpenImageDialog(true);
+
+        //var arrayBuffer = this.result, array = new Uint8Array(arrayBuffer);
+        //console.log(array)
       }
   
       try {
         reader.readAsDataURL(files[0]);
+        const test_src = URL.createObjectURL(files[0])
+        //console.log(test_src)
+        setLocalBlob(files[0]) // works
+
+
       } catch(err) {
           console.log(err.message);
       }
@@ -198,7 +259,20 @@ function useUpload() {
         uploadImage(function(returnValue_downloadURL) {
           // use the return value here instead of like a regular (non-evented) return value
           let downloadURL = returnValue_downloadURL;
-  
+
+          computerVision(downloadURL).then((item) => {
+            console.log('analyzed:', item)
+
+            let adultScore = item.adult.adultScore
+            let goreScore = item.adult.goreScore
+
+            console.log("adultScore: " + adultScore + "and goreScore: " + goreScore)
+            if (goreScore > GORE_THRESHOLD)
+            {
+              alert("That is not appropriate! Your recipe will be removed.") 
+            }
+          });
+
           firestore
           .collection("recipes")
           .add({
@@ -254,6 +328,19 @@ function useUpload() {
             update_data.img_url = returnValue_downloadURL;
             firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
             uploadDone(upload_store.recipe_id);
+
+            computerVision(returnValue_downloadURL).then((item) => {
+              console.log('analyzed:', item)
+
+              let adultScore = item.adult.adultScore
+              let goreScore = item.adult.goreScore
+
+              console.log("adultScore: " + adultScore + "and goreScore: " + goreScore)
+              if (goreScore > GORE_THRESHOLD)
+              {
+                alert("That is not appropriate! Your recipe will be removed.") 
+              }
+            });
   
           }); // end of image upload callback
    

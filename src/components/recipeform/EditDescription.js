@@ -73,8 +73,12 @@ function DescriptionList(props) {
 
   const recognizedText = (textLine) => {
 
+    if(!textLine)
+      return
+       
     console.log("got audio description: " + textLine)
-    directAdd(DESC, {text: textLine})
+    const refinedText = textLine.replace('.', '')
+    directAdd(DESC, {text: refinedText})
     
   }
 

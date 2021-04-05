@@ -94,7 +94,7 @@ function IngredientsList(props) {
     if (!textLine)
       return
 
-    console.log("got audio description: " + textLine)
+    console.log("got audio ingredient: " + textLine)
 
     const refinedText = textLine.replace('.', '')
     directAdd(ROW, {quantity: "", measure: "", name: refinedText})
