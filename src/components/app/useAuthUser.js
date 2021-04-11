@@ -16,8 +16,8 @@ function useAuthUser() {
           // if user is signed in, set redux object
           if( user ) {
     
-            const user_email = user.email
-            const usersRef = firestore.collection('users').doc(user_email)
+            const userEmail = user.email
+            const usersRef = firestore.collection('users').doc(userEmail)
     
             // connect to firebase and check if a user doc for this email exists
             usersRef.get()
@@ -29,7 +29,7 @@ function useAuthUser() {
                   // dispatch user doc info (such as username, other info set in the app)
                   dispatch({
                     type: 'SETFIREUSER',
-                    firestore_user: doc.data()
+                    firestoreUser: doc.data()
                   })
     
                 })

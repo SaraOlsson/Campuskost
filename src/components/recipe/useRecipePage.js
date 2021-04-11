@@ -2,10 +2,8 @@ import firebase from 'firebase/app'
 import { useEffect, useState } from 'react'
 import { useCollection, useDocument, useDocumentData } from 'react-firebase-hooks/firestore'
 import { useDispatch, useSelector } from 'react-redux'
-import { useFirestore } from 'react-redux-firebase'
 import { useParams } from 'react-router'
 import { useHistory } from 'react-router-dom'
-import useFirebaseFetch from '../core/useFirebaseFetch'
 
 
 export default function useRecipePage() {

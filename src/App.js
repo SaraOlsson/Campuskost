@@ -1,23 +1,23 @@
-import Fab from '@material-ui/core/Fab';
-import { makeStyles } from '@material-ui/core/styles';
-import ChatBubbleRoundedIcon from '@material-ui/icons/ChatBubbleRounded';
-import 'firebase/auth';
-import 'firebase/firestore';
-import React, { Suspense, useEffect } from 'react';
-import Draggable from 'react-draggable'; // The default
-import { useSelector } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import Fab from '@material-ui/core/Fab'
+import { makeStyles } from '@material-ui/core/styles'
+import ChatBubbleRoundedIcon from '@material-ui/icons/ChatBubbleRounded'
+import 'firebase/auth'
+import 'firebase/firestore'
+import React, { Suspense, useEffect } from 'react'
+import Draggable from 'react-draggable' // The default
+import { useSelector } from 'react-redux'
+import { Route, Switch } from 'react-router-dom'
 
 // import our css
-import './App.css';
-import BottomMenuBar from './components/app/BottomMenuBar';
-import TopMenuBar from './components/app/TopMenuBar';
-import useAuthUser from './components/app/useAuthUser';
-import BotDialog from './components/core/BotDialog';
-import useDataLoad from './components/core/useDataLoad';
-import PrivateRoute from './components/core/PrivateRoute';
-import Snackbar from './components/app/SnackBar';
-import Todos from './components/todo-demo/Todos';
+import './App.css'
+import BottomMenuBar from './components/app/BottomMenuBar'
+import TopMenuBar from './components/app/TopMenuBar'
+import useAuthUser from './components/app/useAuthUser'
+import BotDialog from './components/core/BotDialog'
+import useDataLoad from './components/core/useDataLoad'
+import PrivateRoute from './components/core/PrivateRoute'
+import Snackbar from './components/app/SnackBar'
+import Todos from './components/todo-demo/Todos'
 // import our page components
 import {
   FeedPage,
@@ -30,23 +30,23 @@ import {
   SettingsPage,
   TermsPage,
   UploadPage
-} from './pages';
-import * as serviceWorker from './serviceWorker';
+} from './pages'
+import * as serviceWorker from './serviceWorker'
 
 import TestTS from './components/TestTS' 
 
-//import {ErrorBoundary} from './pages/ErrorBoundary';
-// require('dotenv').config(); // check if we need this
+//import {ErrorBoundary} from './pages/ErrorBoundary'
+// require('dotenv').config() // check if we need this
 
 // main component of the app
 function App() {
 
-  const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
-  const [openBotDialog, setOpenBotDialog] = React.useState(false);
+  const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false)
+  const [openBotDialog, setOpenBotDialog] = React.useState(false)
 
-  const classes = useStyles();
+  const classes = useStyles()
   
-  const userEmail = useSelector(state => state.firebase.auth.email);
+  const userEmail = useSelector(state => state.firebase.auth.email)
 
   useDataLoad(userEmail)
   useAuthUser()
@@ -54,19 +54,19 @@ function App() {
 
   useEffect(() => {
     if(serviceWorker.hasUpdates === true) {
-      setOpenUpdateDialog(true);
+      setOpenUpdateDialog(true)
     }
   }, [serviceWorker.hasUpdates])
 
   const closeDialog = (action) => {
     setOpenUpdateDialog(false)
-  };
+  }
 
   const closeBotDialog = (action) => {
     setOpenBotDialog(false)
-  };
+  }
 
-  let update_message = 'New content is available and will be used when all tabs for this page are closed';
+  let update_message = 'New content is available and will be used when all tabs for this page are closed'
 
   const onBotClick = () => {
     console.log('onBotClick!')
@@ -145,7 +145,7 @@ function App() {
     </div>
     </Suspense>
 
-  );
+  )
 }
 
 /*
@@ -193,7 +193,7 @@ const useStyles = makeStyles({
     right: '20px',
     zIndex: '10'
   }
-});
+})
 
 
-export default App;
+export default App

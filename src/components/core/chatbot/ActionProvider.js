@@ -9,7 +9,7 @@ class ActionProvider {
 
     getReplayOptionMessage = () => {
         
-        let mess = this.createChatBotMessage(
+        const mess = this.createChatBotMessage(
         'Undrar du något annat? Välj ett alternativ så berättar jag gärna mer:',
         {
           withAvatar: false,
@@ -29,8 +29,8 @@ class ActionProvider {
 
         if(answer !== '')
         {
-            const answer_mess = this.createChatBotMessage(answer)
-            this.addMessageToBotState(answer_mess)
+            const answerMess = this.createChatBotMessage(answer)
+            this.addMessageToBotState(answerMess)
             return
 
         }

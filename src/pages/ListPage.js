@@ -1,19 +1,19 @@
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { FadeIn } from 'react-anim-kit';
-// import LoadSpinner from '../components/shared/LoadSpinner';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import AddRecipeList from '../components/lists/AddRecipeList';
-import AllLikesByUser from '../components/lists/AllLikesByUser';
-import AllListsByUser from '../components/lists/AllListsByUser';
-import AllListsUserFollows from '../components/lists/AllListsUserFollows';
-import Emoji from '../components/shared/Emoji';
+import { makeStyles } from '@material-ui/core/styles'
+import React from 'react'
+import { FadeIn } from 'react-anim-kit'
+// import LoadSpinner from '../components/shared/LoadSpinner'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import AddRecipeList from '../components/lists/AddRecipeList'
+import AllLikesByUser from '../components/lists/AllLikesByUser'
+import AllListsByUser from '../components/lists/AllListsByUser'
+import AllListsUserFollows from '../components/lists/AllListsUserFollows'
+import Emoji from '../components/shared/Emoji'
 
 
 function ListPage() {
 
-  const { uid, email } = useSelector((state) => state.firebase.auth); 
+  const { uid, email } = useSelector((state) => state.firebase.auth) 
   const {t} = useTranslation('common')
 
   let no_account = <p> {t('lists.sign_in_message')} </p>
@@ -48,10 +48,10 @@ function ListPage() {
       {/* { email && <RecipeLists byUser={''} firebase_query={get_query_followed_lists()} state_name='others_lists'/> } */}
       {/* <p>{t('lists.follows.no_list_yet')}</p> */}
     </div>
-  );
+  )
 }
 
 const useStyles = makeStyles({
-});
+})
 
 export default ListPage
