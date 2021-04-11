@@ -1,14 +1,14 @@
 import { makeStyles } from '@material-ui/core/styles'
 import React from 'react'
-import { FadeIn } from "react-anim-kit"
+import { FadeIn } from 'react-anim-kit'
 //
 // RCE CSS
 import 'react-chat-elements/dist/main.css'
 //
-import Chatbot from "react-chatbot-kit"
-import ActionProvider from "./chatbot/ActionProvider"
-import config from "./chatbot/chatbotConfig"
-import MessageParser from "./chatbot/MessageParser"
+import Chatbot from 'react-chatbot-kit'
+import ActionProvider from './chatbot/ActionProvider'
+import config from './chatbot/chatbotConfig'
+import MessageParser from './chatbot/MessageParser'
 
 
 export default function BotDialog(props) {

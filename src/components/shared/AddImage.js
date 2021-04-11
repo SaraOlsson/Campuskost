@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import React from 'react'
 import FileInput from './FileInput'
 import { makeStyles } from '@material-ui/core/styles'
-import {useTranslation} from "react-i18next"
+import {useTranslation} from 'react-i18next'
 
 function AddImage(props) {
 
@@ -23,13 +23,13 @@ function AddImage(props) {
         { props.image !== undefined &&
         <React.Fragment>
           <Grid item xs={12}>
-            <img src={props.image} alt={"loadedimage"} className={classes.loadedimage} />
+            <img src={props.image} alt={'loadedimage'} className={classes.loadedimage} />
           </Grid>
           
           <Grid item xs={12}>
             <Button
-              variant="contained"
-              color="primary"
+              variant='contained'
+              color='primary'
               onClick={props.onFileRemove}
               style={{lineHeight: '1.2'}}
             >

@@ -1,27 +1,27 @@
-import { useState, useEffect, useReducer } from "react"
-// import axios from "axios"
+import { useState, useEffect, useReducer } from 'react'
+// import axios from 'axios'
 
 const dataFetchReducer = (state, action) => {
   switch (action.type) {
-    case "FETCH_INIT":
+    case 'FETCH_INIT':
       return { ...state, isLoading: true, isError: false }
-    case "FETCH_SUCCESS":
+    case 'FETCH_SUCCESS':
       return {
         ...state,
         isLoading: false,
         hasErrored: false,
-        errorMessage: "",
+        errorMessage: '',
         data: action.payload
       }
-    case "FETCH_FAILURE":
+    case 'FETCH_FAILURE':
       return {
         ...state,
         isLoading: false,
         hasErrored: true,
-        errorMessage: "Data Retrieve Failure"
+        errorMessage: 'Data Retrieve Failure'
       }
-    case "REPLACE_DATA":
-      // The record passed (state.data) must have the attribute "id"
+    case 'REPLACE_DATA':
+      // The record passed (state.data) must have the attribute 'id'
       const newData = state.data.map(rec => {
         return rec.id === action.replacerecord.id ? action.replacerecord : rec
       })
@@ -29,7 +29,7 @@ const dataFetchReducer = (state, action) => {
         ...state,
         isLoading: false,
         hasErrored: false,
-        errorMessage: "",
+        errorMessage: '',
         data: newData
       }
     default:
@@ -37,12 +37,12 @@ const dataFetchReducer = (state, action) => {
   }
 }
 
-const DOC = "DOC"
-const COLLECTION = "COLLECTION"
+const DOC = 'DOC'
+const COLLECTION = 'COLLECTION'
 
 /**
- * @param firebaseRef example: db.collection("users").doc("myDoc") where db = firebase.firestore()
- * @param type can be "DOC" or "COLLECTION"
+ * @param firebaseRef example: db.collection('users').doc('myDoc') where db = firebase.firestore()
+ * @param type can be 'DOC' or 'COLLECTION'
  * @param initialData is optional
  */
 const useFirebaseFetch = (firebaseRef, type = DOC, initialData) => {
@@ -51,7 +51,7 @@ const useFirebaseFetch = (firebaseRef, type = DOC, initialData) => {
   const [state, dispatch] = useReducer(dataFetchReducer, {
     isLoading: false,
     hasErrored: false,
-    errorMessage: "",
+    errorMessage: '',
     data: initialData
   })
 
@@ -63,26 +63,26 @@ const useFirebaseFetch = (firebaseRef, type = DOC, initialData) => {
     let didCancel = false
 
     const fetchData = async () => {
-      dispatch({ type: "FETCH_INIT" })
+      dispatch({ type: 'FETCH_INIT' })
 
       db_Ref.get().then(function(doc) {
 
         if (doc.exists) {
   
           if (!didCancel) {
-            dispatch({ type: "FETCH_SUCCESS", payload: doc.data() })
+            dispatch({ type: 'FETCH_SUCCESS', payload: doc.data() })
           }
   
         } else {
             if (!didCancel) {
-                dispatch({ type: "FETCH_FAILURE" })
+                dispatch({ type: 'FETCH_FAILURE' })
             }
         }
 
       })
       .catch(err => {
         if (!didCancel) {
-            dispatch({ type: "FETCH_FAILURE" })
+            dispatch({ type: 'FETCH_FAILURE' })
         }
       })
 
@@ -90,12 +90,12 @@ const useFirebaseFetch = (firebaseRef, type = DOC, initialData) => {
 
     const fetchArrayData = async () => {
 
-      dispatch({ type: "FETCH_INIT" })
+      dispatch({ type: 'FETCH_INIT' })
       const docs = []
 
       db_Ref.get().then(async function(querySnapshot) {
         await Promise.all(querySnapshot.docs.map(async (doc) => {
-          //console.log(doc.id, " => ", doc.data())
+          //console.log(doc.id, ' => ', doc.data())
           let data = doc.data()
           data.id = doc.id
           docs.push(data)
@@ -104,12 +104,12 @@ const useFirebaseFetch = (firebaseRef, type = DOC, initialData) => {
       })
       .catch(err => {
         if (!didCancel) {
-            dispatch({ type: "FETCH_FAILURE" })
+            dispatch({ type: 'FETCH_FAILURE' })
         }
       })
 
       if (!didCancel) {
-        dispatch({ type: "FETCH_SUCCESS", payload: docs })
+        dispatch({ type: 'FETCH_SUCCESS', payload: docs })
       }
     }
 
@@ -128,7 +128,7 @@ const useFirebaseFetch = (firebaseRef, type = DOC, initialData) => {
 
   const updateDataRecord = record => {
     dispatch({
-      type: "REPLACE_DATA",
+      type: 'REPLACE_DATA',
       replacerecord: record
     })
   }

@@ -5,8 +5,8 @@ import Typography from '@material-ui/core/Typography'
 import 'firebase/auth'
 import 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from "react-redux"
-import { useFirestore } from "react-redux-firebase"
+import { useSelector } from 'react-redux'
+import { useFirestore } from 'react-redux-firebase'
 import Emoji from '../shared/Emoji'
 
 // small bug when first unvalid name then writes again
@@ -15,7 +15,7 @@ import Emoji from '../shared/Emoji'
 function UsernameSetting(props) {
 
     const userdoc = useSelector(state => state.firestore.data.userdoc)
-    const [settingValue, SetSettingValue] = useState("")
+    const [settingValue, SetSettingValue] = useState('')
     const [in_editmode, setIn_editmode] = useState(false)
     const [has_changed, setHas_changed] = useState(false)
     const [isAvailable, setIsAvailable] = useState(true)
@@ -24,12 +24,12 @@ function UsernameSetting(props) {
     const firestore = useFirestore()
   
     useEffect(() => {
-        SetSettingValue( userdoc ? userdoc.username : "" )
+        SetSettingValue( userdoc ? userdoc.username : '' )
     }, [userdoc]) 
 
     useEffect(() => {
 
-        if(settingValue === "")
+        if(settingValue === '')
             return
         
         setHas_changed(settingValue !== userdoc.username)
@@ -37,8 +37,8 @@ function UsernameSetting(props) {
 
     function newName() {
 
-        let preNames = ["Master", "Lill", "Pro"]
-        let postNames = ["Chef", "Sleven", "Pasta", "Vego"]
+        let preNames = ['Master', 'Lill', 'Pro']
+        let postNames = ['Chef', 'Sleven', 'Pasta', 'Vego']
     
         let rand1 = Math.floor(Math.random() * preNames.length)
         let rand2 = Math.floor(Math.random() * postNames.length)
@@ -136,9 +136,9 @@ function UsernameSetting(props) {
     return !userdoc ? null : (
       <React.Fragment>
         <TextField
-          id="outlined-disabled"
+          id='outlined-disabled'
           label={props.label.charAt(0).toUpperCase() + props.label.slice(1)}
-          variant="outlined"
+          variant='outlined'
           value={settingValue}
           onChange={(e) => SetSettingValue(e.target.value)}
           disabled={!in_editmode}
@@ -146,8 +146,8 @@ function UsernameSetting(props) {
 
             { !in_editmode &&
             <Button
-              variant="contained"
-              color="primary"
+              variant='contained'
+              color='primary'
               onClick={() => setIn_editmode(true)}
               className={classes.buttons}
             >
@@ -157,24 +157,24 @@ function UsernameSetting(props) {
             { in_editmode &&
             <React.Fragment>
               <Button
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 onClick={() => cancel_edit() }
                 className={classes.buttons}
               >
                 Avbryt
               </Button>
               <Button
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 onClick={() => randomName()}
                 className={`${classes.buttons} ${classes.rainbow}`}
               >
-                Slumpa <Emoji symbol="🤪"/>
+                Slumpa <Emoji symbol='🤪'/>
               </Button>
               <Button
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 onClick={() => save_setting(settingValue)}
                 className={classes.buttons}
                 disabled={!has_changed}

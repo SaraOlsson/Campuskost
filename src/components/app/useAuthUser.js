@@ -1,5 +1,5 @@
-import { useDispatch } from "react-redux"
-import { useFirestore } from "react-redux-firebase"
+import { useDispatch } from 'react-redux'
+import { useFirestore } from 'react-redux-firebase'
 import firebase from 'firebase/app'
 import { useEffect } from 'react'
 
@@ -25,22 +25,22 @@ function useAuthUser() {
               if (docSnapshot.exists) {
                 usersRef.onSnapshot((doc) => {
     
-                  console.log("user exists in firestore")
+                  console.log('user exists in firestore')
                   // dispatch user doc info (such as username, other info set in the app)
                   dispatch({
-                    type: "SETFIREUSER",
+                    type: 'SETFIREUSER',
                     firestore_user: doc.data()
                   })
     
                 })
               } else {
-                console.log("in app, user doc doesnt exist yet")
+                console.log('in app, user doc doesnt exist yet')
               }
             })
     
             // dispatch auth info (such as last time logged in etc)
             dispatch({
-              type: "SETUSER",
+              type: 'SETUSER',
               auth_user: user
             })
     
@@ -49,13 +49,13 @@ function useAuthUser() {
     
             // no user is signed in
             dispatch({
-              type: "SETUSER",
+              type: 'SETUSER',
               user: undefined
             })
     
           }
     
-          dispatch({ type: user ? "SIGNIN" : "SIGNOUT" })
+          dispatch({ type: user ? 'SIGNIN' : 'SIGNOUT' })
     
         }) // end auth listener
     

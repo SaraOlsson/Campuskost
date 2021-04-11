@@ -29,12 +29,12 @@ function CollapseGrid(props) {
             expanded={isExpanded}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-label="Expand"
-            aria-controls="additional-actions1-content"
-            id="additional-actions1-header"
+            aria-label='Expand'
+            aria-controls='additional-actions1-content'
+            id='additional-actions1-header'
           >
   
-          <FormLabel component="legend" className={classes.formlabel}> {props.label} </FormLabel>
+          <FormLabel component='legend' className={classes.formlabel}> {props.label} </FormLabel>
   
           </AccordionSummary>
           <AccordionDetails>

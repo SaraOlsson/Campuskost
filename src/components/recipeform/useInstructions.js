@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import _ from "lodash"
+import { useDispatch, useSelector } from 'react-redux';
+import _ from 'lodash'
 
 // custom hook, input list with drag-n-drop
 function useInstructions({
@@ -23,7 +23,7 @@ function useInstructions({
 
   const instructionsDisp = (instructions) => {
     dispatch({
-        type: "SETDATA",
+        type: 'SETDATA',
         payload: {[propertyName]: instructions}
     })
   }
@@ -38,7 +38,7 @@ function useInstructions({
     const existing_instructions = upload_store.data[propertyName] 
     if(existing_instructions !== undefined)
     {
-      console.log("has existing_instructions")
+      console.log('has existing_instructions')
       setInstructions(existing_instructions);
     }
 
@@ -48,7 +48,7 @@ function useInstructions({
     if(!upload_store.editmode)
     {
       emptyLocalState()
-      console.log("empty local state")
+      console.log('empty local state')
     }
   }, [upload_store.editmode]);
 
@@ -69,7 +69,7 @@ function useInstructions({
                 type: item.type || DEFAULT // REALLY? all recipes don't have type yet
             }
         } else
-            console.log("row id " + row.id + " not found")
+            console.log('row id ' + row.id + ' not found')
         
     })
 
@@ -115,7 +115,7 @@ function useInstructions({
     temp_list.splice(ind, 1);
 
     setEditObject(undefined);
-    //setText(""); // FIX
+    //setText(''); // FIX
     setCustomFieldsData(customFieldsDefault)
 
     // BOTH?
@@ -171,7 +171,7 @@ function useInstructions({
   const getOrder = (item) => {
 
     if (item.type === HEADER) {
-      return "";
+      return '';
     } else {
       return '• ';
     }

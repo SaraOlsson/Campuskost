@@ -2,7 +2,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 const fallbackImage = require('../../assets/err_image.png')
 
 function RecipeItem({recipe, smalltiles}) {
@@ -16,7 +16,7 @@ function RecipeItem({recipe, smalltiles}) {
   const tilesize = show_title ? 150 : 100;  
 
   const handeRecipeClick = (clicked_recipe) => {
-    history.push("/recipe/" + clicked_recipe.title + "/" + clicked_recipe.recipeID );
+    history.push('/recipe/' + clicked_recipe.title + '/' + clicked_recipe.recipeID );
   };
 
   let img_url_temp = recipe.img_url_small ? recipe.img_url_small : recipe.img_url;
@@ -27,7 +27,7 @@ function RecipeItem({recipe, smalltiles}) {
 
     <React.Fragment>
       <GridListTile 
-        key={"tile" + recipe.recipeID} 
+        key={'tile' + recipe.recipeID} 
         className={classes.pointer } 
         style={getTileStyle(tilesize)}
         onClick={() => handeRecipeClick(recipe)}

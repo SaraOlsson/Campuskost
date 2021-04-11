@@ -24,7 +24,7 @@ export default function MyDialog(props) {
   }
 
   /*
-  <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+  <Button variant='outlined' color='primary' onClick={handleClickOpen}>
     Open alert dialog
   </Button> */
 
@@ -34,21 +34,21 @@ export default function MyDialog(props) {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle id='alert-dialog-title'>{'Use Google location service?'}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id='alert-dialog-description'>
             Let Google help apps determine location. This means sending anonymous location data to
             Google, even when no apps are running.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} color='primary'>
             Disagree
           </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
+          <Button onClick={handleClose} color='primary' autoFocus>
             Agree
           </Button>
         </DialogActions>

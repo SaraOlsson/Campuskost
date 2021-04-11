@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
+import React, { useState } from 'react'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 
 // a little function to help us with reordering the result
@@ -41,7 +41,7 @@ function DragNDrop(props) {
   
 return (
     <DragDropContext onDragEnd={onDragEnd}>
-    <Droppable droppableId="droppable">
+    <Droppable droppableId='droppable'>
         {(provided, snapshot) => (
         <div
             {...provided.droppableProps}

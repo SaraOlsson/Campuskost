@@ -1,16 +1,16 @@
-import redux, {applyMiddleware} from "redux"
-import thunk from "redux-thunk"
+import redux, {applyMiddleware} from 'redux'
+import thunk from 'redux-thunk'
 
 export function fetchData() {
     return (dispatch, getState) => {
         // const number = 1; // getState()
-        // const baseUrl = "https://swapi.dev/api/people"
+        // const baseUrl = 'https://swapi.dev/api/people'
         // fetch(`${baseUrl}/${number}/`)
         //     .then(res => res.json())
         //     .then(res => {
         //         console.log(res)
         //         dispatch({
-        //             type: "FETCHDATA",
+        //             type: 'FETCHDATA',
         //             payload: res
         //         })
         //     })
@@ -22,7 +22,7 @@ export function fetchData() {
         //     //data.id = doc.id;
         //     console.log(res)
         //     dispatch({
-        //         type: "FETCHDATA",
+        //         type: 'FETCHDATA',
         //         payload: res
         //     })
         //   });
@@ -37,12 +37,12 @@ const default_state = {
 
 export default function reducer(state = default_state, action) {
     switch(action.type) {
-        case "SETDB":
+        case 'SETDB':
             return {
             ...state,
             db: action.payload
             }
-        case "FETCHDATA":
+        case 'FETCHDATA':
             return  {
             ...state,
             data: action.payload

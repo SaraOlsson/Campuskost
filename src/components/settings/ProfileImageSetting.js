@@ -5,17 +5,17 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import ReactGA from 'react-ga'
-import { useSelector } from "react-redux"
-import { useFirestore } from "react-redux-firebase"
+import { useSelector } from 'react-redux'
+import { useFirestore } from 'react-redux-firebase'
 import Emoji from '../shared/Emoji'
 import AddImage from '../../components/shared/AddImage'
-import {useTranslation} from "react-i18next"
+import {useTranslation} from 'react-i18next'
 
 function ProfileImageSetting(props) {
 
     const {t} = useTranslation('common')
     const userdoc = useSelector(state => state.firestore.data.userdoc)
-    const [settingValue, SetSettingValue] = useState("")
+    const [settingValue, SetSettingValue] = useState('')
     const [in_editmode, setIn_editmode] = useState(false)
     const [has_changed, setHas_changed] = useState(false)
 
@@ -43,18 +43,18 @@ function ProfileImageSetting(props) {
           setImageUrlList(available_images)
     
         }).catch(function(error) {
-          console.log("could not get storage list")
+          console.log('could not get storage list')
         })
     
       }, [])
 
     useEffect(() => {
-        SetSettingValue( userdoc ? userdoc[props.db_field] : "" )
+        SetSettingValue( userdoc ? userdoc[props.db_field] : '' )
     }, [userdoc]) 
 
     useEffect(() => {
 
-        if(settingValue === "")
+        if(settingValue === '')
             return
         
         setHas_changed(choosedUploaded || settingValue !== userdoc[props.db_field])
@@ -124,8 +124,8 @@ function ProfileImageSetting(props) {
         setChoosedUploaded(false)
 
         ReactGA.event({
-          category: "Settings",
-          action: "User tries random image",
+          category: 'Settings',
+          action: 'User tries random image',
         })
     
         let continue_search = true
@@ -172,14 +172,14 @@ function ProfileImageSetting(props) {
       <React.Fragment>
         { img_src &&
             <div className={classes.fullrow}>
-              <img src={img_src} className={classes.profileimage}  alt={"profile img"} />
+              <img src={img_src} className={classes.profileimage}  alt={'profile img'} />
             </div>
             }
 
             { !in_editmode &&
             <Button
-              variant="contained"
-              color="primary"
+              variant='contained'
+              color='primary'
               onClick={() => setIn_editmode(true)}
               className={classes.buttons}
             >
@@ -189,25 +189,25 @@ function ProfileImageSetting(props) {
             { in_editmode &&
             <React.Fragment>
               <Button
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 onClick={() => cancel_edit() }
                 className={classes.buttons}
               >
                 {t('shared.cancel')}
               </Button>
               <Button
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 onClick={() => randomImg()}
                 className={`${classes.buttons} ${classes.rainbow}`}
               >
-                {t('shared.random')} <Emoji symbol="🤪"/>
+                {t('shared.random')} <Emoji symbol='🤪'/>
               </Button>
               <AddImage onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>
               <Button
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 onClick={() => save_setting()}
                 className={classes.buttons}
                 disabled={!has_changed}

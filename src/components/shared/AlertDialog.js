@@ -17,20 +17,20 @@ export default function AlertDialog(props) {
       <Dialog
         open={props.open}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+        <DialogTitle id='alert-dialog-title'>{props.title}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id='alert-dialog-description'>
             {props.message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleClose(false)} color="primary">
+          <Button onClick={() => handleClose(false)} color='primary'>
             {props.NoOptionText}
           </Button>
-          <Button onClick={() => handleClose(true)} color="primary" autoFocus>
+          <Button onClick={() => handleClose(true)} color='primary' autoFocus>
             {props.yesOptionText}
           </Button>
         </DialogActions>

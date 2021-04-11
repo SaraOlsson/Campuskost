@@ -11,8 +11,8 @@ export default function Banner(props) {
       <div className={classes.login_div}>
         <h3> {props.header} {props.emoji}</h3>
         <Button
-          variant="contained"
-          color="primary"
+          variant='contained'
+          color='primary'
           onClick={props.onAction}
         >
           {props.buttonText}

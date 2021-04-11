@@ -33,8 +33,8 @@ function SimpleDialog(props) {
   }
 
   return (
-    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
+    <Dialog onClose={handleClose} aria-labelledby='simple-dialog-title' open={open}>
+      <DialogTitle id='simple-dialog-title'>Set backup account</DialogTitle>
       <List>
         {emails.map(email => (
           <ListItem button onClick={() => handleListItemClick(email)} key={email}>
@@ -53,7 +53,7 @@ function SimpleDialog(props) {
               <AddIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary="Add account" />
+          <ListItemText primary='Add account' />
         </ListItem>
       </List>
     </Dialog>

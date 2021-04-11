@@ -3,8 +3,8 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
-import {useTranslation} from "react-i18next"
-import React from "react"
+import {useTranslation} from 'react-i18next'
+import React from 'react'
 
 function ListIngredients(props) {
 
@@ -20,12 +20,12 @@ function ListIngredients(props) {
     <React.Fragment key={idx}>
       <ListItem>
         <ListItemText
-          classes={{ primary: (ingred.type === "HEADER") ? classes.headerRow : '' }}
-          primary={ ingred.quantity + " " + ingred.measure + " " + ingred.name }
+          classes={{ primary: (ingred.type === 'HEADER') ? classes.headerRow : '' }}
+          primary={ ingred.quantity + ' ' + ingred.measure + ' ' + ingred.name }
         />
   
       </ListItem>
-      { idx < ingredients.length - 1 && <Divider component="li" /> }
+      { idx < ingredients.length - 1 && <Divider component='li' /> }
     </React.Fragment>
     )
   

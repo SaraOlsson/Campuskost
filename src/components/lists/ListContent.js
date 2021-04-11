@@ -1,8 +1,8 @@
-import firebase from "firebase/app"
-import React from "react"
+import firebase from 'firebase/app'
+import React from 'react'
 import { useCollectionOnce } from 'react-firebase-hooks/firestore'
 import RecipeItemInList from './RecipeItemInList'
-import { useTranslation } from "react-i18next"
+import { useTranslation } from 'react-i18next'
 
 const ListContent = ({ref_listID}) => {
 

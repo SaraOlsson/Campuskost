@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
 import React from 'react'
-import theme from "../../theme"
+import theme from '../../theme'
 
 var Spinner = require('react-spinkit')
 
@@ -10,8 +10,8 @@ function LoadSpinner(props) {
 
   return (
     <div className={classes.spinner}>
-      <Spinner name={props.name || "ball-scale-multiple"} 
-      color={props.color ? props.color : theme.palette.campuskost.teal} fadeIn="none"/>
+      <Spinner name={props.name || 'ball-scale-multiple'} 
+      color={props.color ? props.color : theme.palette.campuskost.teal} fadeIn='none'/>
     </div>
   )
 }

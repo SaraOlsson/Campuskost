@@ -1,12 +1,12 @@
-import firebase from "firebase/app"
-import React from "react"
+import firebase from 'firebase/app'
+import React from 'react'
 import { useCollection } from 'react-firebase-hooks/firestore'
 import SavedList from './SavedList'
 
 const AllListsByUser = ({ref_user, css_prop={}}) => {
 
   const [value, loading, error] = useCollection(
-    firebase.firestore().collection('lists').where("created_by", "==", ref_user), {}
+    firebase.firestore().collection('lists').where('created_by', '==', ref_user), {}
   )
 
   return (

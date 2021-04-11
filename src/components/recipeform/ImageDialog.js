@@ -4,7 +4,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import { withStyles } from '@material-ui/styles'
 import React, { useCallback, useState } from 'react'
-import ImageCrop from "./ImageCrop"
+import ImageCrop from './ImageCrop'
 import getCroppedImg from '../../logic/cropImage'
 
 function ImageDialog(props) {
@@ -46,8 +46,8 @@ const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
       <Dialog
         open={props.open}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
         classes={{ paper: props.classes.dialogPaper }}
       >
         
@@ -57,10 +57,10 @@ const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
 
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleClose(false)} color="primary">
+          <Button onClick={() => handleClose(false)} color='primary'>
             Avbryt
           </Button>
-          <Button onClick={() => handleClose(true)} color="primary" autoFocus>
+          <Button onClick={() => handleClose(true)} color='primary' autoFocus>
             Använd bild
           </Button>
         </DialogActions>

@@ -3,12 +3,12 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core/styles'
-import firebase from "firebase/app"
+import firebase from 'firebase/app'
 import React, { useEffect, useState } from 'react'
 import { useCollectionData, useDocument } from 'react-firebase-hooks/firestore'
-import { useTranslation } from "react-i18next"
-import { useFirestore } from "react-redux-firebase"
-import { useHistory } from "react-router-dom"
+import { useTranslation } from 'react-i18next'
+import { useFirestore } from 'react-redux-firebase'
+import { useHistory } from 'react-router-dom'
 
 // TODO: reorder options so that lists that dont have the recipe appears at the top
 // TODO: mouse-over on desktop
@@ -22,7 +22,7 @@ function ListOption({list, onClick, hasPicked, recipeID}) {
   const {t} = useTranslation('common')
   //const [hasMouseOver, hasMouseOver] = useState(false)
 
-  let db_doc_ref = db.collection("lists").doc(list.listID).collection("recipes").doc(recipeID)
+  let db_doc_ref = db.collection('lists').doc(list.listID).collection('recipes').doc(recipeID)
   const [savedDoc] = useDocument(db_doc_ref)
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function ListOption({list, onClick, hasPicked, recipeID}) {
   }, [savedDoc])
 
   const removeClick = () => {
-    db.collection("lists").doc(list.listID).collection("recipes").doc(recipeID).delete()
+    db.collection('lists').doc(list.listID).collection('recipes').doc(recipeID).delete()
     setPickedThis(!pickedThis)
   }
 
@@ -81,7 +81,7 @@ function ListOption({list, onClick, hasPicked, recipeID}) {
   )
 }
 
-// <Emoji symbol="🗸"/>
+// <Emoji symbol='🗸'/>
 
 export default function SaveRecipeDialog(props) {
 
@@ -93,10 +93,10 @@ export default function SaveRecipeDialog(props) {
   const {t} = useTranslation('common')
   const db = firebase.firestore()
 
-  let db_ref = db.collection("lists").where("created_by", "==", props.byUser)
+  let db_ref = db.collection('lists').where('created_by', '==', props.byUser)
   // const {
   //   data: list_data
-  // } = useFirebaseFetch(db_ref, "COLLECTION")
+  // } = useFirebaseFetch(db_ref, 'COLLECTION')
 
   const [list_data] = useCollectionData(db_ref)
 
@@ -105,7 +105,7 @@ export default function SaveRecipeDialog(props) {
   }
 
   const onClick = (listID) => {
-    // console.log("picked listID "+ listID)
+    // console.log('picked listID '+ listID)
     setHasPicked(true)
     props.onAdd(listID)
   }
@@ -115,13 +115,13 @@ export default function SaveRecipeDialog(props) {
       <Dialog
         open={props.open}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
         classes={{
           paperWidthSm: classes.overrideDialog
         }}
       >
-        <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+        <DialogTitle id='alert-dialog-title'>{props.title}</DialogTitle>
         <DialogContent>
 
         <div>
@@ -144,10 +144,10 @@ export default function SaveRecipeDialog(props) {
               flexDirection: 'column'
             }}
           >
-            <p>{t("lists.no_lists_yet")}</p>
-            <Button variant="contained" color="primary" 
-                    onClick={() => history.push("/saved")}>
-                    {t("lists.actions.create_list")}
+            <p>{t('lists.no_lists_yet')}</p>
+            <Button variant='contained' color='primary' 
+                    onClick={() => history.push('/saved')}>
+                    {t('lists.actions.create_list')}
             </Button>
           </div>
         } 
@@ -156,10 +156,10 @@ export default function SaveRecipeDialog(props) {
 
         </DialogContent>
         {/* <DialogActions>
-          <Button onClick={() => handleClose(false)} color="primary">
+          <Button onClick={() => handleClose(false)} color='primary'>
             {props.NoOptionText}
           </Button>
-          <Button onClick={() => handleClose(true)} color="primary" autoFocus>
+          <Button onClick={() => handleClose(true)} color='primary' autoFocus>
             {props.yesOptionText}
           </Button>
         </DialogActions> */}

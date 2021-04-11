@@ -6,9 +6,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
-import { useFirestore } from "react-redux-firebase";
-import { useHistory } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { useFirestore } from 'react-redux-firebase';
+import { useHistory } from 'react-router-dom';
 import LoadSpinner from '../components/shared/LoadSpinner';
 import Emoji from '../components/shared/Emoji';
 import recipe_id_to_title from '../logic/recipeIdToTitle'
@@ -24,32 +24,32 @@ function NoticeListItem(props) {
   let noticeText;
 
   const userClick = () => {
-    history.push("/profile/" + props.user );
+    history.push('/profile/' + props.user );
   };
 
   const recipeClick = () => {
 
-    // let recipe_title = props.recipe.substring(0, props.recipe.indexOf("-"));
-    history.push("/recipe/" + recipe_id_to_title(props.recipe) + "/" + props.recipe );
+    // let recipe_title = props.recipe.substring(0, props.recipe.indexOf('-'));
+    history.push('/recipe/' + recipe_id_to_title(props.recipe) + '/' + props.recipe );
   };
 
   
 
   switch (props.type) {
-    case "FOLLOWS":
+    case 'FOLLOWS':
       noticeText = <div>
                    <span className={classes.pointer} onClick={userClick}><B>{props.user}</B></span>
                    <span> följer nu dig. </span>
                    </div>;
       break;
-    case "TIPS":
+    case 'TIPS':
       noticeText = <div>
                   <span className={classes.pointer} onClick={userClick}><B>{props.user}</B></span>
                   <span> tipsar dig om att laga </span>
                   <span className={classes.pointer} onClick={recipeClick}><B>{recipe_id_to_title(props.recipe)}</B>.</span>
                   </div>;
       break;
-    case "TESTED":
+    case 'TESTED':
       noticeText = <div>
                     <span className={classes.pointer} onClick={userClick}><B>{props.user}</B></span>
                     <span> har testat ditt recept </span>
@@ -62,11 +62,11 @@ function NoticeListItem(props) {
 
   let user_avatar = undefined;
 
-  if(props.eventimg !== undefined && props.eventimg !== "") {
-    user_avatar = <img src={props.eventimg} className={classes.smallprofileimage + ' ' + classes.pointer } alt={"profile-img"} />; //
+  if(props.eventimg !== undefined && props.eventimg !== '') {
+    user_avatar = <img src={props.eventimg} className={classes.smallprofileimage + ' ' + classes.pointer } alt={'profile-img'} />; //
   } else {
     user_avatar = (
-      <Avatar className={classes.pointer + " " + classes.avatar}>
+      <Avatar className={classes.pointer + ' ' + classes.avatar}>
           <PersonIcon />
       </Avatar>
     );
@@ -129,7 +129,7 @@ function NoticePage(props) {
   }
 
   let eventListjsx = (eventList) ? eventList.map( (event, idx) =>
-    <NoticeListItem key={idx} type={event.type} user={event.other_username} recipe={event.recipe || undefined} time="" eventimg={event.event_image_url}/>
+    <NoticeListItem key={idx} type={event.type} user={event.other_username} recipe={event.recipe || undefined} time='' eventimg={event.event_image_url}/>
   ) : <LoadSpinner/>;
 
 
@@ -144,7 +144,7 @@ function NoticePage(props) {
       </List>
     }
     { (eventList && eventList.length < 1) &&
-      <p> Ledsen, inga händelser än. Börja interagera med dina kockvänner! <Emoji symbol="🍳"/> </p>
+      <p> Ledsen, inga händelser än. Börja interagera med dina kockvänner! <Emoji symbol='🍳'/> </p>
     }
 
     </div>

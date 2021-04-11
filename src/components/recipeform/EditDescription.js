@@ -11,15 +11,15 @@ import SaveIcon from '@material-ui/icons/Save'
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import DragNDrop from '../shared/DragNDrop'
-import useInstructions from "./useInstructions"
-import {useTranslation} from "react-i18next"
+import useInstructions from './useInstructions'
+import {useTranslation} from 'react-i18next'
 import '../../style/Animations.css'
 
-const HEADER = "HEADER"
-const DESC = "DESC"
+const HEADER = 'HEADER'
+const DESC = 'DESC'
 
 const getListStyle = isDraggingOver => ({
-  // background: isDraggingOver ? "lightblue" : "lightgrey",
+  // background: isDraggingOver ? 'lightblue' : 'lightgrey',
 })
 
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -46,8 +46,8 @@ function DescriptionList(props) {
     getMyItems,
     listClick
   } = useInstructions({
-    propertyName: "description",
-    customFieldsDefault: {text: ""},
+    propertyName: 'description',
+    customFieldsDefault: {text: ''},
     HEADER: HEADER,
     DEFAULT: DESC
   })
@@ -64,7 +64,7 @@ function DescriptionList(props) {
       />
 
     </ListItem>
-    { idx < descriptions.length - 1 && <Divider component="li" /> }
+    { idx < descriptions.length - 1 && <Divider component='li' /> }
 
   </React.Fragment>
   )
@@ -72,11 +72,11 @@ function DescriptionList(props) {
   return (
     <div >
 
-      <Grid className="test"
+      <Grid className='test'
         container
         spacing={1}
-        justify="center"
-        alignItems="center"
+        justify='center'
+        alignItems='center'
       >
 
       <Grid item xs={12}>
@@ -86,12 +86,12 @@ function DescriptionList(props) {
           <DragNDrop items={getMyItems(descriptions, descriptionjsx)} getListStyle={getListStyle} getItemStyle={getItemStyle} onReorder={onReorder}/>
 
           { editObject === undefined &&
-            <ListItem alignItems="center">
-              <Button variant="contained" color="primary" 
+            <ListItem alignItems='center'>
+              <Button variant='contained' color='primary' 
                 onClick={() => addInstruction(DESC)} className={classes.marginRight10}>
                 {t('upload.actions.add_description')}
               </Button>
-              <Button variant="contained" color="primary" 
+              <Button variant='contained' color='primary' 
                 onClick={() => addInstruction(HEADER)}>
                 {t('upload.actions.add_header')}
               </Button>
@@ -107,7 +107,7 @@ function DescriptionList(props) {
         <React.Fragment>
 
         <Grid item xs={10}>
-          <TextField variant="outlined" label={t('upload.tooltip.step')} InputLabelProps={{shrink: true}} 
+          <TextField variant='outlined' label={t('upload.tooltip.step')} InputLabelProps={{shrink: true}} 
           value={customFieldsData.text} 
           onChange={ event => setCustomFieldsData({text: event.target.value})} 
           onKeyPress={(ev) => enterPress(ev)}/>

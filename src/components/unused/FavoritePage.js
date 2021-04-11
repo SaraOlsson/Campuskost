@@ -5,8 +5,8 @@ import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import React, { useEffect } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import { useSelector } from "react-redux"
-import { useFirestore } from "react-redux-firebase"
+import { useSelector } from 'react-redux'
+import { useFirestore } from 'react-redux-firebase'
 import ListContainer from './ListContainer'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -107,7 +107,7 @@ function FavoritePage(props) {
   let likes_by_user_jxs = (likes != undefined) ? <ListContainer recipemap={likes.liked_recipes} noheader={true}/> : undefined
 
   // if user profile view, this prop will be available
-  let no_lists_text = (props.otheruser) ? props.otheruser + " har ännu inga sparade listor" : "Inga sparade listor ännu"
+  let no_lists_text = (props.otheruser) ? props.otheruser + ' har ännu inga sparade listor' : 'Inga sparade listor ännu'
   let liked_list_jsx = (refList.length >= 1) ? <ListContainer refs={refList} noheader={true}/> : <p> Gillade recept.. </p>
 
   // <p> - kanske listor som <i>billig vecka, bra matlådemat</i> eller <i>att prova</i> ? </p>
@@ -128,7 +128,7 @@ function FavoritePage(props) {
 
     <div>
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="list_test2" direction="horizontal">
+      <Droppable droppableId='list_test2' direction='horizontal'>
           {(provided, snapshot) => (
               <div
                   ref={provided.innerRef}
@@ -144,8 +144,8 @@ function FavoritePage(props) {
         defaultExpanded={true}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
+          aria-controls='panel1a-content'
+          id='panel1a-header'
         >
           <Typography style={{fontWeight: 'bold'}}> Gillade recept</Typography>
         </AccordionSummary>
@@ -161,7 +161,7 @@ function FavoritePage(props) {
 
     { props.otheruser &&
 
-      <div className={classes.likedPanel}> {/*className="profilepageLists"*/}
+      <div className={classes.likedPanel}> {/*className='profilepageLists'*/}
         {lists_by_user_jxs}
       </div>
 
@@ -170,8 +170,8 @@ function FavoritePage(props) {
     <Accordion className={classes.likedPanel}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
+        aria-controls='panel1a-content'
+        id='panel1a-header'
       >
         <Typography style={{fontWeight: 'bold'}}> Dina listor</Typography>
       </AccordionSummary>
@@ -187,8 +187,8 @@ function FavoritePage(props) {
       <Accordion className={classes.likedPanel}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
+          aria-controls='panel1a-content'
+          id='panel1a-header'
         >
           <Typography style={{fontWeight: 'bold'}}> Listor du följer</Typography>
         </AccordionSummary>

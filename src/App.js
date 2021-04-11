@@ -5,19 +5,19 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import React, { Suspense, useEffect } from 'react';
 import Draggable from 'react-draggable'; // The default
-import { useSelector } from "react-redux";
-import { Route, Switch } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
 
 // import our css
 import './App.css';
-import BottomMenuBar from "./components/app/BottomMenuBar";
+import BottomMenuBar from './components/app/BottomMenuBar';
 import TopMenuBar from './components/app/TopMenuBar';
 import useAuthUser from './components/app/useAuthUser';
-import BotDialog from "./components/core/BotDialog";
+import BotDialog from './components/core/BotDialog';
 import useDataLoad from './components/core/useDataLoad';
-import PrivateRoute from "./components/core/PrivateRoute";
+import PrivateRoute from './components/core/PrivateRoute';
 import Snackbar from './components/app/SnackBar';
-import Todos from "./components/todo-demo/Todos";
+import Todos from './components/todo-demo/Todos';
 // import our page components
 import {
   FeedPage,
@@ -69,20 +69,20 @@ function App() {
   let update_message = 'New content is available and will be used when all tabs for this page are closed';
 
   const onBotClick = () => {
-    console.log("onBotClick!")
+    console.log('onBotClick!')
     setOpenBotDialog(!openBotDialog)
   }
 
   // const handleClickAway = (event) => {
   //   //console.log(event)
-  //   //console.log("handleClickAway!")
+  //   //console.log('handleClickAway!')
   //   if(openBotDialog === true)
   //     setOpenBotDialog(false)
   // }  
 
   return (
 
-    <Suspense fallback="loading">
+    <Suspense fallback='loading'>
 
     <div className={classes.body}>
 
@@ -92,13 +92,13 @@ function App() {
           <TopMenuBar/>
         </div>
 
-        <div id="chat" className={`${classes.mainContainer}`}>
+        <div id='chat' className={`${classes.mainContainer}`}>
 
           <TestTS/>
 
-          <Draggable onMouseDown={onBotClick} axis="y" bounds={{bottom: 0, top: -400}}>
+          <Draggable onMouseDown={onBotClick} axis='y' bounds={{bottom: 0, top: -400}}>
             <div className={classes.botButton}>
-            <Fab color="primary" aria-label="add">
+            <Fab color='primary' aria-label='add'>
               <ChatBubbleRoundedIcon onClick={onBotClick} />
             </Fab>
             </div>
@@ -107,34 +107,34 @@ function App() {
           <BotDialog open={openBotDialog} onAlertClose={closeBotDialog}/>
 
           <Switch>
-            <Route exact path="/home" component={FeedPage}/>
-            <Route path="/login" component={LoginPage} />
-            <Route path="/settings" component={SettingsPage} />
-            <Route path="/profile/:username_url" component={ProfilePage} />
-            <Route path="/upload/:id_param" component={UploadPage} />
-            <Route path="/upload" component={UploadPage} />
-            <Route path="/notices" component={NoticePage} />
-            <Route path="/saved" component={ListPage} />
-            <Route path="/recipe/:recipetitle/:id" component={RecipePage} />
-            <Route path="/recipe/:id" component={RecipePage} />
-            <Route path="/search" component={SearchPage} />
-            <Route path="/home" component={FeedPage}/>
-            <Route path="/lists" component={ListPage}/>
-            <Route path="/terms" component={TermsPage}/>
-            <PrivateRoute path = "/todos">
+            <Route exact path='/home' component={FeedPage}/>
+            <Route path='/login' component={LoginPage} />
+            <Route path='/settings' component={SettingsPage} />
+            <Route path='/profile/:username_url' component={ProfilePage} />
+            <Route path='/upload/:id_param' component={UploadPage} />
+            <Route path='/upload' component={UploadPage} />
+            <Route path='/notices' component={NoticePage} />
+            <Route path='/saved' component={ListPage} />
+            <Route path='/recipe/:recipetitle/:id' component={RecipePage} />
+            <Route path='/recipe/:id' component={RecipePage} />
+            <Route path='/search' component={SearchPage} />
+            <Route path='/home' component={FeedPage}/>
+            <Route path='/lists' component={ListPage}/>
+            <Route path='/terms' component={TermsPage}/>
+            <PrivateRoute path = '/todos'>
               <Todos />
             </PrivateRoute>
             <Route component={FeedPage} />
 
           </Switch>
 
-          <Snackbar open={openUpdateDialog} handleClose={closeDialog} message={update_message} action={""}/>
+          <Snackbar open={openUpdateDialog} handleClose={closeDialog} message={update_message} action={''}/>
         </div>
 
         <div className={classes.footer}>
           <BottomMenuBar/>
-          {/* <svg viewBox="0 0 1366 74" id="shape-wave" style={{fill: '#43a58e', marginBottom: -10}}> 
-            <path fill-rule="evenodd" d="M0,6.92209776 C305.760417,-8.06143884 556.887773,1.27998827 753.38207,34.9463791 C949.876366,68.6127699 1154.08234,68.6127699 1366,34.9463791 L1366,74 L0,74 L0,6.92209776 Z">
+          {/* <svg viewBox='0 0 1366 74' id='shape-wave' style={{fill: '#43a58e', marginBottom: -10}}> 
+            <path fill-rule='evenodd' d='M0,6.92209776 C305.760417,-8.06143884 556.887773,1.27998827 753.38207,34.9463791 C949.876366,68.6127699 1154.08234,68.6127699 1366,34.9463791 L1366,74 L0,74 L0,6.92209776 Z'>
             </path> 
         </svg> */}
         </div>
@@ -149,7 +149,7 @@ function App() {
 }
 
 /*
-<PrivateRoute path = "/todos">
+<PrivateRoute path = '/todos'>
   <Todos />
 </PrivateRoute>
 */

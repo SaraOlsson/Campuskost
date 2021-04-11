@@ -1,40 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter as BrowserRouter } from "react-router-dom";
+import { HashRouter as BrowserRouter } from 'react-router-dom';
 
-import { Provider } from "react-redux";
+import { Provider } from 'react-redux';
 import {createStore, compose, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
-// import reducer from "./store.js";
+// import reducer from './store.js';
 
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-import { ReactReduxFirebaseProvider } from "react-redux-firebase";
-import { createFirestoreInstance } from "redux-firestore";
-import { rootReducer } from "./redux/rootReducer";
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import { createFirestoreInstance } from 'redux-firestore';
+import { rootReducer } from './redux/rootReducer';
 
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import theme from "./theme"
+import theme from './theme'
 
-import {I18nextProvider} from "react-i18next";
-import i18next from "i18next";
-import common_sv from "./translations/sv/common.json";
-import common_en from "./translations/en/common.json";
+import {I18nextProvider} from 'react-i18next';
+import i18next from 'i18next';
+import common_sv from './translations/sv/common.json';
+import common_en from './translations/en/common.json';
 
 import ReactGA from 'react-ga';
 
-const trackingId = "UA-176407801-1"; // Replace with your Google Analytics tracking ID
+const trackingId = 'UA-176407801-1'; // Replace with your Google Analytics tracking ID
 /*
 ReactGA.initialize(trackingId);
-ReactGA.pageview("/#/home");
+ReactGA.pageview('/#/home');
 
 ReactGA.set({
-  userId: "testis-ID",
+  userId: 'testis-ID',
   // any data that is relevant to the user session
   // that you would like to track with google analytics
 }) */
@@ -52,17 +52,17 @@ const DEBUG = (window.location.hostname === 'localhost')
 const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
 const firebaseConfig = {
   apiKey: API_KEY,
-  authDomain: "campuskost-firebase.firebaseapp.com",
-  databaseURL: "https://campuskost-firebase.firebaseio.com",
-  projectId: "campuskost-firebase",
-  storageBucket: "campuskost-firebase.appspot.com",
-  messagingSenderId: "477692438735",
-  appId: "1:477692438735:web:2e6dce163d7f7ce8baafba",
-  measurementId: "G-MDB52ZHJER"
+  authDomain: 'campuskost-firebase.firebaseapp.com',
+  databaseURL: 'https://campuskost-firebase.firebaseio.com',
+  projectId: 'campuskost-firebase',
+  storageBucket: 'campuskost-firebase.appspot.com',
+  messagingSenderId: '477692438735',
+  appId: '1:477692438735:web:2e6dce163d7f7ce8baafba',
+  measurementId: 'G-MDB52ZHJER'
 };
 
 const rrfConfig = {
-  userProfile: "authusers",
+  userProfile: 'authusers',
   useFirestoreForProfile: true,
 };
 
@@ -70,7 +70,7 @@ firebase.initializeApp(firebaseConfig);
 
 firebase.firestore().enablePersistence()
   .then(function(test) {
-    console.log("enablePersistence enabled")
+    console.log('enablePersistence enabled')
     console.log(test)
   })
   .catch(function(err) {
@@ -97,7 +97,7 @@ messaging.getToken({ vapidKey: vapidKey }).then((currentToken) => {
     // Send the token to your server and update the UI if necessary
     // ...
     // alert('Notifikationer kan dyka upp!')
-    console.log("got token!")
+    console.log('got token!')
     console.log(currentToken)
   } else {
     // Show permission request UI
@@ -134,7 +134,7 @@ i18next.init({
 
 // const initialState = {};
 const use_devtools = (DEBUG === true)
-console.log("use devtools: " + use_devtools)
+console.log('use devtools: ' + use_devtools)
 const composeEnhancer = use_devtools ? (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose) : compose;
 // const store = createStore(rootReducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 const store = createStore(rootReducer, composeEnhancer(applyMiddleware(thunk)))
@@ -199,4 +199,4 @@ console.log(`
 ╔═╗┌─┐┌┬┐┌─┐┬ ┬┌─┐┬┌─┌─┐┌─┐┌┬┐
 ║  ├─┤│││├─┘│ │└─┐├┴┐│ │└─┐ │ 
 ╚═╝┴ ┴┴ ┴┴  └─┘└─┘┴ ┴└─┘└─┘ ┴ 
-"`)
+'`)

@@ -1,18 +1,18 @@
 import firebase from 'firebase' // REFACTOR
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from "react-redux"
-import { useFirestore } from "react-redux-firebase"
-import { useParams } from "react-router"
-import { useHistory } from "react-router-dom"
+import { useDispatch, useSelector } from 'react-redux'
+import { useFirestore } from 'react-redux-firebase'
+import { useParams } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import resizeImage from '../../logic/resizeImage'
-import _ from "lodash"
+import _ from 'lodash'
 
 const DEFAULT_DATA = {
-    title: "",
-    freetext: "",
-    servings: "", // change to int
-    cookingtime: "",
-    credit_link: ""
+    title: '',
+    freetext: '',
+    servings: '', // change to int
+    cookingtime: '',
+    credit_link: ''
     //     ingredients: undefined, 
     //     descriptions: undefined, 
     //     image: undefined,
@@ -30,7 +30,7 @@ function useUpload() {
     const [uploadWait, setUpload_wait] = useState(false)
     const [done, setDone] = useState(false)
     const [openImageDialog, setOpenImageDialog] = useState(false)
-    const [recipeURL, setRecipeURL] = useState("")
+    const [recipeURL, setRecipeURL] = useState('')
   
     const dispatch = useDispatch() // be able to dispatch
 
@@ -45,13 +45,13 @@ function useUpload() {
 
     const defaultsDisp = () => {
       dispatch({
-        type: "SETALLDEFAULT"
+        type: 'SETALLDEFAULT'
       })
     }
   
     const fieldDisp = (fieldName, payload) => {
       dispatch({
-        type: "SETFIELD",
+        type: 'SETFIELD',
         field: fieldName,
         payload: payload
       })
@@ -71,25 +71,25 @@ function useUpload() {
       const edit_mode = upload_store.editmode//id_param !== undefined
       if (edit_mode)
       {
-        console.log("MODE: edit")
+        console.log('MODE: edit')
         // load global state to local state
         setData(
           Object.assign({}, data, upload_store.data)
         )
 
       } else {
-        console.log("MODE: new recipe")
-        if(id_param !== "")
+        console.log('MODE: new recipe')
+        if(id_param !== '')
         {
-          console.log("was not coming from recipe page")
-          history.push("/upload")
+          console.log('was not coming from recipe page')
+          history.push('/upload')
         }
       }
   
       return () => {
-        console.log("leaving UploadPage") //. has_unsaved:" + upload_store.has_unsaved)
+        console.log('leaving UploadPage') //. has_unsaved:' + upload_store.has_unsaved)
         if(_.isEmpty(upload_store.data) === false) // true)
-          console.log("upload store is not empty")
+          console.log('upload store is not empty')
       }
   
     }, [])
@@ -100,7 +100,7 @@ function useUpload() {
   
       if(chosedYes === true) {
         setImage(croppedImage)
-        fieldDisp("image", croppedImage)
+        fieldDisp('image', croppedImage)
         //imageDisp(croppedImage)
   
         let small_img = await resizeImage(croppedImage)
@@ -112,7 +112,7 @@ function useUpload() {
   
     const onFileAdd = (files) => {
   
-      //setValid({ ...valid, ["image"]: true })
+      //setValid({ ...valid, ['image']: true })
   
       var reader = new FileReader()
       reader.onload = function(e) {
@@ -144,7 +144,7 @@ function useUpload() {
       // TODO: dont even go here
       if(newImage === false)
       {
-        callback("")
+        callback('')
         return
       }
       
@@ -172,13 +172,13 @@ function useUpload() {
     const uploadAction = async () => {
   
       if(!validUpload()) {
-        alert("Upload data is not valid")
+        alert('Upload data is not valid')
         return
       }
   
       // make sure signed in, let pop up earlier..
       if(userdoc === undefined) {
-        alert("you have to sign in first")
+        alert('you have to sign in first')
         return
       }
   
@@ -200,7 +200,7 @@ function useUpload() {
           let downloadURL = returnValue_downloadURL
   
           firestore
-          .collection("recipes")
+          .collection('recipes')
           .add({
             user: username,
             title: data.title,
@@ -220,7 +220,7 @@ function useUpload() {
               recipeID: docRef.id,
             })
             // Document created successfully.
-            console.log( "Document created/updated successfully.")
+            console.log( 'Document created/updated successfully.')
             uploadDone(docRef.id)
             // setId(docRef.id)
           })
@@ -267,8 +267,8 @@ function useUpload() {
   
     const uploadDone = (recipe_id) => {
       //const recipe_id = id ? id : id_param
-      console.log("recipe_id: " + recipe_id)
-      setRecipeURL("/recipe/" + data.title + "/" + recipe_id)
+      console.log('recipe_id: ' + recipe_id)
+      setRecipeURL('/recipe/' + data.title + '/' + recipe_id)
       setUpload_wait(false)
       setDone(true)
       setData(DEFAULT_DATA)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { FacebookIcon, FacebookShareButton } from "react-share"
+import { FacebookIcon, FacebookShareButton } from 'react-share'
 
 export default function ReactShare(props) {
 
@@ -14,7 +14,7 @@ export default function ReactShare(props) {
       <FacebookShareButton
         url={shareUrl}
         quote={title}
-        className="Demo__some-network__share-button"
+        className='Demo__some-network__share-button'
         >
 
         <div style={{marginTop: 10}}>
@@ -33,7 +33,7 @@ export default function ReactShare(props) {
 <FacebookMessengerShareButton
   url={shareUrl}
   quote={title}
-  className="Demo__some-network__share-button"
+  className='Demo__some-network__share-button'
   >
   <FacebookIcon size={32} round />
   </FacebookMessengerShareButton>

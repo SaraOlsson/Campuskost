@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles'
 import React, { useEffect } from 'react'
-import { useSelector } from "react-redux"
-import { useFirestore } from "react-redux-firebase"
+import { useSelector } from 'react-redux'
+import { useFirestore } from 'react-redux-firebase'
 import RecipeGridList from '../shared/RecipeGridList'
 
 var Spinner = require('react-spinkit')
@@ -48,7 +48,7 @@ function ListContainer(props) {
       let data = doc.data()
       data.id = doc.id
       data.recipes[recipe_id] = false // remove from list // my_map.delete(key)
-      firestore.collection("recipe_lists").doc(doc.id).update(data)
+      firestore.collection('recipe_lists').doc(doc.id).update(data)
 
 
       //let updated_recipes = data.recipes[recipe_id]
@@ -78,19 +78,19 @@ function ListContainer(props) {
               }
           } 
       }).catch(function(error) {
-          console.log("Error getting document:", error)
+          console.log('Error getting document:', error)
       })
     })
   }
 
   // either spinner or recipe content is to be shown
-  let spinner_jsx = <div className={classes.spinner} ><Spinner name="ball-scale-multiple" fadeIn="none"/></div>
+  let spinner_jsx = <div className={classes.spinner} ><Spinner name='ball-scale-multiple' fadeIn='none'/></div>
   let recipeContent = (recipes.length > 0) ? <RecipeGridList handleaction={handleaction} recipes={recipes} smalltiles={true}/> : spinner_jsx
 
   let header
   if (props.noheader === false) {
-    let listname = (list_doc.listname) ? list_doc.listname : "<listname>" // "Gillade recept"
-    let user_in_header = (props.mine) ? "" : "| " + props.createdby.split("@")[0]
+    let listname = (list_doc.listname) ? list_doc.listname : '<listname>' // 'Gillade recept'
+    let user_in_header = (props.mine) ? '' : '| ' + props.createdby.split('@')[0]
     header = <p className={classes.list_header}> {listname} <i>{user_in_header}</i> </p>
   }
 

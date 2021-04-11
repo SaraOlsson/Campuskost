@@ -1,7 +1,7 @@
 
 import Button from '@material-ui/core/Button'
 import React from 'react'
-import { useTranslation } from "react-i18next"
+import { useTranslation } from 'react-i18next'
 
 let src_flag_en = require('../../assets/en_flag.png')
 let src_flag_sv = require('../../assets/sv_flag.png')
@@ -10,7 +10,7 @@ let src_flag_sv = require('../../assets/sv_flag.png')
 export default function TranslateOptions()
 {
   
-    // variant="contained" color="primary"
+    // variant='contained' color='primary'
     const {i18n} = useTranslation('common')
     return (
       <div style={{display: 'flex', justifyContent: 'flex-end'}}>

@@ -7,8 +7,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import PersonIcon from '@material-ui/icons/Person'
 import React, { useEffect, useState } from 'react'
 import Emoji from './Emoji'
-import { useHistory } from "react-router-dom"
-import {FadeIn} from "react-anim-kit"
+import { useHistory } from 'react-router-dom'
+import {FadeIn} from 'react-anim-kit'
 
 function FollowerListItem(props) {
 
@@ -16,8 +16,8 @@ function FollowerListItem(props) {
   let user = props.user
 
   let user_avatar = undefined
-  if(user.profile_img_url !== undefined && user.profile_img_url !== "") {
-    user_avatar = <img src={user.profile_img_url} className={classes.smallprofileimage} alt={"profile-img"} /> //
+  if(user.profile_img_url !== undefined && user.profile_img_url !== '') {
+    user_avatar = <img src={user.profile_img_url} className={classes.smallprofileimage} alt={'profile-img'} /> //
   } else {
     user_avatar = (
       <Avatar className={classes.avatar}>
@@ -28,7 +28,7 @@ function FollowerListItem(props) {
 
   return (
 
-    <ListItem className={classes.pointer + " " + classes.mylistitem}>
+    <ListItem className={classes.pointer + ' ' + classes.mylistitem}>
       <ListItemAvatar>
         {user_avatar}
       </ListItemAvatar>
@@ -50,7 +50,7 @@ function FollowerList(props) {
   const history = useHistory()
 
   const handleUserClick = (user) => {
-    history.push("/profile/" + user )
+    history.push('/profile/' + user )
   }
 
   // when url changes, on load and on user click
@@ -63,10 +63,10 @@ function FollowerList(props) {
 
   if (props.followerData.length < 1) {
 
-    if(props.type === "followers") 
-      return <div className={classes.followerlist + " " + classes.noFollowDiv}> Alla har vi en gång varit utan följare.. <Emoji symbol="💌"/> </div>
-    else if(props.type === "following")
-      return <div className={classes.followerlist + " " + classes.noFollowDiv}> Här följs det ingen än.. <Emoji symbol="🚶"/> </div>
+    if(props.type === 'followers') 
+      return <div className={classes.followerlist + ' ' + classes.noFollowDiv}> Alla har vi en gång varit utan följare.. <Emoji symbol='💌'/> </div>
+    else if(props.type === 'following')
+      return <div className={classes.followerlist + ' ' + classes.noFollowDiv}> Här följs det ingen än.. <Emoji symbol='🚶'/> </div>
   }
 
   let followersjsx = followData.map((user, idx) =>

@@ -1,7 +1,7 @@
 // Config starter code
-import { createChatBotMessage } from "react-chatbot-kit"
-import {StartOptions} from "./widgets/StartOptions"
-import React from "react"
+import { createChatBotMessage } from 'react-chatbot-kit'
+import {StartOptions} from './widgets/StartOptions'
+import React from 'react'
 import FaceIcon from '@material-ui/icons/Face'
 import Button from '@material-ui/core/Button'
 import CancelIcon from '@material-ui/icons/Cancel'
@@ -9,30 +9,30 @@ import theme from '../../../theme'
 //import PersonIcon from '@material-ui/icons/Person'
 
 const onClose = () => {
-    console.log("WOW close")
+    console.log('WOW close')
 }
 
 const config = {
   initialMessages: [
       createChatBotMessage(`Hej! Du kanske är ny på Campuskost?`),
       createChatBotMessage(
-        "Välj ett alternativ så berättar jag gärna mer:",
+        'Välj ett alternativ så berättar jag gärna mer:',
         {
           withAvatar: false,
           delay: 500,
-          widget: "infoabout",
+          widget: 'infoabout',
         }
       ),
   ],
-  botName: "Chefina",
+  botName: 'Chefina',
   state: {
-    myProp: "wow"
+    myProp: 'wow'
   },
   widgets: [
     {
-        widgetName: "infoabout",
+        widgetName: 'infoabout',
         widgetFunc: (props) => <StartOptions {...props} />,
-        mapStateToProps: ["myProp"],
+        mapStateToProps: ['myProp'],
     }
   ],
   customComponents: {
@@ -46,7 +46,7 @@ const config = {
 const ChatbotHeader = (props) => {
 
     return (
-        <div className="react-chatbot-kit-chat-header">
+        <div className='react-chatbot-kit-chat-header'>
             Chatta med Chefina 
             <Button 
                 onClick={() => props.onClose()}
@@ -64,8 +64,8 @@ const ChatbotHeader = (props) => {
 
 const ChatbotMessageAvatar = () => {
     return (
-      <div className="react-chatbot-kit-chat-bot-avatar">
-        <div className="react-chatbot-kit-chat-bot-avatar-container">
+      <div className='react-chatbot-kit-chat-bot-avatar'>
+        <div className='react-chatbot-kit-chat-bot-avatar-container'>
           <FaceIcon/>
         </div>
       </div>
@@ -74,24 +74,24 @@ const ChatbotMessageAvatar = () => {
 
 export default config
 
-//           <p className="react-chatbot-kit-chat-bot-avatar-letter">A</p>
+//           <p className='react-chatbot-kit-chat-bot-avatar-letter'>A</p>
 /*
 
 widgets: [
     {
-      widgetName: "overview",
+      widgetName: 'overview',
       widgetFunc: (props) => <Overview {...props} />,
-      mapStateToProps: ["myProp"],
+      mapStateToProps: ['myProp'],
     },
     {
-      widgetName: "messageParser",
+      widgetName: 'messageParser',
       widgetFunc: (props) => <MessageParser {...props} />,
-      mapStateToProps: ["myProp"],
+      mapStateToProps: ['myProp'],
     },
     {
-      widgetName: "actionProviderDocs",
+      widgetName: 'actionProviderDocs',
       widgetFunc: (props) => <ActionProviderDocs {...props} />,
-      mapStateToProps: ["myProp"],
+      mapStateToProps: ['myProp'],
     },
   ],
   */

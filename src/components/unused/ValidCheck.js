@@ -14,7 +14,7 @@ function ValidCheck(props) {
       control={
         <Checkbox
           checked={props.checked}
-          color= "primary"
+          color= 'primary'
           className= {classes.nomargin}
         />}
     />

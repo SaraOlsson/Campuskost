@@ -1,10 +1,10 @@
-import {combineReducers} from "redux";
-import {firebaseReducer} from "react-redux-firebase";
-import {firestoreReducer} from "redux-firestore";
+import {combineReducers} from 'redux';
+import {firebaseReducer} from 'react-redux-firebase';
+import {firestoreReducer} from 'redux-firestore';
 
-import testReducer from "./testReducer"
-import uploadReducer from "./uploadReducer"
-//import firebaseFetch from "../redux/fetchFirestore"
+import testReducer from './testReducer'
+import uploadReducer from './uploadReducer'
+//import firebaseFetch from '../redux/fetchFirestore'
 
 export const rootReducer = combineReducers({
     firebase: firebaseReducer,
@@ -18,9 +18,9 @@ export const rootReducer = combineReducers({
 });
 
 // remove or create a shared state reducer?
-function searchReducer(state = { searchstring: "" }, action) {
+function searchReducer(state = { searchstring: '' }, action) {
     switch (action.type) {
-      case "SETSEARCH":
+      case 'SETSEARCH':
         return {
           ...state,
           searchstring: action.payload

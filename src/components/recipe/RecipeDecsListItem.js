@@ -4,7 +4,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
-import React, { useState } from "react"
+import React, { useState } from 'react'
 
 function RecipeDecsListItem(props) {
 
@@ -27,7 +27,7 @@ function RecipeDecsListItem(props) {
           {icon}
           <ListItemText primary={ props.desc }/>
         </ListItem>
-        { idx < props.len - 1 && <Divider component="li" /> }
+        { idx < props.len - 1 && <Divider component='li' /> }
       </React.Fragment>
     )
   }

@@ -11,8 +11,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import PersonIcon from '@material-ui/icons/Person'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from "react-redux"
-import { useFirestore } from "react-redux-firebase"
+import { useSelector } from 'react-redux'
+import { useFirestore } from 'react-redux-firebase'
 
 
 // const emails = ['username@gmail.com', 'user02@gmail.com']
@@ -35,7 +35,7 @@ function SimpleDialog(props) {
   useEffect(() => {
 
     if(userdoc) {
-      followFetcher(userdoc.email, "following")
+      followFetcher(userdoc.email, 'following')
     }
 
   }, [userdoc])
@@ -56,11 +56,11 @@ function SimpleDialog(props) {
       other_username: userdoc.username,
       recipe: props.recipeId,
       timestamp: date,
-      type: "TIPS",
+      type: 'TIPS',
       seen: false
     }
 
-    let firebase_event_id = userdoc.email + "-tips-" + friend.email + "-" + props.recipeId
+    let firebase_event_id = userdoc.email + '-tips-' + friend.email + '-' + props.recipeId
 
     firestore.collection('events').doc(firebase_event_id).set(event_tips_object)
   }
@@ -71,12 +71,12 @@ function SimpleDialog(props) {
     let follow_docs = []
     let follow_data = []
 
-    firestore.collection("followers").doc(current_user_email).collection(collection)
+    firestore.collection('followers').doc(current_user_email).collection(collection)
     .onSnapshot(function(querySnapshot) {
 
         querySnapshot.forEach( doc => {
 
-          firestore.collection("users").doc(doc.id)
+          firestore.collection('users').doc(doc.id)
           .onSnapshot(function(doc) {
               let data = doc.data()
               follow_data.push({email: doc.id, username: data.username, fullname: data.fullname, profile_img_url: data.profile_img_url, follows: false})
@@ -102,8 +102,8 @@ function SimpleDialog(props) {
 
   //
   return (
-    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">Tipsa vän</DialogTitle>
+    <Dialog onClose={handleClose} aria-labelledby='simple-dialog-title' open={open}>
+      <DialogTitle id='simple-dialog-title'>Tipsa vän</DialogTitle>
       <List>
         {email_jsx}
       </List>
@@ -119,7 +119,7 @@ SimpleDialog.propTypes = {
 
 export default function PickUserDialog(props) {
   const [open, setOpen] = React.useState(false)
-  const [selectedValue, setSelectedValue] = React.useState("temp") // emails[1])
+  const [selectedValue, setSelectedValue] = React.useState('temp') // emails[1])
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -131,11 +131,11 @@ export default function PickUserDialog(props) {
     setSelectedValue(value)
   }
 
-  // variant="outlined" color="primary"
+  // variant='outlined' color='primary'
 
   return (
     <div>
-      <Button variant="contained" color="primary" onClick={handleClickOpen}>
+      <Button variant='contained' color='primary' onClick={handleClickOpen}>
         Tipsa en vän
       </Button>
       <SimpleDialog recipeId={props.recipeId} selectedValue={selectedValue} open={open} onClose={handleClose} />

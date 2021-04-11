@@ -1,15 +1,15 @@
 import { makeStyles } from '@material-ui/core/styles'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from "react-redux"
-import { useHistory } from "react-router-dom"
+import { useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import Banner from '../components/login/Banner'
 import LoginContainer from '../components/login/LoginContainer'
 import SignUpContainer from '../components/login/SignUpContainer'
 import Emoji from '../components/shared/Emoji'
 
 
-const LOGIN_STATE = "login"
-const SIGNUP_STATE = "signup"
+const LOGIN_STATE = 'login'
+const SIGNUP_STATE = 'signup'
 
 function LoginPage() {
 
@@ -20,7 +20,7 @@ function LoginPage() {
   const classes = useStyles()
 
   const loginRoute = () => {
-    history.push("/home")
+    history.push('/home')
   }
 
   useEffect(() => {
@@ -40,9 +40,9 @@ function LoginPage() {
           <LoginContainer onLogin={loginRoute}/>
           {/* <SignupBanner onAction={() => setState(SIGNUP_STATE)} /> */}
           <Banner
-              header="Har du redan ett konto?"
-              emoji={<Emoji symbol="🍼"/>}
-              buttonText="Skapa konto"
+              header='Har du redan ett konto?'
+              emoji={<Emoji symbol='🍼'/>}
+              buttonText='Skapa konto'
               onAction={() => setState(SIGNUP_STATE)}  
           >
             <p className={classes.info_font}>
@@ -59,8 +59,8 @@ function LoginPage() {
           <SignUpContainer onLogin={loginRoute}/>
           {/* <LogInBanner onAction={() => setState(LOGIN_STATE)}/> */}
           <Banner
-              header="Har du redan ett konto?"
-              buttonText="Logga in"
+              header='Har du redan ett konto?'
+              buttonText='Logga in'
               onAction={() => setState(LOGIN_STATE)}
           />
         </>

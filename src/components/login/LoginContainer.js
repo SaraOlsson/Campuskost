@@ -2,13 +2,13 @@
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import React, { useState } from 'react'
-import { useFirebase } from "react-redux-firebase"
+import { useFirebase } from 'react-redux-firebase'
 
 export default function LoginContainer(props) {
 
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [feedback, setFeedback] = useState({color: 'green', message: ""})
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [feedback, setFeedback] = useState({color: 'green', message: ''})
     const [loginProblem, setLoginProblem] = useState(false)
   
     const classes = useStyles()
@@ -63,15 +63,15 @@ export default function LoginContainer(props) {
     function resetPassword() {
   
         firebase.auth().sendPasswordResetEmail(email).then(function() {
-          alert("sent password reset to email: " + email)
+          alert('sent password reset to email: ' + email)
         }).catch(function(error) {
           // An error happened.
-          console.log("could not send reset email")
+          console.log('could not send reset email')
         })
     }
   
-    let signText = (firebase.auth().currentUser) ? "Logga ut" : "Logga in"
-    let btn_color = (firebase.auth().currentUser) ? "secondary" : "primary"
+    let signText = (firebase.auth().currentUser) ? 'Logga ut' : 'Logga in'
+    let btn_color = (firebase.auth().currentUser) ? 'secondary' : 'primary'
   
     return (
   
@@ -79,14 +79,14 @@ export default function LoginContainer(props) {
       <h3> Logga in </h3>
       <p>Ange email and lösenord för att logga in</p>
   
-           <input type="text" name="email" placeholder="Email" onChange={evt => setEmail(evt.target.value)}/>
+           <input type='text' name='email' placeholder='Email' onChange={evt => setEmail(evt.target.value)}/>
            &nbsp;&nbsp;&nbsp;
-           <input type="password" name="password" placeholder="Password" onChange={evt => setPassword(evt.target.value)}/>
+           <input type='password' name='password' placeholder='Password' onChange={evt => setPassword(evt.target.value)}/>
   
            <br/><br/>
   
            <Button
-             variant="contained"
+             variant='contained'
              color={btn_color}
              onClick={toggleSignIn}
            >
@@ -97,8 +97,8 @@ export default function LoginContainer(props) {
   
            { loginProblem === true &&
            <Button
-             variant="contained"
-             color="secondary"
+             variant='contained'
+             color='secondary'
              onClick={resetPassword}
            >
              Återställ lösenord

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 import { useCollection } from 'react-firebase-hooks/firestore'
-import firebase from "firebase/app"
+import firebase from 'firebase/app'
 
 
 function useHasRecipeInList(ref_user, ref_recipe) {
@@ -9,21 +9,21 @@ function useHasRecipeInList(ref_user, ref_recipe) {
     const db = firebase.firestore()
 
     const [lists, loading, error] = useCollection(
-        db.collection('lists').where("created_by", "==", ref_user)
+        db.collection('lists').where('created_by', '==', ref_user)
     )
 
     // const [lists, loading, error] = useCollection(
-    //     db.collectionGroup('lists').where("created_by", "==", ref_user)
+    //     db.collectionGroup('lists').where('created_by', '==', ref_user)
     // )
 
     // const [lists, loading, error] = useCollection(
-    //     db.collection('lists').where("created_by", "==", ref_user).collection('recipes').where("recipeID", "==", ref_recipe)
+    //     db.collection('lists').where('created_by', '==', ref_user).collection('recipes').where('recipeID', '==', ref_recipe)
     // )
 
-    // .where("songName", "array-contains", "Title1")
+    // .where('songName', 'array-contains', 'Title1')
 
     // const [savedDoc] = useDocument(
-    //     db.collection("lists").doc(list.listID).collection("recipes").doc(ref_recipe)
+    //     db.collection('lists').doc(list.listID).collection('recipes').doc(ref_recipe)
     // )
 
     useEffect(() => {

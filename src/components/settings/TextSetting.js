@@ -4,13 +4,13 @@ import TextField from '@material-ui/core/TextField'
 import 'firebase/auth'
 import 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from "react-redux"
-import { useFirestore } from "react-redux-firebase"
+import { useSelector } from 'react-redux'
+import { useFirestore } from 'react-redux-firebase'
 
 function TextSetting(props) {
 
     const userdoc = useSelector(state => state.firestore.data.userdoc)
-    const [settingValue, SetSettingValue] = useState("")
+    const [settingValue, SetSettingValue] = useState('')
     const [in_editmode, setIn_editmode] = useState(false)
     const [has_changed, setHas_changed] = useState(false)
 
@@ -18,12 +18,12 @@ function TextSetting(props) {
     const firestore = useFirestore()
   
     useEffect(() => {
-        SetSettingValue( userdoc ? userdoc[props.db_field] : "" )
+        SetSettingValue( userdoc ? userdoc[props.db_field] : '' )
     }, [userdoc]) 
 
     useEffect(() => {
 
-        if(settingValue === "")
+        if(settingValue === '')
             return
         
         setHas_changed(settingValue !== userdoc[props.db_field])
@@ -54,9 +54,9 @@ function TextSetting(props) {
     return !userdoc ? null : (
       <React.Fragment>
         <TextField
-          id={"input-" + props.label}
+          id={'input-' + props.label}
           label={props.label.charAt(0).toUpperCase() + props.label.slice(1)}
-          variant="outlined"
+          variant='outlined'
           value={settingValue}
           onChange={(e) => SetSettingValue(e.target.value)}
           disabled={!in_editmode}
@@ -65,8 +65,8 @@ function TextSetting(props) {
 
         { !in_editmode &&
         <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             onClick={() => setIn_editmode(true)}
             className={classes.buttons}
         >
@@ -76,8 +76,8 @@ function TextSetting(props) {
         { in_editmode &&
         <React.Fragment>
             <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             onClick={() => cancel_edit() }
             className={classes.buttons}
             >
@@ -85,8 +85,8 @@ function TextSetting(props) {
             </Button>
 
             <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             onClick={() => save_setting()}
             className={classes.buttons}
             disabled={!has_changed}

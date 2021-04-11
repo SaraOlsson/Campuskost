@@ -2,7 +2,7 @@ import React from 'react'
 
 const TestTS: React.FC = () => {
 
-  const toSay = "hello"
+  const toSay = 'hello'
     
   return (
   <>

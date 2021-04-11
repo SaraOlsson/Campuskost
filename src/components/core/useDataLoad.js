@@ -1,38 +1,38 @@
 
-import { useFirestore, useFirestoreConnect } from "react-redux-firebase"
+import { useFirestore, useFirestoreConnect } from 'react-redux-firebase'
 
 function useDataLoad(userEmail) {
 
     useFirestoreConnect({
         collection: `users`,
         doc: userEmail,
-        storeAs: "userdoc",
+        storeAs: 'userdoc',
     })
 
     useFirestoreConnect({
         collection: `users`,
-        storeAs: "allusers",
+        storeAs: 'allusers',
     })
     
     useFirestoreConnect({
         collection: `recipes`,
-        storeAs: "allrecipes",
+        storeAs: 'allrecipes',
     })
     
     // useFirestoreConnect({
     //     collection: `recipe_likes`,
     //     doc:  `${userEmail}`,
-    //     storeAs: "userLikes",
+    //     storeAs: 'userLikes',
     // })
     
     useFirestoreConnect([
     {
         collection: `followers/${userEmail}/following`,
-        storeAs: "following",
+        storeAs: 'following',
     },
     {
         collection: `followers/${userEmail}/followers`,
-        storeAs: "followers",
+        storeAs: 'followers',
     }
     ])
       

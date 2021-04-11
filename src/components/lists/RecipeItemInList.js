@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
-import firebase from "firebase/app"
-import React from "react"
+import firebase from 'firebase/app'
+import React from 'react'
 import { useDocumentDataOnce } from 'react-firebase-hooks/firestore'
 import { useHistory } from 'react-router-dom'
 import FavoriteIcon from '@material-ui/icons/Favorite'
@@ -32,7 +32,7 @@ const RecipeItemInList = ({ref_recipeID, isLiking = null, toggleLike = () => {},
         {value && 
         <div className={classes.row}
           style={css_prop}
-          onClick={() => history.push("/recipe/" + ref_recipeID )}
+          onClick={() => history.push('/recipe/' + ref_recipeID )}
         >
             {/* <span>Document: {JSON.stringify(value)}</span> */}
             {/* <span> {value.title}{' | '}{value.user}</span> */}

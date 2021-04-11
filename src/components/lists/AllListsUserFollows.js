@@ -1,7 +1,7 @@
-import firebase from "firebase/app"
-import React from "react"
+import firebase from 'firebase/app'
+import React from 'react'
 import { useCollection } from 'react-firebase-hooks/firestore'
-import { useTranslation } from "react-i18next"
+import { useTranslation } from 'react-i18next'
 import Emoji from '../shared/Emoji'
 import SavedList from './SavedList'
 
@@ -27,7 +27,7 @@ const AllListsUserFollows = ({ref_user, css_prop={}}) => {
         )}
       {
         (!loading && value.docs.length < 1) && 
-        <p>{t('lists.follows.no_list_yet')}<Emoji symbol="🍽️"/></p>
+        <p>{t('lists.follows.no_list_yet')}<Emoji symbol='🍽️'/></p>
       }
     </div>
   )

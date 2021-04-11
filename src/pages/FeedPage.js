@@ -1,23 +1,23 @@
 import Grid from '@material-ui/core/Grid'
 import Link from '@material-ui/core/Link'
 import { makeStyles } from '@material-ui/core/styles'
-import firebase from "firebase/app"
+import firebase from 'firebase/app'
 import React, { useEffect, useState } from 'react'
-import { FadeIn } from "react-anim-kit"
+import { FadeIn } from 'react-anim-kit'
 import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore'
-import { useTranslation } from "react-i18next"
+import { useTranslation } from 'react-i18next'
 import { Else, If, Then } from 'react-if'
-import { useDispatch } from "react-redux"
+import { useDispatch } from 'react-redux'
 import Emoji from '../components/shared/Emoji'
 import LoadSpinner from '../components/shared/LoadSpinner'
 import RecipeGridList from '../components/shared/RecipeGridList'
-import { fetchData } from "../redux/testReducer"
-import TranslateOptions from "../components/core/TranslateOptions"
+import { fetchData } from '../redux/testReducer'
+import TranslateOptions from '../components/core/TranslateOptions'
 
 // import CacheComponent from '../components/core/CacheComponent'
-// import DropZone from "../components/input/DropZone"
-// import KeyFrames from "../components/framer/KeyFrames"
-// import BouncyDiv from "../components/animations/BouncyDiv"
+// import DropZone from '../components/input/DropZone'
+// import KeyFrames from '../components/framer/KeyFrames'
+// import BouncyDiv from '../components/animations/BouncyDiv'
 // import FavoriteIcon from '@material-ui/icons/Favorite'
 // import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
@@ -54,8 +54,8 @@ function FeedPage() {
       console.log(version.release)
       
       //let local_version = Number(window.localStorage.getItem('version'));
-      //console.log("const version: " + VERSION);
-      //console.log("local version: " + local_version);
+      //console.log('const version: ' + VERSION);
+      //console.log('local version: ' + local_version);
 
       if (VERSION !== version.release)
         setUpdateExists(true);
@@ -88,7 +88,7 @@ function FeedPage() {
       <FadeIn right by={300}>
         <NewsContainer/>
       </FadeIn>
-      <h3>{t("welcome.recipesheader")}</h3>
+      <h3>{t('welcome.recipesheader')}</h3>
 
       <If condition={recipes}>
         <Then>
@@ -116,15 +116,15 @@ function NewsContainer(props) {
 
   // <h1>{t('welcome.title', {framework:'Campuskost'})}</h1>
 
-  //let feedback_form_link = <a href="https://forms.gle/wUSFkwExgdJbiAUL7" target="_blank" variant="body1">här</a>;
+  //let feedback_form_link = <a href='https://forms.gle/wUSFkwExgdJbiAUL7' target='_blank' variant='body1'>här</a>;
   // <Test/>
   let feedback_form_link = (
-      <Link href="https://forms.gle/wUSFkwExgdJbiAUL7" target="_blank" variant="body2">
+      <Link href='https://forms.gle/wUSFkwExgdJbiAUL7' target='_blank' variant='body2'>
         här
       </Link>
   )
   let feedback_message = (<p>Lämna gärna feedback {feedback_form_link} om du
-    hittar buggar eller har något roligt förslag <Emoji symbol="💡"/></p>)
+    hittar buggar eller har något roligt förslag <Emoji symbol='💡'/></p>)
   
   return (
     <div>
@@ -136,14 +136,14 @@ function NewsContainer(props) {
     <Grid
       container
       spacing={1}
-      justify="center"
-      alignItems="center"
+      justify='center'
+      alignItems='center'
       className={classes.newscontainer}
     >
 
       <Grid item xs={12}>
         <div style={{padding: '10px'}}>
-        <h3>{t('welcome.header', {appname:'Campuskost'})} <Emoji symbol="🌱"/> </h3>
+        <h3>{t('welcome.header', {appname:'Campuskost'})} <Emoji symbol='🌱'/> </h3>
         {/* <p> Campuskost har fått nytt utseende och funktion! Du kan nu skapa ett konto och själv ladda upp och redigera dina recept.
         Snart kommer funktionalitet såsom att skapa listor och följa dina vänners listor med recept. Lämna gärna feedback {feedback_form_link} om du
         hittar buggar eller har något roligt förslag.</p> */}

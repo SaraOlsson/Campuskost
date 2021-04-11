@@ -2,7 +2,7 @@ import GridList from '@material-ui/core/GridList'
 import { makeStyles } from '@material-ui/core/styles'
 import React from 'react'
 import RecipeItem from './RecipeItem'
-import {FadeIn} from "react-anim-kit"
+import {FadeIn} from 'react-anim-kit'
 
 function RecipeGridList({recipes, smalltiles}) {
 
