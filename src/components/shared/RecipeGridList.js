@@ -1,12 +1,12 @@
-import GridList from '@material-ui/core/GridList';
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import RecipeItem from './RecipeItem';
+import GridList from '@material-ui/core/GridList'
+import { makeStyles } from '@material-ui/core/styles'
+import React from 'react'
+import RecipeItem from './RecipeItem'
 import {FadeIn} from "react-anim-kit"
 
 function RecipeGridList({recipes, smalltiles}) {
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <FadeIn up by={200}>
@@ -23,14 +23,14 @@ function RecipeGridList({recipes, smalltiles}) {
       </GridList>
     </div>
     </FadeIn>
-  );
+  )
 }
 
 /*
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 RecipeGridList.propTypes = {
   recipes: PropTypes.array.isRequired
-}; */
+} */
 
 const useStyles = makeStyles({
   grid_root: {
@@ -39,6 +39,6 @@ const useStyles = makeStyles({
    justifyContent: 'center',
    overflow: 'hidden'
   }
-});
+})
 
-export default RecipeGridList;
+export default RecipeGridList

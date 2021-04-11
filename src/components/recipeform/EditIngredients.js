@@ -1,39 +1,39 @@
 
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import React from 'react';
-import DragNDrop from '../shared/DragNDrop';
-import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider'
+import Grid from '@material-ui/core/Grid'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
+import React from 'react'
+import DragNDrop from '../shared/DragNDrop'
+import Button from '@material-ui/core/Button'
 import useInstructions from "./useInstructions"
-import {useTranslation} from "react-i18next";
-import '../../style/Animations.css';
+import {useTranslation} from "react-i18next"
+import '../../style/Animations.css'
 
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
 
-const HEADER = "HEADER";
-const ROW = "ROW";
+const HEADER = "HEADER"
+const ROW = "ROW"
 
 const getListStyle = isDraggingOver => ({
   // background: isDraggingOver ? "lightblue" : "lightgrey",
-});
+})
 
 const getItemStyle = (isDragging, draggableStyle) => ({
   // styles we need to apply on draggables
   ...draggableStyle
-});
+})
 
 function IngredientsList(props) {
 
-  const classes = useStyles();
-  const {t} = useTranslation('common');  
+  const classes = useStyles()
+  const {t} = useTranslation('common')  
 
   const {
     instructions: ingredients,
@@ -58,9 +58,9 @@ function IngredientsList(props) {
   const hasOrderProp = () => {
 
     if( ingredients.length < 1 )
-      return false;
+      return false
       
-    return (ingredients[0].order !== undefined) ? true : false;
+    return (ingredients[0].order !== undefined) ? true : false
  
   }
 
@@ -77,7 +77,7 @@ function IngredientsList(props) {
     { idx < ingredients.length - 1 && <Divider component="li" /> }
 
   </React.Fragment>
-  );
+  )
 
   const onValueChange = (event) => {
 
@@ -211,7 +211,7 @@ function IngredientsList(props) {
       </Grid>
 
     </div>
-  );
+  )
 }
 
 
@@ -270,6 +270,6 @@ const useStyles = makeStyles(theme => ({
   bold: {
     fontWeight: 'bold'
   }
-}));
+}))
 
-export default IngredientsList;
+export default IngredientsList

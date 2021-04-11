@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { useFirestore } from "react-redux-firebase";
-import { useSelector } from "react-redux";
+import React, { useState } from "react"
+import { useFirestore } from "react-redux-firebase"
+import { useSelector } from "react-redux"
 
 const AddTodo = () => {
-  const [presentToDo, setPresentToDo] = useState("");
-  const firestore = useFirestore();
-  const { uid } = useSelector((state) => state.firebase.auth);
+  const [presentToDo, setPresentToDo] = useState("")
+  const firestore = useFirestore()
+  const { uid } = useSelector((state) => state.firebase.auth)
   const handleChange = ({ currentTarget: { name, value } }) => {
     if (name === "addTodo") {
-      setPresentToDo(value);
+      setPresentToDo(value)
     }
-  };
+  }
   const addNewTodo = (todo) => {
     firestore
       .collection("authusers")
@@ -23,10 +23,10 @@ const AddTodo = () => {
       .then((docRef) => {
         docRef.update({
           todoID: docRef.id,
-        });
-      });
-    setPresentToDo("");
-  };
+        })
+      })
+    setPresentToDo("")
+  }
   return (
     <div>
       <form action="">
@@ -38,15 +38,15 @@ const AddTodo = () => {
         />
         <button
           onClick={(event) => {
-            event.preventDefault();
-            addNewTodo(presentToDo);
+            event.preventDefault()
+            addNewTodo(presentToDo)
           }}
         >
           Add Todo
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default AddTodo;
+export default AddTodo

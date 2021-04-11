@@ -1,5 +1,5 @@
 
-import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
+import { useFirestore, useFirestoreConnect } from "react-redux-firebase"
 
 function useDataLoad(userEmail) {
 
@@ -7,23 +7,23 @@ function useDataLoad(userEmail) {
         collection: `users`,
         doc: userEmail,
         storeAs: "userdoc",
-    });
+    })
 
     useFirestoreConnect({
         collection: `users`,
         storeAs: "allusers",
-    });
+    })
     
     useFirestoreConnect({
         collection: `recipes`,
         storeAs: "allrecipes",
-    });
+    })
     
     // useFirestoreConnect({
     //     collection: `recipe_likes`,
     //     doc:  `${userEmail}`,
     //     storeAs: "userLikes",
-    // });
+    // })
     
     useFirestoreConnect([
     {
@@ -34,7 +34,7 @@ function useDataLoad(userEmail) {
         collection: `followers/${userEmail}/followers`,
         storeAs: "followers",
     }
-    ]);
+    ])
       
 }
 

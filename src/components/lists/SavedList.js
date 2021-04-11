@@ -1,13 +1,13 @@
-import { useDocument, useDocumentOnce, useDocumentData, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
-import React, {useEffect, useState} from "react"
-import firebase from "firebase/app"
-import { useSelector } from "react-redux"
+import { useDocument, useDocumentOnce, useDocumentData, useDocumentDataOnce } from 'react-firebase-hooks/firestore'
+import React, {useEffect, useState} from 'react'
+import firebase from 'firebase/app'
+import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import ListContent from './ListContent'
 import AlertDialog from '../shared/AlertDialog'
-import {useTranslation} from "react-i18next";
-import { useHistory } from "react-router-dom"
+import {useTranslation} from 'react-i18next'
+import { useHistory } from 'react-router-dom'
 
 
 const SavedList = ({ref_listID}) => {
@@ -17,8 +17,8 @@ const SavedList = ({ref_listID}) => {
   const {email: authUser} = useSelector((state) => state.firebase.auth)
   const [openAlert, setOpenAlert] = useState(false)
   const [isMine, setIsMine] = useState(false)
-  const [value] = useDocumentDataOnce(db.doc('lists/' + ref_listID));
-
+  const [value] = useDocumentDataOnce(db.doc('lists/' + ref_listID))
+ 
   const [follows, setFollows] = useState(false)
   const [followRef, setFollowRef] = useState('')
   const [followDoc] = useDocument(followRef)
@@ -52,7 +52,7 @@ const SavedList = ({ref_listID}) => {
   const onRemove = (chosedDelete) => {
 
     if(chosedDelete === true) {
-      console.log("remove " + ref_listID)
+      console.log('remove ' + ref_listID)
     db.doc('lists/' + ref_listID).delete()
     } else {
       setOpenAlert(false)
@@ -109,12 +109,12 @@ const SavedList = ({ref_listID}) => {
         NoOptionText={t('lists.delete_alert.no')}
       />
     </>
-  );
-};
+  )
+}
 
 // refactor
 function isTouchDevice() {
-  return(window.matchMedia("(pointer: coarse)").matches)
+  return(window.matchMedia('(pointer: coarse)').matches)
 }
 
 const ListUI = ({data, userDoc, showRmButton, onRemove, showFollowBtn, follows, toggleFollow}) => {
@@ -140,8 +140,8 @@ const ListUI = ({data, userDoc, showRmButton, onRemove, showFollowBtn, follows, 
               </div>}
               { (showFollowBtn && (isHovering || isTouchDevice())) &&
               <div className={classes.removeIcon}> 
-                  <Button onClick={toggleFollow} variant={!follows ? "contained" : "text"} 
-                          color={follows ? "secondary" : "primary"}>
+                  <Button onClick={toggleFollow} variant={!follows ? 'contained' : 'text'} 
+                          color={follows ? 'secondary' : 'primary'}>
                     {follows ? t('shared.unfollow') : t('shared.follow') }
                   </Button> 
               </div>
@@ -154,7 +154,7 @@ const ListUI = ({data, userDoc, showRmButton, onRemove, showFollowBtn, follows, 
               <p className={classes.byUser}> 
                 {t('shared.by')} 
                 <a className={classes.byUserLink} 
-                   onClick={() => {history.push("/profile/" + userDoc.username)}}>
+                   onClick={() => {history.push('/profile/' + userDoc.username)}}>
                      {' '}{userDoc.username} 
                 </a>
               </p> 

@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { useFirestore } from "react-redux-firebase";
-import { useSelector } from "react-redux";
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import {useTranslation} from "react-i18next";
+import React, { useState } from "react"
+import { useFirestore } from "react-redux-firebase"
+import { useSelector } from "react-redux"
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import {useTranslation} from "react-i18next"
 import { makeStyles } from '@material-ui/core/styles'
 
 export default function AddRecipeList() {
 
-    const [listname, setListname] = useState("");
+    const [listname, setListname] = useState("")
 
     const classes = useStyles()
     const {t} = useTranslation('common')
-    const firestore = useFirestore();
-    const { email } = useSelector((state) => state.firebase.auth);
+    const firestore = useFirestore()
+    const { email } = useSelector((state) => state.firebase.auth)
 
 
     const addNewTodo = (todo) => {
@@ -26,10 +26,10 @@ export default function AddRecipeList() {
           .then((docRef) => {
             docRef.update({
               listID: docRef.id,
-            });
-          });
-          setListname("");
-    };
+            })
+          })
+          setListname("")
+    }
       
     return (
         <div className={classes.newRecipeContainer}>
@@ -42,8 +42,8 @@ export default function AddRecipeList() {
             />
             <Button
               onClick={(event) => {
-                event.preventDefault();
-                addNewTodo(listname);
+                event.preventDefault()
+                addNewTodo(listname)
               }}
               variant="contained"
               color="primary"
@@ -52,7 +52,7 @@ export default function AddRecipeList() {
             </Button>
 
         </div>
-      );
+      )
 }
 
 const useStyles = makeStyles(theme => ({
@@ -65,4 +65,4 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 10,
     margin: 15
   }
-}));
+}))

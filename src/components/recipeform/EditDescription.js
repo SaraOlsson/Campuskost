@@ -1,36 +1,36 @@
 
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import SaveIcon from '@material-ui/icons/Save';
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import DragNDrop from '../shared/DragNDrop';
+import Divider from '@material-ui/core/Divider'
+import Grid from '@material-ui/core/Grid'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
+import SaveIcon from '@material-ui/icons/Save'
+import React from 'react'
+import Button from '@material-ui/core/Button'
+import DragNDrop from '../shared/DragNDrop'
 import useInstructions from "./useInstructions"
-import {useTranslation} from "react-i18next";
-import '../../style/Animations.css';
+import {useTranslation} from "react-i18next"
+import '../../style/Animations.css'
 
-const HEADER = "HEADER";
-const DESC = "DESC";
+const HEADER = "HEADER"
+const DESC = "DESC"
 
 const getListStyle = isDraggingOver => ({
   // background: isDraggingOver ? "lightblue" : "lightgrey",
-});
+})
 
 const getItemStyle = (isDragging, draggableStyle) => ({
   // styles we need to apply on draggables
   ...draggableStyle
-});
+})
 
 function DescriptionList(props) {
 
-  const classes = useStyles();
-  const {t} = useTranslation('common');
+  const classes = useStyles()
+  const {t} = useTranslation('common')
 
   const {
     instructions: descriptions,
@@ -67,7 +67,7 @@ function DescriptionList(props) {
     { idx < descriptions.length - 1 && <Divider component="li" /> }
 
   </React.Fragment>
-  );
+  )
 
   return (
     <div >
@@ -127,7 +127,7 @@ function DescriptionList(props) {
       </Grid>
 
     </div>
-  );
+  )
 }
 
 // .toLowerCase()
@@ -189,6 +189,6 @@ const useStyles = makeStyles(theme => ({
   textField: { // not used
     color: 'green'
   }
-}));
+}))
 
-export default DescriptionList;
+export default DescriptionList

@@ -33,6 +33,8 @@ import {
 } from './pages';
 import * as serviceWorker from './serviceWorker';
 
+import TestTS from './components/TestTS' 
+
 //import {ErrorBoundary} from './pages/ErrorBoundary';
 // require('dotenv').config(); // check if we need this
 
@@ -91,6 +93,8 @@ function App() {
         </div>
 
         <div id="chat" className={`${classes.mainContainer}`}>
+
+          <TestTS/>
 
           <Draggable onMouseDown={onBotClick} axis="y" bounds={{bottom: 0, top: -400}}>
             <div className={classes.botButton}>

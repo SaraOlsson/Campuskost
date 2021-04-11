@@ -1,8 +1,8 @@
-import { makeStyles } from '@material-ui/core/styles';
-import firebase from "firebase/app";
-import React from "react";
-import { useDocumentDataOnce } from 'react-firebase-hooks/firestore';
-import { useHistory } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles'
+import firebase from "firebase/app"
+import React from "react"
+import { useDocumentDataOnce } from 'react-firebase-hooks/firestore'
+import { useHistory } from 'react-router-dom'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import Button from '@material-ui/core/Button'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
@@ -11,12 +11,12 @@ const fallbackImage = require('../../assets/err_image.png')
 
 const RecipeItemInList = ({ref_recipeID, isLiking = null, toggleLike = () => {}, css_prop = {}}) => {
     const [value, loading, error] = useDocumentDataOnce(
-        firebase.firestore().doc('recipes/' + ref_recipeID), {} );
+        firebase.firestore().doc('recipes/' + ref_recipeID), {} )
 
     const history = useHistory()
     const classes = useStyles()
 
-    const icon = (isLiking === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
+    const icon = (isLiking === true) ? <FavoriteIcon/> : <FavoriteBorderIcon/>
     const likeBtn = isLiking ? (
         <Button 
         disableTouchRipple 

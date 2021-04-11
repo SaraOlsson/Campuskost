@@ -1,12 +1,12 @@
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Grid from '@material-ui/core/Grid'
+import { makeStyles } from '@material-ui/core/styles'
+import React from 'react'
 
 function ValidCheck(props) {
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <Grid item xs={props.xs}>
@@ -19,7 +19,7 @@ function ValidCheck(props) {
         />}
     />
     </Grid>
-  );
+  )
 }
 
 const useStyles = makeStyles(theme => ({
@@ -29,4 +29,4 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default ValidCheck;
+export default ValidCheck

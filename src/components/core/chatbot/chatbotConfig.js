@@ -1,12 +1,12 @@
 // Config starter code
-import { createChatBotMessage } from "react-chatbot-kit";
+import { createChatBotMessage } from "react-chatbot-kit"
 import {StartOptions} from "./widgets/StartOptions"
 import React from "react"
-import FaceIcon from '@material-ui/icons/Face';
-import Button from '@material-ui/core/Button';
-import CancelIcon from '@material-ui/icons/Cancel';
+import FaceIcon from '@material-ui/icons/Face'
+import Button from '@material-ui/core/Button'
+import CancelIcon from '@material-ui/icons/Cancel'
 import theme from '../../../theme'
-//import PersonIcon from '@material-ui/icons/Person';
+//import PersonIcon from '@material-ui/icons/Person'
 
 const onClose = () => {
     console.log("WOW close")
@@ -69,8 +69,8 @@ const ChatbotMessageAvatar = () => {
           <FaceIcon/>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
 export default config
 

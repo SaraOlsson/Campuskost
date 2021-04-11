@@ -1,7 +1,7 @@
-import firebase from "firebase/app";
-import React from "react";
-import { useCollectionOnce } from 'react-firebase-hooks/firestore';
-import RecipeItemInList from './RecipeItemInList';
+import firebase from "firebase/app"
+import React from "react"
+import { useCollectionOnce } from 'react-firebase-hooks/firestore'
+import RecipeItemInList from './RecipeItemInList'
 import { useTranslation } from "react-i18next"
 
 const ListContent = ({ref_listID}) => {
@@ -12,7 +12,7 @@ const ListContent = ({ref_listID}) => {
     {
       snapshotListenOptions: { includeMetadataChanges: true },
     }
-  );
+  )
   return (
     <div>
       {/* <p>
@@ -35,7 +35,7 @@ const ListContent = ({ref_listID}) => {
         }
       
     </div>
-  );
-};
+  )
+}
 
 export default ListContent

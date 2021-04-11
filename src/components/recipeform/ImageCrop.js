@@ -1,13 +1,13 @@
-import { Slider } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
-import Cropper from 'react-easy-crop';
+import { Slider } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import React, { useState } from 'react'
+import Cropper from 'react-easy-crop'
 
 const ImageCrop = (props) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <div className={classes.App}>
@@ -65,9 +65,9 @@ const useStyles = makeStyles({
     padding: "22px 0px"
   }
 
-});
+})
 
-export default ImageCrop;
+export default ImageCrop
 
 // "https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000"
 // classes={{ container: classes.slider }}

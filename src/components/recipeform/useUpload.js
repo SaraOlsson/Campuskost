@@ -1,10 +1,10 @@
-import firebase from 'firebase'; // REFACTOR
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { useFirestore } from "react-redux-firebase";
-import { useParams } from "react-router";
-import { useHistory } from "react-router-dom";
-import resizeImage from '../../logic/resizeImage';
+import firebase from 'firebase' // REFACTOR
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from "react-redux"
+import { useFirestore } from "react-redux-firebase"
+import { useParams } from "react-router"
+import { useHistory } from "react-router-dom"
+import resizeImage from '../../logic/resizeImage'
 import _ from "lodash"
 
 const DEFAULT_DATA = {
@@ -22,26 +22,26 @@ function useUpload() {
 
     const [data, setData] = useState(DEFAULT_DATA)
 
-    const [image, setImage] = useState(undefined);
-    const [rawImage, setRawImage] = useState(undefined);
-    const [smallImage, setSmallImage] = useState(undefined);
-    const [newImage, setNewImage] = useState(false);
+    const [image, setImage] = useState(undefined)
+    const [rawImage, setRawImage] = useState(undefined)
+    const [smallImage, setSmallImage] = useState(undefined)
+    const [newImage, setNewImage] = useState(false)
   
-    const [upload_wait, setUpload_wait] = useState(false);
-    const [done, setDone] = useState(false);
-    const [openImageDialog, setOpenImageDialog] = useState(false);
+    const [uploadWait, setUpload_wait] = useState(false)
+    const [done, setDone] = useState(false)
+    const [openImageDialog, setOpenImageDialog] = useState(false)
     const [recipeURL, setRecipeURL] = useState("")
   
-    const dispatch = useDispatch(); // be able to dispatch
+    const dispatch = useDispatch() // be able to dispatch
 
-    const userdoc = useSelector(state => state.firestore.data.userdoc);
-    const { uid } = useSelector((state) => state.firebase.auth);
+    const userdoc = useSelector(state => state.firestore.data.userdoc)
+    const { uid } = useSelector((state) => state.firebase.auth)
 
-    const firestore = useFirestore();
-    const upload_store = useSelector(state => state.uploadReducer);
-    const history = useHistory();
+    const firestore = useFirestore()
+    const upload_store = useSelector(state => state.uploadReducer)
+    const history = useHistory()
   
-    const { id_param } = useParams();
+    const { id_param } = useParams()
 
     const defaultsDisp = () => {
       dispatch({
@@ -92,18 +92,18 @@ function useUpload() {
           console.log("upload store is not empty")
       }
   
-    }, []);
+    }, [])
   
     const onImageDialogChoise = async (chosedYes, croppedImage = null) => {
   
-      setOpenImageDialog(false);
+      setOpenImageDialog(false)
   
       if(chosedYes === true) {
         setImage(croppedImage)
         fieldDisp("image", croppedImage)
-        //imageDisp(croppedImage);
+        //imageDisp(croppedImage)
   
-        let small_img = await resizeImage(croppedImage);
+        let small_img = await resizeImage(croppedImage)
         setSmallImage(small_img)
   
       }
@@ -112,31 +112,31 @@ function useUpload() {
   
     const onFileAdd = (files) => {
   
-      //setValid({ ...valid, ["image"]: true });
+      //setValid({ ...valid, ["image"]: true })
   
-      var reader = new FileReader();
+      var reader = new FileReader()
       reader.onload = function(e) {
-        setRawImage(e.target.result);
-        setNewImage(true);
-        setOpenImageDialog(true);
+        setRawImage(e.target.result)
+        setNewImage(true)
+        setOpenImageDialog(true)
       }
   
       try {
-        reader.readAsDataURL(files[0]);
+        reader.readAsDataURL(files[0])
       } catch(err) {
-          console.log(err.message);
+          console.log(err.message)
       }
   
-    };
+    }
   
     const onFileRemove = () => {
-      setRawImage(undefined);
-      setImage(undefined);
-    };
+      setRawImage(undefined)
+      setImage(undefined)
+    }
   
     const generateImageFilename = () => {
-      return 'recept/' + data.title + '_' + uid;
-    };
+      return 'recept/' + data.title + '_' + uid
+    }
   
     // upload image and callback with download URL
     const uploadImage = (callback) => {
@@ -145,26 +145,26 @@ function useUpload() {
       if(newImage === false)
       {
         callback("")
-        return;
+        return
       }
       
-      setUpload_wait(true);
+      setUpload_wait(true)
       // Create a reference to the new image
-      let storageRef = firebase.storage(); // REFACTOR TO HOOKS
+      let storageRef = firebase.storage() // REFACTOR TO HOOKS
       let image_filename = generateImageFilename() + '.jpg'
-      let newImageRef = storageRef.ref(image_filename); // storageRef.ref('recept/' + title + '_image.jpg');
+      let newImageRef = storageRef.ref(image_filename) // storageRef.ref('recept/' + title + '_image.jpg')
   
       // Upload image as a Base64 formatted image string.
-      let uploadTask = newImageRef.putString(image, 'data_url');
+      let uploadTask = newImageRef.putString(image, 'data_url')
   
       uploadTask.on('state_changed', function(snapshot){
         }, function(error) { // Handle unsuccessful uploads
         }, function() { // Handle successful uploads on complete
   
           uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-            callback(downloadURL);
-          });
-      }); 
+            callback(downloadURL)
+          })
+      }) 
     }
   
     
@@ -173,22 +173,22 @@ function useUpload() {
   
       if(!validUpload()) {
         alert("Upload data is not valid")
-        return;
+        return
       }
   
       // make sure signed in, let pop up earlier..
       if(userdoc === undefined) {
         alert("you have to sign in first")
-        return;
+        return
       }
   
       // prepare data
-      let username = userdoc.username;
-      //let recipe_name = upload_store.title;
-      let image_filename = generateImageFilename();
+      let username = userdoc.username
+      //let recipe_name = upload_store.title
+      let image_filename = generateImageFilename()
   
-      let ref_to_user = userdoc.email;
-      let firestore_timestamp = firebase.firestore.Timestamp.now();
+      let ref_to_user = userdoc.email
+      let firestore_timestamp = firebase.firestore.Timestamp.now()
   
       // if create new doc or edit
       //if(upload_store.editmode === false)
@@ -197,7 +197,7 @@ function useUpload() {
         // when image is uploaded, continue with uploading the rest
         uploadImage(function(returnValue_downloadURL) {
           // use the return value here instead of like a regular (non-evented) return value
-          let downloadURL = returnValue_downloadURL;
+          let downloadURL = returnValue_downloadURL
   
           firestore
           .collection("recipes")
@@ -223,9 +223,9 @@ function useUpload() {
             console.log( "Document created/updated successfully.")
             uploadDone(docRef.id)
             // setId(docRef.id)
-          });
+          })
   
-        }); // end of image upload callback
+        }) // end of image upload callback
   
       } else {
   
@@ -239,40 +239,40 @@ function useUpload() {
           ingredients: upload_store.data.ingredients,
           description: upload_store.data.description,
           credit_link: data.credit_link
-        };
+        }
   
         // either upload with or without image (no new imag needed of recipe _update_)
         if (newImage === false) {
   
-          firestore.collection('recipes').doc(id_param).update(update_data);
-          uploadDone(upload_store.recipe_id);
+          firestore.collection('recipes').doc(id_param).update(update_data)
+          uploadDone(upload_store.recipe_id)
   
         } else {
   
           await uploadImage(function(returnValue_downloadURL) {
             // use the return value here instead of like a regular (non-evented) return value
-            update_data.img_url = returnValue_downloadURL;
-            firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data);
-            uploadDone(upload_store.recipe_id);
+            update_data.img_url = returnValue_downloadURL
+            firestore.collection('recipes').doc(upload_store.recipe_id).update(update_data)
+            uploadDone(upload_store.recipe_id)
   
-          }); // end of image upload callback
+          }) // end of image upload callback
    
         }
 
         // to be able to direct to recipe page
-        // setId(upload_store.recipe_id); // needed?
+        // setId(upload_store.recipe_id) // needed?
       }
   
-    };
+    }
   
     const uploadDone = (recipe_id) => {
       //const recipe_id = id ? id : id_param
       console.log("recipe_id: " + recipe_id)
       setRecipeURL("/recipe/" + data.title + "/" + recipe_id)
-      setUpload_wait(false);
-      setDone(true);
+      setUpload_wait(false)
+      setDone(true)
       setData(DEFAULT_DATA)
-      defaultsDisp();
+      defaultsDisp()
     }
   
     const validUpload = () => {
@@ -287,14 +287,14 @@ function useUpload() {
     // when done, there's an option to go to recipe page
     const goToRecipe = () => {
       history.push(recipeURL)
-    };
+    }
   
     return {
         data,
         onValueChange,
         validUpload,
         uploadAction,
-        upload_wait,
+        uploadWait,
         done,
         goToRecipe,
         image,

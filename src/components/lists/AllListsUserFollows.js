@@ -10,7 +10,7 @@ const AllListsUserFollows = ({ref_user, css_prop={}}) => {
   const {t} = useTranslation('common')
   const [value, loading, error] = useCollection(
     firebase.firestore().collection(`lists_follows/${ref_user}/lists`), {}
-  );
+  )
 
   return (
     <div style={css_prop}>
@@ -30,7 +30,7 @@ const AllListsUserFollows = ({ref_user, css_prop={}}) => {
         <p>{t('lists.follows.no_list_yet')}<Emoji symbol="🍽️"/></p>
       }
     </div>
-  );
-};
+  )
+}
 
 export default AllListsUserFollows

@@ -1,23 +1,23 @@
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import React, { useState } from "react";
+import Divider from '@material-ui/core/Divider'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import { makeStyles } from '@material-ui/core/styles'
+import CheckBoxIcon from '@material-ui/icons/CheckBox'
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
+import React, { useState } from "react"
 
 function RecipeDecsListItem(props) {
 
-    const [checked, setChecked] = useState(false);
-    const classes = useStyles();
+    const [checked, setChecked] = useState(false)
+    const classes = useStyles()
   
-    let idx = props.idx;
+    let idx = props.idx
   
     const onIngredClick = (idx) => {
-      setChecked(!checked);
+      setChecked(!checked)
     }
   
-    let icon = (checked === true ) ? <CheckBoxIcon className={classes.checkIcon}/> : <CheckBoxOutlineBlankIcon className={classes.checkIcon}/> ;
+    let icon = (checked === true ) ? <CheckBoxIcon className={classes.checkIcon}/> : <CheckBoxOutlineBlankIcon className={classes.checkIcon}/> 
   
     return (
       <React.Fragment>
@@ -29,7 +29,7 @@ function RecipeDecsListItem(props) {
         </ListItem>
         { idx < props.len - 1 && <Divider component="li" /> }
       </React.Fragment>
-    );
+    )
   }
 
   const useStyles = makeStyles(theme => ({
@@ -37,6 +37,6 @@ function RecipeDecsListItem(props) {
         marginRight: '10px',
         color:  theme.palette.campuskost.teal,
       }
-  }));
+  }))
 
-export default RecipeDecsListItem;
+export default RecipeDecsListItem

@@ -1,13 +1,13 @@
 
 
-import { makeStyles } from '@material-ui/core/styles';
-//import {useTranslation} from "react-i18next";
-import firebase from "firebase/app";
-import React from 'react';
+import { makeStyles } from '@material-ui/core/styles'
+//import {useTranslation} from "react-i18next"
+import firebase from "firebase/app"
+import React from 'react'
 
 function CacheComponent() {
 
-  const classes = useStyles();
+  const classes = useStyles()
   var db = firebase.firestore()
   //const {email: authUser} = useSelector((state) => state.firebase.auth)
   
@@ -15,18 +15,18 @@ function CacheComponent() {
   .onSnapshot({ includeMetadataChanges: true }, function(snapshot) {
       snapshot.docChanges().forEach(function(change) {
         //   if (change.type === "added") {
-        //       console.log("New city: ", change.doc.data());
+        //       console.log("New city: ", change.doc.data())
         //   }
 
-        //   var source = snapshot.metadata.fromCache ? "local cache" : "server";
-        //   console.log("Data came from " + source);
-      });
-  });
+        //   var source = snapshot.metadata.fromCache ? "local cache" : "server"
+        //   console.log("Data came from " + source)
+      })
+  })
 
   return  (
     <div> 
     </div>
-  );
+  )
 }
 
 const useStyles = makeStyles({
@@ -36,6 +36,6 @@ const useStyles = makeStyles({
     soonText: {
       fontSize: 'small'
     }
-});
+})
 
 export default CacheComponent

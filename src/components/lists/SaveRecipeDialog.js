@@ -20,7 +20,7 @@ function ListOption({list, onClick, hasPicked, recipeID}) {
   const [isSaved, setIsSaved] = useState(false)
   const db = firebase.firestore()
   const {t} = useTranslation('common')
-  //const [hasMouseOver, hasMouseOver] = useState(false);
+  //const [hasMouseOver, hasMouseOver] = useState(false)
 
   let db_doc_ref = db.collection("lists").doc(list.listID).collection("recipes").doc(recipeID)
   const [savedDoc] = useDocument(db_doc_ref)
@@ -33,7 +33,7 @@ function ListOption({list, onClick, hasPicked, recipeID}) {
   }, [savedDoc])
 
   const removeClick = () => {
-    db.collection("lists").doc(list.listID).collection("recipes").doc(recipeID).delete();
+    db.collection("lists").doc(list.listID).collection("recipes").doc(recipeID).delete()
     setPickedThis(!pickedThis)
   }
 
@@ -101,8 +101,8 @@ export default function SaveRecipeDialog(props) {
   const [list_data] = useCollectionData(db_ref)
 
   const handleClose = (chosedYes) => {
-    props.onAlertClose(chosedYes);
-  };
+    props.onAlertClose(chosedYes)
+  }
 
   const onClick = (listID) => {
     // console.log("picked listID "+ listID)
@@ -164,7 +164,7 @@ export default function SaveRecipeDialog(props) {
           </Button>
         </DialogActions> */}
       </Dialog>
-  );
+  )
 }
 
 const useStyles = makeStyles({
@@ -173,4 +173,4 @@ const useStyles = makeStyles({
     minWidth: '50%',
     minHeight: '30%'
   }
-});
+})

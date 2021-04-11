@@ -1,14 +1,14 @@
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import React from 'react';
-import FileInput from './FileInput';
-import { makeStyles } from '@material-ui/core/styles';
-import {useTranslation} from "react-i18next";
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
+import React from 'react'
+import FileInput from './FileInput'
+import { makeStyles } from '@material-ui/core/styles'
+import {useTranslation} from "react-i18next"
 
 function AddImage(props) {
 
-    const classes = useStyles();
-    const {t} = useTranslation('common');  
+    const classes = useStyles()
+    const {t} = useTranslation('common')  
   
     return (
       <React.Fragment>
@@ -39,7 +39,7 @@ function AddImage(props) {
         </React.Fragment>
         }
       </React.Fragment>
-    );
+    )
 }
  
 // material ui design
@@ -48,6 +48,6 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         borderRadius: '4px'
     }
-}));
+}))
 
-export default AddImage;
+export default AddImage

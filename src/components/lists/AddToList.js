@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { useFirestore } from "react-redux-firebase"
 import Button from '@material-ui/core/Button'
 import SaveRecipeDialog from './SaveRecipeDialog'
-import { useSelector } from "react-redux";
+import { useSelector } from "react-redux"
 
 
 export default function AddToList({recipe}) {
@@ -11,7 +11,7 @@ export default function AddToList({recipe}) {
   const [openDialog, setOpenDialog] = useState(false)
 
   const firestore = useFirestore()
-  const { email } = useSelector((state) => state.firebase.auth); 
+  const { email } = useSelector((state) => state.firebase.auth) 
   const {t} = useTranslation('common')
 
   // const {has_recipe} = useHasRecipeInList("sara.olsson4s@gmail.com", recipe.recipeID)
@@ -46,5 +46,5 @@ export default function AddToList({recipe}) {
       }
 
     </div>
-  );
+  )
 }

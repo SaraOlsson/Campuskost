@@ -1,25 +1,25 @@
-import Accordion from '@material-ui/core/Accordion';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import FormLabel from '@material-ui/core/FormLabel';
-import { makeStyles } from '@material-ui/core/styles';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import React, {useState} from 'react';
+import Accordion from '@material-ui/core/Accordion'
+import AccordionDetails from '@material-ui/core/AccordionDetails'
+import AccordionSummary from '@material-ui/core/AccordionSummary'
+import FormLabel from '@material-ui/core/FormLabel'
+import { makeStyles } from '@material-ui/core/styles'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import React, {useState} from 'react'
 
 function CollapseGrid(props) {
 
-    const [expandedState, setExpandedState] = useState(false);
-    const classes = useStyles();
+    const [expandedState, setExpandedState] = useState(false)
+    const classes = useStyles()
 
     const onExpand = (e, expanded, id) => {
         
-        setExpandedState(!expandedState);
+        setExpandedState(!expandedState)
 
         if(props.onExpand)
-            props.onExpand(e, expanded, id);
+            props.onExpand(e, expanded, id)
     }
 
-    let isExpanded = props.expandedCheck ? props.expandedCheck(props.controlName) : expandedState;
+    let isExpanded = props.expandedCheck ? props.expandedCheck(props.controlName) : expandedState
 
     return (
   
@@ -43,7 +43,7 @@ function CollapseGrid(props) {
         </Accordion>
       
   
-    );
+    )
   
 }
 
@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme => ({
       color: 'black'
       /*fontWeight: 'bold'*/
     }
-}));
+}))
 
 
-export default CollapseGrid;
+export default CollapseGrid

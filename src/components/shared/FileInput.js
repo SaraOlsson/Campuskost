@@ -1,7 +1,7 @@
-import React from "react";
-import Button from '@material-ui/core/Button';
+import React from "react"
+import Button from '@material-ui/core/Button'
 
-const noop = () => {};
+const noop = () => {}
 
 const FileInput = ({ value, uploadText, onChange = noop, ...rest }) => (
   <div>
@@ -15,7 +15,7 @@ const FileInput = ({ value, uploadText, onChange = noop, ...rest }) => (
         type="file"
         files={value}
         onChange={e => {
-          onChange([...e.target.files]);
+          onChange([...e.target.files])
         }}
       />
 
@@ -25,6 +25,6 @@ const FileInput = ({ value, uploadText, onChange = noop, ...rest }) => (
     </label>
 
   </div>
-);
+)
 
-export default FileInput;
+export default FileInput

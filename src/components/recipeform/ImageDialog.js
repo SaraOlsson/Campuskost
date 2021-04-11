@@ -1,11 +1,11 @@
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import { withStyles } from '@material-ui/styles';
-import React, { useCallback, useState } from 'react';
-import ImageCrop from "./ImageCrop";
-import getCroppedImg from '../../logic/cropImage';
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import { withStyles } from '@material-ui/styles'
+import React, { useCallback, useState } from 'react'
+import ImageCrop from "./ImageCrop"
+import getCroppedImg from '../../logic/cropImage'
 
 function ImageDialog(props) {
 
@@ -23,15 +23,15 @@ const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
             )
         // console.log('done', { croppedImage })
         // console.log(croppedImage)
-        props.onAlertClose(chosedYes, croppedImage);
+        props.onAlertClose(chosedYes, croppedImage)
         } catch (e) {
         console.error(e)
         }
     } else {
-        props.onAlertClose(chosedYes);
+        props.onAlertClose(chosedYes)
     }
     
-  }; 
+  } 
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels)
@@ -39,7 +39,7 @@ const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
   }, [])
   
 
-  // const classes = useStyles();
+  // const classes = useStyles()
 
   return (
 
@@ -66,7 +66,7 @@ const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
         </DialogActions>
       </Dialog>
 
-  );
+  )
 }
 
 
@@ -75,6 +75,6 @@ const useStyles = {
         minHeight: '50vh',
         maxHeight: '50vh',
     },
-};
+}
 
-export default withStyles(useStyles)(ImageDialog);
+export default withStyles(useStyles)(ImageDialog)

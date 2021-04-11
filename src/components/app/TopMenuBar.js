@@ -1,12 +1,12 @@
 
-import { fade, makeStyles } from '@material-ui/core/styles';
-import { default as AccountCircle, default as AccountCircleIcon } from '@material-ui/icons/AccountCircle';
+import { fade, makeStyles } from '@material-ui/core/styles'
+import { default as AccountCircle, default as AccountCircleIcon } from '@material-ui/icons/AccountCircle'
 
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from "react-router-dom";
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useHistory } from "react-router-dom"
 
-import { Offline, Online } from "react-detect-offline";
+import { Offline, Online } from "react-detect-offline"
 
 import {
   AppBar,
@@ -30,45 +30,45 @@ import {
 } from '@material-ui/icons'
 
 
-let img_src = require('../../assets/logo.png');
+let img_src = require('../../assets/logo.png')
 const fallbackProfileImage = require('../../assets/chefgirl.png')
 
 function TopMenuBar(props) {
-  const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const classes = useStyles()
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null)
 
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const {uid} = useSelector(state => state.firebase.auth);
+  const history = useHistory()
+  const dispatch = useDispatch()
+  const {uid} = useSelector(state => state.firebase.auth)
 
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isMenuOpen = Boolean(anchorEl)
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
-  const searchString = useSelector((state) => state.searchReducer.searchstring);
+  const searchString = useSelector((state) => state.searchReducer.searchstring)
 
 
   const handleProfileMenuOpen = event => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
+    setMobileMoreAnchorEl(null)
+  }
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
+    setAnchorEl(null)
+    handleMobileMenuClose()
+  }
 
   const handleMobileMenuOpen = event => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
+    setMobileMoreAnchorEl(event.currentTarget)
+  }
 
   const handleSearchFocus = () => {
     if(history.location.pathname !== "/search")
       history.push("/search")    
-  };
+  }
 
   const handleUnFocus = () => {
     // console.log("onBlur")
@@ -81,7 +81,7 @@ function TopMenuBar(props) {
     })
   } // 
 
-  const menuId = 'primary-search-account-menu';
+  const menuId = 'primary-search-account-menu'
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -95,9 +95,9 @@ function TopMenuBar(props) {
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
-  );
+  )
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const mobileMenuId = 'primary-search-account-menu-mobile'
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -136,7 +136,7 @@ function TopMenuBar(props) {
         <p>Profile</p>
       </MenuItem>
     </Menu>
-  );
+  )
 
   return (
     <div className={classes.grow}>
@@ -241,15 +241,15 @@ function TopMenuBar(props) {
       {renderMobileMenu}
       {renderMenu}
     </div>
-  );
+  )
 }
 
 
 function ProfileBtn (props) {
 
-  const classes = useStyles();
-  const history = useHistory();
-  const userdoc = useSelector(state => state.firestore.data.userdoc);
+  const classes = useStyles()
+  const history = useHistory()
+  const userdoc = useSelector(state => state.firestore.data.userdoc)
 
   let btn = (
     <div>
@@ -261,7 +261,7 @@ function ProfileBtn (props) {
       >
         logga in
       </Button>
-    </div> );
+    </div> )
 
   // make sure info is loaded
   let img_src = (userdoc && userdoc.profile_img_url ) ? userdoc.profile_img_url : undefined
@@ -269,13 +269,13 @@ function ProfileBtn (props) {
   // if user has no profile image set in firebase
   /*
   if (img_src === undefined) {
-    img_src = <AccountCircleIcon/>;
+    img_src = <AccountCircleIcon/>
   } */
 
   // fallbackProfileImage
-  let icon_content = (img_src !== undefined) ? <img src={img_src} onError={(e)=>{e.target.onerror = null; e.target.src=fallbackProfileImage}} className={classes.smallprofileimage} alt={"profile img"} /> : <AccountCircleIcon/>;
+  let icon_content = (img_src !== undefined) ? <img src={img_src} onError={(e)=>{e.target.onerror = null e.target.src=fallbackProfileImage}} className={classes.smallprofileimage} alt={"profile img"} /> : <AccountCircleIcon/>
 
-  let jsx_content = props.signedIn ? icon_content : btn;
+  let jsx_content = props.signedIn ? icon_content : btn
 
   if(props.signedIn === true && userdoc)
   {
@@ -291,9 +291,9 @@ function ProfileBtn (props) {
       >
       {jsx_content} </IconButton></React.Fragment>
 
-    );
+    )
   } else {
-    return btn;
+    return btn
   }
 
 }
@@ -395,6 +395,6 @@ const useStyles = makeStyles(theme => ({
       color: 'rgba(255,255,255,0.9)'
     }
   }
-}));
+}))
 
-export default TopMenuBar;
+export default TopMenuBar

@@ -1,12 +1,12 @@
-import { useDispatch } from "react-redux";
-import { useFirestore } from "react-redux-firebase";
-import firebase from 'firebase/app';
-import { useEffect } from 'react';
+import { useDispatch } from "react-redux"
+import { useFirestore } from "react-redux-firebase"
+import firebase from 'firebase/app'
+import { useEffect } from 'react'
 
 function useAuthUser() {
 
-    const dispatch = useDispatch(); // be able to dispatch
-    const firestore = useFirestore();
+    const dispatch = useDispatch() // be able to dispatch
+    const firestore = useFirestore()
 
     useEffect(() => {
 
@@ -16,8 +16,8 @@ function useAuthUser() {
           // if user is signed in, set redux object
           if( user ) {
     
-            const user_email = user.email;
-            const usersRef = firestore.collection('users').doc(user_email);
+            const user_email = user.email
+            const usersRef = firestore.collection('users').doc(user_email)
     
             // connect to firebase and check if a user doc for this email exists
             usersRef.get()
@@ -32,11 +32,11 @@ function useAuthUser() {
                     firestore_user: doc.data()
                   })
     
-                });
+                })
               } else {
                 console.log("in app, user doc doesnt exist yet")
               }
-            });
+            })
     
             // dispatch auth info (such as last time logged in etc)
             dispatch({
@@ -57,9 +57,9 @@ function useAuthUser() {
     
           dispatch({ type: user ? "SIGNIN" : "SIGNOUT" })
     
-        }); // end auth listener
+        }) // end auth listener
     
-      }, []); // end useEffect
+      }, []) // end useEffect
 
 
 }

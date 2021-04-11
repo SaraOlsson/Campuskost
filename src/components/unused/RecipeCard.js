@@ -1,20 +1,20 @@
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import Collapse from '@material-ui/core/Collapse';
-import { red } from '@material-ui/core/colors';
-import IconButton from '@material-ui/core/IconButton';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ShareIcon from '@material-ui/icons/Share';
-import clsx from 'clsx';
-import React from 'react';
+import Avatar from '@material-ui/core/Avatar'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardMedia from '@material-ui/core/CardMedia'
+import Collapse from '@material-ui/core/Collapse'
+import { red } from '@material-ui/core/colors'
+import IconButton from '@material-ui/core/IconButton'
+import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
+import ShareIcon from '@material-ui/icons/Share'
+import clsx from 'clsx'
+import React from 'react'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,18 +37,18 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
-}));
+}))
 
 export default function RecipeReviewCard() {
-  const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  const classes = useStyles()
+  const [expanded, setExpanded] = React.useState(false)
 
   const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+    setExpanded(!expanded)
+  }
 
-  let r_img = 'temp_food1';
-  let img_src = require('../../assets/'+ r_img + '.jpg');
+  let r_img = 'temp_food1'
+  let img_src = require('../../assets/'+ r_img + '.jpg')
 
   return (
     <Card className={classes.root}>
@@ -108,7 +108,7 @@ export default function RecipeReviewCard() {
             browned, 6 to 8 minutes. Transfer shrimp to a large plate and set aside, leaving chicken
             and chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes, onion, salt and
             pepper, and cook, stirring often until thickened and fragrant, about 10 minutes. Add
-            saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
+            saffron broth and remaining 4 1/2 cups chicken broth bring to a boil.
           </Typography>
           <Typography paragraph>
             Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook
@@ -123,5 +123,5 @@ export default function RecipeReviewCard() {
         </CardContent>
       </Collapse>
     </Card>
-  );
+  )
 }

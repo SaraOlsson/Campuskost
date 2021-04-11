@@ -1,5 +1,5 @@
-import { bounce, pulse, tada } from 'react-animations';
-import { makeStyles } from '@material-ui/core/styles';
+import { bounce, pulse, tada } from 'react-animations'
+import { makeStyles } from '@material-ui/core/styles'
 import React, {useEffect, useState} from "react"
 
 function BouncyDiv(props) {
@@ -14,9 +14,9 @@ function BouncyDiv(props) {
     
     const timer =  setTimeout(() => {
       setAnimNow(false)
-    }, 2000);
+    }, 2000)
 
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timer)
 
   }, [props.trigger])
 
@@ -47,5 +47,5 @@ export default BouncyDiv
 
 //   setTimeout(() => {
 //     setAnimNow(false)
-//   }, 2000);
+//   }, 2000)
 // }

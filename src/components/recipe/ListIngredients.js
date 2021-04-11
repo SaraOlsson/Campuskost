@@ -1,20 +1,20 @@
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
-import {useTranslation} from "react-i18next";
-import React from "react";
+import Divider from '@material-ui/core/Divider'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import { makeStyles } from '@material-ui/core/styles'
+import {useTranslation} from "react-i18next"
+import React from "react"
 
 function ListIngredients(props) {
 
-    const classes = useStyles();
-    const {t} = useTranslation('common');
+    const classes = useStyles()
+    const {t} = useTranslation('common')
   
-    let ingredients = (props.ingredients !==  undefined) ? props.ingredients : [];
+    let ingredients = (props.ingredients !==  undefined) ? props.ingredients : []
 
     // sort by order
-    ingredients.sort( (ingred1, ingred2) => ingred1.order - ingred2.order );
+    ingredients.sort( (ingred1, ingred2) => ingred1.order - ingred2.order )
   
     let ingredientsjsx = ingredients.map((ingred, idx) =>
     <React.Fragment key={idx}>
@@ -27,7 +27,7 @@ function ListIngredients(props) {
       </ListItem>
       { idx < ingredients.length - 1 && <Divider component="li" /> }
     </React.Fragment>
-    );
+    )
   
     return (
       <div>
@@ -36,7 +36,7 @@ function ListIngredients(props) {
           {ingredientsjsx}
         </List>
       </div>
-    );
+    )
   }
 
   const useStyles = makeStyles(theme => ({
@@ -47,6 +47,6 @@ function ListIngredients(props) {
       color: theme.palette.campuskost.teal,
       fontWeight: 'bold'
     }
-  }));
+  }))
 
   export default ListIngredients

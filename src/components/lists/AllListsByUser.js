@@ -7,7 +7,7 @@ const AllListsByUser = ({ref_user, css_prop={}}) => {
 
   const [value, loading, error] = useCollection(
     firebase.firestore().collection('lists').where("created_by", "==", ref_user), {}
-  );
+  )
 
   return (
     <div style={css_prop}>
@@ -20,7 +20,7 @@ const AllListsByUser = ({ref_user, css_prop={}}) => {
           </>
         )}
     </div>
-  );
-};
+  )
+}
 
 export default AllListsByUser

@@ -2,7 +2,7 @@ import firebase from "firebase/app"
 import React from "react"
 import { useCollection } from 'react-firebase-hooks/firestore'
 import RecipeItemInList from './RecipeItemInList'
-import {useTranslation} from "react-i18next";
+import {useTranslation} from "react-i18next"
 import Emoji from '../shared/Emoji'
 
 // get which recipe IDs this user likes
@@ -12,10 +12,10 @@ const AllLikesByUser = ({ref_user, css_prop={}}) => {
 
   const [value, loading] = useCollection(
     firebase.firestore().collection(`likes/${ref_user}/likes`), {}
-  );
+  )
 
   const toggleLike = (event, ref_recipeID) => {
-    event.stopPropagation();
+    event.stopPropagation()
 
     firebase.firestore().collection(`likes/${ref_user}/likes`).doc(ref_recipeID).delete()
   }
@@ -55,7 +55,7 @@ const AllLikesByUser = ({ref_user, css_prop={}}) => {
         <p>{t('lists.no_recipes_yet')}<Emoji symbol="🍽️"/></p>
       }
     </div>
-  );
-};
+  )
+}
 
 export default AllLikesByUser

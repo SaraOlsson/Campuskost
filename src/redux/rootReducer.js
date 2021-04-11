@@ -3,7 +3,7 @@ import {firebaseReducer} from "react-redux-firebase";
 import {firestoreReducer} from "redux-firestore";
 
 import testReducer from "./testReducer"
-import newUploadReducer from "./newUploadReducer"
+import uploadReducer from "./uploadReducer"
 //import firebaseFetch from "../redux/fetchFirestore"
 
 export const rootReducer = combineReducers({
@@ -11,7 +11,7 @@ export const rootReducer = combineReducers({
     firestore: firestoreReducer,
 
     // custom reducers
-    uploadReducer: newUploadReducer,
+    uploadReducer: uploadReducer,
     searchReducer: searchReducer,
 
     testReducer: testReducer

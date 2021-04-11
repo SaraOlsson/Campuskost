@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useCollection } from 'react-firebase-hooks/firestore';
+import { useEffect, useState } from "react"
+import { useCollection } from 'react-firebase-hooks/firestore'
 import firebase from "firebase/app"
 
 
@@ -10,15 +10,15 @@ function useHasRecipeInList(ref_user, ref_recipe) {
 
     const [lists, loading, error] = useCollection(
         db.collection('lists').where("created_by", "==", ref_user)
-    );
+    )
 
     // const [lists, loading, error] = useCollection(
     //     db.collectionGroup('lists').where("created_by", "==", ref_user)
-    // );
+    // )
 
     // const [lists, loading, error] = useCollection(
     //     db.collection('lists').where("created_by", "==", ref_user).collection('recipes').where("recipeID", "==", ref_recipe)
-    // );
+    // )
 
     // .where("songName", "array-contains", "Title1")
 

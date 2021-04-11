@@ -1,14 +1,14 @@
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { FadeIn } from "react-anim-kit";
+import { makeStyles } from '@material-ui/core/styles'
+import React from 'react'
+import { FadeIn } from "react-anim-kit"
 //
 // RCE CSS
-import 'react-chat-elements/dist/main.css';
+import 'react-chat-elements/dist/main.css'
 //
-import Chatbot from "react-chatbot-kit";
-import ActionProvider from "./chatbot/ActionProvider";
-import config from "./chatbot/chatbotConfig";
-import MessageParser from "./chatbot/MessageParser";
+import Chatbot from "react-chatbot-kit"
+import ActionProvider from "./chatbot/ActionProvider"
+import config from "./chatbot/chatbotConfig"
+import MessageParser from "./chatbot/MessageParser"
 
 
 export default function BotDialog(props) {
@@ -16,8 +16,8 @@ export default function BotDialog(props) {
   const classes = useStyles()
 
   // const handleClose = (chosedYes) => {
-  //   props.onAlertClose(chosedYes);
-  // };
+  //   props.onAlertClose(chosedYes)
+  // }
 
   return !props.open ? null : (
     
@@ -45,4 +45,4 @@ const useStyles = makeStyles({
         boxShadow: '5px 5px 13px rgba(91,81,81,.4)',
         borderRadius: '5px'
     }
-  });
+  })
