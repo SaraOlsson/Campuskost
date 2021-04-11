@@ -65,7 +65,7 @@ function UploadPage(props) {
   const uploadDoneText = (uploadStore.editmode) ? 'Ändring klar' : 'Uppladding klar, gå till recept'
   const submitText = (uploadStore.editmode) ? t('upload.actions.edit') : t('upload.actions.upload')
   const isWorking = (!uploadWait && !done) 
-  const submitText = isWorking ? submitText : uploadDoneText
+  submitText = isWorking ? submitText : uploadDoneText
   const onClickAction = isWorking ? uploadAction : goToRecipe
   
   const spinner = <Spinner name='ball-scale-multiple' color='#ffffff' fadeIn='none'/>

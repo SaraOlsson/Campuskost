@@ -20,7 +20,7 @@ function RecipeItem({recipe, smalltiles}) {
   }
 
   let img_url_temp = recipe.img_url_small ? recipe.img_url_small : recipe.img_url
-  const image = <div><img src={img_url_temp} className={classes.listimage} onError={(e)=>{e.target.onerror = null e.target.src=fallbackImage}} alt={recipe.title} /></div>
+  const image = <div><img src={img_url_temp} className={classes.listimage} onError={(e)=>{e.target.onerror = null; e.target.src=fallbackImage}} alt={recipe.title} /></div>
 
 
   return (
