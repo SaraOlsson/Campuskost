@@ -33,7 +33,8 @@ import {
 } from './pages'
 import * as serviceWorker from './serviceWorker'
 
-import TestTS from './components/TestTS' 
+import TestTS from './components/CustomFB' 
+import CustomUpload from './components/CustomUpload' 
 
 //import {ErrorBoundary} from './pages/ErrorBoundary'
 // require('dotenv').config() // check if we need this
