@@ -39,13 +39,13 @@ function ProfilePage(props) {
     where: [
       ['username', '==', username_url],
     ],
-    storeAs: "viewUser",
+    storeAs: 'viewUser',
   }); 
 
   const user = useSelector((state) => {
     return state.firestore.data.viewUser ? Object.values(state.firestore.data.viewUser)[0] : undefined
   });
-  const viewUserEmail = user ? user.email : "noemail";
+  const viewUserEmail = user ? user.email : 'noemail';
   
   useFirestoreConnect(
     [{
@@ -84,7 +84,7 @@ function ProfilePage(props) {
     where: [
       ['user', '==', username_url],
     ],
-    storeAs: "viewRecipes",
+    storeAs: 'viewRecipes',
   });
   const recipes = useSelector((state) => {
 
@@ -127,18 +127,18 @@ function ProfilePage(props) {
 
   const followUser = () => {
 
-    let firebase_event_id = email + "-follows-" + user.email;
+    let firebase_event_id = email + '-follows-' + user.email;
 
     // in following, remove from following list
     if(isFollowing) {
-      firestore.collection("followers").doc(email).collection("following").doc(user.email).delete();
-      firestore.collection("followers").doc(user.email).collection("followers").doc(email).delete();
+      firestore.collection('followers').doc(email).collection('following').doc(user.email).delete();
+      firestore.collection('followers').doc(user.email).collection('followers').doc(email).delete();
       firestore.collection('events').doc(firebase_event_id).delete();
       setIsFollowing(false)
 
     } else {
-      firestore.collection("followers").doc(email).collection("following").doc(user.email).set({});
-      firestore.collection("followers").doc(user.email).collection("followers").doc(email).set({});
+      firestore.collection('followers').doc(email).collection('following').doc(user.email).set({});
+      firestore.collection('followers').doc(user.email).collection('followers').doc(email).set({});
       setIsFollowing(true)
 
       // if document for user who triggered the action is availiable
@@ -150,7 +150,7 @@ function ProfilePage(props) {
           event_image_url: userdoc.profile_img_url,
           other_username: userdoc.username,
           timestamp: date,
-          type: "FOLLOWS",
+          type: 'FOLLOWS',
           seen: false
         };
 
@@ -166,12 +166,12 @@ function ProfilePage(props) {
     {
       recipeContent = <LoadSpinner/>;
     } else {
-      let no_recipes_content = <div className={classes.noRecipesDiv}> Vi väntar med spänning på första receptet från <i>{user.username}!</i> <Emoji symbol="🍽️"/> </div>;
+      let no_recipes_content = <div className={classes.noRecipesDiv}> Vi väntar med spänning på första receptet från <i>{user.username}!</i> <Emoji symbol='🍽️'/> </div>;
       recipeContent = recipes.length > 0 ? <RecipeGridList recipes={recipes}/> : no_recipes_content;
     }
   }
   // } else { // HEY MAY NOT BE LOADED YET
-  //   history.push("/home");
+  //   history.push('/home');
   // }
 
   const listCSS = {
@@ -186,8 +186,8 @@ function ProfilePage(props) {
       <Grid
         container
         spacing={1}
-        justify="center"
-        alignItems="center"
+        justify='center'
+        alignItems='center'
         className={classes.userinfo}
       >
 
@@ -202,22 +202,22 @@ function ProfilePage(props) {
 
           { isUser() && 
             <Button
-              variant="contained"
-              color="primary"
+              variant='contained'
+              color='primary'
               startIcon={<SettingsIcon />}
-              onClick={() => history.push("/settings")}
+              onClick={() => history.push('/settings')}
             >
             {t('shared.settings')}
           </Button>}
 
           { !isUser() &&
             <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             startIcon={isFollowing ? <RemoveIcon /> : <AddIcon />}
             onClick={() => followUser()}
           >
-            {isFollowing ? "Sluta följ" : "Följ"}
+            {isFollowing ? 'Sluta följ' : 'Följ'}
           </Button>
           }
 
@@ -225,7 +225,7 @@ function ProfilePage(props) {
         { user.profile_img_url ? 
           <Grid item xs={3}>
             <FadeIn left by={200}>
-            <img src={user.profile_img_url} alt="user-profile-img" className={classes.profileImage}/>
+            <img src={user.profile_img_url} alt='user-profile-img' className={classes.profileImage}/>
             </FadeIn>
           </Grid> 
           :
@@ -244,10 +244,10 @@ function ProfilePage(props) {
         <AllListsByUser ref_user={viewUserEmail} css_prop={listCSS}/>
         </div>
         <div>
-        <FollowerList type="followers" followerData={isUser() ? getUserDocs(followers_users) : getUserDocs(viewuser_followers_users)} showFollowIcon={true}/>
+        <FollowerList type='followers' followerData={isUser() ? getUserDocs(followers_users) : getUserDocs(viewuser_followers_users)} showFollowIcon={true}/>
         </div>
         <div>
-        <FollowerList type="following" followerData={isUser() ? getUserDocs(following_users) : getUserDocs(viewuser_following_users)} showFollowIcon={true}/>
+        <FollowerList type='following' followerData={isUser() ? getUserDocs(following_users) : getUserDocs(viewuser_following_users)} showFollowIcon={true}/>
         </div>
       </UserPageTabs>
 

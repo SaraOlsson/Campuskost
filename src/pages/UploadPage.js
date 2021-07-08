@@ -2,14 +2,13 @@
 Component: Page where recipes are uploaded or edited.
 TODO: notice if something differs from prev saved data 
 */
-
+import React, {useState} from 'react'
 import Button from '@material-ui/core/Button'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
-import React, {useState} from 'react'
-import { useSelector } from "react-redux"
+import { useSelector } from 'react-redux'
 import AddImage from '../components/shared/AddImage'
 import CollapseGrid from '../components/shared/CollapseGrid'
 import Emoji from '../components/shared/Emoji'
@@ -17,16 +16,26 @@ import ImageDialog from '../components/recipeform/ImageDialog'
 import DescriptionList from '../components/recipeform/EditDescription'
 import IngredientsList from '../components/recipeform/EditIngredients'
 import useUpload from '../components/recipeform/useUpload'
-import { useHistory } from "react-router-dom"
-import {useTranslation} from "react-i18next"
+import { useHistory } from 'react-router-dom'
+import {useTranslation} from 'react-i18next'
 
-var Spinner = require('react-spinkit')
+const Spinner = require('react-spinkit')
 const DEBUG = (window.location.hostname === 'localhost')
+
+function ValidItem(props) {
+  const classes = useStyles()
+  return (
+    <p className={classes.validItem}>
+      {props.title} 
+      {props.valid ? <Emoji symbol='☑'/> : <Emoji symbol='☐'/>} 
+    </p>
+  )
+}
 
 function UploadPage(props) {
 
   const classes = useStyles()
-  const upload_store = useSelector(state => state.uploadReducer)
+  const uploadStore = useSelector(state => state.uploadReducer)
   const history = useHistory()
   const { uid } = useSelector((state) => state.firebase.auth)
   const {t} = useTranslation('common')
@@ -37,7 +46,7 @@ function UploadPage(props) {
     onValueChange,
     validUpload,
     uploadAction,
-    upload_wait,
+    uploadWait,
     done,
     goToRecipe,
     image,
@@ -53,27 +62,27 @@ function UploadPage(props) {
   } = useUpload()
 
   // configure bottom content
-  let upload_done_text = (upload_store.editmode) ? "Ändring klar" : "Uppladding klar, gå till recept"
-  let submit_text = (upload_store.editmode) ? t('upload.actions.edit') : t('upload.actions.upload')
-  let is_working = (!upload_wait && !done) 
-  let button_text = is_working ? submit_text : upload_done_text
-  let onClick_action = is_working ? uploadAction : goToRecipe
+  const uploadDoneText = (uploadStore.editmode) ? 'Ändring klar' : 'Uppladding klar, gå till recept'
+  const submitText = (uploadStore.editmode) ? t('upload.actions.edit') : t('upload.actions.upload')
+  const isWorking = (!uploadWait && !done) 
+  submitText = isWorking ? submitText : uploadDoneText
+  const onClickAction = isWorking ? uploadAction : goToRecipe
   
-  const spinner = <Spinner name="ball-scale-multiple" color="#ffffff" fadeIn="none"/>
+  const spinner = <Spinner name='ball-scale-multiple' color='#ffffff' fadeIn='none'/>
   const button = (
     <Button
-    variant="contained"
-    color="primary"
-    startIcon={is_working && <CloudUploadIcon />}
-    onClick={onClick_action}
-    disabled={is_working && !validUpload()}
+    variant='contained'
+    color='primary'
+    startIcon={isWorking && <CloudUploadIcon />}
+    onClick={onClickAction}
+    disabled={isWorking && !validUpload()}
     >
-    {button_text}
+    {submitText}
     </Button>
   )
 
-  let bottom_content = upload_wait ? spinner : button
-  let page_title = (upload_store.editmode) ? t('upload.header_edit') : t('upload.header_upload')
+  let bottom_content = uploadWait ? spinner : button
+  let page_title = (uploadStore.editmode) ? t('upload.header_edit') : t('upload.header_upload')
 
   if(done)
   {
@@ -81,8 +90,8 @@ function UploadPage(props) {
       <div>
         <div className={classes.newRecipeContainer}>
           <Button 
-            onClick={() => history.go("/upload")}
-            variant="contained" color="primary">
+            onClick={() => history.go('/upload')}
+            variant='contained' color='primary'>
             {t('upload.createnew')}
           </Button>
         </div>
@@ -106,10 +115,10 @@ function UploadPage(props) {
         {/* TITLE */}
 
           <TextField
-            id="recipename-input"
+            id='recipename-input'
             label={t('upload.tooltip.recipename')}
-            variant="outlined"
-            name="title"
+            variant='outlined'
+            name='title'
             value={data.title}
             onChange={onValueChange}
           />
@@ -135,10 +144,10 @@ function UploadPage(props) {
             <>
             {/* <p> {t('upload.creditlinkinfo')}</p> */}
             <TextField
-            id="recipecredit-input"
+            id='recipecredit-input'
             label={t('upload.tooltip.credit')}
-            variant="outlined"
-            name="credit_link"
+            variant='outlined'
+            name='credit_link'
             value={data.credit_link}
             onChange={onValueChange}
             />
@@ -158,33 +167,33 @@ function UploadPage(props) {
 
         {/* IMAGE */}
         <CollapseGrid label={t('upload.recipe_image')}>
-          <p className={classes.copyright}>{t('upload.creditmessage')}<Emoji symbol="📷"/> </p>
+          <p className={classes.copyright}>{t('upload.creditmessage')}<Emoji symbol='📷'/> </p>
           <AddImage image={image} onFileAdd={onFileAdd} onFileRemove={onFileRemove}/>
         </CollapseGrid>
 
         {/* OTHER */}
         <CollapseGrid label={t('upload.other')}>
         <TextField
-            id="recipe-extra" className="freetext" variant="outlined" rows={2} multiline
+            id='recipe-extra' className='freetext' variant='outlined' rows={2} multiline
             label={t('upload.data.freetext')}
-            name="freetext" value={data.freetext} onChange={onValueChange}
+            name='freetext' value={data.freetext} onChange={onValueChange}
           />
 
           <TextField
-            id="recipe-servings" variant="outlined"
-            type="number"
-            name="servings" value={data.servings} onChange={onValueChange} 
+            id='recipe-servings' variant='outlined'
+            type='number'
+            name='servings' value={data.servings} onChange={onValueChange} 
             InputProps={{
-              endAdornment: <InputAdornment position="end">{t('upload.data.servings')}</InputAdornment>
+              endAdornment: <InputAdornment position='end'>{t('upload.data.servings')}</InputAdornment>
             }} 
           />
 
           <TextField
-            id="recipe-time" variant="outlined"
-            type="number"
-            value={data.cookingtime} name="cookingtime" onChange={onValueChange} 
+            id='recipe-time' variant='outlined'
+            type='number'
+            value={data.cookingtime} name='cookingtime' onChange={onValueChange} 
             InputProps={{
-              endAdornment: <InputAdornment position="end">{t('upload.data.cookingtime')}</InputAdornment>
+              endAdornment: <InputAdornment position='end'>{t('upload.data.cookingtime')}</InputAdornment>
             }} 
           />
 
@@ -194,10 +203,10 @@ function UploadPage(props) {
       <div className={classes.uploaddiv} >
         { DEBUG &&
           <div className={classes.validList}>
-            <ValidItem title="Receptnamn " valid={validTitle()}/>
-            <ValidItem title="Ingredienser " valid={validIngredients()}/>
-            <ValidItem title="Beskrivning " valid={validDescription()}/>
-            <ValidItem title="Bild " valid={validImage()}/>
+            <ValidItem title='Receptnamn ' valid={validTitle()}/>
+            <ValidItem title='Ingredienser ' valid={validIngredients()}/>
+            <ValidItem title='Beskrivning ' valid={validDescription()}/>
+            <ValidItem title='Bild ' valid={validImage()}/>
           </div>
         }
         {bottom_content} 
@@ -210,18 +219,10 @@ function UploadPage(props) {
       />
 
     </div>
-  );
-}
-
-function ValidItem(props) {
-  const classes = useStyles()
-  return (
-    <p className={classes.validItem}>
-      {props.title} 
-      {props.valid ? <Emoji symbol="☑"/> : <Emoji symbol="☐"/>} 
-    </p>
   )
 }
+
+
 // <RecipeCard/>
 
 // material ui design
@@ -255,6 +256,6 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center' 
 
   }
-}));
+}))
 
 export default UploadPage

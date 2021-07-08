@@ -1,14 +1,14 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer } from 'react'
 
-// const DOC = "DOC"
-// const COLLECTION = "COLLECTION"
+// const DOC = 'DOC'
+// const COLLECTION = 'COLLECTION'
 
 const useFirebaseAction = () => {
 
     const setData = async (firebaseRef, obj ) => {
 
         if(firebaseRef === undefined)
-            return;
+            return
 
         firebaseRef.set(obj)
         .catch(err => {
@@ -22,14 +22,14 @@ const useFirebaseAction = () => {
   
     // useEffect(() => {
   
-    //   console.log("set..?")
+    //   console.log('set..?')
   
     //   if(db_Ref === undefined)
-    //     return;
+    //     return
   
-    //   console.log("set!")
+    //   console.log('set!')
   
-    //   let didCancel = false;
+    //   let didCancel = false
   
     //   const setData = async () => {
 
@@ -44,23 +44,23 @@ const useFirebaseAction = () => {
   
     // //   const fetchArrayData = async () => {
   
-    // //     dispatch({ type: "FETCH_INIT" });
+    // //     dispatch({ type: 'FETCH_INIT' })
     // //     const docs = []
   
     // //     db_Ref.get().then(async function(querySnapshot) {
     // //       await Promise.all(querySnapshot.docs.map(async (doc) => {
-    // //         console.log(doc.id, " => ", doc.data());
+    // //         console.log(doc.id, ' => ', doc.data())
     // //         docs.push(doc.data())
-    // //       }));
+    // //       }))
     // //     })
     // //     .catch(err => {
     // //       if (!didCancel) {
-    // //           dispatch({ type: "FETCH_FAILURE" });
+    // //           dispatch({ type: 'FETCH_FAILURE' })
     // //       }
-    // //     });
+    // //     })
   
     // //     if (!didCancel) {
-    // //       dispatch({ type: "FETCH_SUCCESS", payload: docs });
+    // //       dispatch({ type: 'FETCH_SUCCESS', payload: docs })
     // //     }
     // //   }
   
@@ -76,6 +76,6 @@ const useFirebaseAction = () => {
   
   
     return { setData }
-  };
+  }
   
-  export default useFirebaseAction;
+  export default useFirebaseAction

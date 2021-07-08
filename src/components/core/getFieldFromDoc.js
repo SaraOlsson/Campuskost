@@ -4,7 +4,7 @@
 
 //      let found = false
 //      let docData = {}
-//      let field = "undefined"
+//      let field = 'undefined'
 
 
 //     await db_Ref.get().then( async function(doc) {
@@ -17,7 +17,7 @@
                 
 //                 field = docData[fieldName]
 //                 found = true
-//                 console.log("found doc")
+//                 console.log('found doc')
 //                 return {found, docData, field}
 //             }
 //             else {
@@ -27,7 +27,7 @@
 //         } else {
             
 //             found = false
-//             console.log("does not exist")
+//             console.log('does not exist')
 //             return {found, docData, field}
 //         }
 

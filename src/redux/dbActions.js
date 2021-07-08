@@ -1,5 +1,5 @@
-import redux, {applyMiddleware} from "redux"
-import thunk from "redux-thunk"
+import redux, {applyMiddleware} from 'redux'
+import thunk from 'redux-thunk'
 
 const default_upload_state = {
     editmode: false,
@@ -9,7 +9,7 @@ const default_upload_state = {
 
   export default function newUploadReducer(state = default_upload_state, action) {
     switch (action.type) {
-        case "SETFIELD":
+        case 'SETFIELD':
             return {
                 ...state,
                 data: {

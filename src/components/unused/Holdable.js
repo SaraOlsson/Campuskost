@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 function Holdable({id, onClick, onHold, children}) {
 
@@ -35,4 +35,4 @@ function Holdable({id, onClick, onHold, children}) {
   )
 }
 
-export default Holdable;
+export default Holdable

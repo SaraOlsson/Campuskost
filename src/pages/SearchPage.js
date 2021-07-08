@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles'
 import React, { useEffect } from 'react'
-import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 import FollowerList from '../components/shared/FollowerList'
 import LoadSpinner from '../components/shared/LoadSpinner'
 import RecipeGridList from '../components/shared/RecipeGridList'
@@ -17,32 +17,32 @@ function SearchPage(props) {
   const users = useSelector((state) => state.firestore.data.allusers);
 
   // var db = firebase.firestore();
-  // let ref = db.collection("users").doc("sara.olsson4s@gmail.com") 
+  // let ref = db.collection('users').doc('sara.olsson4s@gmail.com') 
   // const {
   //   isLoading,
   //   hasErrored,
   //   errorMessage,
   //   data
-  // } = useFirebaseFetch(ref, "DOC") 
+  // } = useFirebaseFetch(ref, 'DOC') 
 
   useEffect(() => {
 
     // Specify how to clean up after this effect:
     return function cleanup() {
       dispatch({
-        type: "SETSEARCH",
-        payload: ""
+        type: 'SETSEARCH',
+        payload: ''
       })
     };
 
   },[]);
 
   const filterRecipes = (values) => {
-    return values.filter(r => ( r != null && (match(r, "title") || match(r, "user") )));
+    return values.filter(r => ( r != null && (match(r, 'title') || match(r, 'user') )));
   }
 
   const filterUsers = (values) => {
-    return values.filter(u => ( u != null && (match(u, "username") || match(u, "fullname") )));
+    return values.filter(u => ( u != null && (match(u, 'username') || match(u, 'fullname') )));
   }
 
   const match = (object, attr) => {
@@ -57,12 +57,12 @@ function SearchPage(props) {
     <div>
       <h3>{t('search.header')}</h3>
 
-      { (users && recipes && searchString !== "") &&
-        <p> {filteredRecipes.length+filteredUsers.length} {" "}
+      { (users && recipes && searchString !== '') &&
+        <p> {filteredRecipes.length+filteredUsers.length} {' '}
         {filteredRecipes.length+filteredUsers.length > 1 ? t('search.hits') : t('search.hit')} 
         </p>
       }
-      { searchString === "" &&
+      { searchString === '' &&
         <p> {t('search.helptext')}</p>
       }
 

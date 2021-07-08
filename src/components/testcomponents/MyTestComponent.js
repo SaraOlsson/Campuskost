@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 export default function MyTestComponent(props) {
   
@@ -8,6 +8,6 @@ export default function MyTestComponent(props) {
           Hi my test component
         </h2>
       </div>
-    );
+    )
   }
   

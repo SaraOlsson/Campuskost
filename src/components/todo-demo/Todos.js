@@ -1,17 +1,17 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import AddTodo from "./AddTodo";
-import { useFirestoreConnect } from "react-redux-firebase";
-import ToDoItem from "./ToDoItem";
+import React from 'react'
+import { useSelector } from 'react-redux'
+import AddTodo from './AddTodo'
+import { useFirestoreConnect } from 'react-redux-firebase'
+import ToDoItem from './ToDoItem'
 
 const Todos = () => {
-  const { displayName, uid } = useSelector((state) => state.firebase.auth);
+  const { displayName, uid } = useSelector((state) => state.firebase.auth)
   useFirestoreConnect({
     collection: `authusers/${uid}/todos`,
-    storeAs: "todos",
-  });
-  const todos = useSelector((state) => state.firestore.data.todos);
-  console.log(todos); // has value after a while
+    storeAs: 'todos',
+  })
+  const todos = useSelector((state) => state.firestore.data.todos)
+  console.log(todos) // has value after a while
   return (
     <div>
       <h3>Hello {displayName}</h3>
@@ -19,7 +19,7 @@ const Todos = () => {
       <AddTodo />
       <ul
         style={{
-          listStyleType: "none",
+          listStyleType: 'none',
         }}
       >
         {todos &&
@@ -34,7 +34,7 @@ const Todos = () => {
           ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default Todos;
+export default Todos

@@ -1,6 +1,6 @@
-import { bounce, pulse, tada } from 'react-animations';
-import { makeStyles } from '@material-ui/core/styles';
-import React, {useEffect, useState} from "react"
+import { bounce, pulse, tada } from 'react-animations'
+import { makeStyles } from '@material-ui/core/styles'
+import React, {useEffect, useState} from 'react'
 
 function BouncyDiv(props) {
 
@@ -14,16 +14,16 @@ function BouncyDiv(props) {
     
     const timer =  setTimeout(() => {
       setAnimNow(false)
-    }, 2000);
+    }, 2000)
 
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timer)
 
   }, [props.trigger])
 
   return (
   <>
     {/* <button onClick={triggerAnim}>Trigger animation</button> */}
-    <div className={animNow ? classes.anim : ""}>
+    <div className={animNow ? classes.anim : ''}>
       {props.children}
     </div>
   </>
@@ -42,10 +42,10 @@ const useStyles = makeStyles(theme => ({
 export default BouncyDiv
 
 // const triggerAnim = () => {
-//   console.log("animate now")
+//   console.log('animate now')
 //   setAnimNow(true)
 
 //   setTimeout(() => {
 //     setAnimNow(false)
-//   }, 2000);
+//   }, 2000)
 // }

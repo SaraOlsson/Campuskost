@@ -1,12 +1,12 @@
 
-import { fade, makeStyles } from '@material-ui/core/styles';
-import { default as AccountCircle, default as AccountCircleIcon } from '@material-ui/icons/AccountCircle';
+import { fade, makeStyles } from '@material-ui/core/styles'
+import { default as AccountCircle, default as AccountCircleIcon } from '@material-ui/icons/AccountCircle'
 
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from "react-router-dom";
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useHistory } from 'react-router-dom'
 
-import { Offline, Online } from "react-detect-offline";
+import { Offline, Online } from 'react-detect-offline'
 
 import {
   AppBar,
@@ -30,58 +30,58 @@ import {
 } from '@material-ui/icons'
 
 
-let img_src = require('../../assets/logo.png');
+let img_src = require('../../assets/logo.png')
 const fallbackProfileImage = require('../../assets/chefgirl.png')
 
 function TopMenuBar(props) {
-  const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const classes = useStyles()
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null)
 
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const {uid} = useSelector(state => state.firebase.auth);
+  const history = useHistory()
+  const dispatch = useDispatch()
+  const {uid} = useSelector(state => state.firebase.auth)
 
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isMenuOpen = Boolean(anchorEl)
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
-  const searchString = useSelector((state) => state.searchReducer.searchstring);
+  const searchString = useSelector((state) => state.searchReducer.searchstring)
 
 
   const handleProfileMenuOpen = event => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
+    setMobileMoreAnchorEl(null)
+  }
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
+    setAnchorEl(null)
+    handleMobileMenuClose()
+  }
 
   const handleMobileMenuOpen = event => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
+    setMobileMoreAnchorEl(event.currentTarget)
+  }
 
   const handleSearchFocus = () => {
-    if(history.location.pathname !== "/search")
-      history.push("/search")    
-  };
+    if(history.location.pathname !== '/search')
+      history.push('/search')    
+  }
 
   const handleUnFocus = () => {
-    // console.log("onBlur")
+    // console.log('onBlur')
   }
 
   const handleSearchChange = (searchvalue) => {
     dispatch({
-      type: "SETSEARCH",
+      type: 'SETSEARCH',
       payload: searchvalue
     })
   } // 
 
-  const menuId = 'primary-search-account-menu';
+  const menuId = 'primary-search-account-menu'
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -95,9 +95,9 @@ function TopMenuBar(props) {
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
-  );
+  )
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const mobileMenuId = 'primary-search-account-menu-mobile'
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -109,16 +109,16 @@ function TopMenuBar(props) {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
+        <IconButton aria-label='show 4 new mails' color='inherit'>
+          <Badge badgeContent={4} color='secondary'>
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
       </MenuItem>
       <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
+        <IconButton aria-label='show 11 new notifications' color='inherit'>
+          <Badge badgeContent={11} color='secondary'>
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -126,38 +126,38 @@ function TopMenuBar(props) {
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
+          aria-label='account of current user'
+          aria-controls='primary-search-account-menu'
+          aria-haspopup='true'
+          color='inherit'
         >
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
     </Menu>
-  );
+  )
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Toolbar>
 
           <div className={classes.sectionMobile}>
             <IconButton
-              edge="start"
+              edge='start'
               className={classes.menuButton}
-              color="inherit"
-              aria-label="open drawer"
+              color='inherit'
+              aria-label='open drawer'
               onClick={ () => history.goBack() }
             >
               <ArrowBackIosIcon />
             </IconButton>
           </div>
 
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography className={classes.title} variant='h6' noWrap>
             <img src={img_src} style={{ width: 45}}/>
-            <LinkUI component={Link} to="/home" style={{ textDecoration: 'none', color: 'white' }}>
+            <LinkUI component={Link} to='/home' style={{ textDecoration: 'none', color: 'white' }}>
               Campuskost
             </LinkUI>
           </Typography>
@@ -167,7 +167,7 @@ function TopMenuBar(props) {
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search…"
+              placeholder='Search…'
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
@@ -191,34 +191,34 @@ function TopMenuBar(props) {
 
           {/* MENU START */}
           {/* <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
+            <IconButton aria-label='show 4 new mails' color='inherit'>
+              <Badge badgeContent={4} color='secondary'>
                 <MailIcon />
               </Badge>
             </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
+            <IconButton aria-label='show 17 new notifications' color='inherit'>
+              <Badge badgeContent={17} color='secondary'>
                 <NotificationsIcon />
               </Badge>
             </IconButton>
             <IconButton
-              edge="end"
-              aria-label="account of current user"
+              edge='end'
+              aria-label='account of current user'
               aria-controls={menuId}
-              aria-haspopup="true"
+              aria-haspopup='true'
               onClick={handleProfileMenuOpen}
-              color="inherit"
+              color='inherit'
             >
               <AccountCircle />
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
-              aria-label="show more"
+              aria-label='show more'
               aria-controls={mobileMenuId}
-              aria-haspopup="true"
+              aria-haspopup='true'
               onClick={handleMobileMenuOpen}
-              color="inherit"
+              color='inherit'
             >
               <MoreIcon />
             </IconButton>
@@ -241,27 +241,27 @@ function TopMenuBar(props) {
       {renderMobileMenu}
       {renderMenu}
     </div>
-  );
+  )
 }
 
 
 function ProfileBtn (props) {
 
-  const classes = useStyles();
-  const history = useHistory();
-  const userdoc = useSelector(state => state.firestore.data.userdoc);
+  const classes = useStyles()
+  const history = useHistory()
+  const userdoc = useSelector(state => state.firestore.data.userdoc)
 
   let btn = (
     <div>
       <Button
-        variant="contained"
-        color="primary"
-        onClick={() => history.push("/login")}
+        variant='contained'
+        color='primary'
+        onClick={() => history.push('/login')}
         className={classes.buttonPad}
       >
         logga in
       </Button>
-    </div> );
+    </div> )
 
   // make sure info is loaded
   let img_src = (userdoc && userdoc.profile_img_url ) ? userdoc.profile_img_url : undefined
@@ -269,13 +269,13 @@ function ProfileBtn (props) {
   // if user has no profile image set in firebase
   /*
   if (img_src === undefined) {
-    img_src = <AccountCircleIcon/>;
+    img_src = <AccountCircleIcon/>
   } */
 
   // fallbackProfileImage
-  let icon_content = (img_src !== undefined) ? <img src={img_src} onError={(e)=>{e.target.onerror = null; e.target.src=fallbackProfileImage}} className={classes.smallprofileimage} alt={"profile img"} /> : <AccountCircleIcon/>;
+  let icon_content = (img_src !== undefined) ? <img src={img_src} onError={(e)=>{e.target.onerror = null; e.target.src=fallbackProfileImage}} className={classes.smallprofileimage} alt={'profile img'} /> : <AccountCircleIcon/>
 
-  let jsx_content = props.signedIn ? icon_content : btn;
+  let jsx_content = props.signedIn ? icon_content : btn
 
   if(props.signedIn === true && userdoc)
   {
@@ -283,17 +283,17 @@ function ProfileBtn (props) {
       <React.Fragment>
       <p className={classes.username}> {userdoc.username} </p>
       <IconButton
-        edge="start"
+        edge='start'
         className={classes.menuButton}
-        color="inherit"
-        aria-label="open profile"
-        onClick={() => history.push("/profile/" + userdoc.username)}
+        color='inherit'
+        aria-label='open profile'
+        onClick={() => history.push('/profile/' + userdoc.username)}
       >
       {jsx_content} </IconButton></React.Fragment>
 
-    );
+    )
   } else {
-    return btn;
+    return btn
   }
 
 }
@@ -395,6 +395,6 @@ const useStyles = makeStyles(theme => ({
       color: 'rgba(255,255,255,0.9)'
     }
   }
-}));
+}))
 
-export default TopMenuBar;
+export default TopMenuBar

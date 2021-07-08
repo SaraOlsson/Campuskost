@@ -1,12 +1,12 @@
-import { useDispatch } from "react-redux";
-import { useFirestore } from "react-redux-firebase";
-import firebase from 'firebase/app';
-import { useEffect } from 'react';
+import { useDispatch } from 'react-redux'
+import { useFirestore } from 'react-redux-firebase'
+import firebase from 'firebase/app'
+import { useEffect } from 'react'
 
 function useAuthUser() {
 
-    const dispatch = useDispatch(); // be able to dispatch
-    const firestore = useFirestore();
+    const dispatch = useDispatch() // be able to dispatch
+    const firestore = useFirestore()
 
     useEffect(() => {
 
@@ -16,8 +16,8 @@ function useAuthUser() {
           // if user is signed in, set redux object
           if( user ) {
     
-            const user_email = user.email;
-            const usersRef = firestore.collection('users').doc(user_email);
+            const userEmail = user.email
+            const usersRef = firestore.collection('users').doc(userEmail)
     
             // connect to firebase and check if a user doc for this email exists
             usersRef.get()
@@ -25,22 +25,22 @@ function useAuthUser() {
               if (docSnapshot.exists) {
                 usersRef.onSnapshot((doc) => {
     
-                  console.log("user exists in firestore")
+                  console.log('user exists in firestore')
                   // dispatch user doc info (such as username, other info set in the app)
                   dispatch({
-                    type: "SETFIREUSER",
-                    firestore_user: doc.data()
+                    type: 'SETFIREUSER',
+                    firestoreUser: doc.data()
                   })
     
-                });
+                })
               } else {
-                console.log("in app, user doc doesnt exist yet")
+                console.log('in app, user doc doesnt exist yet')
               }
-            });
+            })
     
             // dispatch auth info (such as last time logged in etc)
             dispatch({
-              type: "SETUSER",
+              type: 'SETUSER',
               auth_user: user
             })
     
@@ -49,17 +49,17 @@ function useAuthUser() {
     
             // no user is signed in
             dispatch({
-              type: "SETUSER",
+              type: 'SETUSER',
               user: undefined
             })
     
           }
     
-          dispatch({ type: user ? "SIGNIN" : "SIGNOUT" })
+          dispatch({ type: user ? 'SIGNIN' : 'SIGNOUT' })
     
-        }); // end auth listener
+        }) // end auth listener
     
-      }, []); // end useEffect
+      }, []) // end useEffect
 
 
 }

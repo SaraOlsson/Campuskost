@@ -1,10 +1,10 @@
-//import redux, {applyMiddleware} from "redux"
-//import thunk from "redux-thunk"
+//import redux, {applyMiddleware} from 'redux'
+//import thunk from 'redux-thunk'
 
-// const default_upload_state = {
+// const defaultUploadState = {
 //     editmode: false,
-//     has_unsaved: false,  
-//     recipe_id: undefined, 
+//     hasUnsaved: false,  
+//     recipeId: undefined, 
 //     title: undefined, 
 //     ingredients: undefined, 
 //     descriptions: undefined, 
@@ -14,15 +14,15 @@
 //     cookingtime: undefined
 //   }
 
-const default_upload_state = {
+const defaultUploadState = {
     editmode: false,
-    has_unsaved: false,  
+    hasUnsaved: false,  
     data: {}
   }
 
-  export default function newUploadReducer(state = default_upload_state, action) {
+  export default function newUploadReducer(state = defaultUploadState, action) {
     switch (action.type) {
-        case "SETFIELD":
+        case 'SETFIELD':
             return {
                 ...state,
                 data: {
@@ -30,46 +30,46 @@ const default_upload_state = {
                     [action.field]: action.payload
                 }
             }
-        case "SETDATA": {
+        case 'SETDATA': {
             return {
                 ...state,
                 data: Object.assign({}, state.data, action.payload)
             }
         }
-        case "SETIMAGE":
+        case 'SETIMAGE':
          
           return {
             ...state,
             image: action.image
           }
-        case "SETEDITMODE":
+        case 'SETEDITMODE':
           return {
             ...state,
             editmode: action.editmode,
-            recipe_id: action.recipe_id,
+            recipeId: action.recipeId,
           }
-        case "SETALLDEFAULT":
-          return default_upload_state
+        case 'SETALLDEFAULT':
+          return defaultUploadState
         default:
-          return state;
+          return state
     }
   }
-//   case "SETTITLE":
+//   case 'SETTITLE':
 //         return {
 //         ...state,
 //         title: action.title
 //         }
-//     case "SETFREETEXT":
+//     case 'SETFREETEXT':
 //         return {
 //         ...state,
 //         freetext: action.freetext
 //         }
-//     case "SETCOOKINGTIME":
+//     case 'SETCOOKINGTIME':
 //         return {
 //         ...state,
 //         cookingtime: action.cookingtime
 //         }
-//     case "SETSERVINGS":
+//     case 'SETSERVINGS':
 //         return {
 //         ...state,
 //         servings: action.servings

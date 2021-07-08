@@ -1,39 +1,39 @@
 
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import React from 'react';
-import DragNDrop from '../shared/DragNDrop';
-import Button from '@material-ui/core/Button';
-import useInstructions from "./useInstructions"
-import {useTranslation} from "react-i18next";
-import '../../style/Animations.css';
+import Divider from '@material-ui/core/Divider'
+import Grid from '@material-ui/core/Grid'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
+import React from 'react'
+import DragNDrop from '../shared/DragNDrop'
+import Button from '@material-ui/core/Button'
+import useInstructions from './useInstructions'
+import {useTranslation} from 'react-i18next'
+import '../../style/Animations.css'
 
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
 
-const HEADER = "HEADER";
-const ROW = "ROW";
+const HEADER = 'HEADER'
+const ROW = 'ROW'
 
 const getListStyle = isDraggingOver => ({
-  // background: isDraggingOver ? "lightblue" : "lightgrey",
-});
+  // background: isDraggingOver ? 'lightblue' : 'lightgrey',
+})
 
 const getItemStyle = (isDragging, draggableStyle) => ({
   // styles we need to apply on draggables
   ...draggableStyle
-});
+})
 
 function IngredientsList(props) {
 
-  const classes = useStyles();
-  const {t} = useTranslation('common');  
+  const classes = useStyles()
+  const {t} = useTranslation('common')  
 
   const {
     instructions: ingredients,
@@ -49,8 +49,8 @@ function IngredientsList(props) {
     getMyItems,
     listClick
   } = useInstructions({
-    propertyName: "ingredients",
-    customFieldsDefault: {quantity: "", measure: "", name: ""},
+    propertyName: 'ingredients',
+    customFieldsDefault: {quantity: '', measure: '', name: ''},
     HEADER: HEADER,
     DEFAULT: ROW
   })
@@ -58,9 +58,9 @@ function IngredientsList(props) {
   const hasOrderProp = () => {
 
     if( ingredients.length < 1 )
-      return false;
+      return false
       
-    return (ingredients[0].order !== undefined) ? true : false;
+    return (ingredients[0].order !== undefined) ? true : false
  
   }
 
@@ -70,14 +70,14 @@ function IngredientsList(props) {
     <ListItem onClick={() => listClick(ingred)} className={(ingredients.indexOf(editObject) === idx ? 'testis' : '')} style={{minHeight: 40}}>
       <ListItemText
         classes={{ primary: (ingred.type === HEADER) ? classes.bold : '' }}
-        primary={ ingred.quantity + " " + ingred.measure + " " + ingred.name }
+        primary={ ingred.quantity + ' ' + ingred.measure + ' ' + ingred.name }
       />
 
     </ListItem>
-    { idx < ingredients.length - 1 && <Divider component="li" /> }
+    { idx < ingredients.length - 1 && <Divider component='li' /> }
 
   </React.Fragment>
-  );
+  )
 
   const onValueChange = (event) => {
 
@@ -90,11 +90,11 @@ function IngredientsList(props) {
   return (
     <div>
 
-      <Grid className="test"
+      <Grid className='test'
         container
         spacing={1}
-        justify="center"
-        alignItems="center"
+        justify='center'
+        alignItems='center'
       >
 
       <Grid item xs={12}>
@@ -108,11 +108,11 @@ function IngredientsList(props) {
 
           { editObject === undefined &&
 
-            <ListItem alignItems="center">
-              <Button variant="contained" color="primary" onClick={() => addInstruction(ROW)} className={classes.marginRight10}>
+            <ListItem alignItems='center'>
+              <Button variant='contained' color='primary' onClick={() => addInstruction(ROW)} className={classes.marginRight10}>
                 {t('upload.actions.add_ingredient')}
               </Button>
-              <Button variant="contained" color="primary" onClick={() => addInstruction(HEADER)}>
+              <Button variant='contained' color='primary' onClick={() => addInstruction(HEADER)}>
               {t('upload.actions.add_header')}
               </Button>
             </ListItem>
@@ -131,18 +131,18 @@ function IngredientsList(props) {
 
             <React.Fragment>
               <Grid item xs={3}>
-                <TextField required variant="outlined" 
+                <TextField required variant='outlined' 
                 label={t('upload.data.quantity')} 
                 InputLabelProps={{shrink: true}} 
                 value={customFieldsData.quantity} 
-                name="quantity"
+                name='quantity'
                 onChange={onValueChange}
                 />
               </Grid>
               {/* <Grid item xs={2}>
-                <TextField variant="outlined" label="mått" InputLabelProps={{shrink: true}} 
+                <TextField variant='outlined' label='mått' InputLabelProps={{shrink: true}} 
                 value={customFieldsData.measure} 
-                name="measure"
+                name='measure'
                 onChange={onValueChange} />
               </Grid> */}
 
@@ -151,37 +151,37 @@ function IngredientsList(props) {
                 required
                 autoWidth={false}
                 style={{minWidth: 120}}
-                variant="outlined"
+                variant='outlined'
                 label={t('upload.data.measure')}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
                 value={customFieldsData.measure}
-                name="measure"
+                name='measure'
                 onChange={onValueChange}
               >
-                <MenuItem value={"dl"}>dl</MenuItem>
-                <MenuItem value={"msk"}>msk</MenuItem>
-                <MenuItem value={"tsk"}>tsk</MenuItem>
-                <MenuItem value={"kryddmått"}>kryddmått</MenuItem>
-                <MenuItem value={"stycken"}>stycken</MenuItem>
-                <MenuItem value={"gram"}>gram</MenuItem>
+                <MenuItem value={'dl'}>dl</MenuItem>
+                <MenuItem value={'msk'}>msk</MenuItem>
+                <MenuItem value={'tsk'}>tsk</MenuItem>
+                <MenuItem value={'kryddmått'}>kryddmått</MenuItem>
+                <MenuItem value={'stycken'}>stycken</MenuItem>
+                <MenuItem value={'gram'}>gram</MenuItem>
                 <MenuItem value={customFieldsData.measure}>{customFieldsData.measure}</MenuItem>
               </Select>
             </Grid>
             
             {/* <Grid item xs={2}>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="demo-simple-select-label">Mått</InputLabel>
+            <FormControl variant='outlined' className={classes.formControl}>
+              <InputLabel id='demo-simple-select-label'>Mått</InputLabel>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
                 value={customFieldsData.measure}
-                name="measure"
+                name='measure'
                 onChange={onValueChange}
               >
-                <MenuItem value={"dl"}>dl</MenuItem>
-                <MenuItem value={"msk"}>msk</MenuItem>
-                <MenuItem value={"tsk"}>tsk</MenuItem>
+                <MenuItem value={'dl'}>dl</MenuItem>
+                <MenuItem value={'msk'}>msk</MenuItem>
+                <MenuItem value={'tsk'}>tsk</MenuItem>
               </Select>
             </FormControl>
             </Grid> */}
@@ -191,9 +191,9 @@ function IngredientsList(props) {
           }
 
           <Grid item xs={editObject.type !== HEADER ? 5 : 10}>
-            <TextField required variant="outlined" label={t('upload.data.ingredient')} InputLabelProps={{shrink: true}} 
+            <TextField required variant='outlined' label={t('upload.data.ingredient')} InputLabelProps={{shrink: true}} 
             value={customFieldsData.name} 
-            name="name"
+            name='name'
             onChange={onValueChange}
             onKeyPress={(ev) => enterPress(ev)}/>
           </Grid>
@@ -211,7 +211,7 @@ function IngredientsList(props) {
       </Grid>
 
     </div>
-  );
+  )
 }
 
 
@@ -270,6 +270,6 @@ const useStyles = makeStyles(theme => ({
   bold: {
     fontWeight: 'bold'
   }
-}));
+}))
 
-export default IngredientsList;
+export default IngredientsList

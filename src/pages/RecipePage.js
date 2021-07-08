@@ -4,10 +4,10 @@ import EditIcon from '@material-ui/icons/Edit'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import React, { useEffect, useState } from 'react'
-import { FadeIn } from "react-anim-kit"
-import { useTranslation } from "react-i18next"
-import { useHistory } from "react-router-dom"
-import BouncyDiv from "../components/animations/BouncyDiv"
+import { FadeIn } from 'react-anim-kit'
+import { useTranslation } from 'react-i18next'
+import { useHistory } from 'react-router-dom'
+import BouncyDiv from '../components/animations/BouncyDiv'
 import Emoji from '../components/shared/Emoji'
 import AddToList from '../components/lists/AddToList'
 import ListIngredients from '../components/recipe/ListIngredients'
@@ -48,9 +48,9 @@ export default function RecipePage(props) {
 
   const icon = likesBool ? <FavoriteIcon/> : <FavoriteBorderIcon/>;
   const timestring = recipe ? generateTimeString(recipe.timestamp) : undefined;
-  const image = (recipe && recipe.img_url !== "") ? <img src={recipe.img_url} className={classes.recipeImage} onError={(e)=>{e.target.onerror = null; e.target.src=fallbackImage}} alt={recipe.title}/> : null;
+  const image = (recipe && recipe.img_url !== '') ? <img src={recipe.img_url} className={classes.recipeImage} onError={(e)=>{e.target.onerror = null; e.target.src=fallbackImage}} alt={recipe.title}/> : null;
 
-  const regex_link = (recipe && recipe.credit_link ) ? recipe.credit_link.match(website_regex)[0] : "orginalrecept"
+  const regex_link = (recipe && recipe.credit_link ) ? recipe.credit_link.match(website_regex)[0] : 'orginalrecept'
 
   // <div
   // style={{
@@ -91,7 +91,7 @@ export default function RecipePage(props) {
               <span>
                 <Button 
                   disableTouchRipple 
-                  onClick={() => {history.push("/profile/" + recipe.user)}} >
+                  onClick={() => {history.push('/profile/' + recipe.user)}} >
                   { recipe.user }
                 </Button>
               </span>
@@ -148,7 +148,7 @@ export default function RecipePage(props) {
 
           { recipe.freetext &&
           <div className={classes.freetext} style={{width: '100%'}}> 
-            <b>{recipe.user}</b> <Emoji symbol="🗨️"/> {recipe.freetext}
+            <b>{recipe.user}</b> <Emoji symbol='🗨️'/> {recipe.freetext}
           </div>
           }
 
@@ -170,7 +170,7 @@ export default function RecipePage(props) {
             <div className={classes.freetext}> 
               { recipe.servings &&
               <span> 
-                {recipe.servings} {t('recipe.servings')} {" | "}
+                {recipe.servings} {t('recipe.servings')} {' | '}
               </span>
               }
               { recipe.cookingtime &&
@@ -201,8 +201,8 @@ export default function RecipePage(props) {
 
         {ifUser &&
           <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             startIcon={<EditIcon />}
             onClick={editRecipe}
           >
@@ -214,8 +214,8 @@ export default function RecipePage(props) {
 
         {ifUser &&
           <Button
-            variant="contained"
-            color="secondary"
+            variant='contained'
+            color='secondary'
             startIcon={<EditIcon />}
             onClick={ () => setOpenAlert(true) }
           >
@@ -229,10 +229,10 @@ export default function RecipePage(props) {
       <AlertDialog
       open={openAlert}
       onAlertClose={onDeleteRecipeChoice}
-      title="Är du säker?"
-      message="Är du säker på att du vill ta bort det här receptet?"
-      yesOptionText="Ja"
-      NoOptionText="Oj, nej!"
+      title='Är du säker?'
+      message='Är du säker på att du vill ta bort det här receptet?'
+      yesOptionText='Ja'
+      NoOptionText='Oj, nej!'
       />
 
     </div>

@@ -1,38 +1,38 @@
-import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import React, { useState } from 'react'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
+  const result = Array.from(list)
+  const [removed] = result.splice(startIndex, 1)
+  result.splice(endIndex, 0, removed)
 
-  return result;
-};
+  return result
+}
 
 function DragNDrop(props) {
 
-  const [items, setItems] = useState(props.items);
+  const [items, setItems] = useState(props.items)
 
   React.useEffect(() => {
-    setItems(props.items);
+    setItems(props.items)
   }, [props.items])
 
   const onDragEnd = (result) => {
     // dropped outside the list
     if (!result.destination) {
-      return;
+      return
     }
 
     const reordered_items = reorder(
       items,
       result.source.index,
       result.destination.index
-    );
+    )
 
-    setItems(reordered_items);
-    props.onReorder(reordered_items);
+    setItems(reordered_items)
+    props.onReorder(reordered_items)
 
   }
 
@@ -41,7 +41,7 @@ function DragNDrop(props) {
   
 return (
     <DragDropContext onDragEnd={onDragEnd}>
-    <Droppable droppableId="droppable">
+    <Droppable droppableId='droppable'>
         {(provided, snapshot) => (
         <div
             {...provided.droppableProps}
@@ -70,8 +70,8 @@ return (
         )}
     </Droppable>
     </DragDropContext>
-    );
+    )
   
 }
 
-export default DragNDrop;
+export default DragNDrop

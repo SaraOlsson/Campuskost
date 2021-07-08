@@ -1,11 +1,11 @@
 
-import {useState} from "react"
+import {useState} from 'react'
 
 function useDialog() {
 
-    const [openDialog, setOpenDialog] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false)
 
     const closeDialog = (action) => {
-        setOpenDialog(false);
-    };
+        setOpenDialog(false)
+    }
 }

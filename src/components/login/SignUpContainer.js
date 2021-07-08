@@ -1,17 +1,17 @@
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import React, { useState } from 'react'
-import { useDispatch } from "react-redux"
-import { useFirebase, useFirestore } from "react-redux-firebase"
+import { useDispatch } from 'react-redux'
+import { useFirebase, useFirestore } from 'react-redux-firebase'
 
 export default function SignUpContainer(props) {
 
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [username, setUsername] = useState({value: "", isValid: false})
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [username, setUsername] = useState({value: '', isValid: false})
   
   
-    const [feedback, setFeedback] = useState({color: 'green', message: ""})
+    const [feedback, setFeedback] = useState({color: 'green', message: ''})
   
     const dispatch = useDispatch() // be able to dispatch
     const classes = useStyles()
@@ -31,18 +31,18 @@ export default function SignUpContainer(props) {
           let userObj = {
             email: email,
             username: username.value,
-            university: "",
-            fullname: "",
-            bio: "",
-            profile_img_url: ""
+            university: '',
+            fullname: '',
+            bio: '',
+            profile_img_url: ''
           }
   
-          console.log("create the document")
+          console.log('create the document')
           usersRef.set(userObj) // create the document
   
           // set redux state
           dispatch({
-            type: "SETFIREUSER",
+            type: 'SETFIREUSER',
             firestore_user: userObj
           })
   
@@ -67,7 +67,7 @@ export default function SignUpContainer(props) {
       // Sign in with email and pass.
       firebase.auth().createUserWithEmailAndPassword(email, password).then(function(value) {
   
-        setFeedback({color: 'green', message: "Skapade ett konto för " + email})
+        setFeedback({color: 'green', message: 'Skapade ett konto för ' + email})
         create_db_user_doc()
   
       }).catch(function(error) {
@@ -85,7 +85,7 @@ export default function SignUpContainer(props) {
   
       let current_username = username.value
   
-      if( current_username === "" ) {
+      if( current_username === '' ) {
         setFeedback({color: 'orange', message: 'Skriv först in ett användarnamn.'})
         return
       }
@@ -107,7 +107,7 @@ export default function SignUpContainer(props) {
     const editUsername = (username_textfield) => {
   
       setUsername({value: username_textfield, isValid: false})
-      setFeedback({color: 'green', message: ""})
+      setFeedback({color: 'green', message: ''})
     }
   
     var usenameIsAvailableCheck = function(username_totry) {
@@ -131,15 +131,15 @@ export default function SignUpContainer(props) {
       <h3> Skapa konto </h3>
       <p>Ange email and lösenord för att skapa ett konto</p>
   
-           <input autoComplete="off" value={email} type="email" placeholder="Email" onChange={evt => setEmail(evt.target.value)}/>
+           <input autoComplete='off' value={email} type='email' placeholder='Email' onChange={evt => setEmail(evt.target.value)}/>
            &nbsp;&nbsp;&nbsp;
-           <input autoComplete="off" value={password} type="password" placeholder="Password" onChange={evt => setPassword(evt.target.value)}/>
+           <input autoComplete='off' value={password} type='password' placeholder='Password' onChange={evt => setPassword(evt.target.value)}/>
            <br/><br/>
-           <input autoComplete="off" value={username.value} type="text" placeholder="Usename" onChange={evt => editUsername(evt.target.value)}/>
+           <input autoComplete='off' value={username.value} type='text' placeholder='Usename' onChange={evt => editUsername(evt.target.value)}/>
   
            <Button
-             variant="contained"
-             color="primary"
+             variant='contained'
+             color='primary'
              onClick={handleUsername}
              style={{marginLeft: 20}}
            >
@@ -149,8 +149,8 @@ export default function SignUpContainer(props) {
            <br/><br/>
   
            <Button
-             variant="contained"
-             color="primary"
+             variant='contained'
+             color='primary'
              onClick={handleSignUp}
              disabled={!username.isValid}
            >
